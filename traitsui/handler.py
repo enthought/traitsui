@@ -29,8 +29,7 @@ from .ui_info import UIInfo
 
 
 def close_dock_control(dock_control):
-    """ Closes a DockControl (if allowed by the associated Traits UI Handler).
-    """
+    """Closes a DockControl (if allowed by the associated Traits UI Handler)."""
     # Retrieve the traits UI object set when we created the DockControl:
     ui = dock_control.data
 
@@ -47,23 +46,23 @@ def close_dock_control(dock_control):
 
 
 class Handler(HasPrivateTraits):
-    """ Provides access to and control over the run-time workings of a
+    """Provides access to and control over the run-time workings of a
     Traits-based user interface.
     """
 
     def init_info(self, info):
-        """ Informs the handler what the UIInfo object for a View will be.
+        """Informs the handler what the UIInfo object for a View will be.
 
-            This method is called before the UI for the View has been
-            constructed. It is provided so that the handler can save the
-            reference to the UIInfo object in case it exposes viewable traits
-            whose values are properties that depend upon items in the context
-            being edited.
+        This method is called before the UI for the View has been
+        constructed. It is provided so that the handler can save the
+        reference to the UIInfo object in case it exposes viewable traits
+        whose values are properties that depend upon items in the context
+        being edited.
         """
         pass
 
     def init(self, info):
-        """ Initializes the controls of a user interface.
+        """Initializes the controls of a user interface.
 
         This method is called after all user interface elements have been
         created, but before the user interface is displayed. Override this
@@ -86,7 +85,7 @@ class Handler(HasPrivateTraits):
         return True
 
     def position(self, info):
-        """ Positions a dialog-based user interface on the display.
+        """Positions a dialog-based user interface on the display.
 
         This method is called after the user interface is initialized (by
         calling init()), but before the user interface is displayed. Override
@@ -105,7 +104,7 @@ class Handler(HasPrivateTraits):
         toolkit().position(info.ui)
 
     def close(self, info, is_ok):
-        """ Handles the user attempting to close a dialog-based user interface.
+        """Handles the user attempting to close a dialog-based user interface.
 
         This method is called when the user attempts to close a window, by
         clicking an **OK** or **Cancel** button, or clicking a Close control
@@ -133,7 +132,7 @@ class Handler(HasPrivateTraits):
         return True
 
     def closed(self, info, is_ok):
-        """ Handles a dialog-based user interface being closed by the user.
+        """Handles a dialog-based user interface being closed by the user.
 
         This method is called *after* the window is destroyed. Override this
         method to perform any clean-up tasks needed by the application.
@@ -149,17 +148,15 @@ class Handler(HasPrivateTraits):
         return
 
     def revert(self, info):
-        """ Handles the **Revert** button being clicked.
-        """
+        """Handles the **Revert** button being clicked."""
         return
 
     def apply(self, info):
-        """ Handles the **Apply** button being clicked.
-        """
+        """Handles the **Apply** button being clicked."""
         return
 
     def show_help(self, info, control=None):
-        """ Shows the help associated with the view.
+        """Shows the help associated with the view.
 
         This method is called when the user clicks a **Help** button in a
         Traits user interface. The method calls the global help handler, which
@@ -179,7 +176,7 @@ class Handler(HasPrivateTraits):
         on_help_call()(info, control)
 
     def perform(self, info, action, event):
-        """ Perform computation for an action.
+        """Perform computation for an action.
 
         The default method looks for a method matching ``action.action`` and
         calls it (sniffing the signature to determine how to call it for
@@ -226,7 +223,7 @@ class Handler(HasPrivateTraits):
             action.perform(event)
 
     def get_perform_handlers(self, info):
-        """ Return a list of objects which can handle actions.
+        """Return a list of objects which can handle actions.
 
         This method may be overridden by sub-classes to return a more relevant
         set of objects.
@@ -252,7 +249,7 @@ class Handler(HasPrivateTraits):
         return handlers
 
     def setattr(self, info, object, name, value):
-        """ Handles the user setting a specified object trait's value.
+        """Handles the user setting a specified object trait's value.
 
         This method is called when an editor attempts to set a new value for
         a specified object trait attribute. Use this method to control what
@@ -279,8 +276,7 @@ class Handler(HasPrivateTraits):
         setattr(object, name, value)
 
     def trait_view_for(self, info, view, object, object_name, trait_name):
-        """ Gets a specified View object.
-        """
+        """Gets a specified View object."""
         # If a view element was passed instead of a name or None, return it:
         if isinstance(view, ViewElement):
             return view
@@ -326,8 +322,7 @@ class Handler(HasPrivateTraits):
     # -- 'DockWindowHandler' interface implementation -------------------------
 
     def can_drop(self, info, object):
-        """ Can the specified object be inserted into the view?
-        """
+        """Can the specified object be inserted into the view?"""
         from pyface.dock.api import DockControl
 
         if isinstance(object, DockControl):
@@ -340,8 +335,7 @@ class Handler(HasPrivateTraits):
         return category in info.ui.view.imports
 
     def dock_control_for(self, info, parent, object):
-        """ Returns the DockControl object for a specified object.
-        """
+        """Returns the DockControl object for a specified object."""
         from pyface.dock.api import IDockable, DockControl
         from .dockable_view_element import DockableViewElement
 
@@ -400,15 +394,13 @@ class Handler(HasPrivateTraits):
         return dc
 
     def open_view_for(self, control, use_mouse=True):
-        """ Creates a new view of a specified control.
-        """
+        """Creates a new view of a specified control."""
         from pyface.dock.api import DockWindowShell
 
         DockWindowShell(control, use_mouse=use_mouse)
 
     def dock_window_empty(self, dock_window):
-        """ Handles a DockWindow becoming empty.
-        """
+        """Handles a DockWindow becoming empty."""
         if dock_window.auto_close:
             dock_window.control.GetParent.Destroy()
 
@@ -423,10 +415,9 @@ class Handler(HasPrivateTraits):
         handler=None,
         id="",
         scrollable=None,
-        **args
+        **args,
     ):
-        """ Edits the object's traits.
-        """
+        """Edits the object's traits."""
         if context is None:
             context = self
 
@@ -454,10 +445,9 @@ class Handler(HasPrivateTraits):
         handler=None,
         id="",
         scrollable=None,
-        **args
+        **args,
     ):
-        """ Configures the object's traits.
-        """
+        """Configures the object's traits."""
         return super().configure_traits(
             filename,
             view,
@@ -467,33 +457,29 @@ class Handler(HasPrivateTraits):
             handler or self,
             id,
             scrollable,
-            **args
+            **args,
         )
 
     # -- Private Methods: -----------------------------------------------------
 
     def _on_undo(self, info):
-        """ Handles an "Undo" change request.
-        """
+        """Handles an "Undo" change request."""
         if info.ui.history is not None:
             info.ui.history.undo()
 
     def _on_redo(self, info):
-        """ Handles a "Redo" change request.
-        """
+        """Handles a "Redo" change request."""
         if info.ui.history is not None:
             info.ui.history.redo()
 
     def _on_revert(self, info):
-        """ Handles a "Revert all changes" request.
-        """
+        """Handles a "Revert all changes" request."""
         if info.ui.history is not None:
             info.ui.history.revert()
             self.revert(info)
 
     def _on_close(self, info):
-        """ Handles a "Close" request.
-        """
+        """Handles a "Close" request."""
         if (info.ui.owner is not None) and self.close(info, True):
             info.ui.owner.close()
 
@@ -506,7 +492,7 @@ _default_handler = Handler()
 
 
 def default_handler(handler=None):
-    """ Returns the global default handler.
+    """Returns the global default handler.
 
     If *handler* is an instance of Handler, this function sets it as the
     global default handler.
@@ -519,13 +505,13 @@ def default_handler(handler=None):
 
 
 class Controller(Handler):
-    """ Defines a handler class which provides a view and controller for a
-        specified model.
+    """Defines a handler class which provides a view and controller for a
+    specified model.
 
-        This class is used when implementing a standard MVC-based design. The
-        **model** trait contains most, if not all, of the data being viewed,
-        and can be referenced in a Controller instance's View definition using
-        unadorned trait names. (e.g., ``Item('name')``).
+    This class is used when implementing a standard MVC-based design. The
+    **model** trait contains most, if not all, of the data being viewed,
+    and can be referenced in a Controller instance's View definition using
+    unadorned trait names. (e.g., ``Item('name')``).
     """
 
     # -- Trait Definitions ----------------------------------------------------
@@ -539,22 +525,21 @@ class Controller(Handler):
     # -- HasTraits Method Overrides -------------------------------------------
 
     def __init__(self, model=None, **metadata):
-        """ Initializes the object and sets the model (if supplied).
-        """
+        """Initializes the object and sets the model (if supplied)."""
         super().__init__(**metadata)
         if model is not None:
             self.model = model
 
     def trait_context(self):
-        """ Returns the default context to use for editing or configuring
-            traits.
+        """Returns the default context to use for editing or configuring
+        traits.
         """
         return {"object": self.model, "controller": self, "handler": self}
 
     # -- Handler Method Overrides ---------------------------------------------
 
     def get_perform_handlers(self, info):
-        """ Return a list of objects which can handle actions.
+        """Return a list of objects which can handle actions.
 
         By default this returns the Controller instance and the model.
 
@@ -571,33 +556,32 @@ class Controller(Handler):
         return [self, self.model]
 
     def init_info(self, info):
-        """ Informs the handler what the UIInfo object for a View will be.
-        """
+        """Informs the handler what the UIInfo object for a View will be."""
         self.info = info
 
 
 class ModelView(Controller):
-    """ Defines a handler class which provides a view and controller for a
-        specified model.
+    """Defines a handler class which provides a view and controller for a
+    specified model.
 
-        This class is useful when creating a variant of the standard MVC-based
-        design. A subclass of ModelView reformulates a number of traits on
-        its **model** object as properties on the ModelView subclass itself,
-        usually in order to convert them into a more user-friendly format. In
-        this design, the ModelView subclass supplies not only the view and
-        the controller, but also, in effect, the model (as a set of properties
-        wrapped around the original model). Because of this, the ModelView
-        context dictionary specifies the ModelView instance itself as the
-        special *object* value, and assigns the original model object as the
-        *model* value. Thus, the traits of the ModelView object can be
-        referenced in its View definition using unadorned trait names.
+    This class is useful when creating a variant of the standard MVC-based
+    design. A subclass of ModelView reformulates a number of traits on
+    its **model** object as properties on the ModelView subclass itself,
+    usually in order to convert them into a more user-friendly format. In
+    this design, the ModelView subclass supplies not only the view and
+    the controller, but also, in effect, the model (as a set of properties
+    wrapped around the original model). Because of this, the ModelView
+    context dictionary specifies the ModelView instance itself as the
+    special *object* value, and assigns the original model object as the
+    *model* value. Thus, the traits of the ModelView object can be
+    referenced in its View definition using unadorned trait names.
     """
 
     # -- HasTraits Method Overrides -------------------------------------------
 
     def trait_context(self):
-        """ Returns the default context to use for editing or configuring
-            traits.
+        """Returns the default context to use for editing or configuring
+        traits.
         """
         return {"object": self, "handler": self, "model": self.model}
 

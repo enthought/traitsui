@@ -12,7 +12,6 @@
 """
 
 
-
 from traits.api import Trait, TraitError
 
 # -------------------------------------------------------------------------
@@ -21,8 +20,7 @@ from traits.api import Trait, TraitError
 
 
 def convert_to_color(object, name, value):
-    """ Converts a number into a wxColour object.
-    """
+    """Converts a number into a wxColour object."""
     if isinstance(value, int):
         return value & 0xFFFFFF
 

@@ -31,11 +31,18 @@ Please refer to the `TableEditor API docs`_ for further information.
 from traits.api import HasTraits, HasStrictTraits, Str, Int, Regex, List
 
 from traitsui.api import (
-    View, Group, Item, TableEditor, ObjectColumn, ExpressionColumn,
-    EvalTableFilter
+    View,
+    Group,
+    Item,
+    TableEditor,
+    ObjectColumn,
+    ExpressionColumn,
+    EvalTableFilter,
 )
 from traitsui.table_filter import (
-    EvalFilterTemplate, MenuFilterTemplate, RuleFilterTemplate
+    EvalFilterTemplate,
+    MenuFilterTemplate,
+    RuleFilterTemplate,
 )
 
 
@@ -47,10 +54,13 @@ class Employee(HasTraits):
     phone = Regex(value='000-0000', regex=r'\d\d\d[-]\d\d\d\d')
 
     traits_view = View(
-        'first_name', 'last_name', 'age', 'phone',
+        'first_name',
+        'last_name',
+        'age',
+        'phone',
         title='Create new employee',
         width=0.18,
-        buttons=['OK', 'Cancel']
+        buttons=['OK', 'Cancel'],
     )
 
 
@@ -63,11 +73,10 @@ table_editor = TableEditor(
         ExpressionColumn(
             label='Full Name',
             width=0.30,
-            expression="'%s %s' % (object.first_name, "
-            "object.last_name )"
+            expression="'%s %s' % (object.first_name, " "object.last_name )",
         ),
         ObjectColumn(name='age', width=0.10, horizontal_alignment='center'),
-        ObjectColumn(name='phone', width=0.20)
+        ObjectColumn(name='phone', width=0.20),
     ],
     deletable=True,
     sort_model=True,
@@ -75,7 +84,7 @@ table_editor = TableEditor(
     orientation='vertical',
     edit_view=View(
         Group('first_name', 'last_name', 'age', 'phone', show_border=True),
-        resizable=True
+        resizable=True,
     ),
     filters=[EvalFilterTemplate, MenuFilterTemplate, RuleFilterTemplate],
     search=EvalTableFilter(),
@@ -91,34 +100,27 @@ class Department(HasStrictTraits):
 
     traits_view = View(
         Group(
-            Item(
-                'employees',
-                show_label=False,
-                editor=table_editor
-            ),
+            Item('employees', show_label=False, editor=table_editor),
             show_border=True,
         ),
         title='Department Personnel',
-        width=.4,
-        height=.4,
+        width=0.4,
+        height=0.4,
         resizable=True,
         buttons=['OK'],
-        kind='live'
+        kind='live',
     )
 
 
 # Create some employees:
 employees = [
-    Employee(first_name='Jason', last_name='Smith',
-             age=32, phone='555-1111'),
-    Employee(first_name='Mike', last_name='Tollan',
-             age=34, phone='555-2222'),
-    Employee(first_name='Dave', last_name='Richards',
-             age=42, phone='555-3333'),
-    Employee(first_name='Lyn', last_name='Spitz',
-             age=40, phone='555-4444'),
-    Employee(first_name='Greg', last_name='Andrews',
-             age=45, phone='555-5555')
+    Employee(first_name='Jason', last_name='Smith', age=32, phone='555-1111'),
+    Employee(first_name='Mike', last_name='Tollan', age=34, phone='555-2222'),
+    Employee(
+        first_name='Dave', last_name='Richards', age=42, phone='555-3333'
+    ),
+    Employee(first_name='Lyn', last_name='Spitz', age=40, phone='555-4444'),
+    Employee(first_name='Greg', last_name='Andrews', age=45, phone='555-5555'),
 ]
 
 # Create the demo:

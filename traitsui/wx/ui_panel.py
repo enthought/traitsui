@@ -65,22 +65,20 @@ emphasis_color = wx.Colour(0, 0, 127)
 
 
 def ui_panel(ui, parent):
-    """ Creates a panel-based wxPython user interface for a specified UI object.
-    """
+    """Creates a panel-based wxPython user interface for a specified UI object."""
     ui_panel_for(ui, parent, True)
 
 
 def ui_subpanel(ui, parent):
-    """ Creates a subpanel-based wxPython user interface for a specified UI
-        object. A subpanel does not allow control buttons (other than those
-        specified in the UI object).
+    """Creates a subpanel-based wxPython user interface for a specified UI
+    object. A subpanel does not allow control buttons (other than those
+    specified in the UI object).
     """
     ui_panel_for(ui, parent, False)
 
 
 def ui_panel_for(ui, parent, buttons):
-    """ Creates a panel-based wxPython user interface for a specified UI object.
-    """
+    """Creates a panel-based wxPython user interface for a specified UI object."""
     # Disable screen updates on the parent control while we build the view:
     parent.Freeze()
 
@@ -105,12 +103,10 @@ def ui_panel_for(ui, parent, buttons):
 
 
 class Panel(BaseDialog):
-    """ wxPython user interface panel for Traits-based user interfaces.
-    """
+    """wxPython user interface panel for Traits-based user interfaces."""
 
     def __init__(self, ui, parent, allow_buttons):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         self.ui = ui
         history = None
         view = ui.view
@@ -218,26 +214,22 @@ class Panel(BaseDialog):
         cpanel.SetSizerAndFit(sw_sizer)
 
     def _on_undoable(self, event):
-        """ Handles a change to the "undoable" state of the undo history.
-        """
+        """Handles a change to the "undoable" state of the undo history."""
         state = event.new
         self.undo.Enable(state)
 
     def _on_redoable(self, event):
-        """ Handles a change to the "redoable" state of the undo history.
-        """
+        """Handles a change to the "redoable" state of the undo history."""
         state = event.new
         self.redo.Enable(state)
 
     def _on_revertable(self, event):
-        """ Handles a change to the "revert" state.
-        """
+        """Handles a change to the "revert" state."""
         state = event.new
         self.revert.Enable(state)
 
     def add_toolbar(self, sizer):
-        """ Adds an optional toolbar to the dialog.
-        """
+        """Adds an optional toolbar to the dialog."""
         toolbar = self.ui.view.toolbar
         if toolbar is not None:
             self._last_group = self._last_parent = None
@@ -255,9 +247,9 @@ class Panel(BaseDialog):
 
 
 def panel(ui, parent):
-    """ Creates a panel-based wxPython user interface for a specified UI object.
+    """Creates a panel-based wxPython user interface for a specified UI object.
 
-        This function does not modify the UI object passed to it
+    This function does not modify the UI object passed to it
     """
     # Bind the context values to the 'info' object:
     ui.info.bind_context()
@@ -304,8 +296,8 @@ def panel(ui, parent):
 def create_notebook_for_items(
     content, ui, parent, group, item_handler=None, is_dock_window=False
 ):
-    """ Creates a notebook and adds a list of groups or items to it as separate
-        pages.
+    """Creates a notebook and adds a list of groups or items to it as separate
+    pages.
     """
     if is_dock_window:
         nb = parent
@@ -384,8 +376,7 @@ def _page_changed(event):
 
 
 def show_help(ui, button):
-    """ Displays a help window for the specified UI's active Group.
-    """
+    """Displays a help window for the specified UI's active Group."""
     group = ui._groups[ui._active_group]
     template = help_template()
     if group.help != "":
@@ -404,8 +395,7 @@ def show_help(ui, button):
 
 
 def show_help_popup(event):
-    """ Displays a pop-up help window for a single trait.
-    """
+    """Displays a pop-up help window for a single trait."""
     control = event.GetEventObject()
     template = help_template()
 
@@ -426,8 +416,8 @@ def fill_panel_for_group(
     is_dock_window=False,
     create_panel=False,
 ):
-    """ Builds the user interface for a specified Group within a specified
-        Panel.
+    """Builds the user interface for a specified Group within a specified
+    Panel.
     """
     fp = FillPanel(
         panel, group, ui, suppress_label, is_dock_window, create_panel
@@ -436,14 +426,12 @@ def fill_panel_for_group(
 
 
 class FillPanel(object):
-    """ A subpanel for a single group of items.
-    """
+    """A subpanel for a single group of items."""
 
     def __init__(
         self, panel, group, ui, suppress_label, is_dock_window, create_panel
     ):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         # Get the contents of the group:
         content = group.get_content()
 
@@ -606,8 +594,8 @@ class FillPanel(object):
             )
 
     def add_dock_window_splitter_items(self, window, content, group):
-        """ Adds a set of groups or items separated by splitter bars to a
-            DockWindow.
+        """Adds a set of groups or items separated by splitter bars to a
+        DockWindow.
         """
         contents = [
             self.add_dock_window_splitter_item(window, item, group)
@@ -626,8 +614,7 @@ class FillPanel(object):
         return result
 
     def add_dock_window_splitter_item(self, window, item, group):
-        """ Adds a single group or item to a DockWindow.
-        """
+        """Adds a single group or item to a DockWindow."""
         if isinstance(item, Group):
             sizer, resizable, contents = fill_panel_for_group(
                 window, item, self.ui, suppress_label=True, is_dock_window=True
@@ -661,14 +648,13 @@ class FillPanel(object):
         )
 
     def create_fold_for_items(self, window, content):
-        """ Adds a set of groups or items as vertical notebook pages to a
-            vertical notebook.
+        """Adds a set of groups or items as vertical notebook pages to a
+        vertical notebook.
         """
         raise NotImplementedError("VFold is not implemented for Wx backend")
 
     def create_fold_for_item(self, notebook, item):
-        """ Adds a single group or item to a vertical notebook.
-        """
+        """Adds a single group or item to a vertical notebook."""
         # Create a new notebook page:
         page = notebook.create_page()
 
@@ -695,13 +681,11 @@ class FillPanel(object):
         return page
 
     def add_notebook_item(self, item, parent, sizer):
-        """ Adds a single Item to a notebook.
-        """
+        """Adds a single Item to a notebook."""
         self.add_items([item], parent, sizer)
 
     def add_groups(self, content, panel):
-        """ Adds a list of Group objects to the panel.
-        """
+        """Adds a list of Group objects to the panel."""
         sizer = self.sizer
 
         # Process each group:
@@ -730,15 +714,15 @@ class FillPanel(object):
 
     def _label_when(self):
         """Set the visible and enabled states of all labels as controlled by
-           a 'visible_when' or 'enabled_when' expression.
+        a 'visible_when' or 'enabled_when' expression.
         """
         self._evaluate_label_condition(self._label_enabled_whens, "enabled")
         self._evaluate_label_condition(self._label_visible_whens, "visible")
 
     def _evaluate_label_condition(self, conditions, kind):
         """Evaluates a list of (eval, widget) pairs and calls the appropriate
-           method on the label widget to toggle whether it is visible/enabled
-           as needed.
+        method on the label widget to toggle whether it is visible/enabled
+        as needed.
         """
         context = self.ui._get_context(self.ui.context)
 
@@ -756,8 +740,7 @@ class FillPanel(object):
                 raise_to_debug()
 
     def add_items(self, content, panel, sizer):
-        """ Adds a list of Item objects to the panel.
-        """
+        """Adds a list of Item objects to the panel."""
         # Get local references to various objects we need:
         ui = self.ui
         info = ui.info
@@ -835,9 +818,13 @@ class FillPanel(object):
                         self._add_emphasis(label)
 
                     if item.visible_when:
-                        self._label_visible_whens.append((item.visible_when, label))
+                        self._label_visible_whens.append(
+                            (item.visible_when, label)
+                        )
                     if item.enabled_when:
-                        self._label_enabled_whens.append((item.enabled_when, label))
+                        self._label_enabled_whens.append(
+                            (item.enabled_when, label)
+                        )
 
                 # Continue on to the next Item in the list:
                 continue
@@ -1069,9 +1056,13 @@ class FillPanel(object):
             # Save the reference to the label control (if any) in the editor:
             editor.label_control = label
 
-        if (len(self._label_enabled_whens) + len(self._label_visible_whens)) > 0:
+        if (
+            len(self._label_enabled_whens) + len(self._label_visible_whens)
+        ) > 0:
             for object in self.ui.context.values():
-                object.on_trait_change(lambda: self._label_when(), dispatch="ui")
+                object.on_trait_change(
+                    lambda: self._label_when(), dispatch="ui"
+                )
 
         # If we created a grid sizer, add it to the original sizer:
         if item_sizer is not sizer:
@@ -1092,8 +1083,7 @@ class FillPanel(object):
         pad_side=wx.LEFT,
         border=False,
     ):
-        """ Creates an item label.
-        """
+        """Creates an item label."""
         label = item.get_label(ui)
         if (label == "") or (label[-1:] in "?=:;,.<>/\\\"'-+#|"):
             suffix = ""
@@ -1128,15 +1118,13 @@ class FillPanel(object):
         return control
 
     def dummy_label(self, parent, sizer):
-        """ Creates an item label.
-        """
+        """Creates an item label."""
         control = wx.StaticText(parent, -1, "", style=wx.ALIGN_RIGHT)
         sizer.Add(control, 0)
         return control
 
     def _add_emphasis(self, control):
-        """ Adds emphasis to a specified control's font.
-        """
+        """Adds emphasis to a specified control's font."""
         global emphasis_font
 
         control.SetForegroundColour(emphasis_color)
@@ -1157,8 +1145,7 @@ class FillPanel(object):
 
 
 class DockWindowGroupEditor(GroupEditor):
-    """ Editor for a group which displays a DockWindow.
-    """
+    """Editor for a group which displays a DockWindow."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -1170,8 +1157,8 @@ class DockWindowGroupEditor(GroupEditor):
     # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         if isinstance(prefs, dict):
             structure = prefs.get("structure")
@@ -1181,20 +1168,17 @@ class DockWindowGroupEditor(GroupEditor):
         self.dock_window.Layout()
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         return {"structure": self.dock_window.GetSizer().GetStructure()}
 
     # -- End UI preference save/restore interface -----------------------------
 
 
 class HTMLHelpWindow(wx.Frame):
-    """ Window for displaying Traits-based help text with HTML formatting.
-    """
+    """Window for displaying Traits-based help text with HTML formatting."""
 
     def __init__(self, parent, html_content, scale_dx, scale_dy):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         wx.Frame.__init__(self, parent, -1, "Help", style=wx.SIMPLE_BORDER)
         self.SetBackgroundColour(WindowColor)
 
@@ -1212,8 +1196,10 @@ class HTMLHelpWindow(wx.Frame):
         sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
         self.SetSizer(sizer)
         self.SetSize(
-            wx.Size(int(scale_dx * SystemMetrics().screen_width),
-            int(scale_dy * SystemMetrics().screen_height))
+            wx.Size(
+                int(scale_dx * SystemMetrics().screen_width),
+                int(scale_dy * SystemMetrics().screen_height),
+            )
         )
 
         # Position and show the dialog:
@@ -1221,8 +1207,7 @@ class HTMLHelpWindow(wx.Frame):
         self.Show()
 
     def _on_ok(self, event):
-        """ Handles the window being closed.
-        """
+        """Handles the window being closed."""
         self.Unbind(wx.EVT_BUTTON)
         self.Destroy()
 
@@ -1235,8 +1220,7 @@ HeadingText = None
 
 
 def heading_text(*args, **kw):
-    """ Creates a Pyface HeadingText control.
-    """
+    """Creates a Pyface HeadingText control."""
     global HeadingText
 
     if HeadingText is None:

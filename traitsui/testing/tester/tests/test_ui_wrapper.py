@@ -38,7 +38,7 @@ from traitsui.testing.tester.ui_wrapper import (
 
 
 def example_ui_wrapper(**kwargs):
-    """ Return an instance of UIWrapper for testing purposes.
+    """Return an instance of UIWrapper for testing purposes.
 
     Parameters
     ----------
@@ -58,18 +58,17 @@ def example_ui_wrapper(**kwargs):
 
 
 class StubRegistry(AbstractTargetRegistry):
-    """ A stub implementation of the AbstractTargetRegistry for testing
-    """
+    """A stub implementation of the AbstractTargetRegistry for testing"""
 
     def __init__(
-            self,
-            handler=None,
-            solver=None,
-            supported_interaction_classes=(),
-            supported_locator_classes=(),
-            interaction_doc="",
-            location_doc="",
-            ):
+        self,
+        handler=None,
+        solver=None,
+        supported_interaction_classes=(),
+        supported_locator_classes=(),
+        interaction_doc="",
+        location_doc="",
+    ):
         self.handler = handler
         self.solver = solver
         self.supported_interaction_classes = supported_interaction_classes
@@ -111,8 +110,7 @@ class StubRegistry(AbstractTargetRegistry):
 # Use of perform/inspect requires the GUI event loop
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUIWrapperInteractionRegistries(unittest.TestCase):
-    """ Test the logic regarding the order of (interaction) registries.
-    """
+    """Test the logic regarding the order of (interaction) registries."""
 
     def test_registry_priority(self):
         # If two registries have a handler for the same target and interaction
@@ -134,9 +132,7 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         self.assertEqual(value, 2)
 
         # reverse order
-        wrapper = example_ui_wrapper(
-            registries=[registry1, registry2]
-        )
+        wrapper = example_ui_wrapper(registries=[registry1, registry2])
         value = wrapper.inspect("some other string")
 
         self.assertEqual(value, 1)
@@ -182,7 +178,7 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
 # Use of locate requires the GUI event loop
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUIWrapperLocationRegistry(unittest.TestCase):
-    """ Test the use of registries with locate. """
+    """Test the use of registries with locate."""
 
     def test_location_registry_priority(self):
         registry1 = StubRegistry(
@@ -254,20 +250,21 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
 
 
 class TestUIWrapperHelp(unittest.TestCase):
-    """ Test calling UIWrapper.help """
+    """Test calling UIWrapper.help"""
 
     def test_help_message(self):
-
         class Action:
-            """ Say hello.
+            """Say hello.
             Say bye.
             """
+
             pass
 
         class Locator:
-            """ Return anything you like.
+            """Return anything you like.
             Good day!
             """
+
             pass
 
         registry1 = TargetRegistry()
@@ -295,7 +292,8 @@ class TestUIWrapperHelp(unittest.TestCase):
         # then
         self.assertEqual(
             stream.getvalue(),
-            textwrap.dedent(f"""\
+            textwrap.dedent(
+                f"""\
                 Interactions
                 ------------
                 {Action!r}
@@ -308,7 +306,8 @@ class TestUIWrapperHelp(unittest.TestCase):
                     Return anything you like.
                     Good day!
 
-            """)
+            """
+            ),
         )
 
     def test_help_message_priority_interactions(self):
@@ -343,7 +342,8 @@ class TestUIWrapperHelp(unittest.TestCase):
         # then
         self.assertEqual(
             stream.getvalue(),
-            textwrap.dedent(f"""\
+            textwrap.dedent(
+                f"""\
                 Interactions
                 ------------
                 {float!r}
@@ -354,7 +354,8 @@ class TestUIWrapperHelp(unittest.TestCase):
                 {str!r}
                     Location: I get a higher priority.
 
-            """)
+            """
+            ),
         )
 
     def test_help_message_nothing_is_supported(self):
@@ -369,7 +370,8 @@ class TestUIWrapperHelp(unittest.TestCase):
         # then
         self.assertEqual(
             stream.getvalue(),
-            textwrap.dedent("""\
+            textwrap.dedent(
+                """\
                 Interactions
                 ------------
                 No interactions are supported.
@@ -378,7 +380,8 @@ class TestUIWrapperHelp(unittest.TestCase):
                 ---------
                 No locations are supported.
 
-            """)
+            """
+            ),
         )
 
 
@@ -388,7 +391,7 @@ class NumberHasTraits(HasTraits):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
-    """ Test GUI events are processed and exceptions from the GUI event
+    """Test GUI events are processed and exceptions from the GUI event
     loop are handled.
     """
 

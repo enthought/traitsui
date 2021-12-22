@@ -34,8 +34,7 @@ from traitsui.api import Item, Group, View, Label
 
 
 class Person(HasTraits):
-    """ Example of enabling/disabling components of a user interface.
-    """
+    """Example of enabling/disabling components of a user interface."""
 
     # General traits:
     first_name = Str()
@@ -58,7 +57,7 @@ class Person(HasTraits):
         Item(name='last_name'),
         Item(name='age'),
         label='General Info',
-        show_border=True
+        show_border=True,
     )
 
     # Interface for attributes of Persons under 18:
@@ -90,19 +89,16 @@ class Person(HasTraits):
             Label("Using 'enabled_when':"),
             '10',
             child_group,
-            adult_group
+            adult_group,
         ),
         title='Personal Information',
         resizable=True,
-        buttons=['OK']
+        buttons=['OK'],
     )
 
+
 # Create the demo:
-demo = Person(
-    first_name="Samuel",
-    last_name="Johnson",
-    age=16
-)
+demo = Person(first_name="Samuel", last_name="Johnson", age=16)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

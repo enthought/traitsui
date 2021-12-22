@@ -41,42 +41,40 @@ from traitsui.menu import (
 
 
 def ui_live(ui, parent):
-    """ Creates a live, non-modal wxPython user interface for a specified UI
+    """Creates a live, non-modal wxPython user interface for a specified UI
     object.
     """
     _ui_dialog(ui, parent, BaseDialog.NONMODAL)
 
 
 def ui_livemodal(ui, parent):
-    """ Creates a live, modal wxPython user interface for a specified UI object.
-    """
+    """Creates a live, modal wxPython user interface for a specified UI object."""
     _ui_dialog(ui, parent, BaseDialog.MODAL)
 
 
 def ui_popup(ui, parent):
-    """ Creates a live, temporary popup wxPython user interface for a specified
-        UI object.
+    """Creates a live, temporary popup wxPython user interface for a specified
+    UI object.
     """
     _ui_dialog(ui, parent, BaseDialog.POPUP)
 
 
 def ui_popover(ui, parent):
-    """ Creates a live, temporary popup wxPython user interface for a specified
-        UI object.
+    """Creates a live, temporary popup wxPython user interface for a specified
+    UI object.
     """
     _ui_dialog(ui, parent, BaseDialog.POPOVER)
 
 
 def ui_info(ui, parent):
-    """ Creates a live, temporary popup wxPython user interface for a specified
-        UI object.
+    """Creates a live, temporary popup wxPython user interface for a specified
+    UI object.
     """
     _ui_dialog(ui, parent, BaseDialog.INFO)
 
 
 def _ui_dialog(ui, parent, style):
-    """ Creates a live wxPython user interface for a specified UI object.
-    """
+    """Creates a live wxPython user interface for a specified UI object."""
     if ui.owner is None:
         ui.owner = LiveWindow()
 
@@ -84,8 +82,7 @@ def _ui_dialog(ui, parent, style):
 
 
 class LiveWindow(BaseDialog):
-    """ User interface window that immediately updates its underlying object(s).
-    """
+    """User interface window that immediately updates its underlying object(s)."""
 
     def init(self, ui, parent, style):
         self.is_modal = style == self.MODAL
@@ -292,8 +289,7 @@ class LiveWindow(BaseDialog):
         window.Fit()
 
     def close(self, rc=wx.ID_OK):
-        """ Closes the dialog window.
-        """
+        """Closes the dialog window."""
         ui = self.ui
         ui.result = rc == wx.ID_OK
         save_window(ui)
@@ -307,16 +303,14 @@ class LiveWindow(BaseDialog):
         self.ui = self.undo = self.redo = self.revert = self.control = None
 
     def _on_close_page(self, event):
-        """ Handles the user clicking the window/dialog "close" button/icon.
-        """
+        """Handles the user clicking the window/dialog "close" button/icon."""
         if not self.ui.view.close_result:
             self._on_cancel(event)
         else:
             self._on_ok(event)
 
     def _on_close_popup(self, event):
-        """ Handles the user giving focus to another window for a 'popup' view.
-        """
+        """Handles the user giving focus to another window for a 'popup' view."""
         if not event.GetActive():
             self.close_popup()
 
@@ -327,8 +321,7 @@ class LiveWindow(BaseDialog):
                 self._monitor.Stop()
 
     def _on_ok(self, event=None):
-        """ Handles the user clicking the **OK** button.
-        """
+        """Handles the user clicking the **OK** button."""
         if self.ui is None or self.control is None:
             return True
 
@@ -340,46 +333,40 @@ class LiveWindow(BaseDialog):
         return False
 
     def _on_key(self, event):
-        """ Handles the user pressing the Escape key.
-        """
+        """Handles the user pressing the Escape key."""
         if event.GetKeyCode() == 0x1B:
             self._on_close_page(event)
 
     def _on_cancel(self, event):
-        """ Handles a request to cancel all changes.
-        """
+        """Handles a request to cancel all changes."""
         if self.ui.handler.close(self.ui.info, False):
             self._on_revert(event)
             self.close(wx.ID_CANCEL)
 
     def _on_error(self, event):
-        """ Handles editing errors.
-        """
+        """Handles editing errors."""
         errors = event.new
         self.ok.Enable(errors == 0)
 
     def _on_undoable(self, event):
-        """ Handles a change to the "undoable" state of the undo history
-        """
+        """Handles a change to the "undoable" state of the undo history"""
         state = event.new
         self.undo.Enable(state)
 
     def _on_redoable(self, event):
-        """ Handles a change to the "redoable state of the undo history.
-        """
+        """Handles a change to the "redoable state of the undo history."""
         state = event.new
         self.redo.Enable(state)
 
     def _on_revertable(self, event):
-        """ Handles a change to the "revert" state.
-        """
+        """Handles a change to the "revert" state."""
         state = event.new
         self.revert.Enable(state)
 
 
 class MouseMonitor(wx.Timer):
-    """ Monitors a specified window and closes it the first time the mouse
-        pointer leaves the window.
+    """Monitors a specified window and closes it the first time the mouse
+    pointer leaves the window.
     """
 
     def __init__(self, ui):

@@ -13,10 +13,12 @@ from unittest import mock
 
 try:
     from pyface.qt import QtWebkit  # noqa: F401
+
     NO_WEBKIT_OR_WEBENGINE = False
 except ImportError:
     try:
         from pyface.qt import QtWebEngine  # noqa: F401
+
         NO_WEBKIT_OR_WEBENGINE = False
     except ImportError:
         NO_WEBKIT_OR_WEBENGINE = True
@@ -32,7 +34,7 @@ from traitsui.testing.api import MouseClick, TargetRegistry, UITester
 
 
 class HTMLModel(HasTraits):
-    """ Dummy class for testing HTMLEditor."""
+    """Dummy class for testing HTMLEditor."""
 
     content = Str()
 
@@ -46,20 +48,21 @@ def get_view(base_url_name):
             editor=HTMLEditor(
                 format_text=True,
                 base_url_name=base_url_name,
-            )
+            ),
         )
     )
 
 
 class HTMLContent:
-    """ Action to retrieve the HTML content currently displayed.
+    """Action to retrieve the HTML content currently displayed.
     Implementation should return a str, whose content conforms to HTML markup.
     """
+
     pass
 
 
 def _is_webkit_page(page):
-    """ Return true if the given page is a QWebPage from QtWebKit.
+    """Return true if the given page is a QWebPage from QtWebKit.
 
     Intended for handling the compatibility between QtWebKit and QtWebEngine.
 
@@ -71,7 +74,7 @@ def _is_webkit_page(page):
 
 
 def qt_get_page_html_content(page):
-    """ Return the HTML content currently being viewed.
+    """Return the HTML content currently being viewed.
 
     Parameters
     ----------
@@ -92,7 +95,7 @@ def qt_get_page_html_content(page):
 
 
 def wait_for_qt_signal(qt_signal, timeout):
-    """ Wait for the given Qt signal to fire, or timeout.
+    """Wait for the given Qt signal to fire, or timeout.
 
     A mock implementation of QSignalSpy.wait, which is one of the missing
     bindings in PySide2, and is not available in Qt4.
@@ -134,7 +137,7 @@ def wait_for_qt_signal(qt_signal, timeout):
 
 
 def qt_allow_view_to_load(loadable, timeout=0.5):
-    """ Allow QWebView/QWebPage/QWebEngineView/QWebEnginePage to finish
+    """Allow QWebView/QWebPage/QWebEngineView/QWebEnginePage to finish
     loading.
 
     Out of context, this function does not know if the page has started
@@ -160,7 +163,7 @@ def qt_allow_view_to_load(loadable, timeout=0.5):
 
 
 def qt_mouse_click_web_view(view, delay):
-    """ Perform a mouse click at the center of the web view.
+    """Perform a mouse click at the center of the web view.
 
     Note that the page is allowed time to load before and after the mouse
     click.
@@ -193,7 +196,7 @@ def qt_mouse_click_web_view(view, delay):
 
 
 def qt_target_registry():
-    """ Return an instance of TargetRegistry for testing Qt + HTMLEditor
+    """Return an instance of TargetRegistry for testing Qt + HTMLEditor
 
     Returns
     -------
@@ -207,20 +210,20 @@ def qt_target_registry():
         interaction_class=MouseClick,
         handler=lambda wrapper, _: qt_mouse_click_web_view(
             wrapper._target.control, wrapper.delay
-        )
+        ),
     )
     registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=HTMLContent,
         handler=lambda wrapper, _: (
             qt_get_page_html_content(wrapper._target.control.page())
-        )
+        ),
     )
     return registry
 
 
 def get_custom_ui_tester():
-    """ Return an instance of UITester that contains extended testing
+    """Return an instance of UITester that contains extended testing
     functionality for HTMLEditor. These implementations are used by
     TraitsUI only, are more ad hoc than they would have been if they were made
     public.
@@ -236,7 +239,7 @@ def get_custom_ui_tester():
     NO_WEBKIT_OR_WEBENGINE, "Tests require either QtWebKit or QtWebEngine"
 )
 class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
-    """ Test HTMLEditor """
+    """Test HTMLEditor"""
 
     def setUp(self):
         BaseTestMixin.setUp(self)
@@ -267,7 +270,8 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
         # this test requires Qt because it relies on the link filling up
         # the entire page through the use of CSS, which isn't supported
         # by Wx.
-        model = HTMLModel(content="""
+        model = HTMLModel(
+            content="""
         <html>
             <a
               href='/#'
@@ -276,10 +280,9 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
                 Internal Link
             </a>
         </html>
-        """)
-        view = View(
-            Item("content", editor=HTMLEditor())
+        """
         )
+        view = View(Item("content", editor=HTMLEditor()))
 
         with self.tester.create_ui(model, dict(view=view)) as ui:
             html_view = self.tester.find_by_name(ui, "content")
@@ -295,7 +298,8 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
         # this test requires Qt because it relies on the link filling up
         # the entire page through the use of CSS, which isn't supported
         # by Wx.
-        model = HTMLModel(content="""
+        model = HTMLModel(
+            content="""
         <html>
             <a
               href='test://testing'
@@ -304,10 +308,9 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
                 External Link
             </a>
         </html>
-        """)
-        view = View(
-            Item("content", editor=HTMLEditor())
+        """
         )
+        view = View(Item("content", editor=HTMLEditor()))
 
         with self.tester.create_ui(model, dict(view=view)) as ui:
             html_view = self.tester.find_by_name(ui, "content")
@@ -329,7 +332,8 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
         # this test requires Qt because it relies on the link filling up
         # the entire page through the use of CSS, which isn't supported
         # by Wx.
-        model = HTMLModel(content="""
+        model = HTMLModel(
+            content="""
         <html>
             <a
               href='test://testing'
@@ -338,10 +342,9 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
                 Internal Link
             </a>
         </html>
-        """)
-        view = View(
-            Item("content", editor=HTMLEditor(open_externally=True))
+        """
         )
+        view = View(Item("content", editor=HTMLEditor(open_externally=True)))
 
         with self.tester.create_ui(model, dict(view=view)) as ui:
             html_view = self.tester.find_by_name(ui, "content")
@@ -356,7 +359,8 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
 
     @requires_toolkit([ToolkitName.qt])
     def test_open_external_link_externally(self):
-        model = HTMLModel(content="""
+        model = HTMLModel(
+            content="""
         <html>
             <a
               href='test://testing'
@@ -365,10 +369,9 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
                 External Link
             </a>
         </html>
-        """)
-        view = View(
-            Item("content", editor=HTMLEditor(open_externally=True))
+        """
         )
+        view = View(Item("content", editor=HTMLEditor(open_externally=True)))
 
         with self.tester.create_ui(model, dict(view=view)) as ui:
             html_view = self.tester.find_by_name(ui, "content")

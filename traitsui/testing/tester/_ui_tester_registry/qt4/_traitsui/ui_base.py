@@ -12,12 +12,12 @@ from traitsui.qt4.ui_base import ButtonEditor
 from traitsui.testing.tester.command import MouseClick
 from traitsui.testing.tester.query import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
-    _interaction_helpers
+    _interaction_helpers,
 )
 
 
 def register(registry):
-    """ Register solvers/handlers specific to qt ui_base Editors
+    """Register solvers/handlers specific to qt ui_base Editors
     for the given registry.
 
     If there are any conflicts, an error will occur.
@@ -27,15 +27,19 @@ def register(registry):
     registry : TargetRegistry
     """
     handlers = [
-        (MouseClick,
-            (lambda wrapper, _: _interaction_helpers.mouse_click_qwidget(
-                wrapper._target.control, wrapper.delay))),
-        (DisplayedText,
-            lambda wrapper, _: wrapper._target.control.text()),
+        (
+            MouseClick,
+            (
+                lambda wrapper, _: _interaction_helpers.mouse_click_qwidget(
+                    wrapper._target.control, wrapper.delay
+                )
+            ),
+        ),
+        (DisplayedText, lambda wrapper, _: wrapper._target.control.text()),
     ]
     for interaction_class, handler in handlers:
         registry.register_interaction(
             target_class=ButtonEditor,
             interaction_class=interaction_class,
-            handler=handler
+            handler=handler,
         )

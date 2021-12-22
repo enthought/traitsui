@@ -59,23 +59,31 @@ Notes:
   'plan'.
 """
 
-#-- Imports --------------------------------------------------------------
+# -- Imports --------------------------------------------------------------
 
 import logging
 import sys
+
+from random import choice
+
+from traits.api import (
+    HasPrivateTraits,
+    Str,
+    Enum,
+    Range,
+    List,
+    Button,
+    Instance,
+    Property,
+    cached_property,
+    observe,
+)
+
+from traitsui.api import View, VGroup, HGroup, Item, ListEditor, spring
+
 logging.basicConfig(stream=sys.stderr)
 
-from random \
-    import choice
-
-from traits.api \
-    import HasPrivateTraits, Str, Enum, Range, List, Button, Instance, \
-    Property, cached_property, observe
-
-from traitsui.api \
-    import View, VGroup, HGroup, Item, ListEditor, spring
-
-#-- The Hotel class ------------------------------------------------------
+# -- The Hotel class ------------------------------------------------------
 
 
 class Hotel(HasPrivateTraits):
@@ -99,40 +107,42 @@ class Hotel(HasPrivateTraits):
     view = View(
         VGroup(
             HGroup(
-                Item('season'), '20',
+                Item('season'),
+                '20',
                 Item('fuel_cost', width=300),
                 spring,
                 Item('add_guest', show_label=False),
                 show_border=True,
-                label='Hotel Information'
+                label='Hotel Information',
             ),
             VGroup(
-                Item('guests',
-                     style='custom',
-                     editor=ListEditor(use_notebook=True,
-                                       deletable=True,
-                                       dock_style='tab',
-                                       page_name='.name')
-                     ),
+                Item(
+                    'guests',
+                    style='custom',
+                    editor=ListEditor(
+                        use_notebook=True,
+                        deletable=True,
+                        dock_style='tab',
+                        page_name='.name',
+                    ),
+                ),
                 show_labels=False,
                 show_border=True,
-                label='Guests'
-            )
+                label='Guests',
+            ),
         ),
         title='The Belmont Hotel Dashboard',
         width=0.6,
         height=0.2,
-        resizable=True
+        resizable=True,
     )
 
     # Property implementations:
     @cached_property
     def _get_min_temperature(self):
-        return ({'Winter': 32,
-                 'Spring': 40,
-                 'Summer': 45,
-                 'Fall': 40}[self.season] +
-                min(int(60.00 / self.fuel_cost), 15))
+        return {'Winter': 32, 'Spring': 40, 'Summer': 45, 'Fall': 40}[
+            self.season
+        ] + min(int(60.00 / self.fuel_cost), 15)
 
     # Event handlers:
     @observe('guests.items')
@@ -149,7 +159,8 @@ class Hotel(HasPrivateTraits):
     def _add_guest_changed(self):
         self.guests.append(Guest(hotel=self))
 
-#-- The Guest class ------------------------------------------------------
+
+# -- The Guest class ------------------------------------------------------
 
 
 class Guest(HasPrivateTraits):
@@ -170,27 +181,40 @@ class Guest(HasPrivateTraits):
     temperature = Range('hotel.min_temperature', 'max_temperature')
 
     # The view of the guest:
-    view = View(
-        Item('plan'),
-        Item('temperature')
-    )
+    view = View(Item('plan'), Item('temperature'))
 
     # Property implementations:
     @cached_property
     def _get_max_temperature(self):
-        return {'Flop house': 62,
-                'Cheap': 66,
-                'Cozy': 75,
-                'Deluxe': 85}[self.plan]
+        return {'Flop house': 62, 'Cheap': 66, 'Cozy': 75, 'Deluxe': 85}[
+            self.plan
+        ]
 
     # Default values:
     def _name_default(self):
         return choice(
-            ['Leah', 'Vibha', 'Janet', 'Jody', 'Dave', 'Evan', 'Ilan', 'Gael',
-             'Peter', 'Robert', 'Judah', 'Eric', 'Travis', 'Mike', 'Bryce',
-             'Chris'])
+            [
+                'Leah',
+                'Vibha',
+                'Janet',
+                'Jody',
+                'Dave',
+                'Evan',
+                'Ilan',
+                'Gael',
+                'Peter',
+                'Robert',
+                'Judah',
+                'Eric',
+                'Travis',
+                'Mike',
+                'Bryce',
+                'Chris',
+            ]
+        )
 
-#-- Create the demo ------------------------------------------------------
+
+# -- Create the demo ------------------------------------------------------
 
 # Create the demo object:
 demo = Hotel(guests=[Guest() for i in range(5)])

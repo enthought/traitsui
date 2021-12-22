@@ -79,15 +79,13 @@ key_map = {
 
 
 class MakeMenu:
-    """ Manages creation of menus.
-    """
+    """Manages creation of menus."""
 
     #: Initialize the globally unique menu ID:
     cur_id = 1000
 
     def __init__(self, desc, owner, popup=False, window=None):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         self.owner = owner
         if window is None:
             window = owner
@@ -108,8 +106,7 @@ class MakeMenu:
                 window.SetAcceleratorTable(wx.AcceleratorTable(self.keys))
 
     def parse(self, menu, indent):
-        """ Recursively parses menu items from the description.
-        """
+        """Recursively parses menu items from the description."""
 
         while True:
 
@@ -245,8 +242,7 @@ class MakeMenu:
                 menu.Append(submenu, label)
 
     def get_body(self, indent):
-        """ Returns the body of an inline method.
-        """
+        """Returns the body of an inline method."""
         result = []
         while self.index < len(self.desc):
             line = self.desc[self.index]
@@ -260,37 +256,32 @@ class MakeMenu:
         return "  pass"
 
     def get_id(self, name):
-        """ Returns the ID associated with a specified name.
-        """
+        """Returns the ID associated with a specified name."""
         if isinstance(name, str):
             return self.names[name]
         return name
 
     def checked(self, name, check=None):
-        """ Checks (or unchecks) a menu item specified by name.
-        """
+        """Checks (or unchecks) a menu item specified by name."""
         if check is None:
             return self.menu.IsChecked(self.get_id(name))
         self.menu.Check(self.get_id(name), check)
 
     def enabled(self, name, enable=None):
-        """ Enables (or disables) a menu item specified by name.
-        """
+        """Enables (or disables) a menu item specified by name."""
         if enable is None:
             return self.menu.IsEnabled(self.get_id(name))
         self.menu.Enable(self.get_id(name), enable)
 
     def label(self, name, label=None):
-        """ Gets or sets the label for a menu item.
-        """
+        """Gets or sets the label for a menu item."""
         if label is None:
             return self.menu.GetLabel(self.get_id(name))
         self.menu.SetLabel(self.get_id(name), label)
 
 
 class MakeMenuItem:
-    """ A menu item for a menu managed by MakeMenu.
-    """
+    """A menu item for a menu managed by MakeMenu."""
 
     def __init__(self, menu, id):
         self.menu = menu
@@ -318,7 +309,7 @@ class MakeMenuItem:
 
 
 def option_check(test, string):
-    """ Determines whether a string contains any specified option characters,
+    """Determines whether a string contains any specified option characters,
     and removes them if it does.
     """
     result = []

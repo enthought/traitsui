@@ -34,7 +34,7 @@ from .clipboard import PyMimeData, clipboard
 
 
 class SimpleEditor(Editor):
-    """ Simple style of drop editor, which displays a read-only text field that
+    """Simple style of drop editor, which displays a read-only text field that
     contains the string representation of the object trait's value.
     """
 
@@ -42,8 +42,8 @@ class SimpleEditor(Editor):
     ok_color = DropColor
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         if self.factory.readonly:
             self.control = QtGui.QLineEdit(self.str_value)
@@ -63,8 +63,7 @@ class SimpleEditor(Editor):
         self.control._qt4_editor = self
 
     def dispose(self):
-        """ Disposes of the content of an editor.
-        """
+        """Disposes of the content of an editor."""
         if self.factory.readonly:
             # enthought/traitsui#884
             _BaseEditor.dispose(self)
@@ -72,15 +71,13 @@ class SimpleEditor(Editor):
             super().dispose()
 
     def string_value(self, value):
-        """ Returns the text representation of a specified object trait value.
-        """
+        """Returns the text representation of a specified object trait value."""
         if value is None:
             return ""
         return str(value)
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-        """
+        """Handles an error that occurs while setting the object's trait value."""
         pass
 
 
@@ -94,8 +91,7 @@ class _DropEventFilter(QtCore.QObject):
         return super().eventFilter(source, event)
 
     def dropEvent(self, e):
-        """ Handles a Python object being dropped on the tree.
-        """
+        """Handles a Python object being dropped on the tree."""
         editor = self.parent()._qt4_editor
 
         klass = editor.factory.klass
@@ -122,8 +118,7 @@ class _DropEventFilter(QtCore.QObject):
             e.acceptProposedAction()
 
     def dragEnterEvent(self, e):
-        """ Handles a Python object being dragged over the tree.
-        """
+        """Handles a Python object being dragged over the tree."""
         editor = self.parent()._qt4_editor
 
         if editor.factory.binding:

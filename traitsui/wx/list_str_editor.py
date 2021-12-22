@@ -24,6 +24,7 @@ from traits.api import (
     Event,
     TraitListEvent,
     Property,
+    Dict,
 )
 
 # FIXME: ListStrEditor is a proxy class defined here just for backward
@@ -50,12 +51,10 @@ except:
 
 
 class wxListCtrl(wx.ListCtrl):
-    """ Subclass of wx.ListCtrl to provide correct virtual list behavior.
-    """
+    """Subclass of wx.ListCtrl to provide correct virtual list behavior."""
 
     def OnGetItemAttr(self, index):
-        """ Returns the display attributes to use for the specified list item.
-        """
+        """Returns the display attributes to use for the specified list item."""
         # fixme: There appears to be a bug in wx in that they do not correctly
         # manage the reference count for the returned object, and it seems to be
         # gc'ed before they finish using it. So we store an object reference to
@@ -80,8 +79,7 @@ class wxListCtrl(wx.ListCtrl):
         return attr
 
     def OnGetItemImage(self, index):
-        """ Returns the image index to use for the specified list item.
-        """
+        """Returns the image index to use for the specified list item."""
         editor = self._editor
         if editor._is_auto_add(index):
             image = editor.adapter.get_default_image(
@@ -97,8 +95,7 @@ class wxListCtrl(wx.ListCtrl):
         return -1
 
     def OnGetItemText(self, index, column):
-        """ Returns the text to use for the specified list item.
-        """
+        """Returns the text to use for the specified list item."""
         editor = self._editor
 
         if editor._is_auto_add(index):
@@ -108,8 +105,7 @@ class wxListCtrl(wx.ListCtrl):
 
 
 class _ListStrEditor(Editor):
-    """ Traits UI editor for editing lists of strings.
-    """
+    """Traits UI editor for editing lists of strings."""
 
     # -- Trait Definitions ----------------------------------------------------
 
@@ -146,11 +142,11 @@ class _ListStrEditor(Editor):
     #: The adapter from list items to editor values:
     adapter = Instance(ListStrAdapter)
 
-    #: Dictionaly mapping image names to wx.ImageList indices:
-    images = Any({})
+    #: Dictionary mapping image names to wx.ImageList indices:
+    images = Dict()
 
     #: Dictionary mapping ImageResource objects to wx.ImageList indices:
-    image_resources = Any({})
+    image_resources = Dict()
 
     #: The current number of item currently in the list:
     item_count = Property()
@@ -159,8 +155,8 @@ class _ListStrEditor(Editor):
     search = Str()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
 
@@ -256,8 +252,7 @@ class _ListStrEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         disconnect_no_id(
             self.control,
             wx.EVT_SIZE,
@@ -280,8 +275,8 @@ class _ListStrEditor(Editor):
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         control = self.control
         top = control.GetTopItem()
@@ -327,9 +322,13 @@ class _ListStrEditor(Editor):
             return
 
         if 0 <= (index - top) < pn:
-            control.EnsureVisible(min(top + pn - 2, control.GetItemCount() - 1))
+            control.EnsureVisible(
+                min(top + pn - 2, control.GetItemCount() - 1)
+            )
         elif index < top:
-            control.EnsureVisible(min(index + pn - 1, control.GetItemCount() - 1))
+            control.EnsureVisible(
+                min(index + pn - 1, control.GetItemCount() - 1)
+            )
         else:
             control.EnsureVisible(index)
 
@@ -350,15 +349,13 @@ class _ListStrEditor(Editor):
     # -- Trait Event Handlers -------------------------------------------------
 
     def _title_changed(self, title):
-        """ Handles the editor title being changed.
-        """
+        """Handles the editor title being changed."""
         list_item = wx.ListItem()
         list_item.SetText(title)
         self.control.SetColumn(0, list_item)
 
     def _selected_changed(self, selected):
-        """ Handles the editor's 'selected' trait being changed.
-        """
+        """Handles the editor's 'selected' trait being changed."""
         if not self._no_update:
             try:
                 self.control.SetItemState(
@@ -370,8 +367,7 @@ class _ListStrEditor(Editor):
                 pass
 
     def _selected_index_changed(self, selected_index):
-        """ Handles the editor's 'selected_index' trait being changed.
-        """
+        """Handles the editor's 'selected_index' trait being changed."""
         if not self._no_update:
             try:
                 self.control.SetItemState(
@@ -383,8 +379,7 @@ class _ListStrEditor(Editor):
                 pass
 
     def _multi_selected_changed(self, selected):
-        """ Handles the editor's 'multi_selected' trait being changed.
-        """
+        """Handles the editor's 'multi_selected' trait being changed."""
         if not self._no_update:
             values = self.value
             try:
@@ -395,8 +390,7 @@ class _ListStrEditor(Editor):
                 pass
 
     def _multi_selected_items_changed(self, event):
-        """ Handles the editor's 'multi_selected' trait being modified.
-        """
+        """Handles the editor's 'multi_selected' trait being modified."""
         values = self.value
         try:
             self._multi_selected_indices_items_changed(
@@ -410,8 +404,7 @@ class _ListStrEditor(Editor):
             pass
 
     def _multi_selected_indices_changed(self, selected_indices):
-        """ Handles the editor's 'multi_selected_indices' trait being changed.
-        """
+        """Handles the editor's 'multi_selected_indices' trait being changed."""
         if not self._no_update:
             control = self.control
             selected = self._get_selected()
@@ -435,8 +428,7 @@ class _ListStrEditor(Editor):
                 control.SetItemState(index, 0, wx.LIST_STATE_SELECTED)
 
     def _multi_selected_indices_items_changed(self, event):
-        """ Handles the editor's 'multi_selected_indices' trait being modified.
-        """
+        """Handles the editor's 'multi_selected_indices' trait being modified."""
         control = self.control
 
         # Remove all items that are no longer selected:
@@ -452,8 +444,8 @@ class _ListStrEditor(Editor):
     # -- List Control Event Handlers ------------------------------------------
 
     def _begin_drag(self, event):
-        """ Handles the user beginning a drag operation with the left mouse
-            button.
+        """Handles the user beginning a drag operation with the left mouse
+        button.
         """
         if PythonDropSource is not None:
             adapter = self.adapter
@@ -499,8 +491,7 @@ class _ListStrEditor(Editor):
                 self._drag_local = False
 
     def _begin_label_edit(self, event):
-        """ Handles the user starting to edit an item label.
-        """
+        """Handles the user starting to edit an item label."""
         index = event.GetIndex()
 
         if (not self._is_auto_add(index)) and (
@@ -509,13 +500,11 @@ class _ListStrEditor(Editor):
             event.Veto()
 
     def _end_label_edit(self, event):
-        """ Handles the user finishing editing an item label.
-        """
+        """Handles the user finishing editing an item label."""
         self._set_text_current(event.GetIndex(), event.GetText())
 
     def _item_selected(self, event):
-        """ Handles an item being selected.
-        """
+        """Handles an item being selected."""
         self._no_update = True
         try:
             get_item = self.adapter.get_item
@@ -536,8 +525,7 @@ class _ListStrEditor(Editor):
             self._no_update = False
 
     def _item_activated(self, event):
-        """ Handles an item being activated (double-clicked or enter pressed).
-        """
+        """Handles an item being activated (double-clicked or enter pressed)."""
         self.activated_index = event.GetIndex()
         if "edit" in self.factory.operations:
             self._edit_current()
@@ -547,8 +535,7 @@ class _ListStrEditor(Editor):
             )
 
     def _right_clicked(self, event):
-        """ Handles an item being right clicked.
-        """
+        """Handles an item being right clicked."""
         index = event.GetIndex()
         if index == -1:
             return
@@ -594,15 +581,13 @@ class _ListStrEditor(Editor):
             event.Skip()
 
     def _size_modified(self, event):
-        """ Handles the size of the list control being changed.
-        """
+        """Handles the size of the list control being changed."""
         dx, dy = self.control.GetClientSize()
         self.control.SetColumnWidth(0, dx - 1)
         event.Skip()
 
     def _left_down(self, event):
-        """ Handles the user pressing the left mouse button.
-        """
+        """Handles the user pressing the left mouse button."""
         index, flags = self.control.HitTest(
             wx.Point(event.GetX(), event.GetY())
         )
@@ -615,8 +600,7 @@ class _ListStrEditor(Editor):
     # -- Drag and Drop Event Handlers -----------------------------------------
 
     def wx_dropped_on(self, x, y, data, drag_result):
-        """ Handles a Python object being dropped on the list control.
-        """
+        """Handles a Python object being dropped on the list control."""
         index, flags = self.control.HitTest(wx.Point(x, y))
 
         # If the user dropped it on an empty list, set the target as past the
@@ -652,8 +636,8 @@ class _ListStrEditor(Editor):
         return wx.DragNone
 
     def _wx_dropped_on(self, index, item):
-        """ Helper method for handling a single item dropped on the list
-            control.
+        """Helper method for handling a single item dropped on the list
+        control.
         """
         adapter = self.adapter
         object, name = self.object, self.name
@@ -680,8 +664,7 @@ class _ListStrEditor(Editor):
                 indices[i] += 1
 
     def wx_drag_over(self, x, y, data, drag_result):
-        """ Handles a Python object being dragged over the tree.
-        """
+        """Handles a Python object being dragged over the tree."""
         if isinstance(data, list):
             rc = wx.DragNone
             for item in data:
@@ -715,13 +698,11 @@ class _ListStrEditor(Editor):
     # -- Private Methods ------------------------------------------------------
 
     def _refresh(self):
-        """ Refreshes the contents of the editor's list control.
-        """
+        """Refreshes the contents of the editor's list control."""
         self.control.RefreshItems(0, len(self.value) - 1)
 
     def _add_image(self, image_resource):
-        """ Adds a new image to the wx.ImageList and its associated mapping.
-        """
+        """Adds a new image to the wx.ImageList and its associated mapping."""
         bitmap = image_resource.create_image().ConvertToBitmap()
 
         image_list = self._image_list
@@ -738,8 +719,7 @@ class _ListStrEditor(Editor):
         return index
 
     def _get_image(self, image):
-        """ Converts a user specified image to a wx.ListCtrl image index.
-        """
+        """Converts a user specified image to a wx.ListCtrl image index."""
         if isinstance(image, ImageResource):
             result = self.image_resources.get(image)
             if result is not None:
@@ -750,8 +730,7 @@ class _ListStrEditor(Editor):
         return self.images.get(image)
 
     def _get_selected(self):
-        """ Returns a list of the indices of all currently selected list items.
-        """
+        """Returns a list of the indices of all currently selected list items."""
         selected = []
         item = -1
         control = self.control
@@ -767,8 +746,7 @@ class _ListStrEditor(Editor):
         return selected
 
     def _search_for_string(self, increment=0):
-        """ Searches for the next occurrence of the current search string.
-        """
+        """Searches for the next occurrence of the current search string."""
         selected = self._get_selected()
         if len(selected) > 1:
             return
@@ -794,8 +772,7 @@ class _ListStrEditor(Editor):
                 break
 
     def _append_new(self):
-        """ Append a new item to the end of the list control.
-        """
+        """Append a new item to the end of the list control."""
         if "append" in self.factory.operations:
             self.edit = True
             adapter = self.adapter
@@ -813,8 +790,7 @@ class _ListStrEditor(Editor):
                 )
 
     def _copy_current(self):
-        """ Copies the currently selected list control item to the clipboard.
-        """
+        """Copies the currently selected list control item to the clipboard."""
         selected = self._get_selected()
         if len(selected) == 1:
             index = selected[0]
@@ -831,8 +807,8 @@ class _ListStrEditor(Editor):
                     pass
 
     def _cut_current(self):
-        """ Cuts the currently selected list control item and places its value
-            in the clipboard.
+        """Cuts the currently selected list control item and places its value
+        in the clipboard.
         """
         ops = self.factory.operations
         if ("insert" in ops) and ("delete" in ops):
@@ -854,8 +830,8 @@ class _ListStrEditor(Editor):
                         pass
 
     def _paste_current(self):
-        """ Pastes the clipboard contents into the currently selected list
-            control item.
+        """Pastes the clipboard contents into the currently selected list
+        control item.
         """
         if "insert" in self.factory.operations:
             selected = self._get_selected()
@@ -872,8 +848,7 @@ class _ListStrEditor(Editor):
                     pass
 
     def _insert_current(self):
-        """ Inserts a new item after the currently selected list control item.
-        """
+        """Inserts a new item after the currently selected list control item."""
         if "insert" in self.factory.operations:
             selected = self._get_selected()
             if len(selected) == 1:
@@ -888,8 +863,7 @@ class _ListStrEditor(Editor):
                 )
 
     def _delete_current(self):
-        """ Deletes the currently selected items from the list control.
-        """
+        """Deletes the currently selected items from the list control."""
         if "delete" in self.factory.operations:
             selected = self._get_selected()
             if len(selected) == 0:
@@ -904,8 +878,7 @@ class _ListStrEditor(Editor):
                     delete(self.object, self.name, index)
 
     def _move_up_current(self):
-        """ Moves the currently selected item up one line in the list control.
-        """
+        """Moves the currently selected item up one line in the list control."""
         if "move" in self.factory.operations:
             selected = self._get_selected()
             if len(selected) == 1:
@@ -920,8 +893,7 @@ class _ListStrEditor(Editor):
                     adapter.insert(object, name, index - 1, item)
 
     def _move_down_current(self):
-        """ Moves the currently selected item down one line in the list control.
-        """
+        """Moves the currently selected item down one line in the list control."""
         if "move" in self.factory.operations:
             selected = self._get_selected()
             if len(selected) == 1:
@@ -936,24 +908,22 @@ class _ListStrEditor(Editor):
                     adapter.insert(object, name, index + 1, item)
 
     def _edit_current(self):
-        """ Allows the user to edit the current item in the list control.
-        """
+        """Allows the user to edit the current item in the list control."""
         if "edit" in self.factory.operations:
             selected = self._get_selected()
             if len(selected) == 1:
                 self.control.EditLabel(selected[0])
 
     def _is_auto_add(self, index):
-        """ Returns whether or not the index is the special 'auto add' item at
-            the end of the list.
+        """Returns whether or not the index is the special 'auto add' item at
+        the end of the list.
         """
         return self.factory.auto_add and (
             index >= self.adapter.len(self.object, self.name)
         )
 
     def _set_text_current(self, index, text, insert=False):
-        """ Sets the text value of the specified list control item.
-        """
+        """Sets the text value of the specified list control item."""
         if text.strip() != "":
             object, name, adapter = self.object, self.name, self.adapter
             if insert or self._is_auto_add(index):

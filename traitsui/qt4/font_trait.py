@@ -57,8 +57,7 @@ font_noise = ["pt", "point", "family"]
 
 
 def font_to_str(font):
-    """ Converts a QFont into a string description of itself.
-    """
+    """Converts a QFont into a string description of itself."""
     weight = {QtGui.QFont.Light: " Light", QtGui.QFont.Bold: " Bold"}.get(
         font.weight(), ""
     )
@@ -79,8 +78,7 @@ def font_to_str(font):
 
 
 def create_traitsfont(value):
-    """ Create a TraitFont object from a string description.
-    """
+    """Create a TraitFont object from a string description."""
     if isinstance(value, QtGui.QFont):
         return TraitsFont(value)
 
@@ -133,17 +131,14 @@ def create_traitsfont(value):
 
 
 class TraitsFont(QtGui.QFont):
-    """ A Traits-specific QFont.
-    """
+    """A Traits-specific QFont."""
 
     def __reduce_ex__(self, protocol):
-        """ Returns the pickleable form of a TraitsFont object.
-        """
+        """Returns the pickleable form of a TraitsFont object."""
         return (create_traitsfont, (font_to_str(self),))
 
     def __str__(self):
-        """ Returns a printable form of the font.
-        """
+        """Returns a printable form of the font."""
         return font_to_str(self)
 
 
@@ -153,13 +148,13 @@ class TraitsFont(QtGui.QFont):
 
 
 class TraitPyQtFont(TraitHandler):
-    """ Ensures that values assigned to a trait attribute are valid font
+    """Ensures that values assigned to a trait attribute are valid font
     descriptor strings; the value actually assigned is the corresponding
     TraitsFont.
     """
 
     def validate(self, object, name, value):
-        """ Validates that the value is a valid font descriptor string. If so,
+        """Validates that the value is a valid font descriptor string. If so,
         it returns the corresponding TraitsFont; otherwise, it raises a
         TraitError.
         """

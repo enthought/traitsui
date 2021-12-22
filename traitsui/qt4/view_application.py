@@ -42,8 +42,7 @@ KEEP_ALIVE_UIS = set()
 
 
 def on_ui_destroyed(object, name, old, destroyed):
-    """ Remove the UI object from KEEP_ALIVE_UIS.
-    """
+    """Remove the UI object from KEEP_ALIVE_UIS."""
     assert name == "destroyed"
     if destroyed:
         assert object in KEEP_ALIVE_UIS
@@ -58,7 +57,7 @@ def on_ui_destroyed(object, name, old, destroyed):
 
 
 def view_application(context, view, kind, handler, id, scrollable, args):
-    """ Creates a stand-alone PyQt application to display a specified traits UI
+    """Creates a stand-alone PyQt application to display a specified traits UI
         View.
 
     Parameters
@@ -112,12 +111,10 @@ def view_application(context, view, kind, handler, id, scrollable, args):
 
 
 class ViewApplication(object):
-    """ Modal window that contains a stand-alone application.
-    """
+    """Modal window that contains a stand-alone application."""
 
     def __init__(self, context, view, kind, handler, id, scrollable, args):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         self.context = context
         self.view = view
         self.kind = kind

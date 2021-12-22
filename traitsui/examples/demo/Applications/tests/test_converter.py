@@ -20,7 +20,11 @@ import runpy
 import unittest
 
 from traitsui.testing.api import (
-    DisplayedText, KeyClick, KeySequence, MouseClick, UITester
+    DisplayedText,
+    KeyClick,
+    KeySequence,
+    MouseClick,
+    UITester,
 )
 
 #: Filename of the demo script

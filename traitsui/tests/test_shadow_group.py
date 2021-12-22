@@ -20,7 +20,6 @@ from traitsui.tests._tools import BaseTestMixin
 
 
 class TestShadowGroup(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

@@ -18,8 +18,7 @@ from .ui_traits import ATheme
 
 
 class DockWindowTheme(HasPrivateTraits):
-    """ Defines the theme style information for a DockWindow and its components.
-    """
+    """Defines the theme style information for a DockWindow and its components."""
 
     # -- Public Trait Definitions ---------------------------------------------
 
@@ -96,8 +95,7 @@ _dock_window_theme = None
 
 
 def dock_window_theme(theme=None):
-    """ Get or set the default DockWindow theme.
-    """
+    """Get or set the default DockWindow theme."""
     global _dock_window_theme
 
     if _dock_window_theme is None:

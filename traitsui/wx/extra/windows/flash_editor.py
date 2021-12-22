@@ -23,8 +23,7 @@ from traitsui.basic_editor_factory import BasicEditorFactory
 
 
 class _FlashEditor(Editor):
-    """ Traits UI Flash editor.
-    """
+    """Traits UI Flash editor."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -34,15 +33,15 @@ class _FlashEditor(Editor):
     scrollable = True
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = FlashWindow(parent)
         self.set_tooltip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         value = self.str_value.strip()
         if value.find("://") < 0:

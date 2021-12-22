@@ -38,7 +38,7 @@ HERE = os.path.dirname(__file__)
 
 
 class ExampleSearcher:
-    """ This object collects and reports example files to be tested."""
+    """This object collects and reports example files to be tested."""
 
     def __init__(self, source_dirs):
         """
@@ -51,7 +51,7 @@ class ExampleSearcher:
         self.files_may_be_skipped = {}
 
     def skip_file_if(self, filepath, condition, reason):
-        """ Mark a file to be skipped for a given condition.
+        """Mark a file to be skipped for a given condition.
 
         Parameters
         ----------
@@ -66,7 +66,7 @@ class ExampleSearcher:
         self.files_may_be_skipped[filepath] = (condition, reason)
 
     def is_skipped(self, filepath):
-        """ Return if the Python file should be skipped in test.
+        """Return if the Python file should be skipped in test.
 
         Parameters
         ----------
@@ -87,7 +87,7 @@ class ExampleSearcher:
         return condition(), reason
 
     def validate(self):
-        """ Validate configuration. Currently this checks all files that may
+        """Validate configuration. Currently this checks all files that may
         be skipped still exist.
         """
         for filepath in self.files_may_be_skipped:
@@ -96,7 +96,7 @@ class ExampleSearcher:
 
     @staticmethod
     def _is_python_file(path):
-        """ Return true if the given path is (public) non-test Python file."""
+        """Return true if the given path is (public) non-test Python file."""
         _, basename = os.path.split(path)
         _, ext = os.path.splitext(basename)
         return (
@@ -106,7 +106,7 @@ class ExampleSearcher:
         )
 
     def get_python_files(self):
-        """ Report Python files to be tested or to be skipped.
+        """Report Python files to be tested or to be skipped.
 
         Returns
         -------
@@ -141,7 +141,12 @@ class ExampleSearcher:
 
 # Tutorial files are not part of the package data
 TUTORIALS = os.path.join(
-    HERE, "..", "examples", "tutorials", "doc_examples", "examples",
+    HERE,
+    "..",
+    "examples",
+    "tutorials",
+    "doc_examples",
+    "examples",
 )
 
 # Demo files are part of the package data.
@@ -163,27 +168,33 @@ SEARCHER.skip_file_if(
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
-    is_wx, "ProgressRenderer is not implemented in wx.",
+    is_wx,
+    "ProgressRenderer is not implemented in wx.",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Advanced", "Scrubber_editor_demo.py"),
-    is_qt, "ScrubberEditor is not implemented in qt.",
+    is_qt,
+    "ScrubberEditor is not implemented in qt.",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Extras", "animated_GIF.py"),
-    lambda: not is_wx(), "Only support wx",
+    lambda: not is_wx(),
+    "Only support wx",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Extras", "Tree_editor_with_TreeNodeRenderer.py"),
-    lambda: not is_qt(), "Only support Qt",
+    lambda: not is_qt(),
+    "Only support Qt",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Extras", "windows", "flash.py"),
-    lambda: not is_wx(), "Only support wx",
+    lambda: not is_wx(),
+    "Only support wx",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Extras", "windows", "internet_explorer.py"),
-    lambda: not is_wx(), "Only support wx",
+    lambda: not is_wx(),
+    "Only support wx",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Misc", "demo_group_size.py"),
@@ -193,15 +204,17 @@ SEARCHER.skip_file_if(
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Standard_Editors", "VideoEditor_demo.py"),
     lambda: not is_qt5(),
-    "Only supported on Qt5"
+    "Only supported on Qt5",
 )
 SEARCHER.skip_file_if(
     os.path.join(TUTORIALS, "view_multi_object.py"),
-    lambda: True, "Require wx and is blocking.",
+    lambda: True,
+    "Require wx and is blocking.",
 )
 SEARCHER.skip_file_if(
     os.path.join(TUTORIALS, "view_standalone.py"),
-    lambda: True, "Require wx and is blocking.",
+    lambda: True,
+    "Require wx and is blocking.",
 )
 
 # Validate configuration.
@@ -214,19 +227,18 @@ SEARCHER.validate()
 
 
 def replaced_configure_traits(
-        instance,
-        filename=None,
-        view=None,
-        kind=None,
-        edit=True,
-        context=None,
-        handler=None,
-        id="",
-        scrollable=None,
-        **args
+    instance,
+    filename=None,
+    view=None,
+    kind=None,
+    edit=True,
+    context=None,
+    handler=None,
+    id="",
+    scrollable=None,
+    **args,
 ):
-    """ Mocked configure_traits to launch then close the GUI.
-    """
+    """Mocked configure_traits to launch then close the GUI."""
     ui_kwargs = dict(
         view=view,
         parent=None,
@@ -243,7 +255,7 @@ def replaced_configure_traits(
 
 @contextlib.contextmanager
 def replace_configure_traits():
-    """ Context manager to temporarily replace HasTraits.configure_traits
+    """Context manager to temporarily replace HasTraits.configure_traits
     with a mocked version such that GUI launched are closed soon after they
     are open.
     """
@@ -256,7 +268,7 @@ def replace_configure_traits():
 
 
 def run_file(file_path):
-    """ Execute a given Python file.
+    """Execute a given Python file.
 
     Parameters
     ----------
@@ -270,9 +282,9 @@ def run_file(file_path):
         "__name__": "__main__",
         "__file__": file_path,
     }
-    with replace_configure_traits(), \
-            mock.patch("sys.stdout", new_callable=io.StringIO), \
-            mock.patch("sys.argv", [file_path]):
+    with replace_configure_traits(), mock.patch(
+        "sys.stdout", new_callable=io.StringIO
+    ), mock.patch("sys.argv", [file_path]):
         # Mock stdout: Examples typically print educational information.
         # They are expected but they should not pollute test output.
         # Mock argv: Some example reads sys.argv to allow more arguments
@@ -287,7 +299,7 @@ def run_file(file_path):
 
 
 def load_tests(loader, tests, pattern):
-    """ Implement load_tests protocol so that when unittest discover is run
+    """Implement load_tests protocol so that when unittest discover is run
     with this test module, the tests in the demo folder (not a package) are
     also loaded.
 
@@ -322,9 +334,9 @@ def load_tests(loader, tests, pattern):
 # Test cases
 # =============================================================================
 
+
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestExample(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

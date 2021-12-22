@@ -23,7 +23,6 @@
 """
 
 
-
 import logging
 
 from pyface.qt import QtCore, QtGui
@@ -31,7 +30,6 @@ from pyface.qt import QtCore, QtGui
 from traitsui.ui_traits import SequenceTypes
 
 from .clipboard import PyMimeData
-
 
 
 # set up logging for the module
@@ -57,8 +55,7 @@ mime_type = "traits-ui-table-editor"
 
 
 def as_qcolor(color):
-    """ Convert a color specification (maybe a tuple) into a QColor.
-    """
+    """Convert a color specification (maybe a tuple) into a QColor."""
     if isinstance(color, SequenceTypes):
         return QtGui.QColor(*color)
     else:
@@ -356,28 +353,28 @@ class TableModel(QtCore.QAbstractTableModel):
     # -------------------------------------------------------------------------
 
     def _get_columns_drag_value(self, columns):
-        """ Returns the value to use when the specified columns are dragged or
-            copied and pasted. The parameter *cols* is a list of column indexes.
+        """Returns the value to use when the specified columns are dragged or
+        copied and pasted. The parameter *cols* is a list of column indexes.
         """
         return [self._get_column_data(column) for column in columns]
 
     def _get_column_data(self, column):
-        """ Return the model data for the column as a list """
+        """Return the model data for the column as a list"""
         editor = self._editor
         column_obj = editor.columns[column]
         return [column_obj.get_value(item) for item in editor.items()]
 
     def _get_rows_drag_value(self, rows):
-        """ Returns the value to use when the specified rows are dragged or
-            copied and pasted. The parameter *rows* is a list of row indexes.
-            Return a list of objects.
+        """Returns the value to use when the specified rows are dragged or
+        copied and pasted. The parameter *rows* is a list of row indexes.
+        Return a list of objects.
         """
         items = self._editor.items()
         return [items[row] for row in rows]
 
     def _get_cell_drag_value(self, row, column):
-        """ Returns the value to use when the specified cell is dragged or
-            copied and pasted.
+        """Returns the value to use when the specified cell is dragged or
+        copied and pasted.
         """
         editor = self._editor
         item = editor.items()[row]
@@ -440,7 +437,7 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
     # -------------------------------------------------------------------------
 
     def filterAcceptsRow(self, source_row, source_parent):
-        """"Reimplemented to use a TableFilter for filtering rows."""
+        """ "Reimplemented to use a TableFilter for filtering rows."""
 
         if self._editor._filtered_cache is None:
             return True

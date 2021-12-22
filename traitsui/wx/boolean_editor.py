@@ -25,12 +25,11 @@ from .constants import ReadonlyColor
 
 
 class SimpleEditor(Editor):
-    """ Simple style of editor for Boolean values, which displays a check box.
-    """
+    """Simple style of editor for Boolean values, which displays a check box."""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = wx.CheckBox(parent, -1, "")
         self.control.Bind(wx.EVT_CHECKBOX, self.update_object)
@@ -40,25 +39,24 @@ class SimpleEditor(Editor):
         self.control.Unbind(wx.EVT_CHECKBOX)
 
     def update_object(self, event):
-        """ Handles the user clicking the checkbox.
-        """
+        """Handles the user clicking the checkbox."""
         self.value = self.control.GetValue() != 0
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.control.SetValue(self.value)
 
 
 class ReadonlyEditor(Editor):
-    """ Read-only style of editor for Boolean values, which displays static text
+    """Read-only style of editor for Boolean values, which displays static text
     of either "True" or "False".
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = wx.TextCtrl(parent, -1, "", style=wx.TE_READONLY)
         self.control.SetBackgroundColour(ReadonlyColor)
@@ -70,8 +68,8 @@ class ReadonlyEditor(Editor):
     # -------------------------------------------------------------------------
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if self.value:
             self.control.SetValue("True")

@@ -12,7 +12,6 @@
 """
 
 
-
 import datetime
 
 from pyface.qt import QtCore, QtGui
@@ -22,20 +21,19 @@ from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 
 class SimpleEditor(Editor):
-    """ Simple Traits UI time editor that wraps QTimeEdit.
-    """
+    """Simple Traits UI time editor that wraps QTimeEdit."""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QTimeEdit()
 
         self.control.timeChanged.connect(self.update_object)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         value = self.value
         if value:
@@ -43,8 +41,7 @@ class SimpleEditor(Editor):
             self.control.setTime(q_date)
 
     def update_object(self, q_time):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         hour = q_time.hour()
         minute = q_time.minute()
         second = q_time.second()
@@ -61,12 +58,10 @@ class SimpleEditor(Editor):
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
-    """ Readonly Traits UI time editor that uses a QLabel for the view.
-    """
+    """Readonly Traits UI time editor that uses a QLabel for the view."""
 
     def _get_str_value(self):
-        """ Replace the default string value with our own time verision.
-        """
+        """Replace the default string value with our own time verision."""
         if not self.value:
             return self.factory.message
         else:

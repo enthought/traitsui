@@ -45,8 +45,7 @@ from .helper import disconnect, disconnect_no_id, BufferDC
 
 
 class _ScrubberEditor(Editor):
-    """ Traits UI simple, scrubber-based integer or float value editor.
-    """
+    """Traits UI simple, scrubber-based integer or float value editor."""
 
     #: The low end of the slider range:
     low = Any()
@@ -72,8 +71,8 @@ class _ScrubberEditor(Editor):
     }
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
 
@@ -137,8 +136,7 @@ class _ScrubberEditor(Editor):
         self._reset_scrubber()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         # Remove all of the wx event handlers:
         disconnect_no_id(
             self.control,
@@ -160,8 +158,8 @@ class _ScrubberEditor(Editor):
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.text = self.string_value(self.value)
         self._text_size = None
@@ -170,8 +168,7 @@ class _ScrubberEditor(Editor):
         self._enum_completed()
 
     def update_object(self, value):
-        """ Updates the object when the scrubber value changes.
-        """
+        """Updates the object when the scrubber value changes."""
         if self.mapping is not None:
             value = self.mapping[int(value)]
 
@@ -186,23 +183,20 @@ class _ScrubberEditor(Editor):
                     self.update_editor()
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-        """
+        """Handles an error that occurs while setting the object's trait value."""
         pass
 
     # -- Trait Event Handlers -------------------------------------------------
 
     def _mapping_changed(self, mapping):
-        """ Handles the Enum mapping being changed.
-        """
+        """Handles the Enum mapping being changed."""
         self.high = len(mapping) - 1
 
     # -- Private Methods ------------------------------------------------------
 
     @observe("low, high")
     def _reset_scrubber(self, event=None):
-        """ Sets the the current tooltip.
-        """
+        """Sets the the current tooltip."""
         low, high = self.low, self.high
         if self._can_set_tooltip:
             if self.mapping is not None:
@@ -233,8 +227,8 @@ class _ScrubberEditor(Editor):
         self.update_editor()
 
     def _get_text_bounds(self):
-        """ Get the window bounds of where the current text should be
-            displayed.
+        """Get the window bounds of where the current text should be
+        displayed.
         """
         tdx, tdy, descent, leading = self._get_text_size()
         wdx, wdy = self.control.GetClientSize()
@@ -250,8 +244,7 @@ class _ScrubberEditor(Editor):
         return (tx, ty, tdx, tdy)
 
     def _get_text_size(self):
-        """ Returns the text size information for the window.
-        """
+        """Returns the text size information for the window."""
         if self._text_size is None:
             self._text_size = self.control.GetFullTextExtent(
                 self.text.strip() or "M"
@@ -260,14 +253,13 @@ class _ScrubberEditor(Editor):
         return self._text_size
 
     def _refresh(self):
-        """ Refreshes the contents of the control.
-        """
+        """Refreshes the contents of the control."""
         if self.control is not None:
             self.control.Refresh()
 
     def _set_scrubber_position(self, event, delta):
-        """ Calculates a new scrubber value for a specified mouse position
-            change.
+        """Calculates a new scrubber value for a specified mouse position
+        change.
         """
         clicks = 3
         increment = self.increment
@@ -288,13 +280,12 @@ class _ScrubberEditor(Editor):
         self.update_object(value)
 
     def _delayed_click(self):
-        """ Handle a delayed click response.
-        """
+        """Handle a delayed click response."""
         self._pending = False
 
     def _pop_up_editor(self):
-        """ Pop-up a text control to allow the user to enter a value using
-            the keyboard.
+        """Pop-up a text control to allow the user to enter a value using
+        the keyboard.
         """
         self.control.SetCursor(wx.Cursor(wx.CURSOR_ARROW))
 
@@ -343,8 +334,7 @@ class _ScrubberEditor(Editor):
         text.Bind(wx.EVT_CHAR, self._key_entered)
 
     def _destroy_text(self):
-        """ Destroys the current text control.
-        """
+        """Destroys the current text control."""
         self._ignore_focus = self._in_text_window
 
         self._disconnect_text()
@@ -354,8 +344,7 @@ class _ScrubberEditor(Editor):
         self._text = None
 
     def _disconnect_text(self):
-        """ Disconnects the event handlers for the pop up text editor.
-        """
+        """Disconnects the event handlers for the pop up text editor."""
         if self._text is not None:
             disconnect(self._text, wx.EVT_TEXT_ENTER)
             disconnect_no_id(
@@ -367,8 +356,8 @@ class _ScrubberEditor(Editor):
             )
 
     def _init_value(self):
-        """ Initializes the current value when the user begins a drag or moves
-            the mouse wheel.
+        """Initializes the current value when the user begins a drag or moves
+        the mouse wheel.
         """
         if self.mapping is not None:
             try:
@@ -381,13 +370,11 @@ class _ScrubberEditor(Editor):
     # --- wxPython Event Handlers ---------------------------------------------
 
     def _erase_background(self, event):
-        """ Do not erase the background here (do it in the 'on_paint' handler).
-        """
+        """Do not erase the background here (do it in the 'on_paint' handler)."""
         pass
 
     def _on_paint(self, event):
-        """ Paint the background using the associated ImageSlice object.
-        """
+        """Paint the background using the associated ImageSlice object."""
         control = self.control
         dc = BufferDC(control)
 
@@ -430,14 +417,12 @@ class _ScrubberEditor(Editor):
         dc.copy()
 
     def _resize(self, event):
-        """ Handles the control being resized.
-        """
+        """Handles the control being resized."""
         if self._text is not None:
             self._text.SetSize(self.control.GetSize())
 
     def _set_focus(self, event):
-        """ Handle the control getting the keyboard focus.
-        """
+        """Handle the control getting the keyboard focus."""
         if (
             (not self._ignore_focus)
             and (self._x is None)
@@ -447,17 +432,16 @@ class _ScrubberEditor(Editor):
         event.Skip()
 
     def _enter_window(self, event):
-        """ Handles the mouse entering the window.
-        """
+        """Handles the mouse entering the window."""
         self._hover = True
 
         self.control.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-        
+
         if not self._ignore_focus:
             self._ignore_focus = True
             self.control.SetFocus()
         self._ignore_focus = False
-        
+
         if self._x is not None:
             if self.factory.active_color_ != self.factory.color_:
                 self.control.Refresh()
@@ -465,16 +449,14 @@ class _ScrubberEditor(Editor):
             self.control.Refresh()
 
     def _leave_window(self, event):
-        """ Handles the mouse leaving the window.
-        """
+        """Handles the mouse leaving the window."""
         self._hover = False
 
         if self.factory.hover_color_ != self.factory.color_:
             self.control.Refresh()
 
     def _left_down(self, event):
-        """ Handles the left mouse being pressed.
-        """
+        """Handles the left mouse being pressed."""
         self._x, self._y = event.GetX(), event.GetY()
         self._pending = True
 
@@ -488,8 +470,7 @@ class _ScrubberEditor(Editor):
         do_after(200, self._delayed_click)
 
     def _left_up(self, event):
-        """ Handles the left mouse button being released.
-        """
+        """Handles the left mouse button being released."""
         self.control.ReleaseMouse()
         if self._pending:
             self._pop_up_editor()
@@ -500,8 +481,7 @@ class _ScrubberEditor(Editor):
             self.control.Refresh()
 
     def _motion(self, event):
-        """ Handles the mouse moving.
-        """
+        """Handles the mouse moving."""
         if self._x is not None:
             x, y = event.GetX(), event.GetY()
             dx = x - self._x
@@ -521,19 +501,19 @@ class _ScrubberEditor(Editor):
             self._set_scrubber_position(event, delta)
 
     def _mouse_wheel(self, event):
-        """ Handles the mouse wheel moving.
-        """
+        """Handles the mouse wheel moving."""
         if self._hover:
             self._init_value()
             clicks = 3
             if event.ShiftDown():
                 clicks = 7
-            delta = clicks * (event.GetWheelRotation() // event.GetWheelDelta())
+            delta = clicks * (
+                event.GetWheelRotation() // event.GetWheelDelta()
+            )
             self._set_scrubber_position(event, delta)
 
     def _update_value(self, event):
-        """ Updates the object value from the current text control value.
-        """
+        """Updates the object value from the current text control value."""
         control = event.GetEventObject()
         try:
             self.update_object(float(control.GetValue()))
@@ -547,26 +527,22 @@ class _ScrubberEditor(Editor):
             return False
 
     def _enter_text(self, event):
-        """ Handles the mouse entering the pop-up text control.
-        """
+        """Handles the mouse entering the pop-up text control."""
         self._in_text_window = True
 
     def _leave_text(self, event):
-        """ Handles the mouse leaving the pop-up text control.
-        """
+        """Handles the mouse leaving the pop-up text control."""
         self._in_text_window = False
 
     def _text_completed(self, event):
-        """ Handles the user pressing the 'Enter' key in the text control.
-        """
+        """Handles the user pressing the 'Enter' key in the text control."""
         if isinstance(event, wx.FocusEvent):
             event.Skip()
         if self._update_value(event):
             self._destroy_text()
 
     def _enum_completed(self, event=None):
-        """ Handles the Enum drop-down control losing focus.
-        """
+        """Handles the Enum drop-down control losing focus."""
         if self._ui is not None:
             self._ignore_focus = True
             disconnect_no_id(
@@ -576,8 +552,7 @@ class _ScrubberEditor(Editor):
             del self._ui
 
     def _key_entered(self, event):
-        """ Handles individual key strokes while the text control is active.
-        """
+        """Handles individual key strokes while the text control is active."""
         key_code = event.GetKeyCode()
         if key_code == wx.WXK_ESCAPE:
             self._destroy_text()

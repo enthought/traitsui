@@ -47,7 +47,6 @@ do = DefaultOverride(x=15, y=25, format_str="%r")
 
 
 class TestDefaultOverride(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -55,8 +54,15 @@ class TestDefaultOverride(BaseTestMixin, unittest.TestCase):
         BaseTestMixin.tearDown(self)
 
     def test_simple_override(self):
-        editor_name, editor, ui, obj, name, description, parent = \
-            do.simple_editor("ui", dummy_object, "x", "description", "parent")
+        (
+            editor_name,
+            editor,
+            ui,
+            obj,
+            name,
+            description,
+            parent,
+        ) = do.simple_editor("ui", dummy_object, "x", "description", "parent")
         self.assertEqual(editor_name, "simple_editor")
         self.assertEqual(editor.x, 15)
         self.assertEqual(editor.y, 25)
@@ -66,8 +72,15 @@ class TestDefaultOverride(BaseTestMixin, unittest.TestCase):
         self.assertEqual(parent, "parent")
 
     def test_text_override(self):
-        editor_name, editor, ui, obj, name, description, parent = \
-            do.text_editor("ui", dummy_object, "x", "description", "parent")
+        (
+            editor_name,
+            editor,
+            ui,
+            obj,
+            name,
+            description,
+            parent,
+        ) = do.text_editor("ui", dummy_object, "x", "description", "parent")
         self.assertEqual(editor_name, "text_editor")
         self.assertEqual(editor.x, 15)
         self.assertEqual(editor.y, 25)
@@ -77,8 +90,15 @@ class TestDefaultOverride(BaseTestMixin, unittest.TestCase):
         self.assertEqual(parent, "parent")
 
     def test_custom_override(self):
-        editor_name, editor, ui, obj, name, description, parent = \
-            do.custom_editor("ui", dummy_object, "x", "description", "parent")
+        (
+            editor_name,
+            editor,
+            ui,
+            obj,
+            name,
+            description,
+            parent,
+        ) = do.custom_editor("ui", dummy_object, "x", "description", "parent")
         self.assertEqual(editor_name, "custom_editor")
         self.assertEqual(editor.x, 15)
         self.assertEqual(editor.y, 25)
@@ -88,10 +108,17 @@ class TestDefaultOverride(BaseTestMixin, unittest.TestCase):
         self.assertEqual(parent, "parent")
 
     def test_readonly_override(self):
-        editor_name, editor, ui, obj, name, description, parent = \
-            do.readonly_editor(
-                "ui", dummy_object, "x", "description", "parent"
-            )
+        (
+            editor_name,
+            editor,
+            ui,
+            obj,
+            name,
+            description,
+            parent,
+        ) = do.readonly_editor(
+            "ui", dummy_object, "x", "description", "parent"
+        )
         self.assertEqual(editor_name, "readonly_editor")
         self.assertEqual(editor.x, 15)
         self.assertEqual(editor.y, 25)

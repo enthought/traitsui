@@ -38,37 +38,36 @@ class ToolkitName(enum.Enum):
 
 
 def is_wx():
-    """ Return true if the toolkit backend is wx. """
+    """Return true if the toolkit backend is wx."""
     return ETSConfig.toolkit == ToolkitName.wx.name
 
 
 def is_qt():
-    """ Return true if the toolkit backend is Qt
+    """Return true if the toolkit backend is Qt
     (that includes Qt4 or Qt5, etc.)
     """
     return ETSConfig.toolkit.startswith(ToolkitName.qt.name)
 
 
 def is_qt5():
-    """ Return true if the toolkit backend is Qt5.
-    """
+    """Return true if the toolkit backend is Qt5."""
     if not is_qt():
         return False
 
     # Only AFTER confirming Qt's availability...
     # We lean on Pyface here since the check is complicated.
     import pyface.qt
+
     return pyface.qt.is_qt5
 
 
 def is_null():
-    """ Return true if the toolkit backend is null.
-    """
+    """Return true if the toolkit backend is null."""
     return ETSConfig.toolkit == ToolkitName.null.name
 
 
 def requires_toolkit(toolkits):
-    """ Decorator factory for skipping tests if the current toolkit is not
+    """Decorator factory for skipping tests if the current toolkit is not
     one of the given values.
 
     Parameters
@@ -83,7 +82,7 @@ def requires_toolkit(toolkits):
     }
     return skipIf(
         not any(mapping[toolkit]() for toolkit in toolkits),
-        "Test requires one of these toolkits: {}".format(toolkits)
+        "Test requires one of these toolkits: {}".format(toolkits),
     )
 
 
@@ -124,7 +123,7 @@ def filter_tests(test_suite, exclusion_pattern):
 
 
 def create_ui(object, ui_kwargs=None):
-    """ Context manager for creating a UI and then dispose it when exiting
+    """Context manager for creating a UI and then dispose it when exiting
     the context.
 
     Parameters
@@ -243,12 +242,12 @@ def get_all_button_status(control):
 
     return button_status
 
+
 # ######### Debug tools
 
 
 def apply_on_children(func, node, _level=0):
-    """Print the result of applying a function on `node` and its children.
-    """
+    """Print the result of applying a function on `node` and its children."""
     print("-" * _level + str(node))
     print(" " * _level + str(func(node)) + "\n")
     for child in get_children(node):
@@ -329,7 +328,7 @@ if no_gui_test_assistant:
 
 
 class BaseTestMixin:
-    """ This is a mixin class for all test cases in TraitsUI, regardless of
+    """This is a mixin class for all test cases in TraitsUI, regardless of
     whether GUI is involved.
 
     Not to be used externally.

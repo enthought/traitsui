@@ -33,13 +33,15 @@ none_str_trait = Union(None, Str, default_value="")
 
 
 def ui_wizard(ui, parent):
-    """ Creates a wizard-based wxPython user interface for a specified UI
+    """Creates a wizard-based wxPython user interface for a specified UI
     object.
     """
     # Create the copy of the 'context' we will need while editing:
     ui._context = context = ui.context
-    new_context = {name: None if value is None else value.clone_traits()
-                   for name, value in context.items()}
+    new_context = {
+        name: None if value is None else value.clone_traits()
+        for name, value in context.items()
+    }
     ui.context = new_context
 
     # Now bind the context values to the 'info' object:
@@ -151,8 +153,7 @@ def ui_wizard(ui, parent):
 
 
 def page_changing(event):
-    """ Handles the user attempting to change the current wizard page.
-    """
+    """Handles the user attempting to change the current wizard page."""
     # Get the page the user is trying to go to:
     page = event.GetPage()
     if event.GetDirection():
@@ -161,9 +162,11 @@ def page_changing(event):
         new_page = page.GetPrev()
 
     # If the page has a disabled PageGroupEditor object, veto the page change:
-    if ((new_page is not None)
-            and (new_page.editor is not None)
-            and (not new_page.editor.enabled)):
+    if (
+        (new_page is not None)
+        and (new_page.editor is not None)
+        and (not new_page.editor.enabled)
+    ):
         event.Veto()
 
         # If their is a message associated with the editor, display it:
@@ -173,8 +176,7 @@ def page_changing(event):
 
 
 class UIWizardPage(wz.WizardPage):
-    """ A page within a wizard interface.
-    """
+    """A page within a wizard interface."""
 
     def __init__(self, wizard, pages):
         super().__init__(wizard)
@@ -182,18 +184,15 @@ class UIWizardPage(wz.WizardPage):
         self.pages = pages
 
     def SetNext(self, page):
-        """ Sets the next page after this one.
-        """
+        """Sets the next page after this one."""
         self.next = page
 
     def SetPrev(self, page):
-        """ Sets the previous page to this one.
-        """
+        """Sets the previous page to this one."""
         self.previous = page
 
     def GetNext(self):
-        """ Returns the next page after this one.
-        """
+        """Returns the next page after this one."""
         editor = self.editor
         if (editor is not None) and (editor.next != ""):
             next_ = editor.next
@@ -205,8 +204,7 @@ class UIWizardPage(wz.WizardPage):
         return self.next
 
     def GetPrev(self):
-        """ Returns the previous page to this one.
-        """
+        """Returns the previous page to this one."""
         editor = self.editor
         if (editor is not None) and (editor.previous != ""):
             previous = editor.previous
@@ -219,8 +217,7 @@ class UIWizardPage(wz.WizardPage):
 
 
 class PageGroupEditor(GroupEditor):
-    """ Editor for a group, which displays a page.
-    """
+    """Editor for a group, which displays a page."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

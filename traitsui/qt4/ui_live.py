@@ -48,27 +48,24 @@ from .ui_panel import panel
 
 
 def ui_live(ui, parent):
-    """Creates a live, non-modal PyQt user interface for a specified UI object.
-    """
+    """Creates a live, non-modal PyQt user interface for a specified UI object."""
     _ui_dialog(ui, parent, BaseDialog.NONMODAL)
 
 
 def ui_livemodal(ui, parent):
-    """Creates a live, modal PyQt user interface for a specified UI object.
-    """
+    """Creates a live, modal PyQt user interface for a specified UI object."""
     _ui_dialog(ui, parent, BaseDialog.MODAL)
 
 
 def ui_popup(ui, parent):
     """Creates a live, modal popup PyQt user interface for a specified UI
-       object.
+    object.
     """
     _ui_dialog(ui, parent, BaseDialog.POPUP)
 
 
 def _ui_dialog(ui, parent, style):
-    """Creates a live PyQt user interface for a specified UI object.
-    """
+    """Creates a live PyQt user interface for a specified UI object."""
     if ui.owner is None:
         ui.owner = _LiveWindow()
 
@@ -76,14 +73,13 @@ def _ui_dialog(ui, parent, style):
 
 
 class _LiveWindow(BaseDialog):
-    """User interface window that immediately updates its underlying object(s).
-    """
+    """User interface window that immediately updates its underlying object(s)."""
 
     def init(self, ui, parent, style):
         """Initialise the object.
 
-           FIXME: Note that we treat MODAL and POPUP as equivalent until we
-           have an example that demonstrates how POPUP is supposed to work.
+        FIXME: Note that we treat MODAL and POPUP as equivalent until we
+        have an example that demonstrates how POPUP is supposed to work.
         """
         self.ui = ui
         self.control = ui.control
@@ -235,15 +231,13 @@ class _LiveWindow(BaseDialog):
         self.add_contents(panel(ui), bbox)
 
     def close(self, rc=True):
-        """Close the dialog and set the given return code.
-        """
+        """Close the dialog and set the given return code."""
         super().close(rc)
 
         self.undo = self.redo = self.revert = None
 
     def _on_finished(self, result):
-        """Handles the user finishing with the dialog.
-        """
+        """Handles the user finishing with the dialog."""
         accept = bool(result)
 
         if not accept and self.ui.history is not None:

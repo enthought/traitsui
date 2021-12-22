@@ -28,7 +28,7 @@ from traitsui.api import Item, View, TreeEditor, TreeNode
 
 
 class Employee(HasRequiredTraits):
-    """ Defines a company employee. """
+    """Defines a company employee."""
 
     name = Str('<unknown>')
     title = Str()
@@ -43,14 +43,14 @@ def create_default_employee():
 
 
 class Department(HasTraits):
-    """ Defines a department with employees. """
+    """Defines a department with employees."""
 
     name = Str('<unknown>')
     employees = List(Employee)
 
 
 class Company(HasTraits):
-    """ Defines a company with departments and employees. """
+    """Defines a company with departments and employees."""
 
     name = Str('<unknown>')
     departments = List(Department)
@@ -70,7 +70,7 @@ tree_editor = TreeEditor(
             # child nodes are
             children='',
             label='name',  # label with Company name
-            view=View(['name'])
+            view=View(['name']),
         ),
         TreeNode(
             node_for=[Company],
@@ -79,35 +79,35 @@ tree_editor = TreeEditor(
             label='=Departments',  # constant label
             view=no_view,
             add=[Department],
-         ),
+        ),
         TreeNode(
             node_for=[Company],
             auto_open=True,
             children='employees',
-            label='=Employees',   # constant label
+            label='=Employees',  # constant label
             view=no_view,
-            add=[(Employee, True, create_default_employee)]
+            add=[(Employee, True, create_default_employee)],
         ),
         TreeNode(
             node_for=[Department],
             auto_open=True,
             children='employees',
-            label='name',   # label with Department name
+            label='name',  # label with Department name
             view=View(['name']),
-            add=[(Employee, True, create_default_employee)]
+            add=[(Employee, True, create_default_employee)],
         ),
         TreeNode(
             node_for=[Employee],
             auto_open=True,
-            label='name',   # label with Employee name
-            view=View(['name', 'title', 'phone'])
-        )
+            label='name',  # label with Employee name
+            view=View(['name', 'title', 'phone']),
+        ),
     ]
 )
 
 
 class Partner(HasTraits):
-    """ Defines a business partner."""
+    """Defines a business partner."""
 
     name = Str('<unknown>')
     company = Instance(Company)
@@ -118,8 +118,8 @@ class Partner(HasTraits):
         buttons=['OK'],
         resizable=True,
         style='custom',
-        width=.3,
-        height=500
+        width=0.3,
+        height=500,
     )
 
 
@@ -137,16 +137,10 @@ demo = Partner(
         name='Enthought',
         employees=[dave, martin, duncan, jason, mike],
         departments=[
-            Department(
-                name='Business',
-                employees=[jason, mike]
-            ),
-            Department(
-                name='Scientific',
-                employees=[dave, martin, duncan]
-            )
-        ]
-    )
+            Department(name='Business', employees=[jason, mike]),
+            Department(name='Scientific', employees=[dave, martin, duncan]),
+        ],
+    ),
 )
 
 # Run the demo (if invoked from the command line):

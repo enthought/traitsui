@@ -17,13 +17,14 @@ documented side effects without returning any values.
 
 
 class MouseClick:
-    """ An object representing the user clicking a mouse button.
+    """An object representing the user clicking a mouse button.
     Currently the left mouse button is assumed.
 
     In most circumstances, a widget can still be clicked on even if it is
     disabled. Therefore unlike key events, if the widget is disabled,
     implementations should not raise an exception.
     """
+
     pass
 
 
@@ -39,7 +40,7 @@ class MouseDClick:
 
 
 class KeySequence:
-    """ An object representing the user typing a sequence of keys.
+    """An object representing the user typing a sequence of keys.
 
     Implementations should raise ``Disabled`` if the widget is disabled.
 
@@ -55,7 +56,7 @@ class KeySequence:
 
 
 class KeyClick:
-    """ An object representing the user clicking a key on the keyboard.
+    """An object representing the user clicking a key on the keyboard.
 
     Implementations should raise ``Disabled`` if the widget is disabled.
 

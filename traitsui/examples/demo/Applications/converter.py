@@ -44,14 +44,19 @@ have made to any of the input fields.
 """
 
 # Units trait maps all units to centimeters:
-Units = Trait('inches', {'inches': 2.54,
-                         'feet': (12 * 2.54),
-                         'yards': (36 * 2.54),
-                         'miles': (5280 * 12 * 2.54),
-                         'millimeters': 0.1,
-                         'centimeters': 1.0,
-                         'meters': 100.0,
-                         'kilometers': 100000.0})
+Units = Trait(
+    'inches',
+    {
+        'inches': 2.54,
+        'feet': (12 * 2.54),
+        'yards': (36 * 2.54),
+        'miles': (5280 * 12 * 2.54),
+        'millimeters': 0.1,
+        'centimeters': 1.0,
+        'meters': 100.0,
+        'kilometers': 100000.0,
+    },
+)
 
 # Converter Class:
 
@@ -61,9 +66,10 @@ class Converter(HasStrictTraits):
     # Trait definitions:
     input_amount = CFloat(12.0, desc="the input quantity")
     input_units = Units('inches', desc="the input quantity's units")
-    output_amount = Property(observe=['input_amount', 'input_units',
-                                      'output_units'],
-                             desc="the output quantity")
+    output_amount = Property(
+        observe=['input_amount', 'input_units', 'output_units'],
+        desc="the output quantity",
+    )
     output_units = Units('feet', desc="the output quantity's units")
 
     # User interface views:
@@ -73,23 +79,24 @@ class Converter(HasStrictTraits):
                 Item('input_amount', springy=True),
                 Item('input_units', show_label=False),
                 label='Input',
-                show_border=True
+                show_border=True,
             ),
             HGroup(
                 Item('output_amount', style='readonly', springy=True),
                 Item('output_units', show_label=False),
                 label='Output',
-                show_border=True
+                show_border=True,
             ),
-            help=ViewHelp
+            help=ViewHelp,
         ),
         title='Units Converter',
-        buttons=['Undo', 'OK', 'Help']
+        buttons=['Undo', 'OK', 'Help'],
     )
 
     # Property implementations
     def _get_output_amount(self):
-        return ((self.input_amount * self.input_units_) / self.output_units_)
+        return (self.input_amount * self.input_units_) / self.output_units_
+
 
 # Create the demo:
 popup = Converter()

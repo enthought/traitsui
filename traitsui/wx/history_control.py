@@ -49,8 +49,7 @@ class HistoryControl(HasPrivateTraits):
     # -- Public Methods -------------------------------------------------------
 
     def create_control(self, parent):
-        """ Creates the control.
-        """
+        """Creates the control."""
         self.control = control = wx.ComboBox(
             parent,
             -1,
@@ -62,15 +61,18 @@ class HistoryControl(HasPrivateTraits):
         )
         parent.Bind(wx.EVT_COMBOBOX, self._update_value, id=control.GetId())
         control.Bind(wx.EVT_KILL_FOCUS, self._kill_focus)
-        parent.Bind(wx.EVT_TEXT_ENTER, self._update_text_value, id=control.GetId())
+        parent.Bind(
+            wx.EVT_TEXT_ENTER, self._update_text_value, id=control.GetId()
+        )
         if self.auto_set:
-            parent.Bind(wx.EVT_TEXT, self._update_value_only, id=control.GetId())
+            parent.Bind(
+                wx.EVT_TEXT, self._update_value_only, id=control.GetId()
+            )
 
         return control
 
     def dispose(self):
-        """ Disposes of the control at the end of its life cycle.
-        """
+        """Disposes of the control at the end of its life cycle."""
         control, self.control = self.control, None
         parent = control.GetParent()
         parent.Bind(wx.EVT_COMBOBOX, None, id=control.GetId())
@@ -78,15 +80,13 @@ class HistoryControl(HasPrivateTraits):
         control.Unbind(wx.EVT_KILL_FOCUS)
 
     def set_value(self, value):
-        """ Sets the specified value and adds it to the history.
-        """
+        """Sets the specified value and adds it to the history."""
         self._update(value)
 
     # -- Traits Event Handlers ------------------------------------------------
 
     def _value_changed(self, value):
-        """ Handles the 'value' trait being changed.
-        """
+        """Handles the 'value' trait being changed."""
         if not self._no_update:
             control = self.control
             if control is not None:
@@ -94,8 +94,7 @@ class HistoryControl(HasPrivateTraits):
                 self._restore = False
 
     def _history_changed(self):
-        """ Handles the 'history' being changed.
-        """
+        """Handles the 'history' being changed."""
         if not self._no_update:
             if self._first_time is None:
                 self._first_time = False
@@ -105,8 +104,7 @@ class HistoryControl(HasPrivateTraits):
             self._load_history(select=False)
 
     def _error_changed(self, error):
-        """ Handles the 'error' trait being changed.
-        """
+        """Handles the 'error' trait being changed."""
         if error:
             self.control.SetBackgroundColour(ErrorColor)
         else:
@@ -117,36 +115,33 @@ class HistoryControl(HasPrivateTraits):
     # -- Wx Event Handlers ----------------------------------------------------
 
     def _update_value(self, event):
-        """ Handles the user selecting something from the drop-down list of the
-            combobox.
+        """Handles the user selecting something from the drop-down list of the
+        combobox.
         """
         self._update(event.GetString())
 
     def _update_value_only(self, event):
-        """ Handles the user typing into the text field in 'auto_set' mode.
-        """
+        """Handles the user typing into the text field in 'auto_set' mode."""
         self._no_update = True
         self.value = event.GetString()
         self._no_update = False
 
     def _update_text_value(self, event, select=True):
-        """ Handles the user typing something into the text field of the
-            combobox.
+        """Handles the user typing something into the text field of the
+        combobox.
         """
         if not self._no_update:
             self._update(self.control.GetValue(), select)
 
     def _kill_focus(self, event):
-        """ Handles the combobox losing focus.
-        """
+        """Handles the combobox losing focus."""
         self._update_text_value(event, False)
         event.Skip()
 
     # -- Private Methods ------------------------------------------------------
 
     def _update(self, value, select=True):
-        """ Updates the value and history list based on a specified value.
-        """
+        """Updates the value and history list based on a specified value."""
         self._no_update = True
 
         if value.strip() != "":
@@ -163,8 +158,7 @@ class HistoryControl(HasPrivateTraits):
         self._no_update = False
 
     def _load_history(self, restore=None, select=True):
-        """ Loads the current history list into the control.
-        """
+        """Loads the current history list into the control."""
         control = self.control
         control.Freeze()
 
@@ -179,8 +173,7 @@ class HistoryControl(HasPrivateTraits):
         do_later(self._thaw_value, restore, select)
 
     def _thaw_value(self, restore, select):
-        """ Restores the value of the combobox control.
-        """
+        """Restores the value of the combobox control."""
         control = self.control
         if control is not None:
             if self._restore:

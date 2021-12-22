@@ -102,5 +102,5 @@ from .tester.exceptions import (
     Disabled,
     InteractionNotSupported,
     LocationNotSupported,
-    TesterError
+    TesterError,
 )

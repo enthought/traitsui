@@ -35,8 +35,7 @@ from traits.api import HasTraits, Instance, Property
 
 
 class _Clipboard(HasTraits):
-    """ The _Clipboard class provides a wrapper around the PyQt clipboard.
-    """
+    """The _Clipboard class provides a wrapper around the PyQt clipboard."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -59,8 +58,7 @@ class _Clipboard(HasTraits):
     # -------------------------------------------------------------------------
 
     def _get_instance(self):
-        """ The instance getter.
-        """
+        """The instance getter."""
         md = PyMimeData.coerce(self.clipboard.mimeData())
         if md is None:
             return None
@@ -68,18 +66,15 @@ class _Clipboard(HasTraits):
         return md.instance()
 
     def _set_instance(self, data):
-        """ The instance setter.
-        """
+        """The instance setter."""
         self.clipboard.setMimeData(PyMimeData(data))
 
     def _get_has_instance(self):
-        """ The has_instance getter.
-        """
+        """The has_instance getter."""
         return self.clipboard.mimeData().hasFormat(PyMimeData.MIME_TYPE)
 
     def _get_instance_type(self):
-        """ The instance_type getter.
-        """
+        """The instance_type getter."""
         md = PyMimeData.coerce(self.clipboard.mimeData())
         if md is None:
             return None
@@ -91,8 +86,7 @@ class _Clipboard(HasTraits):
     # -------------------------------------------------------------------------
 
     def _clipboard_default(self):
-        """ Initialise the clipboard.
-        """
+        """Initialise the clipboard."""
         return QtGui.QApplication.clipboard()
 
 

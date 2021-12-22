@@ -36,7 +36,7 @@ def get_html_tag(tag):
 
 
 def get_action_enabled(action, model_view):
-    """ Helper funciton to return if a tool is enabled.
+    """Helper funciton to return if a tool is enabled.
 
     Parameters
     ----------
@@ -53,7 +53,7 @@ def get_action_enabled(action, model_view):
 
 
 class TestDemo(unittest.TestCase):
-    """ Test actions on the Demo class. """
+    """Test actions on the Demo class."""
 
     def test_demo_previous_button_default(self):
         # Make sure the previous button behaves in the default state.
@@ -108,7 +108,6 @@ class TestDemo(unittest.TestCase):
 
 
 class TestDemoImageFile(unittest.TestCase):
-
     def test_description_contains_file_uri(self):
         with tempfile.NamedTemporaryFile() as file_obj:
             dirname, basename = os.path.split(file_obj.name)
@@ -129,7 +128,7 @@ class TestDemoImageFile(unittest.TestCase):
 
 
 class TestDemoPathDescription(unittest.TestCase):
-    """ Test ``DemoPath.description`` """
+    """Test ``DemoPath.description``"""
 
     def test_description_with_empty_directory(self):
         # If the directory is empty, the content of the description should
@@ -141,7 +140,7 @@ class TestDemoPathDescription(unittest.TestCase):
 
             tree = ET.fromstring(model.description)
         body_node = next(tree.iter(get_html_tag("body")))
-        div_node, = list(body_node)
+        (div_node,) = list(body_node)
         self.assertEqual(list(div_node), [])
 
     def test_use_index_rst(self):
@@ -172,7 +171,7 @@ class TestDemoPathDescription(unittest.TestCase):
 
 
 class TestDemoPathInitLocals(unittest.TestCase):
-    """ Test ``DemoPath.init_dic`` """
+    """Test ``DemoPath.init_dic``"""
 
     def test_init_dict_with_empty_directory(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -199,8 +198,7 @@ class TestDemoPathInitLocals(unittest.TestCase):
 
 
 class TestDemoPathChildren(unittest.TestCase):
-    """ Integration test with DemoPath and its children
-    """
+    """Integration test with DemoPath and its children"""
 
     def test_init_dict_used_by_children(self):
         # Test the __init__.py in a directory (if exists) is visible
@@ -236,10 +234,10 @@ class TestDemoPathChildren(unittest.TestCase):
 
             # In that subdirectory, there is one Python file that is not
             # __init__.py
-            subdir_node, = children
+            (subdir_node,) = children
             file_nodes = subdir_node.get_children()
             self.assertEqual(len(file_nodes), 1)
-            example, = file_nodes
+            (example,) = file_nodes
             self.assertEqual(example.name, "example.py")
 
             # This is the test objective: The __init__.py and traits api are
@@ -251,7 +249,6 @@ class TestDemoPathChildren(unittest.TestCase):
 
 
 class TestDemoVirtualDirectory(unittest.TestCase):
-
     def test_no_resources(self):
         node = DemoVirtualDirectory(resources=[])
         self.assertFalse(node.tno_has_children(None))
@@ -266,7 +263,6 @@ class TestDemoVirtualDirectory(unittest.TestCase):
 
 
 class TestParseSource(unittest.TestCase):
-
     def test_extract_docstring_from_source(self):
         source_code = b""
         with self.assertRaises(TypeError):

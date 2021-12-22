@@ -48,8 +48,7 @@ class FooDialog(HasTraits):
 
 
 class DisallowNewTraits(HasStrictTraits):
-    """ Make sure no extra traits are added.
-    """
+    """Make sure no extra traits are added."""
 
     x = Int(10)
 
@@ -62,16 +61,13 @@ class MaybeInvalidTrait(HasTraits):
 
     name_is_invalid = Property(observe="name")
 
-    traits_view = View(
-        Item("name", invalid="name_is_invalid")
-    )
+    traits_view = View(Item("name", invalid="name_is_invalid"))
 
     def _get_name_is_invalid(self):
         return len(self.name) < 10
 
 
 class TestUI(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -136,9 +132,7 @@ class TestUI(BaseTestMixin, unittest.TestCase):
             self.assertIsInstance(
                 ui._editors[0], traitsui.wx.text_editor.SimpleEditor
             )
-            self.assertIsInstance(
-                ui._editors[0].control, wx.TextCtrl
-            )
+            self.assertIsInstance(ui._editors[0].control, wx.TextCtrl)
 
             ui.reset(destroy=False)
 
@@ -241,7 +235,7 @@ class TestUI(BaseTestMixin, unittest.TestCase):
         # Regression test for enthought/traitsui#983
         obj = MaybeInvalidTrait(name="Name long enough to be valid")
         with create_ui(obj) as ui:
-            editor, = ui.get_editors("name")
+            (editor,) = ui.get_editors("name")
             self.assertFalse(editor.invalid)
 
             obj.name = "too short"
@@ -264,7 +258,6 @@ if is_qt():
     from pyface.qt import QtGui, QtCore
 
     class CustomWidget(QtGui.QWidget):
-
         def __init__(self, editor, parent=None):
             super().__init__()
             self._some_editor = editor
@@ -279,7 +272,6 @@ if is_qt():
             return super().sizeHint()
 
     class EditorWithCustomWidget(ToolkitSpecificEditor):
-
         def init(self, parent):
             self.control = QtGui.QSplitter(QtCore.Qt.Horizontal)
 
@@ -316,7 +308,6 @@ if is_wx():
     from traitsui.wx.helper import TraitsUIPanel
 
     class DummyButtonEditor(ToolkitSpecificEditor):
-
         def init(self, parent):
             self.control = wx.Button(parent, -1, "Dummy")
             self.control.Bind(wx.EVT_BUTTON, self.update_object)
@@ -333,7 +324,6 @@ if is_wx():
             pass
 
     class EditorWithCustomWidget(ToolkitSpecificEditor):  # noqa: F811
-
         def init(self, parent):
             self.control = TraitsUIPanel(parent, -1)
 
@@ -365,7 +355,7 @@ if is_wx():
 
 
 class TestUIDispose(BaseTestMixin, unittest.TestCase):
-    """ Test disposal of UI."""
+    """Test disposal of UI."""
 
     def setUp(self):
         BaseTestMixin.setUp(self)
@@ -405,7 +395,7 @@ class TestUIDispose(BaseTestMixin, unittest.TestCase):
             ),
         )
         ui = obj.edit_traits(view=view)
-        editor, = ui.get_editors("number")
+        (editor,) = ui.get_editors("number")
 
         gui = GUI()
         with ensure_destroyed(ui):
@@ -430,7 +420,7 @@ class TestUIDispose(BaseTestMixin, unittest.TestCase):
 
 @contextlib.contextmanager
 def ensure_destroyed(ui):
-    """ Ensure the widget is destroyed in the event when test fails."""
+    """Ensure the widget is destroyed in the event when test fails."""
     try:
         yield
     finally:
@@ -441,7 +431,7 @@ def ensure_destroyed(ui):
 
 
 def close_control(control):
-    """ Close the widget."""
+    """Close the widget."""
     if is_qt():
         control.close()
     elif is_wx():

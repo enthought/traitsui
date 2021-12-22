@@ -12,7 +12,6 @@
 """
 
 
-
 import sys
 
 import wx
@@ -40,12 +39,10 @@ ColorTypes = (wx.Colour,)
 
 
 class ToolkitEditorFactory(BaseToolkitEditorFactory):
-    """ Wx editor factory for color editors.
-    """
+    """Wx editor factory for color editors."""
 
     def to_wx_color(self, editor, color=None):
-        """ Gets the wxPython color equivalent of the object trait.
-        """
+        """Gets the wxPython color equivalent of the object trait."""
         if color is None:
             if self.mapped:
                 color = getattr(editor.object, editor.name + "_")
@@ -57,13 +54,11 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
         return color
 
     def from_wx_color(self, color):
-        """ Gets the application equivalent of a wxPython value.
-        """
+        """Gets the application equivalent of a wxPython value."""
         return color.Red(), color.Green(), color.Blue()
 
     def str_color(self, color):
-        """ Returns the text representation of a specified color value.
-        """
+        """Returns the text representation of a specified color value."""
         if isinstance(color, ColorTypes):
             alpha = color.Alpha()
             if alpha == 255:
@@ -89,7 +84,6 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 
 
 class ColorComboBox(wx.adv.OwnerDrawnComboBox):
-
     def OnDrawItem(self, dc, rect, item, flags):
 
         r = wx.Rect(rect.x, rect.y, rect.width, rect.height)
@@ -125,7 +119,7 @@ class ColorComboBox(wx.adv.OwnerDrawnComboBox):
 
 
 class SimpleColorEditor(BaseSimpleEditor):
-    """ Simple style of color editor, which displays a text field whose
+    """Simple style of color editor, which displays a text field whose
     background color is the color value. Selecting the text field displays
     a dialog box for selecting a new color value.
     """
@@ -137,8 +131,7 @@ class SimpleColorEditor(BaseSimpleEditor):
     choices = List()
 
     def _choices_default(self):
-        """ by default, uses the W3C 16 color names.
-        """
+        """by default, uses the W3C 16 color names."""
         return [
             "aqua",
             "black",
@@ -184,8 +177,8 @@ class SimpleColorEditor(BaseSimpleEditor):
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         current_color = self.factory.to_wx_color(self)
         self.control.SetValue(self.string_value(current_color))
@@ -215,8 +208,7 @@ class SimpleColorEditor(BaseSimpleEditor):
         return
 
     def string_value(self, color):
-        """ Returns the text representation of a specified color value.
-        """
+        """Returns the text representation of a specified color value."""
         color_name = w3c_color_database.FindName(color)
         if color_name != "":
             return color_name
@@ -230,7 +222,7 @@ class SimpleColorEditor(BaseSimpleEditor):
 
 
 class CustomColorEditor(BaseSimpleEditor):
-    """ Simple style of color editor, which displays a text field whose
+    """Simple style of color editor, which displays a text field whose
     background color is the color value. Selecting the text field displays
     a dialog box for selecting a new color value.
     """
@@ -247,11 +239,15 @@ class CustomColorEditor(BaseSimpleEditor):
             parent, -1, self.str_value, style=wx.TE_PROCESS_ENTER
         )
         text_control.Bind(wx.EVT_KILL_FOCUS, self.update_object)
-        parent.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=text_control.GetId())
+        parent.Bind(
+            wx.EVT_TEXT_ENTER, self.update_object, id=text_control.GetId()
+        )
 
         # 'button_control' shows the 'Edit' button.
         button_control = wx.Button(parent, label="Edit", style=wx.BU_EXACTFIT)
-        button_control.Bind(wx.EVT_BUTTON, self.open_color_dialog, id=button_control.GetId())
+        button_control.Bind(
+            wx.EVT_BUTTON, self.open_color_dialog, id=button_control.GetId()
+        )
 
         sizer.Add(text_control, wx.ALIGN_LEFT)
         sizer.AddSpacer(8)
@@ -266,8 +262,7 @@ class CustomColorEditor(BaseSimpleEditor):
         return
 
     def update_object(self, event):
-        """ Handles the user changing the contents of the edit control.
-        """
+        """Handles the user changing the contents of the edit control."""
         if not isinstance(event, wx._core.CommandEvent):
             event.Skip()
             return
@@ -288,14 +283,13 @@ class CustomColorEditor(BaseSimpleEditor):
         self._text_control.SetValue(self.string_value(color))
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.set_color()
 
     def open_color_dialog(self, event):
-        """ Opens the color dialog and sets the value upon return
-        """
+        """Opens the color dialog and sets the value upon return"""
         color_data = wx.ColourData()
         color_data.SetColour(self.value)
 
@@ -321,8 +315,7 @@ class CustomColorEditor(BaseSimpleEditor):
         return
 
     def string_value(self, color):
-        """ Returns the text representation of a specified color value.
-        """
+        """Returns the text representation of a specified color value."""
         color_name = w3c_color_database.FindName(color)
         if color_name != "":
             return color_name
@@ -336,27 +329,26 @@ class CustomColorEditor(BaseSimpleEditor):
 
 
 class ReadonlyColorEditor(BaseReadonlyEditor):
-    """ Read-only style of color editor, which displays a read-only text field
+    """Read-only style of color editor, which displays a read-only text field
     whose background color is the color value.
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = wx.TextCtrl(parent, style=wx.TE_READONLY)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         # super().update_editor()
         self.control.SetValue(self.string_value(self.value))
         set_color(self)
 
     def string_value(self, color):
-        """ Returns the text representation of a specified color value.
-        """
+        """Returns the text representation of a specified color value."""
         color_name = w3c_color_database.FindName(color)
         if color_name != "":
             return color_name
@@ -370,20 +362,19 @@ class ReadonlyColorEditor(BaseReadonlyEditor):
 
 
 class TextColorEditor(BaseTextEditor):
-    """ Text style of color editor, which displays a text field
+    """Text style of color editor, which displays a text field
     whose background color is the color value.
     """
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.control.SetValue(self.string_value(self.value))
         set_color(self)
 
     def update_object(self, event):
-        """ Handles the user changing the contents of the edit control.
-        """
+        """Handles the user changing the contents of the edit control."""
         if not isinstance(event, wx._core.CommandEvent):
             return
         try:
@@ -393,8 +384,7 @@ class TextColorEditor(BaseTextEditor):
             pass
 
     def string_value(self, color):
-        """ Returns the text representation of a specified color value.
-        """
+        """Returns the text representation of a specified color value."""
         color_name = w3c_color_database.FindName(color)
         if color_name != "":
             return color_name
@@ -408,8 +398,7 @@ class TextColorEditor(BaseTextEditor):
 
 
 def set_color(editor):
-    """  Sets the color of the specified color control.
-    """
+    """Sets the color of the specified color control."""
     color = editor.factory.to_wx_color(editor)
     editor.control.SetBackgroundColour(color)
 

@@ -73,16 +73,19 @@ class Hdf5FilesNode(api.HasTraits):
     files = api.List(Hdf5FileNode)
     groups_and_arrays = api.List()
 
+
 # Recursively build tree, there is probably a better way of doing this.
 
 
 def _get_sub_arrays(group, parent_path):
     """Return a list of all arrays immediately below a group in an HDF5 file."""
-    return [Hdf5ArrayNode(name=name,
-                          path=parent_path + name,
-                          parent_path=parent_path)
-            for name, array in group.items()
-            if isinstance(array, h5py.Dataset)]
+    return [
+        Hdf5ArrayNode(
+            name=name, path=parent_path + name, parent_path=parent_path
+        )
+        for name, array in group.items()
+        if isinstance(array, h5py.Dataset)
+    ]
 
 
 def _get_sub_groups(group, parent_path):
@@ -94,27 +97,34 @@ def _get_sub_groups(group, parent_path):
             path = parent_path + name + '/'
             subsubarrays = _get_sub_arrays(subgroup, path)
             subsubgroups = _get_sub_groups(subgroup, path)
-            subgroups.append(Hdf5GroupNode(name=name,
-                                           path=path,
-                                           parent_path=parent_path,
-                                           arrays=subsubarrays,
-                                           subgroups=subsubgroups,
-                                           groups_and_arrays=subsubgroups + subsubarrays)
-                             )
+            subgroups.append(
+                Hdf5GroupNode(
+                    name=name,
+                    path=path,
+                    parent_path=parent_path,
+                    arrays=subsubarrays,
+                    subgroups=subsubgroups,
+                    groups_and_arrays=subsubgroups + subsubarrays,
+                )
+            )
 
     return subgroups
 
 
 def _hdf5_tree(filename):
     with h5py.File(filename, 'r') as h5file:
-        path = filename + '#'  # separate dataset name from name of hdf5-filename
+        path = (
+            filename + '#'
+        )  # separate dataset name from name of hdf5-filename
         subgroups = _get_sub_groups(h5file, path)
         subarrays = _get_sub_arrays(h5file, path)
-    file_tree = Hdf5FileNode(name=os.path.basename(filename),
-                             path=filename,
-                             groups=subgroups,
-                             arrays=subarrays,
-                             groups_and_arrays=subgroups + subarrays)
+    file_tree = Hdf5FileNode(
+        name=os.path.basename(filename),
+        path=filename,
+        groups=subgroups,
+        arrays=subarrays,
+        groups_and_arrays=subgroups + subarrays,
+    )
 
     return file_tree
 
@@ -130,8 +140,11 @@ def _hdf5_trees(filenames):
     for filename in filenames:
         folder = os.path.dirname(filename)
         if folder != root:
-            warnings.warn("Expected same folder for all files, but got {} != {}".format(root,
-                                                                                        folder))
+            warnings.warn(
+                "Expected same folder for all files, but got {} != {}".format(
+                    root, folder
+                )
+            )
         file_tree = _hdf5_tree(filename)
 
         files_tree.files.append(file_tree)
@@ -144,34 +157,40 @@ def _hdf5_trees(filenames):
 
 def _hdf5_tree_editor(selected=''):
     """Return a ui.TreeEditor specifically for HDF5 file trees."""
-    return ui.TreeEditor(nodes=[ui.TreeNode(node_for=[Hdf5FilesNode],
-                                            auto_open=True,
-                                            children='files',
-                                            label='name',
-                                            view=no_view,
-                                            ),
-                                ui.TreeNode(node_for=[Hdf5FileNode],
-                                            auto_open=True,
-                                            children='groups_and_arrays',
-                                            label='name',
-                                            view=no_view,
-                                            ),
-                                ui.TreeNode(node_for=[Hdf5GroupNode],
-                                            auto_open=False,
-                                            children='groups_and_arrays',
-                                            label='name',
-                                            view=no_view,
-                                            ),
-                                ui.TreeNode(node_for=[Hdf5ArrayNode],
-                                            auto_open=False,
-                                            children='',
-                                            label='name',
-                                            view=no_view,
-                                            ),
-                                ],
-                         editable=False,
-                         selected=selected,
-                         )
+    return ui.TreeEditor(
+        nodes=[
+            ui.TreeNode(
+                node_for=[Hdf5FilesNode],
+                auto_open=True,
+                children='files',
+                label='name',
+                view=no_view,
+            ),
+            ui.TreeNode(
+                node_for=[Hdf5FileNode],
+                auto_open=True,
+                children='groups_and_arrays',
+                label='name',
+                view=no_view,
+            ),
+            ui.TreeNode(
+                node_for=[Hdf5GroupNode],
+                auto_open=False,
+                children='groups_and_arrays',
+                label='name',
+                view=no_view,
+            ),
+            ui.TreeNode(
+                node_for=[Hdf5ArrayNode],
+                auto_open=False,
+                children='',
+                label='name',
+                view=no_view,
+            ),
+        ],
+        editable=False,
+        selected=selected,
+    )
 
 
 class _H5Tree(api.HasTraits):
@@ -179,19 +198,22 @@ class _H5Tree(api.HasTraits):
     node = api.Any()
     path = api.Str()
 
-    traits_view = ui.View(ui.Group(ui.Item('h5_tree',
-                                           editor=_hdf5_tree_editor(selected='node'),
-                                           resizable=True
-                                           ),
-                                   ui.Item('path', label='Selected node'),
-                                   orientation='vertical',
-                                   ),
-                          title='HDF5 Tree Example',
-                          buttons=['OK', 'Cancel'],
-                          resizable=True,
-                          width=.3,
-                          height=.3
-                          )
+    traits_view = ui.View(
+        ui.Group(
+            ui.Item(
+                'h5_tree',
+                editor=_hdf5_tree_editor(selected='node'),
+                resizable=True,
+            ),
+            ui.Item('path', label='Selected node'),
+            orientation='vertical',
+        ),
+        title='HDF5 Tree Example',
+        buttons=['OK', 'Cancel'],
+        resizable=True,
+        width=0.3,
+        height=0.3,
+    )
 
     def _node_changed(self):
         self.path = self.node.path
@@ -203,19 +225,22 @@ class _H5Trees(api.HasTraits):
     node = api.Any()
     path = api.Str()
 
-    traits_view = ui.View(ui.Group(ui.Item('h5_trees',
-                                           editor=_hdf5_tree_editor(selected='node'),
-                                           resizable=True
-                                           ),
-                                   ui.Item('path', label='Selected node'),
-                                   orientation='vertical',
-                                   ),
-                          title='Multiple HDF5 file Tree Example',
-                          buttons=['OK', 'Cancel'],
-                          resizable=True,
-                          width=.3,
-                          height=.3
-                          )
+    traits_view = ui.View(
+        ui.Group(
+            ui.Item(
+                'h5_trees',
+                editor=_hdf5_tree_editor(selected='node'),
+                resizable=True,
+            ),
+            ui.Item('path', label='Selected node'),
+            orientation='vertical',
+        ),
+        title='Multiple HDF5 file Tree Example',
+        buttons=['OK', 'Cancel'],
+        resizable=True,
+        width=0.3,
+        height=0.3,
+    )
 
     def _node_changed(self):
         self.path = self.node.path
@@ -233,50 +258,88 @@ def make_test_datasets():
     import numpy as np
     import pandas as pd  # pandas uses pytables to store datasets in hdf5 format.
     from random import randrange
+
     n = 100
 
-    df = pd.DataFrame(dict([("int{0}".format(i), np.random.randint(0, 10, size=n))
-                            for i in range(5)]))
+    df = pd.DataFrame(
+        dict(
+            [
+                ("int{0}".format(i), np.random.randint(0, 10, size=n))
+                for i in range(5)
+            ]
+        )
+    )
 
     df['float'] = np.random.randn(n)
 
     for i in range(10):
-        df["object_1_{0}".format(i)] = ['%08x' % randrange(16**8) for _ in range(n)]
+        df["object_1_{0}".format(i)] = [
+            '%08x' % randrange(16 ** 8) for _ in range(n)
+        ]
 
     for i in range(7):
-        df["object_2_{0}".format(i)] = ['%15x' % randrange(16**15) for _ in range(n)]
+        df["object_2_{0}".format(i)] = [
+            '%15x' % randrange(16 ** 15) for _ in range(n)
+        ]
 
     df.info()
     df.to_hdf('test_fixed.h5', 'data', format='fixed')
     df.to_hdf('test_table_no_dc.h5', 'data', format='table')
     df.to_hdf('test_table_dc.h5', 'data', format='table', data_columns=True)
-    df.to_hdf('test_fixed_compressed.h5', 'data', format='fixed', complib='blosc', complevel=9)
+    df.to_hdf(
+        'test_fixed_compressed.h5',
+        'data',
+        format='fixed',
+        complib='blosc',
+        complevel=9,
+    )
 
     # h5py dataset
     time = np.arange(n)
     x = np.linspace(-7, 7, n)
-    axes_latlon = [('time', time), ('coordinate', np.array(['lat', 'lon'], dtype='S3'))]
-    axes_mag = [('time', time), ('direction', np.array(['x', 'y', 'z'], dtype='S1'))]
-    latlon = np.vstack((np.linspace(-0.0001, 0.00001, n) + 23.8,
-                        np.zeros(n) - 82.3)).T
-    mag_data = np.vstack((-(1 - np.tanh(x)**2) * np.sin(2 * x),
-                          -(1 - np.tanh(x)**2) * np.sin(2 * x),
-                          -(1 - np.tanh(x)**2))).T
-    datasets = axes_mag + axes_latlon + [('magnetic_3_axial', mag_data), ('latlon', latlon)]
+    axes_latlon = [
+        ('time', time),
+        ('coordinate', np.array(['lat', 'lon'], dtype='S3')),
+    ]
+    axes_mag = [
+        ('time', time),
+        ('direction', np.array(['x', 'y', 'z'], dtype='S1')),
+    ]
+    latlon = np.vstack(
+        (np.linspace(-0.0001, 0.00001, n) + 23.8, np.zeros(n) - 82.3)
+    ).T
+    mag_data = np.vstack(
+        (
+            -(1 - np.tanh(x) ** 2) * np.sin(2 * x),
+            -(1 - np.tanh(x) ** 2) * np.sin(2 * x),
+            -(1 - np.tanh(x) ** 2),
+        )
+    ).T
+    datasets = (
+        axes_mag
+        + axes_latlon
+        + [('magnetic_3_axial', mag_data), ('latlon', latlon)]
+    )
     with h5py.File(os.path.join(ROOT, 'test_h5pydata.h5'), "a") as h5file:
         h5group = h5file.require_group("run1_test1")
         for data_name, data in datasets:
-            h5group.require_dataset(name=data_name,
-                                    dtype=data.dtype,
-                                    shape=data.shape,
-                                    data=data,
-                                    # **options
-                                    )
+            h5group.require_dataset(
+                name=data_name,
+                dtype=data.dtype,
+                shape=data.shape,
+                data=data,
+                # **options
+            )
 
 
 def main():
-    filenames = ['test_fixed.h5', 'test_table_no_dc.h5', 'test_table_dc.h5',
-                 'test_fixed_compressed.h5', 'test_h5pydata.h5']
+    filenames = [
+        'test_fixed.h5',
+        'test_table_no_dc.h5',
+        'test_table_dc.h5',
+        'test_fixed_compressed.h5',
+        'test_h5pydata.h5',
+    ]
     fullfiles = [os.path.join(ROOT, fname) for fname in filenames]
     h5_trees = hdf5_tree(fullfiles)
     return h5_trees

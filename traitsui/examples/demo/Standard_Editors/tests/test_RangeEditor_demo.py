@@ -28,7 +28,7 @@ from traitsui.testing.api import (
     MouseClick,
     Slider,
     Textbox,
-    UITester
+    UITester,
 )
 
 #: Filename of the demo script
@@ -39,7 +39,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 
 class TestRangeEditorDemo(unittest.TestCase):
-
     def test_run_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 

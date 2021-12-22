@@ -65,9 +65,10 @@ Popups = {"popup", "popover", "info"}
 # Traits UI dispatch infrastructure
 # -------------------------------------------------------------------------
 
+
 def ui_handler(handler, *args):
-    """ Handles UI notification handler requests that occur on a thread other
-        than the UI thread.
+    """Handles UI notification handler requests that occur on a thread other
+    than the UI thread.
     """
     wx.CallAfter(handler, *args)
 
@@ -80,85 +81,85 @@ set_ui_handler(ui_handler)
 # Wx Toolkit Implementation
 # -------------------------------------------------------------------------
 
+
 class GUIToolkit(Toolkit):
-    """ Implementation class for wxPython toolkit.
-    """
+    """Implementation class for wxPython toolkit."""
 
     def ui_panel(self, ui, parent):
-        """ Creates a wxPython panel-based user interface using information
-            from the specified UI object.
+        """Creates a wxPython panel-based user interface using information
+        from the specified UI object.
         """
         from . import ui_panel
 
         ui_panel.ui_panel(ui, parent)
 
     def ui_subpanel(self, ui, parent):
-        """ Creates a wxPython subpanel-based user interface using information
-            from the specified UI object.
+        """Creates a wxPython subpanel-based user interface using information
+        from the specified UI object.
         """
         from . import ui_panel
 
         ui_panel.ui_subpanel(ui, parent)
 
     def ui_livemodal(self, ui, parent):
-        """ Creates a wxPython modal "live update" dialog user interface using
-            information from the specified UI object.
+        """Creates a wxPython modal "live update" dialog user interface using
+        information from the specified UI object.
         """
         from . import ui_live
 
         ui_live.ui_livemodal(ui, parent)
 
     def ui_live(self, ui, parent):
-        """ Creates a wxPython non-modal "live update" window user interface
-            using information from the specified UI object.
+        """Creates a wxPython non-modal "live update" window user interface
+        using information from the specified UI object.
         """
         from . import ui_live
 
         ui_live.ui_live(ui, parent)
 
     def ui_modal(self, ui, parent):
-        """ Creates a wxPython modal dialog user interface using information
-            from the specified UI object.
+        """Creates a wxPython modal dialog user interface using information
+        from the specified UI object.
         """
         from . import ui_modal
 
         ui_modal.ui_modal(ui, parent)
 
     def ui_nonmodal(self, ui, parent):
-        """ Creates a wxPython non-modal dialog user interface using
-            information from the specified UI object.
+        """Creates a wxPython non-modal dialog user interface using
+        information from the specified UI object.
         """
         from . import ui_modal
 
         ui_modal.ui_nonmodal(ui, parent)
 
     def ui_popup(self, ui, parent):
-        """ Creates a wxPython temporary "live update" popup dialog user
-            interface using information from the specified UI object.
+        """Creates a wxPython temporary "live update" popup dialog user
+        interface using information from the specified UI object.
         """
         from . import ui_live
 
         ui_live.ui_popup(ui, parent)
 
     def ui_popover(self, ui, parent):
-        """ Creates a wxPython temporary "live update" popup dialog user
-            interface using information from the specified UI object.
+        """Creates a wxPython temporary "live update" popup dialog user
+        interface using information from the specified UI object.
         """
         from . import ui_live
 
         ui_live.ui_popover(ui, parent)
 
     def ui_info(self, ui, parent):
-        """ Creates a wxPython temporary "live update" popup dialog user
-            interface using information from the specified UI object.
+        """Creates a wxPython temporary "live update" popup dialog user
+        interface using information from the specified UI object.
         """
         from . import ui_live
 
         ui_live.ui_info(ui, parent)
 
     def ui_wizard(self, ui, parent):
-        """ Creates a wxPython wizard dialog user interface using information
-            from the specified UI object.
+        """Creates a wxPython wizard dialog user interface using information
+        from the specified UI object.
         """
         from . import ui_wizard
 
@@ -174,7 +175,7 @@ class GUIToolkit(Toolkit):
         scrollable=None,
         args=None,
     ):
-        """ Creates a wxPython modal dialog user interface that
+        """Creates a wxPython modal dialog user interface that
             runs as a complete application, using information from the
             specified View object.
 
@@ -212,8 +213,7 @@ class GUIToolkit(Toolkit):
         )
 
     def position(self, ui):
-        """ Positions the associated dialog window on the display.
-        """
+        """Positions the associated dialog window on the display."""
         view = ui.view
         window = ui.control
 
@@ -295,22 +295,19 @@ class GUIToolkit(Toolkit):
         window.SetSize(max(0, x), max(0, y), width, height)
 
     def show_help(self, ui, control):
-        """ Shows a help window for a specified UI and control.
-        """
+        """Shows a help window for a specified UI and control."""
         from . import ui_panel
 
         ui_panel.show_help(ui, control)
 
     def save_window(self, ui):
-        """ Saves user preference information associated with a UI window.
-        """
+        """Saves user preference information associated with a UI window."""
         from . import helper
 
         helper.save_window(ui)
 
     def rebuild_ui(self, ui):
-        """ Rebuilds a UI after a change to the content of the UI.
-        """
+        """Rebuilds a UI after a change to the content of the UI."""
         parent = size = None
 
         if ui.control is not None:
@@ -330,28 +327,25 @@ class GUIToolkit(Toolkit):
                 sizer.Add(ui.control, 1, wx.EXPAND)
 
     def set_title(self, ui):
-        """ Sets the title for the UI window.
-        """
+        """Sets the title for the UI window."""
         ui.control.SetTitle(ui.title)
 
     def set_icon(self, ui):
-        """ Sets the icon for the UI window.
-        """
+        """Sets the icon for the UI window."""
         from pyface.image_resource import ImageResource
 
         if isinstance(ui.icon, ImageResource):
             ui.control.SetIcon(ui.icon.create_icon())
 
     def key_event_to_name(self, event):
-        """ Converts a keystroke event into a corresponding key name.
-        """
+        """Converts a keystroke event into a corresponding key name."""
         from . import key_event_to_name
 
         return key_event_to_name.key_event_to_name(event)
 
     def hook_events(self, ui, control, events=None, handler=None):
-        """ Hooks all specified events for all controls in a UI so that they
-            can be routed to the correct event handler.
+        """Hooks all specified events for all controls in a UI so that they
+        can be routed to the correct event handler.
         """
         if events is None:
             events = (
@@ -392,8 +386,7 @@ class GUIToolkit(Toolkit):
             self.hook_events(ui, child, events, handler)
 
     def route_event(self, ui, event):
-        """ Routes a hooked event to the correct handler method.
-        """
+        """Routes a hooked event to the correct handler method."""
         suffix = EventSuffix[event.GetEventType()]
         control = event.GetEventObject()
         handler = ui.handler
@@ -414,14 +407,13 @@ class GUIToolkit(Toolkit):
             event.Skip()
 
     def skip_event(self, event):
-        """ Indicates that an event should continue to be processed by the
-            toolkit.
+        """Indicates that an event should continue to be processed by the
+        toolkit.
         """
         event.Skip()
 
     def destroy_control(self, control):
-        """ Destroys a specified GUI toolkit control.
-        """
+        """Destroys a specified GUI toolkit control."""
         _popEventHandlers(control)
 
         def _destroy_control(control):
@@ -429,31 +421,32 @@ class GUIToolkit(Toolkit):
                 control.Destroy()
             except Exception:
                 logger.exception(
-                    "Wx control %r not destroyed cleanly", control)
+                    "Wx control %r not destroyed cleanly", control
+                )
 
         wx.CallAfter(_destroy_control, control)
 
     def destroy_children(self, control):
-        """ Destroys all of the child controls of a specified GUI toolkit
-            control.
+        """Destroys all of the child controls of a specified GUI toolkit
+        control.
         """
         for child in control.GetChildren():
             _popEventHandlers(child)
         wx.CallAfter(control.DestroyChildren)
 
     def image_size(self, image):
-        """ Returns a ( width, height ) tuple containing the size of a
-            specified toolkit image.
+        """Returns a ( width, height ) tuple containing the size of a
+        specified toolkit image.
         """
         return (image.GetWidth(), image.GetHeight())
 
     def constants(self):
-        """ Returns a dictionary of useful constants.
+        """Returns a dictionary of useful constants.
 
-            Currently, the dictionary should have the following key/value pairs:
+        Currently, the dictionary should have the following key/value pairs:
 
-            - WindowColor': the standard window background color in the toolkit
-              specific color format.
+        - WindowColor': the standard window background color in the toolkit
+          specific color format.
         """
         return {"WindowColor": WindowColor}
 
@@ -478,8 +471,7 @@ class GUIToolkit(Toolkit):
 
 
 class DragHandler(HasPrivateTraits):
-    """ Handler for drag events.
-    """
+    """Handler for drag events."""
 
     # -------------------------------------------------------------------------
     #  Traits definitions:
@@ -494,23 +486,19 @@ class DragHandler(HasPrivateTraits):
     # -- Drag and drop event handlers: ----------------------------------------
 
     def wx_dropped_on(self, x, y, data, drag_result):
-        """ Handles a Python object being dropped on the window.
-        """
+        """Handles a Python object being dropped on the window."""
         return self._drag_event("dropped_on", x, y, data, drag_result)
 
     def wx_drag_over(self, x, y, data, drag_result):
-        """ Handles a Python object being dragged over the tree.
-        """
+        """Handles a Python object being dragged over the tree."""
         return self._drag_event("drag_over", x, y, data, drag_result)
 
     def wx_drag_leave(self, data):
-        """ Handles a dragged Python object leaving the window.
-        """
+        """Handles a dragged Python object leaving the window."""
         return self._drag_event("drag_leave")
 
     def _drag_event(self, suffix, x=None, y=None, data=None, drag_result=None):
-        """ Handles routing a drag event to the appropriate handler.
-        """
+        """Handles routing a drag event to the appropriate handler."""
         control = self.control
         handler = self.ui.handler
         method = None
@@ -537,15 +525,16 @@ class DragHandler(HasPrivateTraits):
 
 
 class EventHandlerWrapper(wx.EvtHandler):
-    """ Simple wrapper around wx.EvtHandler used to determine which event
+    """Simple wrapper around wx.EvtHandler used to determine which event
     handlers were added by traitui.
     """
+
     pass
 
 
 def _popEventHandlers(ctrl, handler_type=EventHandlerWrapper):
-    """ Pop any event handlers that have been pushed on to a window and its
-        children.
+    """Pop any event handlers that have been pushed on to a window and its
+    children.
     """
     # FIXME: have to special case URLResolvingHtmlWindow because it doesn't
     # want its EvtHandler cleaned up.  See issue #752.

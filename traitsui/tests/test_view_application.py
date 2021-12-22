@@ -15,7 +15,10 @@ from traits.api import HasTraits, Instance, Int
 from traitsui.api import Handler, Item, UIInfo, View, toolkit
 
 from ._tools import (
-    BaseTestMixin, GuiTestAssistant, is_qt, no_gui_test_assistant
+    BaseTestMixin,
+    GuiTestAssistant,
+    is_qt,
+    no_gui_test_assistant,
 )
 
 

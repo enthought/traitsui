@@ -12,13 +12,13 @@ import warnings
 import wx
 
 from traitsui.testing.tester._ui_tester_registry._compat import (
-    check_key_compat
+    check_key_compat,
 )
 from traitsui.testing.tester.exceptions import Disabled
 
 
 def _create_event(event_type, control):
-    """ Creates a wxEvent of a given type
+    """Creates a wxEvent of a given type
 
     Parameters
     ----------
@@ -33,15 +33,13 @@ def _create_event(event_type, control):
         The created event, of the given type, with the given control set as
         the event object.
     """
-    event = wx.CommandEvent(
-        event_type, control.GetId()
-    )
+    event = wx.CommandEvent(event_type, control.GetId())
     event.SetEventObject(control)
     return event
 
 
 def mouse_click(func):
-    """ Decorator function for mouse clicks. Decorated functions will return
+    """Decorator function for mouse clicks. Decorated functions will return
     if they are not enabled. Additionally, this handles the delay for the
     click.
 
@@ -55,8 +53,9 @@ def mouse_click(func):
     callable
         The decorated function.
     """
+
     def mouse_click_handler(*, control, delay, **kwargs):
-        """ Defines the decorated function.
+        """Defines the decorated function.
 
         Paramters
         ---------
@@ -73,12 +72,13 @@ def mouse_click(func):
             return
         wx.MilliSleep(delay)
         func(control=control, delay=delay, **kwargs)
+
     return mouse_click_handler
 
 
 @mouse_click
 def mouse_click_button(control, delay):
-    """ Performs a mouce click on a wx button.
+    """Performs a mouce click on a wx button.
 
     Parameters
     ----------
@@ -93,7 +93,7 @@ def mouse_click_button(control, delay):
 
 @mouse_click
 def mouse_click_checkbox(control, delay):
-    """ Performs a mouce click on a wx check box.
+    """Performs a mouce click on a wx check box.
 
     Parameters
     ----------
@@ -109,7 +109,7 @@ def mouse_click_checkbox(control, delay):
 
 @mouse_click
 def mouse_click_combobox_or_choice(control, index, delay):
-    """ Performs a mouce click on either a wx combo box or a wx choice on the
+    """Performs a mouce click on either a wx combo box or a wx choice on the
     entry at the given index.
 
     Parameters
@@ -160,7 +160,7 @@ def mouse_click_listbox(control, index, delay):
 
 @mouse_click
 def mouse_click_radiobutton(control, delay):
-    """ Performs a mouce click on a wx radio button.
+    """Performs a mouce click on a wx radio button.
 
     Parameters
     ----------
@@ -176,7 +176,7 @@ def mouse_click_radiobutton(control, delay):
 
 @mouse_click
 def mouse_click_object(control, delay):
-    """ Performs a mouce click on a wxTextCtrl.
+    """Performs a mouce click on a wxTextCtrl.
 
     Parameters
     ----------
@@ -192,7 +192,7 @@ def mouse_click_object(control, delay):
 
 
 def mouse_click_notebook_tab_index(control, index, delay):
-    """ Performs a mouseclick on a Noteboook List Editor on the tab specified
+    """Performs a mouseclick on a Noteboook List Editor on the tab specified
     by index.
 
     Parameters
@@ -210,22 +210,18 @@ def mouse_click_notebook_tab_index(control, index, delay):
     # find the boundaries of the tab to be clicked
     bx, by, bdx, bdy = controls_list[index].drag_bounds
     # find the center
-    tab_center = wx.Point(bx + bdx//2, by + bdy//2)
+    tab_center = wx.Point(bx + bdx // 2, by + bdy // 2)
 
-    click_down_event = wx.MouseEvent(
-        wx.wxEVT_LEFT_DOWN
-    )
+    click_down_event = wx.MouseEvent(wx.wxEVT_LEFT_DOWN)
     click_down_event.SetPosition(tab_center)
-    click_up_event = wx.MouseEvent(
-        wx.wxEVT_LEFT_UP
-    )
+    click_up_event = wx.MouseEvent(wx.wxEVT_LEFT_UP)
     click_up_event.SetPosition(tab_center)
     control.ProcessEvent(click_down_event)
     control.ProcessEvent(click_up_event)
 
 
 def mouse_click_checkbox_child_in_panel(control, index, delay):
-    """ Performs a mouce click on a child of a Wx Panel.
+    """Performs a mouce click on a child of a Wx Panel.
 
     Parameters
     ----------
@@ -249,7 +245,7 @@ def mouse_click_checkbox_child_in_panel(control, index, delay):
 
 
 def mouse_click_radiobutton_child_in_panel(control, index, delay):
-    """ Performs a mouce click on a child of a Wx Panel.
+    """Performs a mouce click on a child of a Wx Panel.
 
     Parameters
     ----------
@@ -273,10 +269,12 @@ def mouse_click_radiobutton_child_in_panel(control, index, delay):
 
 
 def key_click_text_entry(
-    control, interaction, delay,
-    get_selection=lambda control: control.GetSelection()
+    control,
+    interaction,
+    delay,
+    get_selection=lambda control: control.GetSelection(),
 ):
-    """ Performs simulated typing of a key on the given wxObject
+    """Performs simulated typing of a key on the given wxObject
     after a delay.
 
     Parameters
@@ -321,7 +319,7 @@ def key_click_text_entry(
 
 
 def key_click_combobox(control, interaction, delay):
-    """ Performs simulated typing of a key on the given wxComboBox
+    """Performs simulated typing of a key on the given wxComboBox
     after a delay.
 
     Parameters
@@ -335,13 +333,15 @@ def key_click_combobox(control, interaction, delay):
         Time delay (in ms) in which the key click will be performed.
     """
     key_click_text_entry(
-        control, interaction, delay,
+        control,
+        interaction,
+        delay,
         get_selection=lambda control: control.GetTextSelection(),
     )
 
 
 def key_sequence_text_ctrl(control, interaction, delay):
-    """ Performs simulated typing of a sequence of keys on the given wxObject
+    """Performs simulated typing of a sequence of keys on the given wxObject
     after a delay.
 
     Parameters
@@ -376,7 +376,7 @@ def key_sequence_text_ctrl(control, interaction, delay):
 
 
 def key_click_slider(control, interaction, delay):
-    """ Performs simulated typing of a key on the given wxSlider
+    """Performs simulated typing of a key on the given wxSlider
     after a delay. Only allowed keys are:
     "Left", "Right", "Up", "Down", "Page Up", "Page Down"
     Also, note that up related keys correspond to an increment on the slider,
@@ -419,14 +419,12 @@ def key_click_slider(control, interaction, delay):
         )
     wx.MilliSleep(delay)
     control.SetValue(position)
-    event = wx.ScrollEvent(
-        wx.wxEVT_SCROLL_CHANGED, control.GetId(), position
-    )
+    event = wx.ScrollEvent(wx.wxEVT_SCROLL_CHANGED, control.GetId(), position)
     wx.PostEvent(control, event)
 
 
 def readonly_textbox_displayed_text(control):
-    ''' Extracts the displayed text in a wx textbox (either a wx.TextCtrl or
+    '''Extracts the displayed text in a wx textbox (either a wx.TextCtrl or
     wx.StaticText).
 
     Parameters
@@ -443,6 +441,8 @@ def readonly_textbox_displayed_text(control):
         return control.GetValue()
     elif isinstance(control, wx.StaticText):
         return control.GetLabel()
-    raise TypeError("readonly_textbox_displayed_text expected a control"
-                    " of either wx.TextCtrl, or wx.StaticText."
-                    " {} was found".format(control))
+    raise TypeError(
+        "readonly_textbox_displayed_text expected a control"
+        " of either wx.TextCtrl, or wx.StaticText."
+        " {} was found".format(control)
+    )

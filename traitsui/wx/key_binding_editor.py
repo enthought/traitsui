@@ -30,8 +30,7 @@ from .key_event_to_name import key_event_to_name
 
 
 class KeyBindingEditor(Editor):
-    """ An editor for modifying bindings of keys to controls.
-    """
+    """An editor for modifying bindings of keys to controls."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -47,14 +46,13 @@ class KeyBindingEditor(Editor):
     clear = Event()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = KeyBindingCtrl(self, parent, size=wx.Size(160, 19))
 
     def update_object(self, event):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         try:
             self.value = value = key_event_to_name(event)
             self._binding.text = value
@@ -62,21 +60,19 @@ class KeyBindingEditor(Editor):
             pass
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.control.Refresh()
 
     def update_focus(self, has_focus):
-        """ Updates the current focus setting of the control.
-        """
+        """Updates the current focus setting of the control."""
         if has_focus:
             self._binding.border_size = 1
             self.object.owner.focus_owner = self._binding
 
     def _key_changed(self, event):
-        """ Handles a keyboard event.
-        """
+        """Handles a keyboard event."""
         binding = self.object
         key_name = key_event_to_name(event)
         cur_binding = binding.owner.key_binding_for(binding, key_name)
@@ -96,14 +92,12 @@ class KeyBindingEditor(Editor):
         self.value = key_name
 
     def _clear_changed(self):
-        """ Handles a clear field event.
-        """
+        """Handles a clear field event."""
         self.value = ""
 
 
 class KeyBindingCtrl(wx.Window):
-    """ wxPython control for editing key bindings.
-    """
+    """wxPython control for editing key bindings."""
 
     def __init__(
         self,
@@ -141,16 +135,14 @@ class KeyBindingCtrl(wx.Window):
         self.Bind(wx.EVT_CHAR, self._on_char)
 
     def _on_char(self, event):
-        """ Handle keyboard keys being pressed.
-        """
+        """Handle keyboard keys being pressed."""
         self.editor.key = event
 
     def _on_erase_background(self, event):
         pass
 
     def _paint(self, event):
-        """ Updates the screen.
-        """
+        """Updates the screen."""
         wdc = wx.PaintDC(self)
         dx, dy = self.GetSize()
         if self.editor.has_focus:
@@ -164,23 +156,19 @@ class KeyBindingCtrl(wx.Window):
         wdc.DrawText(self.editor.str_value, 5, 3)
 
     def _set_focus(self, event):
-        """ Sets the keyboard focus to this window.
-        """
+        """Sets the keyboard focus to this window."""
         self.SetFocus()
 
     def _get_focus(self, event):
-        """ Handles getting the focus.
-        """
+        """Handles getting the focus."""
         self.editor.has_focus = True
         self.Refresh()
 
     def _lose_focus(self, event):
-        """ Handles losing the focus.
-        """
+        """Handles losing the focus."""
         self.editor.has_focus = False
         self.Refresh()
 
     def _clear_contents(self, event):
-        """ Handles the user double clicking the control to clear its contents.
-        """
+        """Handles the user double clicking the control to clear its contents."""
         self.editor.clear = True

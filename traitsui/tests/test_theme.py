@@ -17,7 +17,6 @@ from traitsui.theme import Theme
 
 
 class TestTheme(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
         self.theme = Theme()
@@ -32,6 +31,7 @@ class TestTheme(BaseTestMixin, unittest.TestCase):
     @requires_toolkit([ToolkitName.wx])
     def test_theme_content_color_default(self):
         import wx
+
         self.assertEqual(self.theme.content_color, wx.BLACK)
 
     def test_theme_content_color_setter_getter(self):
@@ -41,6 +41,7 @@ class TestTheme(BaseTestMixin, unittest.TestCase):
     @requires_toolkit([ToolkitName.wx])
     def test_theme_label_color_default(self):
         import wx
+
         self.assertEqual(self.theme.label_color, wx.BLACK)
 
     def test_theme_label_color_setter_getter(self):

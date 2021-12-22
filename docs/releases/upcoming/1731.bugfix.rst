@@ -1,0 +1,1 @@
+Prevent RangeTextEditor from allowing values outside range (#1731)

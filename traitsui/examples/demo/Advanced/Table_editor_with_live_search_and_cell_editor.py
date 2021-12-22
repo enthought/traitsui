@@ -80,43 +80,58 @@ Finally:
   table.
 """
 
-#-- Imports --------------------------------------------------------------
+# -- Imports --------------------------------------------------------------
 
-from os \
-    import walk, listdir
+from os import walk, listdir
 
-from os.path \
-    import basename, dirname, splitext, join
+from os.path import basename, dirname, splitext, join
 
-from traits.api \
-    import HasTraits, File, Directory, Str, Bool, Int, Enum, Instance, \
-    Property, Any, property_depends_on
+from traits.api import (
+    HasTraits,
+    File,
+    Directory,
+    Str,
+    Bool,
+    Int,
+    Enum,
+    Instance,
+    Property,
+    Any,
+    property_depends_on,
+)
 
-from traitsui.api \
-    import View, VGroup, VSplit, HGroup, Item, TableEditor, CodeEditor, \
-    TitleEditor, HistoryEditor, DNDEditor
+from traitsui.api import (
+    View,
+    VGroup,
+    VSplit,
+    HGroup,
+    Item,
+    TableEditor,
+    CodeEditor,
+    TitleEditor,
+    HistoryEditor,
+    DNDEditor,
+)
 
-from traitsui.table_column \
-    import ObjectColumn
+from traitsui.table_column import ObjectColumn
 from io import open
 
-#-- Constants ------------------------------------------------------------
+# -- Constants ------------------------------------------------------------
 
 FileTypes = {
     'Python': ['.py'],
     'C': ['.c', '.h'],
     'C++': ['.cpp', '.h'],
     'Java': ['.java'],
-    'Ruby': ['.rb']
+    'Ruby': ['.rb'],
 }
 
 DEFAULT_ROOT = dirname(__file__)
 
-#-- The Live Search table editor definition ------------------------------
+# -- The Live Search table editor definition ------------------------------
 
 
 class MatchesColumn1(ObjectColumn):
-
     def get_value(self, object):
         n = len(self.get_raw_value(object))
         if n == 0:
@@ -126,15 +141,14 @@ class MatchesColumn1(ObjectColumn):
 
 
 class MatchesColumn2(ObjectColumn):
-
     def is_editable(self, object):
-        return (len(object.matches) > 0)
+        return len(object.matches) > 0
 
 
 class FileColumn(ObjectColumn):
-
     def get_drag_value(self, object):
         return object.full_name
+
 
 table_editor = TableEditor(
     columns=[
@@ -143,37 +157,34 @@ table_editor = TableEditor(
             label='#',
             editable=False,
             width=0.05,
-            horizontal_alignment='center'),
+            horizontal_alignment='center',
+        ),
         MatchesColumn2(
             name='matches',
             width=0.35,
-            format_func=lambda x: (
-                x + [''])[0].strip(),
+            format_func=lambda x: (x + [''])[0].strip(),
             editor=CodeEditor(
                 line='object.live_search.selected_match',
-                selected_line='object.live_search.selected_match'),
+                selected_line='object.live_search.selected_match',
+            ),
             style='readonly',
             edit_width=0.95,
-            edit_height=0.33),
-        FileColumn(
-            name='base_name',
-            label='Name',
-            width=0.30,
-            editable=False),
+            edit_height=0.33,
+        ),
+        FileColumn(name='base_name', label='Name', width=0.30, editable=False),
         ObjectColumn(
-            name='ext_path',
-            label='Path',
-            width=0.30,
-            editable=False),
+            name='ext_path', label='Path', width=0.30, editable=False
+        ),
     ],
     filter_name='filter',
     auto_size=False,
     show_toolbar=False,
     selected='selected',
     selection_color=0x000000,
-    selection_bg_color=0xFBD391)
+    selection_bg_color=0xFBD391,
+)
 
-#-- LiveSearch class -----------------------------------------------------
+# -- LiveSearch class -----------------------------------------------------
 
 
 class LiveSearch(HasTraits):
@@ -220,70 +231,69 @@ class LiveSearch(HasTraits):
     # Summary of current number of files and matches:
     summary = Property  # Str
 
-    #-- Traits UI Views ------------------------------------------------------
+    # -- Traits UI Views ------------------------------------------------------
 
     view = View(
         VGroup(
             HGroup(
-                Item('root',
-                     id='root',
-                     label='Path',
-                     width=0.5
-                     ),
+                Item('root', id='root', label='Path', width=0.5),
                 Item('recursive'),
                 Item('file_type', label='Type'),
-                Item('search',
-                     id='search',
-                     width=0.5,
-                     editor=HistoryEditor(auto_set=True)
-                     ),
-                Item('case_sensitive')
+                Item(
+                    'search',
+                    id='search',
+                    width=0.5,
+                    editor=HistoryEditor(auto_set=True),
+                ),
+                Item('case_sensitive'),
             ),
             VSplit(
                 VGroup(
-                    Item('summary',
-                         editor=TitleEditor()
-                         ),
-                    Item('source_files',
-                         id='source_files',
-                         editor=table_editor
-                         ),
+                    Item('summary', editor=TitleEditor()),
+                    Item(
+                        'source_files', id='source_files', editor=table_editor
+                    ),
                     dock='horizontal',
-                    show_labels=False
+                    show_labels=False,
                 ),
                 VGroup(
                     HGroup(
-                        Item('selected_full_name',
-                             editor=TitleEditor(),
-                             springy=True
-                             ),
-                        Item('selected_full_name',
-                             editor=DNDEditor(),
-                             tooltip='Drag this file'
-                             ),
-                        show_labels=False
+                        Item(
+                            'selected_full_name',
+                            editor=TitleEditor(),
+                            springy=True,
+                        ),
+                        Item(
+                            'selected_full_name',
+                            editor=DNDEditor(),
+                            tooltip='Drag this file',
+                        ),
+                        show_labels=False,
                     ),
-                    Item('selected_contents',
-                         style='readonly',
-                         editor=CodeEditor(mark_lines='mark_lines',
-                                           line='selected_line',
-                                           selected_line='selected_line')
-                         ),
+                    Item(
+                        'selected_contents',
+                        style='readonly',
+                        editor=CodeEditor(
+                            mark_lines='mark_lines',
+                            line='selected_line',
+                            selected_line='selected_line',
+                        ),
+                    ),
                     dock='horizontal',
-                    show_labels=False
+                    show_labels=False,
                 ),
-                id='splitter'
-            )
+                id='splitter',
+            ),
         ),
         title='Live File Search',
         id='enthought.examples.demo.Advanced.'
         'Table_editor_with_live_search_and_cell_editor.LiveSearch',
         width=0.75,
         height=0.67,
-        resizable=True
+        resizable=True,
     )
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     @property_depends_on('search, case_sensitive')
     def _get_filter(self):
@@ -304,15 +314,19 @@ class LiveSearch(HasTraits):
             for dir_path, dir_names, file_names in walk(root):
                 for file_name in file_names:
                     if splitext(file_name)[1] in file_types:
-                        result.append(SourceFile(
-                            live_search=self,
-                            full_name=join(dir_path, file_name)))
+                        result.append(
+                            SourceFile(
+                                live_search=self,
+                                full_name=join(dir_path, file_name),
+                            )
+                        )
             return result
 
-        return [SourceFile(live_search=self,
-                           full_name=join(root, file_name))
-                for file_name in listdir(root)
-                if splitext(file_name)[1] in file_types]
+        return [
+            SourceFile(live_search=self, full_name=join(root, file_name))
+            for file_name in listdir(root)
+            if splitext(file_name)[1] in file_types
+        ]
 
     @property_depends_on('selected')
     def _get_selected_contents(self):
@@ -326,8 +340,7 @@ class LiveSearch(HasTraits):
         if self.selected is None:
             return []
 
-        return [int(match.split(':', 1)[0])
-                for match in self.selected.matches]
+        return [int(match.split(':', 1)[0]) for match in self.selected.matches]
 
     @property_depends_on('selected, selected_match')
     def _get_selected_line(self):
@@ -335,8 +348,7 @@ class LiveSearch(HasTraits):
         if (selected is None) or (len(selected.matches) == 0):
             return 1
 
-        return int(selected.matches[self.selected_match - 1
-                                    ].split(':', 1)[0])
+        return int(selected.matches[self.selected_match - 1].split(':', 1)[0])
 
     @property_depends_on('selected')
     def _get_selected_full_name(self):
@@ -361,9 +373,12 @@ class LiveSearch(HasTraits):
                 matches += n
 
         return 'A total of %d files with %d files containing %d matches.' % (
-               len(source_files), files, matches)
+            len(source_files),
+            files,
+            matches,
+        )
 
-    #-- Traits Event Handlers ------------------------------------------------
+    # -- Traits Event Handlers ------------------------------------------------
 
     def _selected_changed(self):
         self.selected_match = 1
@@ -374,7 +389,8 @@ class LiveSearch(HasTraits):
         else:
             self.selected = None
 
-#-- SourceFile class -----------------------------------------------------
+
+# -- SourceFile class -----------------------------------------------------
 
 
 class SourceFile(HasTraits):
@@ -397,7 +413,7 @@ class SourceFile(HasTraits):
     # The list of matches for the current search criteria:
     matches = Property  # List( Str )
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     @property_depends_on('full_name')
     def _get_base_name(self):
@@ -405,7 +421,7 @@ class SourceFile(HasTraits):
 
     @property_depends_on('full_name')
     def _get_ext_path(self):
-        return dirname(self.full_name)[len(self.live_search.root):]
+        return dirname(self.full_name)[len(self.live_search.root) :]
 
     @property_depends_on('full_name')
     def _get_contents(self):
@@ -424,16 +440,21 @@ class SourceFile(HasTraits):
 
         case_sensitive = self.live_search.case_sensitive
         if case_sensitive:
-            return ['%5d: %s' % ((i + 1), line.strip())
-                    for i, line in enumerate(self.contents)
-                    if line.find(search) >= 0]
+            return [
+                '%5d: %s' % ((i + 1), line.strip())
+                for i, line in enumerate(self.contents)
+                if line.find(search) >= 0
+            ]
 
         search = search.lower()
-        return ['%5d: %s' % ((i + 1), line.strip())
-                for i, line in enumerate(self.contents)
-                if line.lower().find(search) >= 0]
+        return [
+            '%5d: %s' % ((i + 1), line.strip())
+            for i, line in enumerate(self.contents)
+            if line.lower().find(search) >= 0
+        ]
 
-#-- Set up and run the demo ----------------------------------------------
+
+# -- Set up and run the demo ----------------------------------------------
 
 # Create the demo object:
 demo = LiveSearch()

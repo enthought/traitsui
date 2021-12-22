@@ -17,8 +17,8 @@ import wx
 
 
 class ImageControl(wx.Window):
-    """ A wxPython control that displays an image, which can be selected or
-        unselected by mouse clicks.
+    """A wxPython control that displays an image, which can be selected or
+    unselected by mouse clicks.
     """
 
     #: Pens used to draw the 'selection' marker:
@@ -33,8 +33,7 @@ class ImageControl(wx.Window):
     def __init__(
         self, parent, bitmap, selected=None, handler=None, padding=10
     ):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         wx.Window.__init__(
             self,
             parent,
@@ -59,8 +58,7 @@ class ImageControl(wx.Window):
         self.Bind(wx.EVT_LEAVE_WINDOW, self._on_leave)
 
     def Selected(self, selected=None):
-        """ Gets or sets the selection state of the image.
-        """
+        """Gets or sets the selection state of the image."""
         if selected is not None:
             selected = selected != 0
             if selected != self._selected:
@@ -79,8 +77,7 @@ class ImageControl(wx.Window):
         return self._selected
 
     def Bitmap(self, bitmap=None):
-        """ Gets or sets the bitmap image.
-        """
+        """Gets or sets the bitmap image."""
         if bitmap is not None:
             if bitmap != self._bitmap:
                 self._bitmap = bitmap
@@ -89,8 +86,7 @@ class ImageControl(wx.Window):
         return self._bitmap
 
     def Handler(self, handler=None):
-        """ Gets or sets the click handler.
-        """
+        """Gets or sets the click handler."""
         if handler is not None:
             if handler != self._handler:
                 self._handler = handler
@@ -99,30 +95,26 @@ class ImageControl(wx.Window):
         return self._handler
 
     def _on_enter(self, event=None):
-        """ Handles the mouse entering the control.
-        """
+        """Handles the mouse entering the control."""
         if self._selected is not None:
             self._mouse_over = True
             self.Refresh()
 
     def _on_leave(self, event=None):
-        """ Handles the mouse leaving the control.
-        """
+        """Handles the mouse leaving the control."""
         if self._mouse_over:
             self._mouse_over = False
             self.Refresh()
 
     def _on_left_down(self, event=None):
-        """ Handles the user pressing the mouse button.
-        """
+        """Handles the user pressing the mouse button."""
         if self._selected is not None:
             self.CaptureMouse()
             self._button_down = True
             self.Refresh()
 
     def _on_left_up(self, event=None):
-        """ Handles the user clicking the control.
-        """
+        """Handles the user clicking the control."""
         need_refresh = self._button_down
         if need_refresh:
             self.ReleaseMouse()
@@ -145,8 +137,7 @@ class ImageControl(wx.Window):
             self.Refresh()
 
     def _on_paint(self, event=None):
-        """ Handles the control being re-painted.
-        """
+        """Handles the control being re-painted."""
         wdc = wx.PaintDC(self)
         wdx, wdy = self.GetClientSize()
         bitmap = self._bitmap

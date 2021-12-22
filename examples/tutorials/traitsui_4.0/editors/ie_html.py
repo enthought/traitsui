@@ -1,4 +1,4 @@
-#--(Internet Explorer HTML Editor (Windows Only))-------------------------
+# --(Internet Explorer HTML Editor (Windows Only))-------------------------
 """
 Internet Explorer HTML Editor (Windows Only)
 ============================================
@@ -76,18 +76,23 @@ URL or file name of the file that Internet Explorer should display. This is a
 the browser to display the page defined by the new value of the trait.
 """
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 
-from traitsui.wx.extra.windows.ie_html_editor \
-    import IEHTMLEditor
+from traitsui.wx.extra.windows.ie_html_editor import IEHTMLEditor
 
-from traits.api \
-    import HasTraits, Str, List, Button
+from traits.api import HasTraits, Str, List, Button
 
-from traitsui.api \
-    import View, VGroup, HGroup, Item, TextEditor, ListEditor, spring
+from traitsui.api import (
+    View,
+    VGroup,
+    HGroup,
+    Item,
+    TextEditor,
+    ListEditor,
+    spring,
+)
 
-#--[WebPage Class]--------------------------------------------------------
+# --[WebPage Class]--------------------------------------------------------
 
 
 class WebPage(HasTraits):
@@ -111,21 +116,35 @@ class WebPage(HasTraits):
 
     # The view to display:
     view = View(
-        HGroup('back', 'forward', 'home', 'stop', 'refresh', 'search', '_',
-               Item('status', style='readonly'),
-               show_labels=False
-               ),
-        Item('url',
-             show_label=False,
-             editor=IEHTMLEditor(
-                 home='home', back='back',
-                 forward='forward', stop='stop',
-                 refresh='refresh', search='search',
-                 title='title', status='status')
-             )
+        HGroup(
+            'back',
+            'forward',
+            'home',
+            'stop',
+            'refresh',
+            'search',
+            '_',
+            Item('status', style='readonly'),
+            show_labels=False,
+        ),
+        Item(
+            'url',
+            show_label=False,
+            editor=IEHTMLEditor(
+                home='home',
+                back='back',
+                forward='forward',
+                stop='stop',
+                refresh='refresh',
+                search='search',
+                title='title',
+                status='status',
+            ),
+        ),
     )
 
-#--[InternetExplorerDemo Class]-------------------------------------------
+
+# --[InternetExplorerDemo Class]-------------------------------------------
 
 
 class InternetExplorerDemo(HasTraits):
@@ -139,27 +158,32 @@ class InternetExplorerDemo(HasTraits):
     # The view to display:
     view = View(
         VGroup(
-            Item('url',
-                 label='Location',
-                 editor=TextEditor(auto_set=False, enter_set=True)
-                 )
+            Item(
+                'url',
+                label='Location',
+                editor=TextEditor(auto_set=False, enter_set=True),
+            )
         ),
-        Item('pages',
-             show_label=False,
-             style='custom',
-             editor=ListEditor(use_notebook=True,
-                               deletable=True,
-                               dock_style='tab',
-                               export='DockWindowShell',
-                               page_name='.title')
-             )
+        Item(
+            'pages',
+            show_label=False,
+            style='custom',
+            editor=ListEditor(
+                use_notebook=True,
+                deletable=True,
+                dock_style='tab',
+                export='DockWindowShell',
+                page_name='.title',
+            ),
+        ),
     )
 
     # Event handlers:
     def _url_changed(self, url):
         self.pages.append(WebPage(url=url.strip()))
 
-#--(Demo Notes)-----------------------------------------------------------
+
+# --(Demo Notes)-----------------------------------------------------------
 
 """
 Demo Notes
@@ -171,8 +195,11 @@ Demo Notes
 - Then, just for fun, try dragging it back...
 """
 
-#--<Example*>-------------------------------------------------------------
+# --<Example*>-------------------------------------------------------------
 
 demo = InternetExplorerDemo(
-    pages=[WebPage(url='http://code.enthought.com/traits/'),
-           WebPage(url='http://dmorrill.com')])
+    pages=[
+        WebPage(url='http://code.enthought.com/traits/'),
+        WebPage(url='http://dmorrill.com'),
+    ]
+)

@@ -41,7 +41,12 @@ listeners to each item in the list.
 
 from traits.api import HasTraits, Str, Float, List, Instance, Button
 from traitsui.api import (
-    View, HGroup, Item, TabularAdapter, TabularEditor, spring
+    View,
+    HGroup,
+    Item,
+    TabularAdapter,
+    TabularEditor,
+    spring,
 )
 
 
@@ -77,8 +82,8 @@ class Company(HasTraits):
                 adapter=EmployeeAdapter(),
                 selected='employee',
                 auto_resize=True,
-                auto_update=True
-            )
+                auto_update=True,
+            ),
         ),
         HGroup(
             spring,
@@ -86,13 +91,13 @@ class Company(HasTraits):
             Item(
                 'give_raise',
                 show_label=False,
-                enabled_when='employee is not None'
-            )
+                enabled_when='employee is not None',
+            ),
         ),
         title='Auto Update Tabular Editor demo',
         height=0.25,
         width=0.30,
-        resizable=True
+        resizable=True,
     )
 
     def _give_raise_changed(self):
@@ -109,8 +114,8 @@ demo = Company(
         Employee(name='Jim', salary=39000),
         Employee(name='Helen', salary=41000),
         Employee(name='George', salary=49000),
-        Employee(name='Betty', salary=46000)
-    ]
+        Employee(name='Betty', salary=46000),
+    ],
 )
 
 # Run the demo (if invoked from the command line):

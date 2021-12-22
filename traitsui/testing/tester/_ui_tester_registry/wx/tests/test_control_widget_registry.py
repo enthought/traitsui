@@ -30,13 +30,13 @@ except ImportError:
     if is_wx():
         raise
 else:
-    from traitsui.testing.tester._ui_tester_registry.wx._control_widget_registry import (   # noqa: E501
+    from traitsui.testing.tester._ui_tester_registry.wx._control_widget_registry import (  # noqa: E501
         get_widget_registry,
     )
 
 
 class TargetWithControl:
-    """ An object holding a control attribute."""
+    """An object holding a control attribute."""
 
     def __init__(self, control):
         self.control = control
@@ -44,7 +44,6 @@ class TargetWithControl:
 
 @requires_toolkit([ToolkitName.wx])
 class TestWxControlWidgetRegistry(unittest.TestCase):
-
     def setUp(self):
         self.widget = wx.Window()
         self.registry = get_widget_registry()
@@ -69,7 +68,7 @@ class TestWxControlWidgetRegistry(unittest.TestCase):
     def test_get_interactions_good_target(self):
         self.assertEqual(
             self.registry._get_interactions(self.target),
-            set([IsEnabled, IsVisible])
+            set([IsEnabled, IsVisible]),
         )
 
     def test_get_interactions_bad_target(self):

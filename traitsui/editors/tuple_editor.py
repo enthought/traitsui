@@ -31,8 +31,7 @@ from traitsui.view import View
 
 
 class TupleEditor(EditorFactory):
-    """ Editor factory for tuple editors.
-    """
+    """Editor factory for tuple editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -62,15 +61,15 @@ class TupleEditor(EditorFactory):
 
 
 class SimpleEditor(Editor):
-    """ Simple style of editor for tuples.
+    """Simple style of editor for tuples.
 
     The editor displays an editor for each of the fields in the tuple, based on
     the type of each field.
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self._ts = ts = TupleStructure(self)
         self._ui = ui = ts.view.ui(ts, parent, kind="subpanel").trait_set(
@@ -80,22 +79,20 @@ class SimpleEditor(Editor):
         self.set_tooltip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes external to the
-            editor.
+        """Updates the editor when the object trait changes external to the
+        editor.
         """
         ts = self._ts
         for i, value in enumerate(self.value):
             setattr(ts, "f%d" % i, value)
 
     def get_error_control(self):
-        """ Returns the editor's control for indicating error status.
-        """
+        """Returns the editor's control for indicating error status."""
         return self._ui.get_error_controls()
 
 
 class TupleStructure(HasTraits):
-    """ Creates a view containing items for each field in a tuple.
-    """
+    """Creates a view containing items for each field in a tuple."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -111,16 +108,14 @@ class TupleStructure(HasTraits):
     fields = Int()
 
     def __init__(self, editor):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
+        super().__init__(editor=editor)
+
         factory = editor.factory
         types = factory.types
         labels = factory.labels
         editors = factory.editors
         cols = factory.cols
-
-        # Save the reference to the editor:
-        self.editor = editor
 
         # Get the tuple we are mirroring:
         object = editor.value
@@ -188,8 +183,7 @@ class TupleStructure(HasTraits):
         self.view = View(Group(show_labels=(len_labels != 0), *content))
 
     def _field_changed(self, name, old, new):
-        """ Updates the underlying tuple when any field changes value.
-        """
+        """Updates the underlying tuple when any field changes value."""
         index = int(name[1:])
         value = self.editor.value
         if new != value[index]:

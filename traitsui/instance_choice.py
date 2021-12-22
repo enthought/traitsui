@@ -12,14 +12,24 @@
     instance editor factory classes.
 """
 
-from traits.api import HasPrivateTraits, Str, Any, Dict, Tuple, Callable, Bool
+from abc import abstractmethod
+
+from traits.api import (
+    ABCHasStrictTraits,
+    Str,
+    Any,
+    Dict,
+    Tuple,
+    Callable,
+    Bool,
+)
 
 from .ui_traits import AView
 
 from .helper import user_name_for
 
 
-class InstanceChoiceItem(HasPrivateTraits):
+class InstanceChoiceItem(ABCHasStrictTraits):
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -35,33 +45,29 @@ class InstanceChoiceItem(HasPrivateTraits):
     is_factory = Bool(False)
 
     def get_name(self, object=None):
-        """ Returns the name of the item.
-        """
+        """Returns the name of the item."""
         return self.name
 
     def get_view(self):
-        """ Returns the view associated with the object.
-        """
+        """Returns the view associated with the object."""
         return self.view
 
+    @abstractmethod
     def get_object(self):
-        """ Returns the object associated with the item.
-        """
-        raise NotImplementedError
+        """Returns the object associated with the item."""
+        pass
 
+    @abstractmethod
     def is_compatible(self, object):
-        """ Indicates whether a specified object is compatible with the item.
-        """
-        raise NotImplementedError
+        """Indicates whether a specified object is compatible with the item."""
+        pass
 
     def is_selectable(self):
-        """ Indicates whether the item can be selected by the user.
-        """
+        """Indicates whether the item can be selected by the user."""
         return True
 
     def is_droppable(self):
-        """ Indicates whether the item supports drag and drop.
-        """
+        """Indicates whether the item supports drag and drop."""
         return False
 
 
@@ -78,8 +84,7 @@ class InstanceChoice(InstanceChoiceItem):
     name_trait = Str("name")
 
     def get_name(self, object=None):
-        """ Returns the name of the item.
-        """
+        """Returns the name of the item."""
         if self.name != "":
             return self.name
 
@@ -90,13 +95,11 @@ class InstanceChoice(InstanceChoiceItem):
         return user_name_for(self.object.__class__.__name__)
 
     def get_object(self):
-        """ Returns the object associated with the item.
-        """
+        """Returns the object associated with the item."""
         return self.object
 
     def is_compatible(self, object):
-        """ Indicates whether a specified object is compatible with the item.
-        """
+        """Indicates whether a specified object is compatible with the item."""
         return object is self.object
 
 
@@ -127,8 +130,7 @@ class InstanceFactoryChoice(InstanceChoiceItem):
     is_factory = True
 
     def get_name(self, object=None):
-        """ Returns the name of the item.
-        """
+        """Returns the name of the item."""
         if self.name != "":
             return self.name
 
@@ -144,25 +146,21 @@ class InstanceFactoryChoice(InstanceChoiceItem):
         return user_name_for(klass.__name__)
 
     def get_object(self):
-        """ Returns the object associated with the item.
-        """
+        """Returns the object associated with the item."""
         return self.klass(*self.args, **self.kw_args)
 
     def is_droppable(self):
-        """ Indicates whether the item supports drag and drop.
-        """
+        """Indicates whether the item supports drag and drop."""
         return self.droppable
 
     def is_compatible(self, object):
-        """ Indicates whether a specified object is compatible with the item.
-        """
+        """Indicates whether a specified object is compatible with the item."""
         if issubclass(type(self.klass), type):
             return isinstance(object, self.klass)
         return isinstance(object, self.get_object().__class__)
 
     def is_selectable(self):
-        """ Indicates whether the item can be selected by the user.
-        """
+        """Indicates whether the item can be selected by the user."""
         return self.selectable
 
 

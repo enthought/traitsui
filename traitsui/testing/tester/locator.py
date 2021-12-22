@@ -35,7 +35,7 @@ class Cell:
 
 
 class Index:
-    """ A locator for locating a target that is uniquely specified by a single
+    """A locator for locating a target that is uniquely specified by a single
     0-based index.
 
     Attributes
@@ -49,34 +49,36 @@ class Index:
 
 
 class TargetByName:
-    """ A locator for locating the next UI target using a name.
+    """A locator for locating the next UI target using a name.
 
     Attributes
     ----------
     name : str
     """
+
     def __init__(self, name):
         self.name = name
 
 
 class TargetById:
-    """ A locator for locating the next UI target using an id.
+    """A locator for locating the next UI target using an id.
 
     Attributes
     ----------
     id : str
     """
+
     def __init__(self, id):
         self.id = id
 
 
 class Slider:
-    """ A locator for locating a nested slider widget within a UI.
-    """
+    """A locator for locating a nested slider widget within a UI."""
+
     pass
 
 
 class Textbox:
-    """ A locator for locating a nested textbox widget within a UI.
-    """
+    """A locator for locating a nested textbox widget within a UI."""
+
     pass

@@ -13,7 +13,6 @@
 """
 
 
-
 from traits.api import (
     Bool,
     Delegate,
@@ -51,8 +50,7 @@ Padding = Range(0, 15, desc="amount of padding to add around each item")
 
 
 class Group(ViewSubElement):
-    """ Represents a grouping of items in a user interface view.
-    """
+    """Represents a grouping of items in a user interface view."""
 
     # -------------------------------------------------------------------------
     # Trait definitions:
@@ -196,8 +194,7 @@ class Group(ViewSubElement):
     height = Property(Float, observe="content")
 
     def __init__(self, *values, **traits):
-        """ Initializes the group object.
-        """
+        """Initializes the group object."""
         super().__init__(**traits)
 
         content = self.content
@@ -237,21 +234,20 @@ class Group(ViewSubElement):
         return dock_window_theme()
 
     def get_label(self, ui):
-        """ Gets the label to use this group.
-        """
+        """Gets the label to use this group."""
         if self.label != "":
             return self.label
 
         return "Group"
 
     def is_includable(self):
-        """ Returns a Boolean value indicating whether the object is replacable
+        """Returns a Boolean value indicating whether the object is replacable
         by an Include object.
         """
         return self.id != ""
 
     def replace_include(self, view_elements):
-        """ Replaces any items that have an **id** attribute with an Include
+        """Replaces any items that have an **id** attribute with an Include
         object with the same ID value, and puts the object with the ID
         into the specified ViewElements object.
 
@@ -272,7 +268,7 @@ class Group(ViewSubElement):
             item.replace_include(view_elements)
 
     def get_shadow(self, ui):
-        """ Returns a ShadowGroup object for the current Group object, which
+        """Returns a ShadowGroup object for the current Group object, which
         recursively resolves all embedded Include objects and which replaces
         each embedded Group object with a corresponding ShadowGroup.
         """
@@ -301,21 +297,18 @@ class Group(ViewSubElement):
         return ShadowGroup(shadow=self, content=content, groups=groups)
 
     def set_container(self):
-        """ Sets the correct container for the content.
-        """
+        """Sets the correct container for the content."""
         for item in self.content:
             item.container = self
 
     def _defined_when(self, ui, value):
-        """ Should the object be defined in the user interface?
-        """
+        """Should the object be defined in the user interface?"""
         if value.defined_when == "":
             return True
         return ui.eval_when(value.defined_when)
 
     def _parse(self, value):
-        """ Parses Group options specified as a string.
-        """
+        """Parses Group options specified as a string."""
         # Override the defaults, since we only allow 'True' values to be
         # specified:
         self.show_border = self.show_labels = self.show_left = False
@@ -341,13 +334,11 @@ class Group(ViewSubElement):
             self.object = value
 
     def _parsed_label(self):
-        """ Handles a label being found in the string definition.
-        """
+        """Handles a label being found in the string definition."""
         self.show_border = True
 
     def __repr__(self):
-        """ Returns a "pretty print" version of the Group.
-        """
+        """Returns a "pretty print" version of the Group."""
         result = []
         items = ",\n".join([item.__repr__() for item in self.content])
         if len(items) > 0:
@@ -381,8 +372,7 @@ class Group(ViewSubElement):
 
     @cached_property
     def _get_width(self):
-        """ Returns the requested width of the Group.
-        """
+        """Returns the requested width of the Group."""
         width = 0.0
         for item in self.content:
             if item.width >= 1:
@@ -398,8 +388,7 @@ class Group(ViewSubElement):
 
     @cached_property
     def _get_height(self):
-        """ Returns the requested height of the Group.
-        """
+        """Returns the requested height of the Group."""
         height = 0.0
         for item in self.content:
             if item.height >= 1:
@@ -415,8 +404,7 @@ class Group(ViewSubElement):
 
 
 class HGroup(Group):
-    """ A group whose items are laid out horizontally.
-    """
+    """A group whose items are laid out horizontally."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -428,8 +416,7 @@ class HGroup(Group):
 
 
 class VGroup(Group):
-    """ A group whose items are laid out vertically.
-    """
+    """A group whose items are laid out vertically."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -441,8 +428,7 @@ class VGroup(Group):
 
 
 class VGrid(VGroup):
-    """ A group whose items are laid out in 2 columns.
-    """
+    """A group whose items are laid out in 2 columns."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -453,7 +439,7 @@ class VGrid(VGroup):
 
 
 class HFlow(HGroup):
-    """ A group in which items are laid out horizontally, and "wrap" when
+    """A group in which items are laid out horizontally, and "wrap" when
     they exceed the available horizontal space..
     """
 
@@ -468,7 +454,7 @@ class HFlow(HGroup):
 
 
 class VFlow(VGroup):
-    """ A group in which items are laid out vertically, and "wrap" when they
+    """A group in which items are laid out vertically, and "wrap" when they
     exceed the available vertical space.
     """
 
@@ -482,8 +468,8 @@ class VFlow(VGroup):
 
 
 class VFold(VGroup):
-    """ A group in which items are laid out vertically and can be collapsed
-        (i.e. 'folded') by clicking their title.
+    """A group in which items are laid out vertically and can be collapsed
+    (i.e. 'folded') by clicking their title.
     """
 
     # -------------------------------------------------------------------------
@@ -497,8 +483,7 @@ class VFold(VGroup):
 
 
 class HSplit(Group):
-    """ A horizontal group with splitter bars to separate it from other groups.
-    """
+    """A horizontal group with splitter bars to separate it from other groups."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -511,8 +496,7 @@ class HSplit(Group):
 
 
 class VSplit(Group):
-    """ A vertical group with splitter bars to separate it from other groups.
-    """
+    """A vertical group with splitter bars to separate it from other groups."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -525,8 +509,7 @@ class VSplit(Group):
 
 
 class Tabbed(Group):
-    """ A group that is shown as a tabbed notebook.
-    """
+    """A group that is shown as a tabbed notebook."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -539,9 +522,9 @@ class Tabbed(Group):
 
 
 class ShadowGroup(Group):
-    """ Corresponds to a Group object, but with all embedded Include
-        objects resolved, and with all embedded Group objects replaced by
-        corresponding ShadowGroup objects.
+    """Corresponds to a Group object, but with all embedded Include
+    objects resolved, and with all embedded Group objects replaced by
+    corresponding ShadowGroup objects.
     """
 
     def __init__(self, shadow, **traits):
@@ -631,7 +614,7 @@ class ShadowGroup(Group):
     style_sheet = ShadowDelegate
 
     def get_content(self, allow_groups=True):
-        """ Returns the contents of the Group within a specified context for
+        """Returns the contents of the Group within a specified context for
         building a user interface.
 
         This method makes sure that all Group types are of the same type (i.e.,
@@ -670,21 +653,18 @@ class ShadowGroup(Group):
         return result
 
     def get_id(self):
-        """ Returns an ID for the group.
-        """
+        """Returns an ID for the group."""
         if self.id != "":
             return self.id
 
         return ":".join([item.get_id() for item in self.get_content()])
 
     def set_container(self):
-        """ Sets the correct container for the content.
-        """
+        """Sets the correct container for the content."""
         pass
 
     def _flush_items(self, content, items):
-        """ Creates a sub-group for any items contained in a specified list.
-        """
+        """Creates a sub-group for any items contained in a specified list."""
         if len(items) > 0:
             content.append(
                 # Set shadow before hand to prevent delegation errors
@@ -702,6 +682,5 @@ class ShadowGroup(Group):
             del items[:]
 
     def __repr__(self):
-        """ Returns a "pretty print" version of the Group.
-        """
+        """Returns a "pretty print" version of the Group."""
         return repr(self.shadow)

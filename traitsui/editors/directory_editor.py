@@ -15,8 +15,7 @@ from traitsui.editors.file_editor import FileEditor
 
 
 class DirectoryEditor(FileEditor):
-    """ Editor factory for directory editors.
-    """
+    """Editor factory for directory editors."""
 
     pass
 

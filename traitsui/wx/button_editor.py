@@ -25,8 +25,7 @@ from .editor import Editor
 
 
 class SimpleEditor(Editor):
-    """ Simple style editor for a button.
-    """
+    """Simple style editor for a button."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -36,8 +35,8 @@ class SimpleEditor(Editor):
     label = Str()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         label = self.factory.label or self.item.get_label(self.ui)
         self.control = wx.Button(parent, -1, self.string_value(label))
@@ -49,8 +48,8 @@ class SimpleEditor(Editor):
         self.control.SetLabel(self.string_value(label))
 
     def update_object(self, event):
-        """ Handles the user clicking the button by setting the factory value
-            on the object.
+        """Handles the user clicking the button by setting the factory value
+        on the object.
         """
         factory = self.factory
         self.value = factory.value
@@ -60,27 +59,26 @@ class SimpleEditor(Editor):
             self.object.edit_traits(view=factory.view, parent=self.control)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         pass
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         self.control.Unbind(wx.EVT_BUTTON)
         super().dispose()
 
 
 class CustomEditor(SimpleEditor):
-    """ Custom style editor for a button, which can contain an image.
-    """
+    """Custom style editor for a button, which can contain an image."""
+
     #: The button image
     image = Image()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         from pyface.ui.wx.image_button import ImageButton
 
@@ -116,8 +114,7 @@ class CustomEditor(SimpleEditor):
         self._control.image = image
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         self._control.on_trait_change(
             self.update_object, "clicked", remove=True
         )

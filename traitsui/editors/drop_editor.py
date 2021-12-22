@@ -19,8 +19,7 @@ from traitsui.editors.text_editor import TextEditor
 
 
 class DropEditor(TextEditor):
-    """ Editor factory for drop editors.
-    """
+    """Editor factory for drop editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

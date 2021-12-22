@@ -20,7 +20,7 @@ from traitsui.testing.tester.query import IsEnabled, IsVisible
 
 
 def _handle_is_enabled(wrapper, interaction):
-    """ Return true if the target's control is enabled.
+    """Return true if the target's control is enabled.
 
     Parameters
     ----------
@@ -33,7 +33,7 @@ def _handle_is_enabled(wrapper, interaction):
 
 
 def _handle_is_visible(wrapper, interaction):
-    """ Return true if the target's control is visible.
+    """Return true if the target's control is visible.
 
     Parameters
     ----------
@@ -46,7 +46,7 @@ def _handle_is_visible(wrapper, interaction):
 
 
 def _is_target_control_a_qt_widget(target):
-    """ Return true if the target is accepted by the registry.
+    """Return true if the target is accepted by the registry.
 
     Parameters
     ----------
@@ -57,14 +57,13 @@ def _is_target_control_a_qt_widget(target):
     -------
     is_accepted : bool
     """
-    return (
-        hasattr(target, "control")
-        and isinstance(target.control, QtGui.QWidget)
+    return hasattr(target, "control") and isinstance(
+        target.control, QtGui.QWidget
     )
 
 
 def get_widget_registry():
-    """ Return a registry to support any target with an attribute 'control'
+    """Return a registry to support any target with an attribute 'control'
     that is an instance of QWidget.
 
     Returns
@@ -77,5 +76,5 @@ def get_widget_registry():
         interaction_to_handler={
             IsEnabled: _handle_is_enabled,
             IsVisible: _handle_is_visible,
-        }
+        },
     )

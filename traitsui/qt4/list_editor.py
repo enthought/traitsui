@@ -29,7 +29,14 @@ from pyface.qt import QtCore, QtGui
 from pyface.api import ImageResource
 
 from traits.api import (
-    Any, Bool, Callable, Dict, Instance, List, Str, TraitError
+    Any,
+    Bool,
+    Callable,
+    Dict,
+    Instance,
+    List,
+    Str,
+    TraitError,
 )
 from traits.trait_base import user_name_for, xgetattr
 
@@ -41,7 +48,7 @@ from .menu import MakeMenu
 
 
 class SimpleEditor(Editor):
-    """ Simple style of editor for lists, which displays a list box with only
+    """Simple style of editor for lists, which displays a list box with only
     one item visible at a time. A icon next to the list box displays a menu of
     operations on the list.
 
@@ -101,8 +108,8 @@ class SimpleEditor(Editor):
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         # Initialize the trait handler to use:
         trait_handler = self.factory.trait_handler
@@ -150,8 +157,7 @@ class SimpleEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         self._dispose_items()
 
         extended_name = self.extended_name.replace(".", ":")
@@ -162,8 +168,8 @@ class SimpleEditor(Editor):
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.mapper = QtCore.QSignalMapper(self.control)
         # Disconnect the editor from any control about to be destroyed:
@@ -229,7 +235,7 @@ class SimpleEditor(Editor):
             self.control.setWidget(list_pane)
 
     def update_editor_item(self, event):
-        """ Updates the editor when an item in the object trait changes
+        """Updates the editor when an item in the object trait changes
         externally to the editor.
         """
         # If this is not a simple, single item update, rebuild entire editor:
@@ -249,8 +255,7 @@ class SimpleEditor(Editor):
                 break
 
     def empty_list(self):
-        """ Creates an empty list entry (so the user can add a new item).
-        """
+        """Creates an empty list entry (so the user can add a new item)."""
         # Connecting the new button to the mapper
         control = IconButton("list_editor.png", self.mapper.map)
         # Setting the mapping and asking it to send the index of the sender to
@@ -271,21 +276,18 @@ class SimpleEditor(Editor):
         layout.addWidget(pcontrol, 0, 0)
 
     def get_info(self):
-        """ Returns the associated object list and current item index.
-        """
+        """Returns the associated object list and current item index."""
         proxy = self._cur_control.proxy
         return (proxy.list, proxy.index)
 
     def popup_empty_menu(self, index):
-        """ Displays the empty list editor popup menu.
-        """
+        """Displays the empty list editor popup menu."""
         self._cur_control = control = self.buttons[index]
         menu = MakeMenu(self.empty_list_menu, self, True, control).menu
         menu.exec_(control.mapToGlobal(QtCore.QPoint(4, 24)))
 
     def popup_menu(self, index):
-        """ Displays the list editor popup menu.
-        """
+        """Displays the list editor popup menu."""
         self._cur_control = sender = self.buttons[index]
 
         proxy = sender.proxy
@@ -304,15 +306,14 @@ class SimpleEditor(Editor):
         menu.exec_(sender.mapToGlobal(QtCore.QPoint(4, 24)))
 
     def add_item(self, offset):
-        """ Adds a new value at the specified list index.
-        """
+        """Adds a new value at the specified list index."""
         list, index = self.get_info()
         index += offset
         item_trait = self._trait_handler.item_trait
         if self.factory.item_factory:
             value = self.factory.item_factory(
                 *self.factory.item_factory_args,
-                **self.factory.item_factory_kwargs
+                **self.factory.item_factory_kwargs,
             )
         else:
             value = item_trait.default_value_for(self.object, self.name)
@@ -322,35 +323,31 @@ class SimpleEditor(Editor):
         # traits will still give an error message, but we don't want to crash
         except TraitError:
             from traitsui.api import raise_to_debug
+
             raise_to_debug()
         self.update_editor()
 
     def add_before(self):
-        """ Inserts a new item before the current item.
-        """
+        """Inserts a new item before the current item."""
         self.add_item(0)
 
     def add_after(self):
-        """ Inserts a new item after the current item.
-        """
+        """Inserts a new item after the current item."""
         self.add_item(1)
 
     def add_empty(self):
-        """ Adds a new item when the list is empty.
-        """
+        """Adds a new item when the list is empty."""
         list, index = self.get_info()
         self.add_item(0)
 
     def delete_item(self):
-        """ Delete the current item.
-        """
+        """Delete the current item."""
         list, index = self.get_info()
         self.value = list[:index] + list[index + 1 :]
         self.update_editor()
 
     def move_up(self):
-        """ Move the current item up one in the list.
-        """
+        """Move the current item up one in the list."""
         list, index = self.get_info()
         self.value = (
             list[: index - 1]
@@ -360,8 +357,7 @@ class SimpleEditor(Editor):
         self.update_editor()
 
     def move_down(self):
-        """ Moves the current item down one in the list.
-        """
+        """Moves the current item down one in the list."""
         list, index = self.get_info()
         self.value = (
             list[:index] + [list[index + 1], list[index]] + list[index + 2 :]
@@ -369,15 +365,13 @@ class SimpleEditor(Editor):
         self.update_editor()
 
     def move_top(self):
-        """ Moves the current item to the top of the list.
-        """
+        """Moves the current item to the top of the list."""
         list, index = self.get_info()
         self.value = [list[index]] + list[:index] + list[index + 1 :]
         self.update_editor()
 
     def move_bottom(self):
-        """ Moves the current item to the bottom of the list.
-        """
+        """Moves the current item to the bottom of the list."""
         list, index = self.get_info()
         self.value = list[:index] + list[index + 1 :] + [list[index]]
         self.update_editor()
@@ -385,8 +379,7 @@ class SimpleEditor(Editor):
     # -- Private Methods ------------------------------------------------------
 
     def _dispose_items(self):
-        """ Disposes of each current list item.
-        """
+        """Disposes of each current list item."""
         layout = self._list_pane.layout()
         child = layout.takeAt(0)
         while child is not None:
@@ -403,20 +396,19 @@ class SimpleEditor(Editor):
     # -- Trait initializers ----------------------------------------------------
 
     def _kind_default(self):
-        """ Returns a default value for the 'kind' trait.
-        """
+        """Returns a default value for the 'kind' trait."""
         return self.factory.style + "_editor"
 
     def _mutable_default(self):
-        """ Trait handler to set the mutable trait from the factory.
-        """
+        """Trait handler to set the mutable trait from the factory."""
         return self.factory.mutable
 
     def _scrollable_default(self):
         return self.factory.scrollable
 
+
 class CustomEditor(SimpleEditor):
-    """ Custom style of editor for lists, which displays the items as a series
+    """Custom style of editor for lists, which displays the items as a series
     of text fields. If the list is editable, an icon next to each item displays
     a menu of operations on the list.
     """
@@ -445,7 +437,7 @@ class ReadonlyEditor(CustomEditor):
 
 
 class NotebookEditor(Editor):
-    """ An editor for lists that displays the list as a "notebook" of tabbed
+    """An editor for lists that displays the list as a "notebook" of tabbed
     pages.
     """
 
@@ -472,8 +464,8 @@ class NotebookEditor(Editor):
     selected = Any()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self._uis = []
 
@@ -522,8 +514,8 @@ class NotebookEditor(Editor):
         self.sync_value(self.factory.selected, "selected")
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         # Destroy the views on each current notebook page:
         self.close_all()
@@ -539,8 +531,7 @@ class NotebookEditor(Editor):
             self._selected_changed(self.selected)
 
     def update_editor_item(self, event):
-        """ Handles an update to some subset of the trait's list.
-        """
+        """Handles an update to some subset of the trait's list."""
         index = event.index
 
         # Delete the page corresponding to each removed item:
@@ -580,8 +571,7 @@ class NotebookEditor(Editor):
             self.control.setCurrentWidget(first_page)
 
     def close_current(self, force=False):
-        """ Closes the currently selected tab:
-        """
+        """Closes the currently selected tab:"""
         widget = self.control.currentWidget()
         for i in range(len(self._uis)):
             page, ui, _, _ = self._uis[i]
@@ -608,8 +598,7 @@ class NotebookEditor(Editor):
         return
 
     def close_all(self):
-        """ Closes all currently open notebook pages.
-        """
+        """Closes all currently open notebook pages."""
         page_name = self.factory.page_name[1:]
 
         for _, ui, view_object, monitoring in self._uis:
@@ -626,8 +615,7 @@ class NotebookEditor(Editor):
         self.control.clear()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         self.context_object.on_trait_change(
             self.update_editor_item, self.name + "_items?", remove=True
         )
@@ -636,8 +624,7 @@ class NotebookEditor(Editor):
         super().dispose()
 
     def update_page_name(self, object, name, old, new):
-        """ Handles the trait defining a particular page's name being changed.
-        """
+        """Handles the trait defining a particular page's name being changed."""
         for i, value in enumerate(self._uis):
             page, ui, _, _ = value
             if object is ui.info.object:
@@ -728,8 +715,8 @@ class NotebookEditor(Editor):
         return (ui, view_object, monitoring)
 
     def _tab_activated(self, idx):
-        """ Handles a notebook tab being "activated" (i.e. clicked on) by the
-            user.
+        """Handles a notebook tab being "activated" (i.e. clicked on) by the
+        user.
         """
         widget = self.control.widget(idx)
         for page, ui, _, _ in self._uis:
@@ -738,8 +725,7 @@ class NotebookEditor(Editor):
                 break
 
     def _selected_changed(self, selected):
-        """ Handles the **selected** trait being changed.
-        """
+        """Handles the **selected** trait being changed."""
         for page, ui, _, _ in self._uis:
             if ui.info and selected is ui.info.object:
                 self.control.setCurrentWidget(page)
@@ -754,7 +740,7 @@ class NotebookEditor(Editor):
         self._context_menu.popup(self.control.mapToGlobal(event))
 
     def _menu_action(self, event, name=""):
-        """ Qt signal handler for when a item in a context menu is actually
+        """Qt signal handler for when a item in a context menu is actually
         selected.  Not that we get this even after the underlying value has
         already changed.
         """

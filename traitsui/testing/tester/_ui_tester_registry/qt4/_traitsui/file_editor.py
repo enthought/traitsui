@@ -15,7 +15,7 @@ from traitsui.qt4.file_editor import SimpleEditor
 
 
 def register(registry):
-    """ Register interactions for the given registry.
+    """Register interactions for the given registry.
 
     If there are any conflicts, an error will occur.
 

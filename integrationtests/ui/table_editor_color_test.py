@@ -8,29 +8,26 @@
 #
 # Thanks for using Enthought open source!
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
-from traits.api \
-    import HasTraits, List
+from traits.api import HasTraits, List
 
-from traitsui.api \
-    import View, Item, TableEditor
+from traitsui.api import View, Item, TableEditor
 
-from traitsui.color_column \
-    import ColorColumn
+from traitsui.color_column import ColorColumn
 
-from enable.api \
-    import ColorTrait
+from enable.api import ColorTrait
 
 
 class Thingy(HasTraits):
     color = ColorTrait('black')
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Sample data:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 colors = [
     Thingy(color='red'),
@@ -47,42 +44,41 @@ colors = [
 
 class TableTest(HasTraits):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     colors = List(Thingy)
 
     table_editor = TableEditor(
-        columns=[ColorColumn(name='color'),
-                 ],
-
+        columns=[
+            ColorColumn(name='color'),
+        ],
         editable=True,
         deletable=True,
-        sortable=True,        #
+        sortable=True,  #
         sort_model=True,
-        show_lines=True,        #
+        show_lines=True,  #
         orientation='vertical',
-        show_column_labels=True,        #
-        row_factory=Thingy
+        show_column_labels=True,  #
+        row_factory=Thingy,
     )
 
     traits_view = View(
-        [Item('colors',
-              id='colors',
-              editor=table_editor),
-         '|[]<>'],
+        [Item('colors', id='colors', editor=table_editor), '|[]<>'],
         title='Table Editor Test',
         id='traitsui.tests.table_editor_color_test',
         dock='horizontal',
-        width=.4,
-        height=.3,
+        width=0.4,
+        height=0.3,
         resizable=True,
-        kind='live')
+        kind='live',
+    )
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Run the tests:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 if __name__ == '__main__':
     tt = TableTest(colors=colors)

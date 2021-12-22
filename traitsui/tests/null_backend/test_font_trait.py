@@ -17,7 +17,6 @@ from traitsui.tests._tools import BaseTestMixin, requires_toolkit, ToolkitName
 
 
 class TestFontTrait(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

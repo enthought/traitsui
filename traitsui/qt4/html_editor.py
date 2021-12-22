@@ -28,7 +28,7 @@ try:
     # Subclass of QWebPage for QtWebEngine support
 
     class ExternallyOpeningWebPage(QtWebKit.QWebPage):
-        """ QWebEnginePage subclass that opens links in system browser
+        """QWebEnginePage subclass that opens links in system browser
 
         This subclass is only used when we are given a QWebEnginePage which is
         pretending to be a QWebPage and we want the open_external feature
@@ -60,8 +60,7 @@ except Exception:
 
 
 class SimpleEditor(Editor):
-    """ Simple style editor for HTML.
-    """
+    """Simple style editor for HTML."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -74,8 +73,8 @@ class SimpleEditor(Editor):
     base_url = Str()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = WebView()
         self.control.setSizePolicy(
@@ -106,8 +105,7 @@ class SimpleEditor(Editor):
         self.sync_value(self.factory.base_url_name, "base_url", "from")
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         if self.control is not None and self.factory.open_externally:
             if HAS_WEB_VIEW:
                 page = self.control.page()
@@ -121,8 +119,8 @@ class SimpleEditor(Editor):
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes external to the
-            editor.
+        """Updates the editor when the object trait changes external to the
+        editor.
         """
         text = self.str_value
         if self.factory.format_text:

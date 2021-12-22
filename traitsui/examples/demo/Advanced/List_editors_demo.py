@@ -31,11 +31,19 @@ changes made in one editor are automatically reflected in the others.
 from traits.api import HasStrictTraits, Str, Int, Regex, List, Instance
 
 from traitsui.api import (
-    Item, ListEditor, ObjectColumn, RuleTableFilter, Tabbed, TableEditor, View
+    Item,
+    ListEditor,
+    ObjectColumn,
+    RuleTableFilter,
+    Tabbed,
+    TableEditor,
+    View,
 )
 
 from traitsui.table_filter import (
-    RuleFilterTemplate, MenuFilterTemplate, EvalFilterTemplate
+    RuleFilterTemplate,
+    MenuFilterTemplate,
+    EvalFilterTemplate,
 )
 
 
@@ -49,9 +57,7 @@ class Person(HasStrictTraits):
 
     # Traits view definition:
     traits_view = View(
-        'name', 'age', 'phone',
-        width=0.18,
-        buttons=['OK', 'Cancel']
+        'name', 'age', 'phone', width=0.18, buttons=['OK', 'Cancel']
     )
 
 
@@ -64,7 +70,7 @@ people = [
     Person(name='Dick', age=63, phone='555-3895'),
     Person(name='Harry', age=46, phone='555-3285'),
     Person(name='Sally', age=43, phone='555-8797'),
-    Person(name='Fields', age=31, phone='555-3547')
+    Person(name='Fields', age=31, phone='555-3547'),
 ]
 
 # Table editor definition:
@@ -74,7 +80,7 @@ table_editor = TableEditor(
     columns=[
         ObjectColumn(name='name', width=0.4),
         ObjectColumn(name='age', width=0.2),
-        ObjectColumn(name='phone', width=0.4)
+        ObjectColumn(name='phone', width=0.4),
     ],
     editable=True,
     deletable=True,
@@ -84,7 +90,7 @@ table_editor = TableEditor(
     filters=filters,
     search=RuleTableFilter(),
     row_factory=Person,
-    show_toolbar=True
+    show_toolbar=True,
 )
 
 
@@ -103,7 +109,7 @@ class ListTraitTest(HasStrictTraits):
                 label='List',
                 id='list',
                 style='custom',
-                editor=ListEditor(style='custom', rows=5)
+                editor=ListEditor(style='custom', rows=5),
             ),
             Item(
                 'people',
@@ -114,15 +120,15 @@ class ListTraitTest(HasStrictTraits):
                     use_notebook=True,
                     deletable=True,
                     export='DockShellWindow',
-                    page_name='.name'
-                )
+                    page_name='.name',
+                ),
             ),
             id='splitter',
-            show_labels=False
+            show_labels=False,
         ),
         id='traitsui.demo.Traits UI Demo.Advanced.List_editors_demo',
         dock='horizontal',
-        width=600
+        width=600,
     )
 
 

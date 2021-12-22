@@ -18,8 +18,7 @@ from traitsui.ui_traits import AView
 
 
 class TimeEditor(EditorFactory):
-    """ Editor factory for time editors.
-    """
+    """Editor factory for time editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

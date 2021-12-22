@@ -25,7 +25,7 @@ from traitsui.testing.api import (
     KeySequence,
     MouseClick,
     InteractionNotSupported,
-    UITester
+    UITester,
 )
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -44,7 +44,7 @@ class Foo(HasTraits):
 
 
 def get_view(style, auto_set):
-    """ Return the default view for the Foo object.
+    """Return the default view for the Foo object.
 
     Parameters
     ----------
@@ -62,8 +62,9 @@ def get_view(style, auto_set):
 @requires_toolkit([ToolkitName.qt])
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestTextEditorQt(
-        BaseTestMixin, GuiTestAssistant, UnittestTools, unittest.TestCase):
-    """ Test on TextEditor with Qt backend."""
+    BaseTestMixin, GuiTestAssistant, UnittestTools, unittest.TestCase
+):
+    """Test on TextEditor with Qt backend."""
 
     def setUp(self):
         BaseTestMixin.setUp(self)
@@ -82,7 +83,7 @@ class TestTextEditorQt(
 
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
-            name_editor, = ui.get_editors("name")
+            (name_editor,) = ui.get_editors("name")
             self.assertEqual(
                 name_editor.control.placeholderText(),
                 "Enter name",
@@ -98,7 +99,7 @@ class TestTextEditorQt(
         view = View(Item(name="name", editor=editor))
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
-            name_editor, = ui.get_editors("name")
+            (name_editor,) = ui.get_editors("name")
             self.assertEqual(
                 name_editor.control.placeholderText(),
                 "Enter name",
@@ -108,7 +109,7 @@ class TestTextEditorQt(
         foo = Foo()
         tester = UITester()
         with tester.create_ui(foo) as ui:
-            name_editor, = ui.get_editors("name")
+            (name_editor,) = ui.get_editors("name")
             self.assertEqual(
                 name_editor.control.placeholderText(),
                 "",
@@ -117,14 +118,16 @@ class TestTextEditorQt(
     def test_text_editor_custom_style_placeholder(self):
         # Test against CustomEditor using QTextEdit
         foo = Foo()
-        view = View(Item(
-            name="name",
-            style="custom",
-            editor=TextEditor(placeholder="Enter name"),
-        ))
+        view = View(
+            Item(
+                name="name",
+                style="custom",
+                editor=TextEditor(placeholder="Enter name"),
+            )
+        )
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
-            name_editor, = ui.get_editors("name")
+            (name_editor,) = ui.get_editors("name")
             try:
                 placeholder = name_editor.control.placeholderText()
             except AttributeError:
@@ -144,7 +147,7 @@ class TestTextEditorQt(
         )
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
-            name_editor, = ui.get_editors("name")
+            (name_editor,) = ui.get_editors("name")
             # isClearButtonEnabled is introduced to QLineEdit since Qt 5.2
             if hasattr(name_editor.control, 'isClearButtonEnabled'):
                 self.assertTrue(name_editor.control.isClearButtonEnabled())
@@ -154,9 +157,10 @@ class TestTextEditorQt(
 # Not running them now to avoid test interaction. See enthought/traitsui#752
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
-    """ Tests that can be run with any toolkit as long as there is an
+    """Tests that can be run with any toolkit as long as there is an
     implementation for simulating user interactions.
     """
+
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -231,12 +235,10 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
     def test_simple_auto_set_false_do_not_update_wx(self):
         foo = Foo(name="")
         view = View(
-                    Item("name",
-                         editor=TextEditor(auto_set=False),
-                         style="simple"),
-                    Item("nickname",
-                         editor=TextEditor(auto_set=False),
-                         style="simple")
+            Item("name", editor=TextEditor(auto_set=False), style="simple"),
+            Item(
+                "nickname", editor=TextEditor(auto_set=False), style="simple"
+            ),
         )
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
@@ -287,12 +289,10 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
     def test_custom_auto_set_false_do_not_update_wx(self):
         foo = Foo(name="")
         view = View(
-                    Item("name",
-                         editor=TextEditor(auto_set=False),
-                         style="custom"),
-                    Item("nickname",
-                         editor=TextEditor(auto_set=False),
-                         style="custom")
+            Item("name", editor=TextEditor(auto_set=False), style="custom"),
+            Item(
+                "nickname", editor=TextEditor(auto_set=False), style="custom"
+            ),
         )
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
@@ -335,32 +335,32 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         )
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
-            display_name = (
-                tester.find_by_name(ui, "name").inspect(DisplayedText())
+            display_name = tester.find_by_name(ui, "name").inspect(
+                DisplayedText()
             )
-            display_nickname = (
-                tester.find_by_name(ui, "nickname").inspect(DisplayedText())
+            display_nickname = tester.find_by_name(ui, "nickname").inspect(
+                DisplayedText()
             )
             self.assertEqual(display_name, "WILLIAM")
             self.assertEqual(display_nickname, "bill")
 
     @unittest.skipUnless(
         Version(TRAITS_VERSION) >= Version("6.1.0"),
-        "This test requires traits >= 6.1.0"
+        "This test requires traits >= 6.1.0",
     )
     def test_format_func_used_simple(self):
         self.check_format_func_used(style='simple')
 
     @unittest.skipUnless(
         Version(TRAITS_VERSION) >= Version("6.1.0"),
-        "This test requires traits >= 6.1.0"
+        "This test requires traits >= 6.1.0",
     )
     def test_format_func_used_custom(self):
         self.check_format_func_used(style='custom')
 
     @unittest.skipUnless(
         Version(TRAITS_VERSION) >= Version("6.1.0"),
-        "This test requires traits >= 6.1.0"
+        "This test requires traits >= 6.1.0",
     )
     def test_format_func_used_readonly(self):
         self.check_format_func_used(style='readonly')

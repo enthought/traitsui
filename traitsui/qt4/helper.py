@@ -33,7 +33,6 @@ from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 from traitsui.ui_traits import SequenceTypes
 
 
-
 is_pyqt = qt_api in {"pyqt", "pyqt5"}
 
 
@@ -45,7 +44,7 @@ DockStyle = Enum("horizontal", "vertical", "tab", "fixed")
 
 
 def pixmap_cache(name, path=None):
-    """ Convert an image file name to a cached QPixmap
+    """Convert an image file name to a cached QPixmap
 
     Returns the QPixmap corresponding to a filename. If the filename does not
     contain a path component, 'path' is used (or if 'path' is not specified,
@@ -81,8 +80,8 @@ def pixmap_cache(name, path=None):
 
 
 def position_window(window, width=None, height=None, parent=None):
-    """ Positions a window on the screen with a specified width and height so
-        that the window completely fits on the screen if possible.
+    """Positions a window on the screen with a specified width and height so
+    that the window completely fits on the screen if possible.
     """
     # Get the available geometry of the screen containing the window.
     sgeom = QtGui.QApplication.desktop().availableGeometry(window)
@@ -133,28 +132,26 @@ def position_window(window, width=None, height=None, parent=None):
 
 
 def restore_window(ui):
-    """ Restores the user preference items for a specified UI.
-    """
+    """Restores the user preference items for a specified UI."""
     prefs = ui.restore_prefs()
     if prefs is not None:
         ui.control.setGeometry(*prefs)
 
 
 def save_window(ui):
-    """ Saves the user preference items for a specified UI.
-    """
+    """Saves the user preference items for a specified UI."""
     geom = ui.control.geometry()
     ui.save_prefs((geom.x(), geom.y(), geom.width(), geom.height()))
 
 
 class IconButton(QtGui.QPushButton):
-    """ The IconButton class is a push button that contains a small image or a
-        standard icon provided by the current style.
+    """The IconButton class is a push button that contains a small image or a
+    standard icon provided by the current style.
     """
 
     def __init__(self, icon, slot):
-        """ Initialise the button.  icon is either the name of an image file or
-            one of the QtGui.QStyle.SP_* values.
+        """Initialise the button.  icon is either the name of an image file or
+        one of the QtGui.QStyle.SP_* values.
         """
         QtGui.QPushButton.__init__(self)
 
@@ -189,7 +186,7 @@ class IconButton(QtGui.QPushButton):
         self.clicked.connect(slot)
 
     def sizeHint(self):
-        """ Reimplement sizeHint to return a recommended button size based on
+        """Reimplement sizeHint to return a recommended button size based on
         the size of the icon.
 
         Returns
@@ -207,13 +204,14 @@ class IconButton(QtGui.QPushButton):
         )
         return size
 
+
 # ------------------------------------------------------------------------
 # Text Rendering helpers
 # ------------------------------------------------------------------------
 
 
 def wrap_text_with_elision(text, font, width, height):
-    """ Wrap paragraphs to fit inside a given size, eliding if too long.
+    """Wrap paragraphs to fit inside a given size, eliding if too long.
 
     Parameters
     ----------

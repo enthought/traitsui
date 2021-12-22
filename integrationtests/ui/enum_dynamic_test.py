@@ -8,8 +8,8 @@
 #
 # Thanks for using Enthought open source!
 
-from traits.api import *
-from traitsui.api import *
+from traits.api import HasTraits, List, Str
+from traitsui.api import EnumEditor, Item, View
 
 
 def evaluate_value(v):
@@ -24,10 +24,10 @@ class Team(HasTraits):
 
     captain_editor = EnumEditor(name='players', evaluate=evaluate_value)
 
-    view = View(Item('captain', editor=captain_editor),
-                '_',
-                'players@',
-                height=200)
+    view = View(
+        Item('captain', editor=captain_editor), '_', 'players@', height=200
+    )
+
 
 if __name__ == '__main__':
     team = Team()

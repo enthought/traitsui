@@ -45,23 +45,21 @@ from .ui_panel import panel
 
 
 def ui_modal(ui, parent):
-    """Creates a modal PyQt user interface for a specified UI object.
-    """
+    """Creates a modal PyQt user interface for a specified UI object."""
     _ui_dialog(ui, parent, BaseDialog.MODAL)
 
 
 def ui_nonmodal(ui, parent):
-    """Creates a non-modal PyQt user interface for a specified UI object.
-    """
+    """Creates a non-modal PyQt user interface for a specified UI object."""
     _ui_dialog(ui, parent, BaseDialog.NONMODAL)
 
 
 def _ui_dialog(ui, parent, style):
     """Creates a PyQt dialog box for a specified UI object.
 
-       Changes are not immediately applied to the underlying object.  The user
-       must click **Apply** or **OK** to apply changes.  The user can revert
-       changes by clicking **Revert** or **Cancel**.
+    Changes are not immediately applied to the underlying object.  The user
+    must click **Apply** or **OK** to apply changes.  The user can revert
+    changes by clicking **Revert** or **Cancel**.
     """
     if ui.owner is None:
         ui.owner = _ModalDialog()
@@ -70,12 +68,10 @@ def _ui_dialog(ui, parent, style):
 
 
 class _ModalDialog(BaseDialog):
-    """Modal dialog box for Traits-based user interfaces.
-    """
+    """Modal dialog box for Traits-based user interfaces."""
 
     def init(self, ui, parent, style):
-        """Initialise the object.
-        """
+        """Initialise the object."""
         self.ui = ui
         self.control = ui.control
         view = ui.view
@@ -133,9 +129,7 @@ class _ModalDialog(BaseDialog):
                         enabled=apply,
                         default=default,
                     )
-                    ui.observe(
-                        self._on_applyable, "modified", dispatch="ui"
-                    )
+                    ui.observe(self._on_applyable, "modified", dispatch="ui")
 
                 elif self.is_button(button, "Revert"):
                     self.revert = self.add_button(
@@ -189,15 +183,13 @@ class _ModalDialog(BaseDialog):
         self.add_contents(panel(ui), bbox)
 
     def close(self, rc=True):
-        """Close the dialog and set the given return code.
-        """
+        """Close the dialog and set the given return code."""
         super().close(rc)
 
         self.apply = self.revert = self.help = None
 
     def _copy_context(self, context):
-        """Creates a copy of a *context* dictionary.
-        """
+        """Creates a copy of a *context* dictionary."""
         result = {}
         for name, value in context.items():
             if value is not None:
@@ -208,8 +200,7 @@ class _ModalDialog(BaseDialog):
         return result
 
     def _apply_context(self, from_context, to_context):
-        """Applies the traits in the *from_context* to the *to_context*.
-        """
+        """Applies the traits in the *from_context* to the *to_context*."""
         for name, value in from_context.items():
             if value is not None:
                 to_context[name].copy_traits(value)
@@ -222,8 +213,7 @@ class _ModalDialog(BaseDialog):
                 on_apply()
 
     def _on_finished(self, result):
-        """Handles the user finishing with the dialog.
-        """
+        """Handles the user finishing with the dialog."""
         accept = bool(result)
 
         if accept:
@@ -234,8 +224,7 @@ class _ModalDialog(BaseDialog):
         self.close(accept)
 
     def _on_apply(self):
-        """Handles a request to apply changes.
-        """
+        """Handles a request to apply changes."""
         ui = self.ui
         self._apply_context(ui.context, ui._context)
         self.revert.setEnabled(True)
@@ -243,14 +232,12 @@ class _ModalDialog(BaseDialog):
         ui.modified = False
 
     def _on_applyable(self, event):
-        """Handles a change to the "modified" state of the user interface .
-        """
+        """Handles a change to the "modified" state of the user interface ."""
         state = event.new
         self.apply.setEnabled(state)
 
     def _on_revert(self):
-        """Handles a request to revert changes.
-        """
+        """Handles a request to revert changes."""
         ui = self.ui
         self._apply_context(ui._revert, ui.context)
         self._apply_context(ui._revert, ui._context)

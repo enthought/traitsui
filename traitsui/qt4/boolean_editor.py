@@ -37,12 +37,11 @@ from .constants import ReadonlyColor
 
 
 class SimpleEditor(Editor):
-    """ Simple style of editor for Boolean values, which displays a check box.
-    """
+    """Simple style of editor for Boolean values, which displays a check box."""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QCheckBox()
         self.control.stateChanged.connect(self.update_object)
@@ -54,13 +53,12 @@ class SimpleEditor(Editor):
         super().dispose()
 
     def update_object(self, state):
-        """ Handles the user clicking the checkbox.
-        """
+        """Handles the user clicking the checkbox."""
         self.value = bool(state)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if self.value:
             self.control.setCheckState(QtCore.Qt.Checked)
@@ -69,13 +67,13 @@ class SimpleEditor(Editor):
 
 
 class ReadonlyEditor(Editor):
-    """ Read-only style of editor for Boolean values, which displays static text
+    """Read-only style of editor for Boolean values, which displays static text
     of either "True" or "False".
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QLineEdit()
         self.control.setReadOnly(True)
@@ -91,8 +89,8 @@ class ReadonlyEditor(Editor):
     # -------------------------------------------------------------------------
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if self.value:
             self.control.setText("True")

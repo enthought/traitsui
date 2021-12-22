@@ -1,7 +1,7 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
-#--(ModelView and Controller Classes)-------------------------------------
+# --(ModelView and Controller Classes)-------------------------------------
 """
 ModelView and Controller Classes
 ================================
@@ -95,13 +95,19 @@ The code portion of this lesson provides a complete example of using a
 for an example of a related **Controller** based design.
 """
 
-#--<Imports>--------------------------------------------------------------
+# --<Imports>--------------------------------------------------------------
 
-from traits.api import *
-from traitsui.api import *
-from traitsui.table_column import *
+from traits.api import (
+    HasTraits,
+    Instance,
+    List,
+    Property,
+    PrototypedFrom,
+    Str,
+)
+from traitsui.api import Item, ModelView, ObjectColumn, TableEditor, View
 
-#--[Parent Class]---------------------------------------------------------
+# --[Parent Class]---------------------------------------------------------
 
 
 class Parent(HasTraits):
@@ -109,7 +115,8 @@ class Parent(HasTraits):
     first_name = Str()
     last_name = Str()
 
-#--[Child Class]----------------------------------------------------------
+
+# --[Child Class]----------------------------------------------------------
 
 
 class Child(HasTraits):
@@ -118,9 +125,10 @@ class Child(HasTraits):
     father = Instance(Parent)
 
     first_name = Str()
-    last_name = Delegate('father')
+    last_name = PrototypedFrom('father')
 
-#--[ChildModelView Class]-------------------------------------------------
+
+# --[ChildModelView Class]-------------------------------------------------
 
 
 class ChildModelView(ModelView):
@@ -131,19 +139,25 @@ class ChildModelView(ModelView):
 
     # Define a view showing the family as a table:
     view = View(
-        Item('family',
-             show_label=False,
-             editor=TableEditor(
-                 columns=[ObjectColumn(name='first_name'),
-                          ObjectColumn(name='last_name')])),
-        resizable=True
+        Item(
+            'family',
+            show_label=False,
+            editor=TableEditor(
+                columns=[
+                    ObjectColumn(name='first_name'),
+                    ObjectColumn(name='last_name'),
+                ]
+            ),
+        ),
+        resizable=True,
     )
 
     # Implementation of the 'family' property:
     def _get_family(self):
         return [self.model.father, self.model.mother, self.model]
 
-#--[Example*]-------------------------------------------------------------
+
+# --[Example*]-------------------------------------------------------------
 
 # Create a sample family:
 mom = Parent(first_name='Julia', last_name='Wilson')

@@ -74,7 +74,6 @@ class VisibleWhenProblem(HasTraits):
 
 
 class TestVisibleWhenLayout(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

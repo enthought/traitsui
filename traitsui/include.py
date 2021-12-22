@@ -13,14 +13,13 @@
 """
 
 
-
 from traits.api import Str
 
 from .view_element import ViewSubElement
 
 
 class Include(ViewSubElement):
-    """ A substitutable user interface element, i.e., a placeholder in a view
+    """A substitutable user interface element, i.e., a placeholder in a view
     definition.
 
     When a view object constructs an attribute-editing window, any Include
@@ -64,12 +63,10 @@ class Include(ViewSubElement):
     id = Str()
 
     def __init__(self, id, **traits):
-        """ Initializes the Include object.
-        """
+        """Initializes the Include object."""
         super().__init__(**traits)
         self.id = id
 
     def __repr__(self):
-        """ Returns a "pretty print" version of the Include object.
-        """
+        """Returns a "pretty print" version of the Include object."""
         return "<%s>" % self.id

@@ -1,0 +1,1 @@
+Fix droppable InstanceEditor (#1733)

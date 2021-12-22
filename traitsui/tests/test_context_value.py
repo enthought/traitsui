@@ -29,7 +29,6 @@ class CVExample(HasTraits):
 
 
 class TestContextvalue(BaseTestMixin, UnittestTools, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

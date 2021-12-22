@@ -11,9 +11,14 @@
 """Traits UI 'display only' video editor."""
 from pyface.qt.QtCore import QPoint, Qt, QUrl, Signal
 from pyface.qt.QtGui import QImage, QPainter, QPalette, QSizePolicy
-from pyface.qt.QtMultimedia import (QAbstractVideoBuffer,
-                                    QAbstractVideoSurface, QAudio,
-                                    QMediaContent, QMediaPlayer, QVideoFrame)
+from pyface.qt.QtMultimedia import (
+    QAbstractVideoBuffer,
+    QAbstractVideoSurface,
+    QAudio,
+    QMediaContent,
+    QMediaPlayer,
+    QVideoFrame,
+)
 from pyface.qt.QtMultimediaWidgets import QVideoWidget
 from traits.api import Bool, Callable, Float, Instance, Range, Str, observe
 from traitsui.editors.video_editor import AspectRatio, MediaStatus, PlayerState
@@ -52,19 +57,22 @@ media_status_map = {
 
 
 class ImageWidget(QVideoWidget):
-    """ Paints a QImage to the window body. """
+    """Paints a QImage to the window body."""
 
     def __init__(self, parent=None, image_func=None):
         import numpy as np
+
         super().__init__(parent)
         self.image = QImage()
         self._np_image = np.zeros(shape=(0, 0, 4))
         self.painter = None
         self.resizeEvent(None)
         if image_func is None:
+
             def I_fun(image, bbox):
                 # Don't bother with creating an ndarray version
                 return image, self._np_image
+
             self.image_func = I_fun
         else:
             self.image_func = image_func
@@ -109,7 +117,7 @@ class VideoSurface(QAbstractVideoSurface):
             cloned_frame.width(),
             cloned_frame.height(),
             cloned_frame.bytesPerLine(),
-            QVideoFrame.imageFormatFromPixelFormat(cloned_frame.pixelFormat())
+            QVideoFrame.imageFormatFromPixelFormat(cloned_frame.pixelFormat()),
         )
         self.frameAvailable.emit(image)
         return True
@@ -260,32 +268,43 @@ class VideoEditor(Editor):
         if self.media_player is not None:
             self.media_player.stateChanged.connect(self._state_changed_emitted)
             self.media_player.positionChanged.connect(
-                self._position_changed_emitted)
+                self._position_changed_emitted
+            )
             self.media_player.durationChanged.connect(
-                self._duration_changed_emitted)
+                self._duration_changed_emitted
+            )
             self.media_player.error.connect(self._error_emitted)
             self.media_player.mediaStatusChanged.connect(
-                self._media_status_changed_emitted)
+                self._media_status_changed_emitted
+            )
             self.media_player.bufferStatusChanged.connect(
-                self._buffer_status_changed_emitted)
+                self._buffer_status_changed_emitted
+            )
             self.media_player.notifyIntervalChanged.connect(
-                self._notify_interval_changed_emitted)
+                self._notify_interval_changed_emitted
+            )
 
     def _disconnect_signals(self):
         if self.media_player is not None:
             self.media_player.stateChanged.disconnect(
-                self._state_changed_emitted)
+                self._state_changed_emitted
+            )
             self.media_player.positionChanged.disconnect(
-                self._position_changed_emitted)
+                self._position_changed_emitted
+            )
             self.media_player.durationChanged.disconnect(
-                self._duration_changed_emitted)
+                self._duration_changed_emitted
+            )
             self.media_player.error.disconnect(self._error_emitted)
             self.media_player.mediaStatusChanged.disconnect(
-                self._media_status_changed_emitted)
+                self._media_status_changed_emitted
+            )
             self.media_player.bufferStatusChanged.disconnect(
-                self._buffer_status_changed_emitted)
+                self._buffer_status_changed_emitted
+            )
             self.media_player.notifyIntervalChanged.disconnect(
-                self._notify_interval_changed_emitted)
+                self._notify_interval_changed_emitted
+            )
 
     def _set_video_url(self):
         qurl = QUrl.fromUserInput(self.value)
@@ -396,14 +415,14 @@ class VideoEditor(Editor):
             w = s.width()
             h = s.height()
             self.media_player.play()
-            self.control.resize(w+1, h+1)
+            self.control.resize(w + 1, h + 1)
             self.control.resize(w, h)
         elif self.state == 'paused':
             self.media_player.pause()
 
     def _update_volume(self):
         linear_volume = QAudio.convertVolume(
-            self.volume/100.0,
+            self.volume / 100.0,
             QAudio.LogarithmicVolumeScale,
             QAudio.LinearVolumeScale,
         )

@@ -34,7 +34,7 @@ from traitsui.api import Item, Group, View
 
 # Define the demo class:
 class FileEditorDemo(HasTraits):
-    """ Defines the main FileEditor demo class. """
+    """Defines the main FileEditor demo class."""
 
     # Define a File trait to view:
     file_name = File()
@@ -47,7 +47,7 @@ class FileEditorDemo(HasTraits):
         Item('_'),
         Item('file_name', style='text', label='Text'),
         Item('_'),
-        Item('file_name', style='readonly', label='ReadOnly')
+        Item('file_name', style='readonly', label='ReadOnly'),
     )
 
     # Demo view:
@@ -57,7 +57,7 @@ class FileEditorDemo(HasTraits):
         width=400,
         height=600,
         buttons=['OK'],
-        resizable=True
+        resizable=True,
     )
 
 

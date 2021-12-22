@@ -29,12 +29,14 @@ from traitsui.tests._tools import (
 # Import needed bitmap/pixmap cache and prepare for patching
 if is_wx():
     from traitsui.wx.helper import bitmap_cache as image_cache
+
     cache_to_patch = "traitsui.wx.image_enum_editor.bitmap_cache"
 elif is_qt():
     from traitsui.qt4.helper import pixmap_cache as image_cache
+
     cache_to_patch = "traitsui.qt4.image_enum_editor.pixmap_cache"
 
-is_linux = (sys.platform == 'linux')
+is_linux = sys.platform == 'linux'
 
 
 class EnumModel(HasTraits):
@@ -48,7 +50,10 @@ def get_view(style):
             'value',
             editor=ImageEnumEditor(
                 values=[
-                    'top left', 'top right', 'bottom left', 'bottom right'
+                    'top left',
+                    'top right',
+                    'bottom left',
+                    'bottom right',
                 ],
                 prefix='@icons:',
                 suffix='_origin',
@@ -61,7 +66,7 @@ def get_view(style):
 
 
 def click_on_image(image_control):
-    """ Click on the image controlled by given image_control."""
+    """Click on the image controlled by given image_control."""
     if is_wx():
         import wx
 
@@ -80,7 +85,7 @@ def click_on_image(image_control):
 
 
 def get_button_strings(control):
-    """ Return the list of strings associated with the buttons under given
+    """Return the list of strings associated with the buttons under given
     control. Assumes all sizer children (wx) or layout items (qt) are buttons.
     """
     button_strings = []
@@ -103,7 +108,7 @@ def get_button_strings(control):
 
 
 def get_all_button_selected_status(control):
-    """ Return a list with selected (wx) or checked (qt) button status under
+    """Return a list with selected (wx) or checked (qt) button status under
     given control. Assumes all sizer children (wx) or layout items (qt) are
     buttons.
     """
@@ -125,7 +130,7 @@ def get_all_button_selected_status(control):
 
 
 def get_button_control(control, button_idx):
-    """ Get button control from a specified parent control given a button index.
+    """Get button control from a specified parent control given a button index.
     Assumes all sizer children (wx) or layout items (qt) are buttons.
     """
     if is_wx():
@@ -140,7 +145,6 @@ def get_button_control(control, button_idx):
 
 @requires_toolkit([ToolkitName.qt])
 class TestImageEnumEditorMapping(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -169,17 +173,18 @@ class TestImageEnumEditorMapping(BaseTestMixin, unittest.TestCase):
             )
         )
 
-        with reraise_exceptions(), \
-                self.setup_ui(EnumModel(), formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            EnumModel(), formatted_view
+        ) as editor:
 
             self.assertEqual(editor.names, ["TOP LEFT", "TOP RIGHT"])
             self.assertEqual(
                 editor.mapping,
-                {"TOP LEFT": "top left", "TOP RIGHT": "top right"}
+                {"TOP LEFT": "top left", "TOP RIGHT": "top right"},
             )
             self.assertEqual(
                 editor.inverse_mapping,
-                {"top left": "TOP LEFT", "top right": "TOP RIGHT"}
+                {"top left": "TOP LEFT", "top right": "TOP RIGHT"},
             )
 
             image_enum_editor_factory.values = ["top right", "top left"]
@@ -187,11 +192,11 @@ class TestImageEnumEditorMapping(BaseTestMixin, unittest.TestCase):
             self.assertEqual(editor.names, ["TOP RIGHT", "TOP LEFT"])
             self.assertEqual(
                 editor.mapping,
-                {"TOP RIGHT": "top right", "TOP LEFT": "top left"}
+                {"TOP RIGHT": "top right", "TOP LEFT": "top left"},
             )
             self.assertEqual(
                 editor.inverse_mapping,
-                {"top right": "TOP RIGHT", "top left": "TOP LEFT"}
+                {"top right": "TOP RIGHT", "top left": "TOP LEFT"},
             )
 
     def check_enum_mappings_name_change(self, style):
@@ -214,17 +219,18 @@ class TestImageEnumEditorMapping(BaseTestMixin, unittest.TestCase):
         )
         model = PossibleEnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_ui(model, formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            model, formatted_view
+        ) as editor:
 
             self.assertEqual(editor.names, ["TOP LEFT", "TOP RIGHT"])
             self.assertEqual(
                 editor.mapping,
-                {"TOP LEFT": "top left", "TOP RIGHT": "top right"}
-                )
+                {"TOP LEFT": "top left", "TOP RIGHT": "top right"},
+            )
             self.assertEqual(
                 editor.inverse_mapping,
-                {"top left": "TOP LEFT", "top right": "TOP RIGHT"}
+                {"top left": "TOP LEFT", "top right": "TOP RIGHT"},
             )
 
             model.possible_values = ["top right", "top left"]
@@ -232,11 +238,11 @@ class TestImageEnumEditorMapping(BaseTestMixin, unittest.TestCase):
             self.assertEqual(editor.names, ["TOP RIGHT", "TOP LEFT"])
             self.assertEqual(
                 editor.mapping,
-                {"TOP RIGHT": "top right", "TOP LEFT": "top left"}
+                {"TOP RIGHT": "top right", "TOP LEFT": "top left"},
             )
             self.assertEqual(
                 editor.inverse_mapping,
-                {"top right": "TOP RIGHT", "top left": "TOP LEFT"}
+                {"top right": "TOP RIGHT", "top left": "TOP LEFT"},
             )
 
     @unittest.skip("Issue enthought/traitsui#844")
@@ -276,8 +282,9 @@ class TestImageEnumEditorMapping(BaseTestMixin, unittest.TestCase):
         )
         model = PossibleEnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_ui(model, formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            model, formatted_view
+        ) as editor:
 
             # Readonly editor doesn't set up full mapping, only check that
             # str_value is mapped as expected
@@ -286,7 +293,6 @@ class TestImageEnumEditorMapping(BaseTestMixin, unittest.TestCase):
 
 
 class TestSimpleImageEnumEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -308,7 +314,10 @@ class TestSimpleImageEnumEditor(BaseTestMixin, unittest.TestCase):
                 'value',
                 editor=ImageEnumEditor(
                     values=[
-                        'top left', 'top right', 'bottom left', 'bottom right'
+                        'top left',
+                        'top right',
+                        'bottom left',
+                        'bottom right',
                     ],
                     prefix='@icons:',
                     suffix='_origin',
@@ -327,8 +336,9 @@ class TestSimpleImageEnumEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_editor_popup_editor(self):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, get_view("simple")) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            enum_edit, get_view("simple")
+        ) as editor:
 
             self.assertEqual(enum_edit.value, 'top left')
 
@@ -337,12 +347,12 @@ class TestSimpleImageEnumEditor(BaseTestMixin, unittest.TestCase):
             process_cascade_events()
 
             # Check created buttons
-            image_grid_control = (
-                editor.control.GetChildren()[0].GetChildren()[0]
-            )
+            image_grid_control = editor.control.GetChildren()[0].GetChildren()[
+                0
+            ]
             self.assertEqual(
                 get_button_strings(image_grid_control),
-                ['top left', 'top right', 'bottom left', 'bottom right']
+                ['top left', 'top right', 'bottom left', 'bottom right'],
             )
 
             # Select new image
@@ -358,8 +368,9 @@ class TestSimpleImageEnumEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_editor_combobox(self):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, get_view("simple")) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            enum_edit, get_view("simple")
+        ) as editor:
 
             self.assertEqual(enum_edit.value, 'top left')
 
@@ -376,7 +387,6 @@ class TestSimpleImageEnumEditor(BaseTestMixin, unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestCustomImageEnumEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -397,7 +407,10 @@ class TestCustomImageEnumEditor(BaseTestMixin, unittest.TestCase):
                 'value',
                 editor=ImageEnumEditor(
                     values=[
-                        'top left', 'top right', 'bottom left', 'bottom right'
+                        'top left',
+                        'top right',
+                        'bottom left',
+                        'bottom right',
                     ],
                     prefix='@icons:',
                     suffix='_origin',
@@ -409,24 +422,24 @@ class TestCustomImageEnumEditor(BaseTestMixin, unittest.TestCase):
             resizable=True,
         )
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view):
+        with reraise_exceptions(), self.setup_gui(enum_edit, view):
             pass
 
     def test_custom_editor_selection(self):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, get_view("custom")) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            enum_edit, get_view("custom")
+        ) as editor:
             self.assertEqual(
                 get_button_strings(editor.control),
-                ['top left', 'top right', 'bottom left', 'bottom right']
+                ['top left', 'top right', 'bottom left', 'bottom right'],
             )
 
             self.assertEqual(enum_edit.value, 'top left')
             self.assertEqual(
                 get_all_button_selected_status(editor.control),
-                [True, False, False, False]
+                [True, False, False, False],
             )
 
             click_on_image(get_button_control(editor.control, 1))
@@ -437,17 +450,18 @@ class TestCustomImageEnumEditor(BaseTestMixin, unittest.TestCase):
     def test_custom_editor_value_changed(self):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, get_view("custom")) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            enum_edit, get_view("custom")
+        ) as editor:
             self.assertEqual(
                 get_button_strings(editor.control),
-                ['top left', 'top right', 'bottom left', 'bottom right']
+                ['top left', 'top right', 'bottom left', 'bottom right'],
             )
 
             self.assertEqual(enum_edit.value, 'top left')
             self.assertEqual(
                 get_all_button_selected_status(editor.control),
-                [True, False, False, False]
+                [True, False, False, False],
             )
 
             enum_edit.value = 'top right'
@@ -455,13 +469,12 @@ class TestCustomImageEnumEditor(BaseTestMixin, unittest.TestCase):
 
             self.assertEqual(
                 get_all_button_selected_status(editor.control),
-                [False, True, False, False]
+                [False, True, False, False],
             )
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestReadOnlyImageEnumEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -472,8 +485,11 @@ class TestReadOnlyImageEnumEditor(BaseTestMixin, unittest.TestCase):
         enum_edit = EnumModel()
 
         with reraise_exceptions():
-            with patch(cache_to_patch, wraps=image_cache) as patched_cache, \
-                    create_ui(enum_edit, dict(view=get_view("readonly"))):
+            with patch(
+                cache_to_patch, wraps=image_cache
+            ) as patched_cache, create_ui(
+                enum_edit, dict(view=get_view("readonly"))
+            ):
 
                 self.assertEqual(enum_edit.value, 'top left')
                 self.assertEqual(

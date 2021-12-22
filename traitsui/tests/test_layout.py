@@ -35,7 +35,7 @@ _TXT_WIDTH = 100
 
 
 class MultipleTrait(HasTraits):
-    """ An object with multiple traits to test layout and alignments."""
+    """An object with multiple traits to test layout and alignments."""
 
     txt1 = Str("text1")
     txt2 = Str("text2")
@@ -83,7 +83,6 @@ class ObjectWithResizeReadonlyItem(HasTraits):
 
 
 class TestLayout(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -96,9 +95,8 @@ class TestLayout(BaseTestMixin, unittest.TestCase):
         # along the non-layout axis of its group. In a VGroup, resizing should
         # work only in the horizontal direction.
 
-        with reraise_exceptions(), \
-                create_ui(VResizeDialog()) as ui:
-            editor, = ui.get_editors("txt")
+        with reraise_exceptions(), create_ui(VResizeDialog()) as ui:
+            (editor,) = ui.get_editors("txt")
             text = editor.control
 
             # horizontal size should be large
@@ -113,10 +111,9 @@ class TestLayout(BaseTestMixin, unittest.TestCase):
         # along the non-layout axis of its group. In a HGroup, resizing should
         # work only in the vertical direction.
 
-        with reraise_exceptions(), \
-                create_ui(HResizeDialog()) as ui:
+        with reraise_exceptions(), create_ui(HResizeDialog()) as ui:
 
-            editor, = ui.get_editors("txt")
+            (editor,) = ui.get_editors("txt")
             text = editor.control
 
             # vertical size should be large
@@ -139,17 +136,16 @@ class TestLayout(BaseTestMixin, unittest.TestCase):
             # vertical direction
             self.assertLess(
                 resizable_readonly_item._target.control.height(),
-                _DIALOG_HEIGHT
+                _DIALOG_HEIGHT,
             )
             self.assertEqual(
-                resizable_readonly_item._target.control.width(),
-                _DIALOG_WIDTH
+                resizable_readonly_item._target.control.width(), _DIALOG_WIDTH
             )
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestOrientation(BaseTestMixin, unittest.TestCase):
-    """ Toolkit-agnostic tests on the layout orientations."""
+    """Toolkit-agnostic tests on the layout orientations."""
 
     def setUp(self):
         BaseTestMixin.setUp(self)
@@ -164,8 +160,9 @@ class TestOrientation(BaseTestMixin, unittest.TestCase):
                 Item("txt2"),
             )
         )
-        with reraise_exceptions(), \
-                create_ui(MultipleTrait(), ui_kwargs=dict(view=view)):
+        with reraise_exceptions(), create_ui(
+            MultipleTrait(), ui_kwargs=dict(view=view)
+        ):
             pass
 
     def test_horizontal_layout(self):
@@ -176,8 +173,9 @@ class TestOrientation(BaseTestMixin, unittest.TestCase):
                 Item("txt2"),
             )
         )
-        with reraise_exceptions(), \
-                create_ui(MultipleTrait(), ui_kwargs=dict(view=view)):
+        with reraise_exceptions(), create_ui(
+            MultipleTrait(), ui_kwargs=dict(view=view)
+        ):
             pass
 
 

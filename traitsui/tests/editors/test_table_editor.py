@@ -14,7 +14,12 @@ from unittest.mock import Mock
 from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 
 from traitsui.api import (
-    Action, EvalTableFilter, Item, ObjectColumn, TableEditor, View,
+    Action,
+    EvalTableFilter,
+    Item,
+    ObjectColumn,
+    TableEditor,
+    View,
 )
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -36,7 +41,7 @@ from traitsui.testing.api import (
 
 
 class ListItem(HasTraits):
-    """ Items to visualize in a table editor """
+    """Items to visualize in a table editor"""
 
     value = Str()
     other_value = Int()
@@ -312,7 +317,6 @@ edit_on_first_click_false_view = View(
 
 @requires_toolkit([ToolkitName.qt])
 class TestTableEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -547,11 +551,14 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             values_table = tester.find_by_name(ui, "values")
             selected = values_table.inspect(Selected())
 
-        self.assertEqual(selected, [
-            (object_list.values[5], "value"),
-            (object_list.values[6], "other value"),
-            (object_list.values[8], "value"),
-        ])
+        self.assertEqual(
+            selected,
+            [
+                (object_list.values[5], "value"),
+                (object_list.values[6], "other value"),
+                (object_list.values[8], "value"),
+            ],
+        )
 
     def test_table_editor_select_cell_index(self):
         object_list = ObjectListWithSelection(

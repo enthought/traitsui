@@ -25,7 +25,8 @@ from traitsui.api import View, Item, TimeEditor
 
 
 class TimeEditorDemo(HasTraits):
-    """ Demo class. """
+    """Demo class."""
+
     time = Time(datetime.time(12, 0, 0))
 
     traits_view = View(
@@ -35,13 +36,13 @@ class TimeEditorDemo(HasTraits):
             label='Readonly Editor',
             style='readonly',
             # Show 24-hour mode instead of default 12 hour.
-            editor=TimeEditor(strftime='%H:%M:%S')
+            editor=TimeEditor(strftime='%H:%M:%S'),
         ),
-        resizable=True
+        resizable=True,
     )
 
     def _time_changed(self):
-        """ Print each time the time value is changed in the editor. """
+        """Print each time the time value is changed in the editor."""
         print(self.time)
 
 

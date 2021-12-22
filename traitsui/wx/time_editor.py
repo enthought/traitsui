@@ -78,10 +78,10 @@ class CustomEditor(SimpleEditor):
 
 
 class ReadonlyEditor(TextReadonlyEditor):
-    """ Use a TextEditor for the view. """
+    """Use a TextEditor for the view."""
 
     def _get_str_value(self):
-        """ Replace the default string value with our own time version. """
+        """Replace the default string value with our own time version."""
         if self.value is None:
             return self.factory.message
         else:
