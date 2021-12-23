@@ -304,6 +304,7 @@ class TestNotebookListEditor(unittest.TestCase):
                     MouseClick()
                 )
 
+    # regression test for enthought/traitsui#1790
     def test_initial_selected(self):
         class PhoneBookWithSelected(Phonebook):
             selected = Instance(Person)
