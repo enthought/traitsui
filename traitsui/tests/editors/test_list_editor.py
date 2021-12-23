@@ -319,7 +319,7 @@ class TestNotebookListEditor(unittest.TestCase):
                     ),
                 )
             )
-        
+
         tester = UITester()
         phonebook = PhoneBookWithSelected(people=get_people())
         with tester.create_ui(phonebook) as ui:
