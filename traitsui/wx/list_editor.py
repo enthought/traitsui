@@ -540,6 +540,8 @@ class NotebookEditor(Editor):
             # Remember the DockControl for later deletion processing:
             uis.append([dock_control, object, view_object, monitoring])
             dock_controls.append(dock_control)
+            if len(uis) == 1:
+                dock_control.dockable.dockable_tab_activated(dock_control, True)
 
         # Add the new items to the DockWindow:
         self.add_controls(dock_controls)
