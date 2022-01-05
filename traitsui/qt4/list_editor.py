@@ -526,7 +526,7 @@ class NotebookEditor(Editor):
 
             # Remember the page for later deletion processing:
             self._uis.append([ui.control, ui, view_object, monitoring])
-
+        self._tab_activated(0)
         if self.selected:
             self._selected_changed(self.selected)
 
