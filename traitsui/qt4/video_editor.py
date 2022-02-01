@@ -9,6 +9,7 @@
 # Thanks for using Enthought open source!
 
 """Traits UI 'display only' video editor."""
+from pyface.qt import is_qt5
 from pyface.qt.QtCore import QPoint, Qt, QUrl, Signal
 from pyface.qt.QtGui import QImage, QPainter, QPalette, QSizePolicy
 from pyface.qt.QtMultimedia import (
@@ -34,9 +35,9 @@ aspect_ratio_map = {
 
 #: Map from PlayerState enum values to QMediaPlayer states.
 state_map = {
-    'stopped': QMediaPlayer.PlaybackState.StoppedState,
-    'playing': QMediaPlayer.PlaybackState.PlayingState,
-    'paused': QMediaPlayer.PlaybackState.PausedState,
+    'stopped': QMediaPlayer.State.StoppedState,
+    'playing': QMediaPlayer.State.PlayingState,
+    'paused': QMediaPlayer.State.PausedState,
 }
 
 #: Map from QMediaPlayer states to PlayerState enum values.
@@ -44,7 +45,7 @@ reversed_state_map = {value: key for key, value in state_map.items()}
 
 #: Map from QMediaPlayer media status values to MediaStatus enum values.
 media_status_map = {
-    QMediaPlayer.UnknownMediaStatus: 'unknown',
+    QMediaPlayer.MediaStatus.UnknownMediaStatus: 'unknown',
     QMediaPlayer.MediaStatus.NoMedia: 'no_media',
     QMediaPlayer.MediaStatus.LoadingMedia: 'loading',
     QMediaPlayer.MediaStatus.LoadedMedia: 'loaded',
