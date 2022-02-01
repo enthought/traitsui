@@ -122,7 +122,7 @@ class SimpleEditor(Editor):
 
                     # Create the trait editor panel:
                     self.control = sa = QtGui.QScrollArea()
-                    sa.setFrameShape(QtGui.QFrame.NoFrame)
+                    sa.setFrameShape(QtGui.QFrame.Shape.NoFrame)
                     sa.setWidgetResizable(True)
                     self.control._node_ui = self.control._editor_nid = None
 
@@ -164,18 +164,18 @@ class SimpleEditor(Editor):
                 self._tree = _TreeWidget(self)
 
                 self._editor = sa = QtGui.QScrollArea()
-                sa.setFrameShape(QtGui.QFrame.NoFrame)
+                sa.setFrameShape(QtGui.QFrame.Shape.NoFrame)
                 sa.setWidgetResizable(True)
                 sa._node_ui = sa._editor_nid = None
 
                 if factory.orientation == "horizontal":
-                    orient = QtCore.Qt.Horizontal
+                    orient = QtCore.Qt.Orientation.Horizontal
                 else:
-                    orient = QtCore.Qt.Vertical
+                    orient = QtCore.Qt.Orientation.Vertical
 
                 self.control = splitter = QtGui.QSplitter(orient)
                 splitter.setSizePolicy(
-                    QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+                    QtGui.QSizePolicy.Policy.Expanding, QtGui.QSizePolicy.Policy.Expanding
                 )
                 splitter.addWidget(self._tree)
                 splitter.addWidget(sa)
@@ -219,7 +219,7 @@ class SimpleEditor(Editor):
                     item_selection.append(QtGui.QItemSelectionRange(idx))
 
                 tree.selectionModel().select(
-                    item_selection, QtGui.QItemSelectionModel.ClearAndSelect
+                    item_selection, QtGui.QItemSelectionModel.SelectionFlag.ClearAndSelect
                 )
             else:
                 tree.setCurrentItem(self._object_info(selection)[2])
@@ -519,9 +519,9 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     STD_ICON_MAP = {
-        "<item>": QtGui.QStyle.SP_FileIcon,
-        "<group>": QtGui.QStyle.SP_DirClosedIcon,
-        "<open>": QtGui.QStyle.SP_DirOpenIcon,
+        "<item>": QtGui.QStyle.StandardPixmap.SP_FileIcon,
+        "<group>": QtGui.QStyle.StandardPixmap.SP_DirClosedIcon,
+        "<open>": QtGui.QStyle.StandardPixmap.SP_DirOpenIcon,
     }
 
     def _get_icon(self, node, object, is_expanded=False):
@@ -1109,9 +1109,9 @@ class SimpleEditor(Editor):
         nid = self._get_object_nid(object)
         flags = nid.flags()
         if can_rename:
-            flags |= QtCore.Qt.ItemIsEditable
+            flags |= QtCore.Qt.ItemFlag.ItemIsEditable
         else:
-            flags &= ~QtCore.Qt.ItemIsEditable
+            flags &= ~QtCore.Qt.ItemFlag.ItemIsEditable
         nid.setFlags(flags)
 
         return can_rename
@@ -1255,9 +1255,9 @@ class SimpleEditor(Editor):
                         "Confirm Deletion",
                         "Are you sure you want to delete %s?"
                         % node.get_label(object),
-                        QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
+                        QtGui.QMessageBox.StandardButton.Yes | QtGui.QMessageBox.StandardButton.No,
                     )
-                    if butn != QtGui.QMessageBox.Yes:
+                    if butn != QtGui.QMessageBox.StandardButton.Yes:
                         return
 
             self._undoable_delete(*self._node_index(nid))
@@ -1467,7 +1467,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         """Initialise the tree widget."""
         QtGui.QTreeWidget.__init__(self, parent)
 
-        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         self.setDragEnabled(True)
         self.setAcceptDrops(True)
         self.setIconSize(QtCore.QSize(*editor.factory.icon_size))
@@ -1495,7 +1495,7 @@ class _TreeWidget(QtGui.QTreeWidget):
             )
 
         if editor.factory.selection_mode == "extended":
-            self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+            self.setSelectionMode(QtGui.QAbstractItemView.SelectionMode.ExtendedSelection)
 
         self.itemExpanded.connect(editor._on_item_expanded)
         self.itemCollapsed.connect(editor._on_item_collapsed)
@@ -1547,7 +1547,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         painter = QtGui.QPainter(pm)
 
         option = self.viewOptions()
-        option.state |= QtGui.QStyle.State_Selected
+        option.state |= QtGui.QStyle.StateFlag.State_Selected
         option.rect = QtCore.QRect(
             nid_rect.topLeft() - rect.topLeft(), nid_rect.size()
         )
@@ -1684,7 +1684,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         _, node, object = editor._get_node_data(nid)
 
         if (
-            event.proposedAction() == QtCore.Qt.MoveAction
+            event.proposedAction() == QtCore.Qt.DropAction.MoveAction
             and editor._is_droppable(node, object, data, False)
         ):
             # append to node being dropped on

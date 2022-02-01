@@ -69,7 +69,7 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         """Returns the QComboBox used for the editor control."""
         control = ImageEnumComboBox(self)
         control.setSizePolicy(
-            QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum
+            QtGui.QSizePolicy.Policy.Maximum, QtGui.QSizePolicy.Policy.Maximum
         )
         return control
 
@@ -171,24 +171,24 @@ class ImageEnumComboBox(QtGui.QComboBox):
         centered in it.
         """
         painter = QtGui.QStylePainter(self)
-        painter.setPen(self.palette().color(QtGui.QPalette.Text))
+        painter.setPen(self.palette().color(QtGui.QPalette.ColorRole.Text))
 
         option = QtGui.QStyleOptionComboBox()
         self.initStyleOption(option)
-        painter.drawComplexControl(QtGui.QStyle.CC_ComboBox, option)
+        painter.drawComplexControl(QtGui.QStyle.ComplexControl.CC_ComboBox, option)
 
         editor = self._editor
         pixmap = editor.get_pixmap(editor.inverse_mapping[editor.value])
         arrow = self.style().subControlRect(
-            QtGui.QStyle.CC_ComboBox,
+            QtGui.QStyle.ComplexControl.CC_ComboBox,
             option,
             QtGui.QStyle.SC_ComboBoxArrow,
             None,
         )
         option.rect.setWidth(option.rect.width() - arrow.width())
         target = QtGui.QStyle.alignedRect(
-            QtCore.Qt.LeftToRight,
-            QtCore.Qt.AlignCenter,
+            QtCore.Qt.LayoutDirection.LeftToRight,
+            QtCore.Qt.AlignmentFlag.AlignCenter,
             pixmap.size(),
             option.rect,
         )
@@ -205,7 +205,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
         option = QtGui.QStyleOptionComboBox()
         self.initStyleOption(option)
         size = self.style().sizeFromContents(
-            QtGui.QStyle.CT_ComboBox, option, size, self
+            QtGui.QStyle.ContentsType.CT_ComboBox, option, size, self
         )
         return size
 
@@ -216,15 +216,15 @@ class ImageEnumTablePopupView(QtGui.QTableView):
         QtGui.QTableView.__init__(self, parent)
         hheader = self.horizontalHeader()
         if is_qt5:
-            hheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
+            hheader.setSectionResizeMode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
         else:
-            hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+            hheader.setResizeMode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
         hheader.hide()
         vheader = self.verticalHeader()
         if is_qt5:
-            vheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
+            vheader.setSectionResizeMode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
         else:
-            vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+            vheader.setResizeMode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
         vheader.hide()
         self.setShowGrid(False)
 
@@ -247,12 +247,12 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
         QtGui.QStyledItemDelegate.paint(self, painter, option, mi)
 
         # Now draw the pixmap
-        name = mi.data(QtCore.Qt.DisplayRole)
+        name = mi.data(QtCore.Qt.ItemDataRole.DisplayRole)
         pixmap = self._get_pixmap(name)
         if pixmap is not None:
             target = QtGui.QStyle.alignedRect(
-                QtCore.Qt.LeftToRight,
-                QtCore.Qt.AlignCenter,
+                QtCore.Qt.LayoutDirection.LeftToRight,
+                QtCore.Qt.AlignmentFlag.AlignCenter,
                 pixmap.size(),
                 option.rect,
             )
@@ -260,7 +260,7 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
 
     def sizeHint(self, option, mi):
         """Reimplemented to define a size hint based on the size of the pixmap."""
-        name = mi.data(QtCore.Qt.DisplayRole)
+        name = mi.data(QtCore.Qt.ItemDataRole.DisplayRole)
         pixmap = self._get_pixmap(name)
         if pixmap is None:
             return QtCore.QSize()
@@ -290,7 +290,7 @@ class ImageEnumModel(QtCore.QAbstractTableModel):
 
     def data(self, mi, role):
         """Reimplemented to return the data."""
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             index = mi.row() * self._editor.factory.cols + mi.column()
             if index < len(self._editor.names):
                 return self._editor.names[index]

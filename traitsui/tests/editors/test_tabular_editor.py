@@ -125,7 +125,7 @@ def set_selected_single(editor, row):
         mi = editor.model.index(row, 0)
         # Add `Rows` flag to select the whole row
         smodel.select(
-            mi, QItemSelectionModel.ClearAndSelect | QItemSelectionModel.Rows
+            mi, QItemSelectionModel.SelectionFlag.ClearAndSelect | QItemSelectionModel.SelectionFlag.Rows
         )
 
     else:
@@ -150,7 +150,7 @@ def set_selected_multiple(editor, rows):
             mi = editor.model.index(row, 0)
             # Add `Rows` flag to select the whole row
             smodel.select(
-                mi, QItemSelectionModel.Select | QItemSelectionModel.Rows
+                mi, QItemSelectionModel.SelectionFlag.Select | QItemSelectionModel.SelectionFlag.Rows
             )
 
     else:

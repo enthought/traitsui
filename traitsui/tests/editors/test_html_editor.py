@@ -187,8 +187,8 @@ def qt_mouse_click_web_view(view, delay):
     try:
         QTest.mouseClick(
             widget,
-            QtCore.Qt.LeftButton,
-            QtCore.Qt.NoModifier,
+            QtCore.Qt.MouseButton.LeftButton,
+            QtCore.Qt.KeyboardModifier.NoModifier,
             delay=delay,
         )
     finally:

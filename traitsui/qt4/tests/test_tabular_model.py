@@ -77,7 +77,7 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
             # when
             # dropped below the list, the "parent" is invalid.
             parent = QtCore.QModelIndex()  # invalid index object
-            model.dropMimeData(mime_data, QtCore.Qt.MoveAction, -1, -1, parent)
+            model.dropMimeData(mime_data, QtCore.Qt.DropAction.MoveAction, -1, -1, parent)
 
             # then
             mime_data = model.mimeData(
@@ -113,7 +113,7 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
             # when
             # drop it to row index 2
             parent = model.createIndex(2, 0)
-            model.dropMimeData(mime_data, QtCore.Qt.MoveAction, -1, -1, parent)
+            model.dropMimeData(mime_data, QtCore.Qt.DropAction.MoveAction, -1, -1, parent)
 
             # then
             mime_data = model.mimeData(
@@ -148,7 +148,7 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
             # when
             # drop to index 2
             parent = model.createIndex(2, 0)
-            model.dropMimeData(mime_data, QtCore.Qt.CopyAction, -1, -1, parent)
+            model.dropMimeData(mime_data, QtCore.Qt.DropAction.CopyAction, -1, -1, parent)
 
             # then
             self.assertEqual(model.rowCount(None), 4)

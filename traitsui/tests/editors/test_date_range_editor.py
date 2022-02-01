@@ -238,7 +238,7 @@ class TestDateRangeEditorQt(BaseTestMixin, unittest.TestCase):
         if selected:
             self.assertEqual(
                 textformat.fontWeight(),
-                QtGui.QFont.Bold,
+                QtGui.QFont.Weight.Bold,
                 "{!r} is not selected.".format(date),
             )
 
@@ -250,7 +250,7 @@ class TestDateRangeEditorQt(BaseTestMixin, unittest.TestCase):
         else:
             self.assertEqual(
                 textformat.fontWeight(),
-                QtGui.QFont.Normal,
+                QtGui.QFont.Weight.Normal,
                 "{!r} is not unselected.".format(date),
             )
             self.assertEqual(

@@ -139,14 +139,14 @@ class TestDateEditorCustomQt(BaseTestMixin, unittest.TestCase):
         if selected:
             self.assertEqual(
                 textformat.fontWeight(),
-                QtGui.QFont.Bold,
+                QtGui.QFont.Weight.Bold,
                 "{!r} is not selected.".format(date),
             )
             self.check_date_bgcolor(editor, date, (0, 128, 0))
         else:
             self.assertEqual(
                 textformat.fontWeight(),
-                QtGui.QFont.Normal,
+                QtGui.QFont.Weight.Normal,
                 "{!r} is not unselected.".format(date),
             )
             self.assertEqual(

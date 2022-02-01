@@ -113,7 +113,7 @@ class SimpleEditor(Editor):
                 "Move Down", blayout, self._on_down
             )
 
-        self.root_layout.addLayout(blayout, 1, 1, QtCore.Qt.AlignCenter)
+        self.root_layout.addLayout(blayout, 1, 1, QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self._used = self._create_listbox(
             2, self._on_value, self._on_unuse, factory.right_column_title
@@ -143,11 +143,11 @@ class SimpleEditor(Editor):
         font.setBold(True)
         font.setPointSize(font.pointSize() + 1)
         title_widget.setFont(font)
-        self.root_layout.addWidget(title_widget, 0, col, QtCore.Qt.AlignLeft)
+        self.root_layout.addWidget(title_widget, 0, col, QtCore.Qt.AlignmentFlag.AlignLeft)
 
         # Create the list box and add it to the column:
         list = QtGui.QListWidget()
-        list.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        list.setSelectionMode(QtGui.QAbstractItemView.SelectionMode.ExtendedSelection)
         self.root_layout.addWidget(list, 1, col)
 
         list.itemClicked.connect(handler1)
@@ -160,7 +160,7 @@ class SimpleEditor(Editor):
         button = QtGui.QPushButton(label)
         # The connection type is set to workaround Qt5 + MacOSX issue with
         # event dispatching. See enthought/traitsui#1308
-        button.clicked.connect(handler, type=QtCore.Qt.QueuedConnection)
+        button.clicked.connect(handler, type=QtCore.Qt.ConnectionType.QueuedConnection)
         layout.addWidget(button)
         return button
 
@@ -363,7 +363,7 @@ class SimpleEditor(Editor):
             if self.factory.ordered:
                 items = list_to.findItems(
                     item_label,
-                    QtCore.Qt.MatchFixedString | QtCore.Qt.MatchCaseSensitive,
+                    QtCore.Qt.MatchFlag.MatchFixedString | QtCore.Qt.MatchFlag.MatchCaseSensitive,
                 )
                 if items:
                     items[0].setSelected(True)

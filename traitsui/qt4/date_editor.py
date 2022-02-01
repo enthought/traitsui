@@ -214,9 +214,9 @@ def _apply_cellformat(cf, textformat):
 
     if cf.bold is not None:
         if cf.bold:
-            weight = QtGui.QFont.Bold
+            weight = QtGui.QFont.Weight.Bold
         else:
-            weight = QtGui.QFont.Normal
+            weight = QtGui.QFont.Weight.Normal
         textformat.setFontWeight(weight)
 
     if cf.bgcolor is not None:
@@ -233,7 +233,7 @@ def _textformat_to_cellformat(textformat):
     return CellFormat(
         italics=textformat.fontItalic(),
         underline=textformat.fontUnderline(),
-        bold=textformat.fontWeight() == QtGui.QFont.Bold,
+        bold=textformat.fontWeight() == QtGui.QFont.Weight.Bold,
         bgcolor=_brush_to_color(bg_brush),
         fgcolor=_brush_to_color(fg_brush),
     )

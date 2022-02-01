@@ -183,15 +183,15 @@ class _Panel(BasePanel):
                 # Add the horizontal separator
                 separator = QtGui.QFrame()
                 separator.setFrameStyle(
-                    QtGui.QFrame.Sunken | QtGui.QFrame.HLine
+                    QtGui.QFrame.Shadow.Sunken | QtGui.QFrame.Shape.HLine
                 )
                 separator.setFixedHeight(2)
                 layout.addWidget(separator)
 
                 # Add the special function buttons
-                bbox = QtGui.QDialogButtonBox(QtCore.Qt.Horizontal)
+                bbox = QtGui.QDialogButtonBox(QtCore.Qt.Orientation.Horizontal)
                 for button in buttons:
-                    role = QtGui.QDialogButtonBox.ActionRole
+                    role = QtGui.QDialogButtonBox.ButtonRole.ActionRole
                     if self.is_button(button, "Undo"):
                         self.undo = self.add_button(
                             button, bbox, role, self._on_undo, False, "Undo"
@@ -206,7 +206,7 @@ class _Panel(BasePanel):
                             self._on_redoable, "redoable", dispatch="ui"
                         )
                     elif self.is_button(button, "Revert"):
-                        role = QtGui.QDialogButtonBox.ResetRole
+                        role = QtGui.QDialogButtonBox.ButtonRole.ResetRole
                         self.revert = self.add_button(
                             button, bbox, role, self._on_revert, False
                         )
@@ -214,7 +214,7 @@ class _Panel(BasePanel):
                             self._on_revertable, "undoable", dispatch="ui"
                         )
                     elif self.is_button(button, "Help"):
-                        role = QtGui.QDialogButtonBox.HelpRole
+                        role = QtGui.QDialogButtonBox.ButtonRole.HelpRole
                         self.add_button(button, bbox, role, self._on_help)
                     elif not self.is_button(button, ""):
                         self.add_button(button, bbox, role)
@@ -322,7 +322,7 @@ def _fill_panel(panel, content, ui, item_handler=None):
 
             layout = new.layout()
             if layout is not None:
-                layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+                layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignTop)
 
         else:
             new = QtGui.QWidget()
@@ -429,7 +429,7 @@ class _GroupSplitter(QtGui.QSplitter):
         """Size the splitter based on the 'width' or 'height' attributes
         of the Traits UI view elements.
         """
-        use_widths = self.orientation() == QtCore.Qt.Horizontal
+        use_widths = self.orientation() == QtCore.Qt.Orientation.Horizontal
 
         # Get the requested size for the items.
         sizes = []
@@ -494,9 +494,9 @@ class _GroupPanel(object):
         self.ui = ui
 
         if group.orientation == "horizontal":
-            self.direction = QtGui.QBoxLayout.LeftToRight
+            self.direction = QtGui.QBoxLayout.Direction.LeftToRight
         else:
-            self.direction = QtGui.QBoxLayout.TopToBottom
+            self.direction = QtGui.QBoxLayout.Direction.TopToBottom
 
         # outer is the top-level widget or layout that will eventually be
         # returned.  sub is the QTabWidget or QToolBox corresponding to any
@@ -531,17 +531,17 @@ class _GroupPanel(object):
             # Create the splitter.
             splitter = _GroupSplitter(group)
             splitter.setOpaqueResize(False)  # Mimic wx backend resize behavior
-            if self.direction == QtGui.QBoxLayout.TopToBottom:
-                splitter.setOrientation(QtCore.Qt.Vertical)
+            if self.direction == QtGui.QBoxLayout.Direction.TopToBottom:
+                splitter.setOrientation(QtCore.Qt.Orientation.Vertical)
 
             # Make sure the splitter will expand to fill available space
             policy = splitter.sizePolicy()
             policy.setHorizontalStretch(50)
             policy.setVerticalStretch(50)
             if group.orientation == "horizontal":
-                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setVerticalPolicy(QtGui.QSizePolicy.Policy.Expanding)
             else:
-                policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setHorizontalPolicy(QtGui.QSizePolicy.Policy.Expanding)
             splitter.setSizePolicy(policy)
 
             if outer is None:
@@ -618,7 +618,7 @@ class _GroupPanel(object):
                 layout = self._add_groups(content, inner)
             else:
                 layout = self._add_items(content, inner)
-            layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+            layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignTop)
 
             if outer is None:
                 outer = layout
@@ -663,7 +663,7 @@ class _GroupPanel(object):
                 layout = panel.layout()
                 if layout is not None:
                     layout.setAlignment(
-                        QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop
+                        QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignTop
                     )
 
                 splitter.addWidget(panel)
@@ -765,9 +765,9 @@ class _GroupPanel(object):
 
             row = 0
             if show_left:
-                label_alignment = QtCore.Qt.AlignRight
+                label_alignment = QtCore.Qt.AlignmentFlag.AlignRight
             else:
-                label_alignment = QtCore.Qt.AlignLeft
+                label_alignment = QtCore.Qt.AlignmentFlag.AlignLeft
 
         else:
             # Use the existing layout if there is one.
@@ -895,7 +895,7 @@ class _GroupPanel(object):
                 item_height = item.height
                 if (item_width != -1) or (item_height != -1):
                     is_horizontal = (
-                        self.direction == QtGui.QBoxLayout.LeftToRight
+                        self.direction == QtGui.QBoxLayout.Direction.LeftToRight
                     )
 
                     min_size = control.minimumSizeHint()
@@ -1016,28 +1016,28 @@ class _GroupPanel(object):
         for i in range(cols):
             line = QtGui.QFrame()
 
-            if self.direction == QtGui.QBoxLayout.LeftToRight:
+            if self.direction == QtGui.QBoxLayout.Direction.LeftToRight:
                 # Add a vertical separator:
-                line.setFrameShape(QtGui.QFrame.VLine)
+                line.setFrameShape(QtGui.QFrame.Shape.VLine)
                 if row < 0:
                     inner.addWidget(line)
                 else:
                     inner.addWidget(line, i, row)
             else:
                 # Add a horizontal separator:
-                line.setFrameShape(QtGui.QFrame.HLine)
+                line.setFrameShape(QtGui.QFrame.Shape.HLine)
                 if row < 0:
                     inner.addWidget(line)
                 else:
                     inner.addWidget(line, row, i)
 
-            line.setFrameShadow(QtGui.QFrame.Sunken)
+            line.setFrameShadow(QtGui.QFrame.Shadow.Sunken)
 
     def _add_spacer_item(self, item, name, inner, row, col, show_labels):
 
         # If so, add the appropriate amount of space to the layout:
         n = int(name)
-        if self.direction == QtGui.QBoxLayout.LeftToRight:
+        if self.direction == QtGui.QBoxLayout.Direction.LeftToRight:
             # Add a horizontal spacer:
             spacer = QtGui.QSpacerItem(n, 1)
         else:
@@ -1076,20 +1076,20 @@ class _GroupPanel(object):
         if (
             label is not None
             and not is_label_left
-            and item_policy == QtGui.QSizePolicy.Minimum
+            and item_policy == QtGui.QSizePolicy.Policy.Minimum
         ):
             # this item cannot be stretched horizontally, and the label
             # exists and is on the right -> make label stretchable if necessary
 
             if (
-                self.direction == QtGui.QBoxLayout.LeftToRight
+                self.direction == QtGui.QBoxLayout.Direction.LeftToRight
                 and is_item_springy
             ):
                 is_item_springy = False
                 self._make_label_h_stretchable(label, stretch or 50)
 
             elif (
-                self.direction == QtGui.QBoxLayout.TopToBottom
+                self.direction == QtGui.QBoxLayout.Direction.TopToBottom
                 and is_item_resizable
             ):
                 is_item_resizable = False
@@ -1115,7 +1115,7 @@ class _GroupPanel(object):
         """
         label_policy = label.sizePolicy()
         label_policy.setHorizontalStretch(stretch)
-        label_policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+        label_policy.setHorizontalPolicy(QtGui.QSizePolicy.Policy.Expanding)
         label.setSizePolicy(label_policy)
 
     def _add_widget(
@@ -1147,7 +1147,7 @@ class _GroupPanel(object):
                 layout.addItem(w)
 
         else:
-            if self.direction == QtGui.QBoxLayout.LeftToRight:
+            if self.direction == QtGui.QBoxLayout.Direction.LeftToRight:
                 # Flip the row and column.
                 row, column = column, row
 
@@ -1232,7 +1232,7 @@ class _GroupPanel(object):
         """Adds emphasis to a specified control's font."""
         # Set the foreground colour.
         pal = QtGui.QPalette(control.palette())
-        pal.setColor(QtGui.QPalette.WindowText, QtGui.QColor(0, 0, 127))
+        pal.setColor(QtGui.QPalette.ColorRole.WindowText, QtGui.QColor(0, 0, 127))
         control.setPalette(pal)
 
         # Set the font.
@@ -1325,14 +1325,14 @@ class HTMLHelpWindow(QtGui.QDialog):
         # Create the html control
         html_control = QtWebKit.QWebView()
         html_control.setSizePolicy(
-            QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+            QtGui.QSizePolicy.Policy.Expanding, QtGui.QSizePolicy.Policy.Expanding
         )
         html_control.setHtml(html_content)
         layout.addWidget(html_control)
 
         # Create the OK button
         bbox = QtGui.QDialogButtonBox(
-            QtGui.QDialogButtonBox.Ok, QtCore.Qt.Horizontal
+            QtGui.QDialogButtonBox.StandardButton.Ok, QtCore.Qt.Orientation.Horizontal
         )
         bbox.accepted.connect(self.accept)
         layout.addWidget(bbox)
