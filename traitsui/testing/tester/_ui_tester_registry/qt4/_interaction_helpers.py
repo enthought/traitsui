@@ -101,7 +101,7 @@ def displayed_text_qobject(widget):
 
 
 def mouse_click_qwidget(control, delay):
-    """Performs a mouce click on a Qt widget.
+    """Performs a mouse click on a Qt widget.
 
     Parameters
     ----------
@@ -114,6 +114,7 @@ def mouse_click_qwidget(control, delay):
     # for QAbstractButtons we do not use QTest.mouseClick as it assumes the
     # center of the widget as the location to be clicked, which may be
     # incorrect. For QAbstractButtons we can simply call their click method.
+
     if isinstance(control, QtGui.QAbstractButton):
         if delay > 0:
             QTest.qSleep(delay)

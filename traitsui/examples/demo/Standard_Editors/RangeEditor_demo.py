@@ -28,18 +28,48 @@ Please refer to the `RangeEditor API docs`_ for further information.
 .. _RangeEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.range_editor.html#traitsui.editors.range_editor.RangeEditor
 """
 
-from traits.api import HasTraits, Range
+from traits.api import HasTraits, Range as _Range
 from traitsui.api import Item, Group, View
+
+
+# TODO: Update traits.api.Range with the following in order to avoid the popup-error-dialog.
+# TODO: Remove redefinition of Range here once the traits.api.Range is updated.
+class Range(_Range):
+    def create_editor(self):
+        """ Returns the default UI editor for the trait.
+        """
+        # fixme: Needs to support a dynamic range editor.
+
+        auto_set = self.auto_set
+        if auto_set is None:
+            auto_set = True
+        show_error_dialog = self.show_error_dialog
+        if show_error_dialog is None:
+            show_error_dialog = True
+
+        from traitsui.api import RangeEditor
+        return RangeEditor(
+            self,
+            mode=self.mode or "auto",
+            cols=self.cols or 3,
+            auto_set=auto_set,
+            enter_set=self.enter_set or False,
+            low_label=self.low or "",
+            high_label=self.high or "",
+            low_name=self._low_name,
+            high_name=self._high_name,
+            show_error_dialog=show_error_dialog
+        )
 
 
 class RangeEditorDemo(HasTraits):
     """Defines the RangeEditor demo class."""
 
     # Define a trait for each of four range variants:
-    small_int_range = Range(1, 16)
-    medium_int_range = Range(1, 25)
-    large_int_range = Range(1, 150)
-    float_range = Range(0.0, 150.0)
+    small_int_range = Range(1, 16, show_error_dialog=False)
+    medium_int_range = Range(1, 25, show_error_dialog=False)
+    large_int_range = Range(1, 150, show_error_dialog=False)
+    float_range = Range(0.0, 150.0, show_error_dialog=False)
 
     # RangeEditor display for narrow integer Range traits (< 17 wide):
     int_range_group1 = Group(

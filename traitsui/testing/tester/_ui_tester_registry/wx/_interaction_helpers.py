@@ -41,7 +41,7 @@ def _create_event(event_type, control):
 def mouse_click(func):
     """Decorator function for mouse clicks. Decorated functions will return
     if they are not enabled. Additionally, this handles the delay for the
-    click.
+    click as well as set the focus to the control if not already set.
 
     Parameters
     ----------
@@ -70,6 +70,8 @@ def mouse_click(func):
                 "Nothing was performed."
             )
             return
+        if not control.HasFocus():
+            control.SetFocus()
         wx.MilliSleep(delay)
         func(control=control, delay=delay, **kwargs)
 
@@ -78,7 +80,7 @@ def mouse_click(func):
 
 @mouse_click
 def mouse_click_button(control, delay):
-    """Performs a mouce click on a wx button.
+    """Performs a mouse click on a wx button.
 
     Parameters
     ----------
@@ -93,7 +95,7 @@ def mouse_click_button(control, delay):
 
 @mouse_click
 def mouse_click_checkbox(control, delay):
-    """Performs a mouce click on a wx check box.
+    """Performs a mouse click on a wx check box.
 
     Parameters
     ----------
@@ -102,6 +104,7 @@ def mouse_click_checkbox(control, delay):
     delay: int
         Time delay (in ms) in which click will be performed.
     """
+
     click_event = _create_event(wx.wxEVT_COMMAND_CHECKBOX_CLICKED, control)
     control.SetValue(not control.GetValue())
     control.ProcessWindowEvent(click_event)
@@ -109,7 +112,7 @@ def mouse_click_checkbox(control, delay):
 
 @mouse_click
 def mouse_click_combobox_or_choice(control, index, delay):
-    """Performs a mouce click on either a wx combo box or a wx choice on the
+    """Performs a mouse click on either a wx combo box or a wx choice on the
     entry at the given index.
 
     Parameters
@@ -141,7 +144,7 @@ def mouse_click_combobox_or_choice(control, index, delay):
 
 @mouse_click
 def mouse_click_listbox(control, index, delay):
-    """Performs a mouce click on a wx list box on the entry at
+    """Performs a mouse click on a wx list box on the entry at
     the given index.
 
     Parameters
@@ -176,7 +179,7 @@ def mouse_click_radiobutton(control, delay):
 
 @mouse_click
 def mouse_click_object(control, delay):
-    """Performs a mouce click on a wxTextCtrl.
+    """Performs a mouse click on a wxTextCtrl.
 
     Parameters
     ----------
@@ -185,8 +188,6 @@ def mouse_click_object(control, delay):
     delay: int
         Time delay (in ms) in which click will be performed.
     """
-    if not control.HasFocus():
-        control.SetFocus()
     click_event = _create_event(wx.wxEVT_COMMAND_LEFT_CLICK, control)
     control.ProcessWindowEvent(click_event)
 
@@ -292,6 +293,7 @@ def key_click_text_entry(
         Useful for when the TextEntry.GetSelection is overridden by a subclass
         that does not conform to the common API.
     """
+
     if not (control.IsEnabled() and control.IsEditable()):
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
@@ -312,6 +314,13 @@ def key_click_text_entry(
         else:
             pos = control.GetInsertionPoint()
             control.Remove(max(0, pos - 1), pos)
+    elif interaction.key in {"Right", "Left"}:
+        wx.MilliSleep(delay)
+        n = len(control.GetValue())
+        pos = control.GetInsertionPoint()
+        step = 1 if interaction.key == "Right" else -1
+        newpos = max(0, min(pos + step, n))
+        control.SetInsertionPoint(newpos)
     else:
         check_key_compat(interaction.key)
         wx.MilliSleep(delay)

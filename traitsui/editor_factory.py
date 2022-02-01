@@ -76,6 +76,9 @@ class EditorFactory(HasPrivateTraits):
     #: The editor class to use for 'readonly' style views.
     readonly_editor_class = Property()
 
+    #: Show the error dialog when an error occur.
+    show_error_dialog = Bool(True)
+
     def __init__(self, *args, **traits):
         """Initializes the factory object."""
         HasPrivateTraits.__init__(self, **traits)
