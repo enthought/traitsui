@@ -102,7 +102,7 @@ from tempfile import mkdtemp
 import click
 
 supported_combinations = {
-    '3.6': {'pyside2', 'pyqt5', 'wx', 'null'},
+    '3.6': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
@@ -132,8 +132,14 @@ extra_dependencies = {
     'pyside2': {
         'pygments',
     },
+    'pyside6': {
+        'pygments',
+    },
     'pyqt5': {
         'pyqt5',
+        'pygments',
+    },
+    'pyqt6': {
         'pygments',
     },
     # XXX once wxPython 4 is available in EDM, we will want it here
@@ -182,8 +188,10 @@ doc_ignore = {
 }
 
 environment_vars = {
-    'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
-    'pyqt5': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
+    'pyside2': {'ETS_TOOLKIT': 'qt', 'QT_API': 'pyside2'},
+    'pyside6': {'ETS_TOOLKIT': 'qt', 'QT_API': 'pyside6'},
+    'pyqt5': {"ETS_TOOLKIT": "qt", "QT_API": "pyqt5"},
+    'pyqt6': {"ETS_TOOLKIT": "qt", "QT_API": "pyqt6"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
 }
@@ -258,6 +266,13 @@ def install(runtime, toolkit, environment, editable, source):
     # pip install pyqt5 and pyside2, because we don't have them in EDM yet
     if toolkit == 'pyside2':
         commands.append("edm run -e {environment} -- pip install pyside2")
+    elif toolkit == 'pyqt6':
+        commands.append("edm run -e {environment} -- pip install pyqt6")
+    elif toolkit == 'pyside6':
+        if sys.platform == 'darwin':
+            commands.append("edm run -e {environment} -- pip install pyside6<6.2.2")
+        else:
+            commands.append("edm run -e {environment} -- pip install pyside6")
     elif toolkit == 'wx':
         if sys.platform != 'linux':
             commands.append("edm run -e {environment} -- pip install wxPython")
