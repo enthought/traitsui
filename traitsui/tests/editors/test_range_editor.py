@@ -174,7 +174,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
 
     # the tester support code is not yet implemented for Wx SimpleSpinEditor
     @requires_toolkit([ToolkitName.qt])
-    def test_simple_spin_editor_enter_set(self):
+    def test_simple_spin_editor_auto_set_false(self):
         model = RangeModel()
         view = View(
             Item(
@@ -184,7 +184,6 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
                     high=12,
                     mode="spinner",
                     auto_set=False,
-                    enter_set=True
                 )
             )
         )
