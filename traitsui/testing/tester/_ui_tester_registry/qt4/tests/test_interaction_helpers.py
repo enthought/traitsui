@@ -34,7 +34,7 @@ class TestInteractions(unittest.TestCase):
     def test_mouse_click(self):
         button = QtGui.QPushButton()
         click_slot = mock.Mock()
-        button.clicked.connect(click_slot)
+        button.clicked.connect(lambda checked: click_slot(checked))
 
         _interaction_helpers.mouse_click_qwidget(button, 0)
 
@@ -45,7 +45,8 @@ class TestInteractions(unittest.TestCase):
         button.setEnabled(False)
 
         click_slot = mock.Mock()
-        button.clicked.connect(click_slot)
+        # pyside6 can't connect to a mock
+        button.clicked.connect(lambda checked: click_slot(checked))
 
         # when
         # clicking won't fail, it just does not do anything.
@@ -64,21 +65,22 @@ class TestInteractions(unittest.TestCase):
         # test on different Qwidget objects
         textboxes = [QtGui.QLineEdit(), QtGui.QTextEdit()]
         for i, textbox in enumerate(textboxes):
-            change_slot = mock.Mock()
-            textbox.textChanged.connect(change_slot)
+            with self.subTest(widget=textbox.__class__.__name__):
+                change_slot = mock.Mock()
+                textbox.textChanged.connect(lambda *args: change_slot(*args))
 
-            # when
-            _interaction_helpers.key_sequence_qwidget(
-                textbox, command.KeySequence("abc"), 0
-            )
+                # when
+                _interaction_helpers.key_sequence_qwidget(
+                    textbox, command.KeySequence("abc"), 0
+                )
 
-            # then
-            if i == 0:
-                self.assertEqual(textbox.text(), "abc")
-            else:
-                self.assertEqual(textbox.toPlainText(), "abc")
-            # each keystroke fires a signal
-            self.assertEqual(change_slot.call_count, 3)
+                # then
+                if i == 0:
+                    self.assertEqual(textbox.text(), "abc")
+                else:
+                    self.assertEqual(textbox.toPlainText(), "abc")
+                # each keystroke fires a signal
+                self.assertEqual(change_slot.call_count, 3)
 
         # for a QLabel, one can try a key sequence and nothing will happen
         textbox = QtGui.QLabel()
@@ -92,7 +94,7 @@ class TestInteractions(unittest.TestCase):
             with self.subTest(code=code, word=chr(code)):
                 textbox = QtGui.QLineEdit()
                 change_slot = mock.Mock()
-                textbox.textChanged.connect(change_slot)
+                textbox.textChanged.connect(lambda text: change_slot(text))
 
                 # when
                 _interaction_helpers.key_sequence_textbox(
@@ -182,7 +184,7 @@ class TestInteractions(unittest.TestCase):
     def test_key_click(self):
         textbox = QtGui.QLineEdit()
         change_slot = mock.Mock()
-        textbox.editingFinished.connect(change_slot)
+        textbox.editingFinished.connect(lambda: change_slot())
 
         # sanity check on editingFinished signal
         _interaction_helpers.key_sequence_qwidget(
@@ -199,7 +201,7 @@ class TestInteractions(unittest.TestCase):
         textbox = QtGui.QTextEdit()
         change_slot = mock.Mock()
         # Now "Enter" should not finish editing, but instead go to next line
-        textbox.textChanged.connect(change_slot)
+        textbox.textChanged.connect(lambda: change_slot())
         _interaction_helpers.key_click_qwidget(
             textbox, command.KeyClick("Enter"), 0
         )
@@ -217,7 +219,7 @@ class TestInteractions(unittest.TestCase):
         textbox = QtGui.QLineEdit()
         textbox.setEnabled(False)
         change_slot = mock.Mock()
-        textbox.editingFinished.connect(change_slot)
+        textbox.editingFinished.connect(lambda text: change_slot(text))
 
         with self.assertRaises(Disabled):
             _interaction_helpers.key_click_qwidget(

@@ -24,7 +24,7 @@
 """
 
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_pyside
 
 from traitsui.editors.color_editor import (
     ToolkitEditorFactory as BaseToolkitEditorFactory,
@@ -289,7 +289,10 @@ def color_editor_for(editor, parent):
 
             i += 1
 
-    mapper.mapped[str].connect(editor.update_object_from_swatch)
+    if is_pyside:
+        mapper.mappedString.connect(editor.update_object_from_swatch)
+    else:
+        mapper.mapped[str].connect(editor.update_object_from_swatch)
 
     panel.addLayout(grid)
 

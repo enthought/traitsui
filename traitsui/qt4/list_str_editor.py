@@ -14,7 +14,7 @@
 import collections.abc
 
 from pyface.image_resource import ImageResource
-from pyface.qt import QtCore, QtGui, is_qt5
+from pyface.qt import QtCore, QtGui, is_qt4
 
 from traits.api import (
     Any,
@@ -119,10 +119,10 @@ class _ListStrEditor(Editor):
             self._header_view = header_view
             header_view.setModel(self.model)
             header_view.setMaximumHeight(header_view.sizeHint().height())
-            if is_qt5:
-                header_view.setSectionResizeMode(QtGui.QHeaderView.Stretch)
-            else:
+            if is_qt4:
                 header_view.setResizeMode(QtGui.QHeaderView.Stretch)
+            else:
+                header_view.setSectionResizeMode(QtGui.QHeaderView.Stretch)
             layout.addWidget(header_view)
         else:
             self._header_view = None

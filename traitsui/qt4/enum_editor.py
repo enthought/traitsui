@@ -27,7 +27,7 @@
 from functools import reduce
 
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_pyside
 
 from traits.api import Bool, Property
 
@@ -164,7 +164,7 @@ class SimpleEditor(BaseEditor):
         self.control = control = self.create_combo_box()
         control.addItems(self.names)
 
-        control.currentIndexChanged[str].connect(self.update_object)
+        control.currentIndexChanged.connect(self.update_object)
 
         if self.factory.evaluate is not None:
             control.setEditable(True)
@@ -249,12 +249,13 @@ class SimpleEditor(BaseEditor):
 
     #  Signal handlers -------------------------------------------------------
 
-    def update_object(self, text):
+    def update_object(self, index):
         """Handles the user selecting a new value from the combo box."""
         if self._no_enum_update == 0:
             self._no_enum_update += 1
             try:
-                self.value = self.mapping[str(text)]
+                text = self.names[index]
+                self.value = self.mapping[text]
             except Exception:
                 from traitsui.api import raise_to_debug
 
@@ -315,7 +316,10 @@ class RadioEditor(BaseEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        self._mapper.mapped.connect(self.update_object)
+        if is_pyside:
+            self._mapper.mappedInt.connect(self.update_object)
+        else:
+            self._mapper.mapped.connect(self.update_object)
 
         self.rebuild_editor()
 

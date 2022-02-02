@@ -13,7 +13,7 @@
 """
 
 
-from pyface.qt import QtGui
+from pyface.qt import QtGui, is_qt4
 
 from .editor import Editor
 
@@ -42,7 +42,10 @@ class _HistoryEditor(Editor):
         if self.factory.auto_set:
             control.editTextChanged.connect(self.update_object)
         else:
-            control.activated[str].connect(self.update_object)
+            if is_qt4:
+                control.activated[str].connect(self.update_object)
+            else:
+                control.textActivated.connect(self.update_object)
 
         self.set_tooltip()
 

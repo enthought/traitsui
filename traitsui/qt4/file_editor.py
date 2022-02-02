@@ -22,7 +22,7 @@
 
 from os.path import abspath, splitext, isfile, exists
 
-from pyface.qt import QtCore, QtGui, is_qt5
+from pyface.qt import QtCore, QtGui, is_qt4
 from traits.api import Any, Callable, List, Event, File, Str, TraitError, Tuple
 
 from .editor import Editor
@@ -216,10 +216,10 @@ class CustomEditor(SimpleTextEditor):
 
         # This is needed to enable horizontal scrollbar.
         header = self.control.header()
-        if is_qt5:
-            header.setSectionResizeMode(0, QtGui.QHeaderView.ResizeToContents)
-        else:
+        if is_qt4:
             header.setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        else:
+            header.setSectionResizeMode(0, QtGui.QHeaderView.ResizeToContents)
         header.setStretchLastSection(False)
 
     def dispose(self):

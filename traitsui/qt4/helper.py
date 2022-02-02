@@ -26,14 +26,12 @@
 
 import os.path
 
-from pyface.qt import QtCore, QtGui, is_qt5, qt_api
+from pyface.api import SystemMetrics
+from pyface.qt import QtCore, QtGui, is_qt5, is_pyqt
 from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
-
-
-is_pyqt = qt_api in {"pyqt", "pyqt5"}
 
 
 #: Layout orientation for a control and its associated editor
@@ -84,9 +82,9 @@ def position_window(window, width=None, height=None, parent=None):
     that the window completely fits on the screen if possible.
     """
     # Get the available geometry of the screen containing the window.
-    sgeom = QtGui.QApplication.desktop().availableGeometry(window)
-    screen_dx = sgeom.width()
-    screen_dy = sgeom.height()
+    system_metrics = SystemMetrics()
+    screen_dx = system_metrics.screen_width
+    screen_dy = system_metrics.screen_height
 
     # Use the frame geometry even though it is very unlikely that the X11 frame
     # exists at this point.
