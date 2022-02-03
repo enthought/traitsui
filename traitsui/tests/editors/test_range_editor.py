@@ -14,6 +14,7 @@ import unittest
 from pyface.constant import OK
 from pyface.toolkit import toolkit_object
 from traits.api import HasTraits, Float, Int, Range
+from traits.testing.api import UnittestTools
 from traitsui.api import Item, RangeEditor, UItem, View
 from traitsui.testing.api import (
     DisplayedText,
@@ -75,7 +76,7 @@ class RangeExcludeLow(HasTraits):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestRangeEditor(BaseTestMixin, unittest.TestCase):
+class TestRangeEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -177,10 +178,41 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             # For whatever reason, "End" was not working here
             number_field.perform(KeyClick("Right"))
             number_field.perform(KeyClick("0"))
-            number_field.perform(KeyClick("Enter"))
             displayed = number_field.inspect(DisplayedText())
             self.assertEqual(model.value, 10)
             self.assertEqual(displayed, str(model.value))
+
+    # the tester support code is not yet implemented for Wx SimpleSpinEditor
+    @requires_toolkit([ToolkitName.qt])
+    def test_simple_spin_editor_auto_set_false(self):
+        model = RangeModel()
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(
+                    low=1,
+                    high=12,
+                    mode="spinner",
+                    auto_set=False,
+                )
+            )
+        )
+        LOCAL_REGISTRY = TargetRegistry()
+        _register_simple_spin(LOCAL_REGISTRY)
+        tester = UITester(registries=[LOCAL_REGISTRY])
+        with tester.create_ui(model, dict(view=view)) as ui:
+            # sanity check
+            self.assertEqual(model.value, 1)
+            number_field = tester.find_by_name(ui, "value")
+            # For whatever reason, "End" was not working here
+            number_field.perform(KeyClick("Right"))
+            with self.assertTraitDoesNotChange(model, "value"):
+                number_field.perform(KeyClick("0"))
+            displayed = number_field.inspect(DisplayedText())
+            self.assertEqual(displayed, "10")
+            with self.assertTraitChanges(model, "value"):
+                number_field.perform(KeyClick("Enter"))
+            self.assertEqual(model.value, 10)
 
     def check_slider_set_with_text_after_empty(self, mode):
         model = RangeModel()

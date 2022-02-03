@@ -630,6 +630,8 @@ class SimpleSpinEditor(BaseRangeEditor):
         self.control.setMaximum(high)
         self.control.setValue(self.value)
         self.control.valueChanged.connect(self.update_object)
+        if not factory.auto_set:
+            self.control.setKeyboardTracking(False)
         self.set_tooltip()
 
     def update_object(self, value):
