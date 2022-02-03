@@ -22,6 +22,7 @@ Interactions (for changing GUI states)
 - :class:`~.KeyClick`
 - :class:`~.KeySequence`
 - :class:`~.MouseClick`
+- :class:`~.MouseDClick`
 
 Interactions (for getting GUI states)
 -------------------------------------
@@ -29,11 +30,15 @@ Interactions (for getting GUI states)
 - :class:`~.DisplayedText`
 - :class:`~.IsChecked`
 - :class:`~.IsEnabled`
+- :class:`~.IsVisible`
+- :class:`~.Selected`
+- :class:`~.SelectedIndices`
 - :class:`~.SelectedText`
 
 Locations (for locating GUI elements)
 -------------------------------------
 
+- :class:`~.Cell`
 - :class:`~.Index`
 - :class:`~.Slider`
 - :class:`~.TargetById`
@@ -61,7 +66,12 @@ Exceptions
 from .tester.ui_tester import UITester
 
 # Interactions (for changing GUI states)
-from .tester.command import MouseClick, KeyClick, KeySequence
+from .tester.command import (
+    MouseClick,
+    MouseDClick,
+    KeyClick,
+    KeySequence
+)
 
 # Interactions (for getting GUI states)
 from .tester.query import (
@@ -69,11 +79,20 @@ from .tester.query import (
     IsChecked,
     IsEnabled,
     IsVisible,
-    SelectedText,
+    Selected,
+    SelectedIndices,
+    SelectedText
 )
 
 # Locations (for locating GUI elements)
-from .tester.locator import Index, TargetById, TargetByName, Textbox, Slider
+from .tester.locator import (
+    Cell,
+    Index,
+    TargetById,
+    TargetByName,
+    Textbox,
+    Slider
+)
 
 # Advanced usage
 from .tester.target_registry import TargetRegistry

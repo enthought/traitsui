@@ -168,13 +168,16 @@ class SimpleSliderEditor(BaseRangeEditor):
     def update_object_on_scroll(self, pos):
         """Handles the user changing the current slider value."""
         value = self._convert_from_slider(pos)
-        self.control.text.setText(self.string_value(value))
+        blocked = self.control.text.blockSignals(True)
         try:
             self.value = value
-        except Exception as exc:
+            self.control.text.setText(self.string_value(value))
+        except TraitError as exc:
             from traitsui.api import raise_to_debug
 
             raise_to_debug()
+        finally:
+            self.control.text.blockSignals(blocked)
 
     def update_object_on_enter(self):
         """Handles the user pressing the Enter key in the text field."""
@@ -184,20 +187,24 @@ class SimpleSliderEditor(BaseRangeEditor):
             return
 
         try:
-            try:
-                value = eval(str(self.control.text.text()).strip())
-            except Exception as ex:
-                # The entered something that didn't eval as a number, (e.g.,
-                # 'foo') pretend it didn't happen
-                value = self.value
-                self.control.text.setText(str(value))
-                # for compound editor, value may be non-numeric
-                if not isinstance(value, (int, float)):
-                    return
+            value = eval(str(self.control.text.text()).strip())
+        except Exception as ex:
+            # They entered something that didn't eval as a number, (e.g.,
+            # 'foo') pretend it didn't happen
+            value = self.value
+            self.control.text.setText(str(value))
+            # for compound editor, value may be non-numeric
+            if not isinstance(value, (int, float)):
+                return
 
-            if not self.factory.is_float:
-                value = int(value)
+        if not self.factory.is_float:
+            value = int(value)
 
+        # If setting the value yields an error, the resulting error dialog
+        # stealing focus could trigger another editingFinished signal so we
+        # block signals here
+        blocked = self.control.text.blockSignals(True)
+        try:
             self.value = value
             blocked = self.control.slider.blockSignals(True)
             try:
@@ -206,8 +213,12 @@ class SimpleSliderEditor(BaseRangeEditor):
                 )
             finally:
                 self.control.slider.blockSignals(blocked)
-        except TraitError as excp:
-            pass
+        except TraitError:
+            # They entered something invalid, pretend it didn't happen
+            value = self.value
+            self.control.text.setText(str(value))
+        finally:
+            self.control.text.blockSignals(blocked)
 
     def update_editor(self):
         """Updates the editor when the object trait changes externally to the
@@ -224,7 +235,6 @@ class SimpleSliderEditor(BaseRangeEditor):
             value = low
 
         ivalue = self._convert_to_slider(value)
-
         self.control.text.setText(text)
 
         blocked = self.control.slider.blockSignals(True)
@@ -620,6 +630,8 @@ class SimpleSpinEditor(BaseRangeEditor):
         self.control.setMaximum(high)
         self.control.setValue(self.value)
         self.control.valueChanged.connect(self.update_object)
+        if not factory.auto_set:
+            self.control.setKeyboardTracking(False)
         self.set_tooltip()
 
     def update_object(self, value):

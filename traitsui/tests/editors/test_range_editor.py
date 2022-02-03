@@ -11,7 +11,10 @@
 import platform
 import unittest
 
-from traits.api import HasTraits, Float, Int
+from pyface.constant import OK
+from pyface.toolkit import toolkit_object
+from traits.api import HasTraits, Float, Int, Range
+from traits.testing.api import UnittestTools
 from traitsui.api import Item, RangeEditor, UItem, View
 from traitsui.testing.api import (
     DisplayedText,
@@ -27,6 +30,10 @@ from traitsui.tests._tools import (
     is_wx,
     requires_toolkit,
     ToolkitName,
+)
+
+ModalDialogTester = toolkit_object(
+    "util.modal_dialog_tester:ModalDialogTester"
 )
 
 is_windows = platform.system() == "Windows"
@@ -64,8 +71,12 @@ class RangeModel(HasTraits):
     float_value = Float(0.1)
 
 
+class RangeExcludeLow(HasTraits):
+    x = Range(low=0.0, high=1.0, value=0.1, exclude_low=True)
+
+
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestRangeEditor(BaseTestMixin, unittest.TestCase):
+class TestRangeEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -167,10 +178,41 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             # For whatever reason, "End" was not working here
             number_field.perform(KeyClick("Right"))
             number_field.perform(KeyClick("0"))
-            number_field.perform(KeyClick("Enter"))
             displayed = number_field.inspect(DisplayedText())
             self.assertEqual(model.value, 10)
             self.assertEqual(displayed, str(model.value))
+
+    # the tester support code is not yet implemented for Wx SimpleSpinEditor
+    @requires_toolkit([ToolkitName.qt])
+    def test_simple_spin_editor_auto_set_false(self):
+        model = RangeModel()
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(
+                    low=1,
+                    high=12,
+                    mode="spinner",
+                    auto_set=False,
+                )
+            )
+        )
+        LOCAL_REGISTRY = TargetRegistry()
+        _register_simple_spin(LOCAL_REGISTRY)
+        tester = UITester(registries=[LOCAL_REGISTRY])
+        with tester.create_ui(model, dict(view=view)) as ui:
+            # sanity check
+            self.assertEqual(model.value, 1)
+            number_field = tester.find_by_name(ui, "value")
+            # For whatever reason, "End" was not working here
+            number_field.perform(KeyClick("Right"))
+            with self.assertTraitDoesNotChange(model, "value"):
+                number_field.perform(KeyClick("0"))
+            displayed = number_field.inspect(DisplayedText())
+            self.assertEqual(displayed, "10")
+            with self.assertTraitChanges(model, "value"):
+                number_field.perform(KeyClick("Enter"))
+            self.assertEqual(model.value, 10)
 
     def check_slider_set_with_text_after_empty(self, mode):
         model = RangeModel()
@@ -381,3 +423,43 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             float_value_field.perform(KeyClick("Enter"))
 
             self.assertTrue(0.0 <= model.float_value <= 1)
+
+    # regression test for enthought/traitsui#1550
+    @requires_toolkit([ToolkitName.qt])
+    def test_modify_out_of_range(self):
+        obj = RangeExcludeLow()
+        tester = UITester(auto_process_events=False)
+        with tester.create_ui(obj) as ui:
+            number_field = tester.find_by_name(ui, "x")
+            text = number_field.locate(Textbox())
+
+            # should not fail
+            def set_out_of_range():
+                text.perform(KeyClick("Backspace"))
+                text.perform(KeyClick("0"))
+                text.perform(KeyClick("Enter"))
+
+            mdtester = ModalDialogTester(set_out_of_range)
+            mdtester.open_and_run(lambda x: x.close(accept=True))
+
+    # regression test for enthought/traitsui#1550
+    @requires_toolkit([ToolkitName.qt])
+    def test_modify_out_of_range_with_slider(self):
+        obj = RangeExcludeLow()
+        tester = UITester(auto_process_events=False)
+        with tester.create_ui(obj) as ui:
+            number_field = tester.find_by_name(ui, "x")
+            slider = number_field.locate(Slider())
+
+            # slider values are converted to a [0, 10000] scale.  A single
+            # step is a change of 100 on that scale and a page step is 1000.
+            # Our range in [0, 10] so these correspond to changes of .1 and 1.
+            # Note: when tested manually, the step size seen on OSX and Wx is
+            # different.
+
+            # should not fail
+            def move_slider_out_of_range():
+                slider.perform(KeyClick("Page Down"))
+
+            mdtester = ModalDialogTester(move_slider_out_of_range)
+            mdtester.open_and_run(lambda x: x.click_button(OK))
