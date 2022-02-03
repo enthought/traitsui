@@ -1,0 +1,1 @@
+Fix double error dialogs (#1734)
