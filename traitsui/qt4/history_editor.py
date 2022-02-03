@@ -13,7 +13,7 @@
 """
 
 
-from pyface.qt import QtGui, is_qt4
+from pyface.qt import QtGui, is_qt4, is_qt5
 
 from .editor import Editor
 
@@ -42,7 +42,7 @@ class _HistoryEditor(Editor):
         if self.factory.auto_set:
             control.editTextChanged.connect(self.update_object)
         else:
-            if is_qt4:
+            if is_qt4 or is_qt5:
                 control.activated[str].connect(self.update_object)
             else:
                 control.textActivated.connect(self.update_object)
