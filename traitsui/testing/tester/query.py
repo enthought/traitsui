@@ -16,6 +16,30 @@ without incurring side-effects.
 """
 
 
+class Selected:
+    """ Represents an interaction to obtain the currently selected object(s).
+
+    Implementations should return a list of selected objects, or an empty list
+    if nothing is selected.
+    """
+    pass
+
+
+class SelectedIndices:
+    """ Represents an interaction to obtain the indices of the currently
+    selected objects.
+
+    Implementations should return a list of indicies of the selected
+    objects or an empty list if nothing is selected.
+
+    Note that an index could be an integer (e.g. when selecting from a list or
+    enumerataion, or selecting entire rows or columns of a table), or it could
+    be a tuple (e.g. corresponding to a specific cell at some (row, column) in
+    a table).
+    """
+    pass
+
+
 class SelectedText:
     """An object representing an interaction to obtain the displayed (echoed)
     plain text which is currently selected.
