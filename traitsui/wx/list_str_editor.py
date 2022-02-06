@@ -591,6 +591,8 @@ class _ListStrEditor(Editor):
     def _motion(self, event):
         """Handles the user moving the mouse."""
         row, _ = self.control.HitTest(wx.Point(event.GetX(), event.GetY()))
+        # NOTE: relies on HasPrivateTraits initializing _last_row and
+        # _last_tooltip to None if they haven't yet been set.
         if row != self._last_row:
             self._last_row = row
             if row == -1:
