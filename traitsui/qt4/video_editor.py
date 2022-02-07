@@ -9,7 +9,6 @@
 # Thanks for using Enthought open source!
 
 """Traits UI 'display only' video editor."""
-from pyface.qt import is_qt5
 from pyface.qt.QtCore import QPoint, Qt, QUrl, Signal
 from pyface.qt.QtGui import QImage, QPainter, QPalette, QSizePolicy
 from pyface.qt.QtMultimedia import (
