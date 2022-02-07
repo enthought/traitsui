@@ -113,7 +113,7 @@ DEFAULT_TOOLKIT = 'null'
 
 # Required runtime dependencies. Should match install_requires in setup.py
 dependencies = {
-    "pyface",
+    "pyface>=7.4",
     "traits",
 }
 
