@@ -246,14 +246,9 @@ def install(runtime, toolkit, environment, editable, source):
     )
 
     # edm commands to setup the development environment
-    if sys.platform == 'linux':
-        commands = [
-            "edm environments create {environment} --platform=rh6-x86_64 --force --version={runtime}"
-        ]
-    else:
-        commands = [
-            "edm environments create {environment} --force --version={runtime}"
-        ]
+    commands = [
+        "edm environments create {environment} --force --version={runtime}"
+    ]
 
     commands.extend(
         [
