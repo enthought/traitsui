@@ -159,7 +159,7 @@ class IconButton(QtGui.QPushButton):
         sty = QtGui.QApplication.instance().style()
 
         # Get the minimum icon size to use.
-        ico_sz = sty.pixelMetric(QtGui.QStyle.PM_ButtonIconSize)
+        ico_sz = sty.pixelMetric(QtGui.QStyle.PixelMetric.PM_ButtonIconSize)
 
         if isinstance(icon, str):
             pm = pixmap_cache(icon)
@@ -181,7 +181,7 @@ class IconButton(QtGui.QPushButton):
         # Configure the button.
         self.setIcon(ico)
         self.setFlat(True)
-        self.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.clicked.connect(slot)
 
@@ -200,7 +200,7 @@ class IconButton(QtGui.QPushButton):
         option = QtGui.QStyleOptionButton()
         self.initStyleOption(option)
         size = self.style().sizeFromContents(
-            QtGui.QStyle.CT_ToolButton, option, option.iconSize
+            QtGui.QStyle.ContentsType.CT_ToolButton, option, option.iconSize
         )
         return size
 
@@ -257,7 +257,7 @@ def wrap_text_with_elision(text, font, width, height):
         # elide last line as we ran out of room
         last_line = paragraph[line_start:]
         lines[-1] = font_metrics.elidedText(
-            last_line, QtCore.Qt.ElideRight, width
+            last_line, QtCore.Qt.TextElideMode.ElideRight, width
         )
 
     return lines

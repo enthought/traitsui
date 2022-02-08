@@ -126,7 +126,7 @@ class _KeyEventHook(QtCore.QObject):
         self._handler = handler
 
     def eventFilter(self, object, event):
-        if event.type() == QtCore.QEvent.KeyPress:
+        if event.type() == QtCore.QEvent.Type.KeyPress:
             return self._handler(event)
         else:
             return QtCore.QObject.eventFilter(self, object, event)
@@ -252,7 +252,7 @@ class GUIToolkit(Toolkit):
             pdy = SystemMetrics().screen_height
         else:
             pos = parent.pos()
-            if int(parent.windowFlags()) & QtCore.Qt.Window == 0:
+            if int(parent.windowFlags()) & QtCore.Qt.WindowType.Window == 0:
                 pos = parent.mapToGlobal(pos)
             px = pos.x()
             py = pos.y()
@@ -310,8 +310,8 @@ class GUIToolkit(Toolkit):
 
         # Position and size the window as requested:
         layout = window.layout()
-        if layout.sizeConstraint() == QtGui.QLayout.SetFixedSize:
-            layout.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
+        if layout.sizeConstraint() == QtGui.QLayout.SizeConstraint.SetFixedSize:
+            layout.setSizeConstraint(QtGui.QLayout.SizeConstraint.SetDefaultConstraint)
             window.move(max(0, x), max(0, y))
             window.setFixedSize(QtCore.QSize(width, height))
         else:
@@ -412,7 +412,7 @@ class GUIToolkit(Toolkit):
         """
         return {
             "WindowColor": QtGui.QApplication.palette().color(
-                QtGui.QPalette.Window
+                QtGui.QPalette.ColorRole.Window
             )
         }
 

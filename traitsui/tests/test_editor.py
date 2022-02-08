@@ -972,7 +972,7 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
                         )
                         self.assertEqual(
                             mdtester.get_dialog_widget().textFormat(),
-                            QtCore.Qt.PlainText,
+                            QtCore.Qt.TextFormat.PlainText,
                         )
                 finally:
                     mdtester.close(accept=True)

@@ -27,16 +27,16 @@ from .editor import Editor
 
 #: Map from ApectRatio enum values to Qt aspect ratio behaviours.
 aspect_ratio_map = {
-    'ignore': Qt.IgnoreAspectRatio,
-    'keep': Qt.KeepAspectRatio,
-    'expand': Qt.KeepAspectRatioByExpanding,
+    'ignore': Qt.AspectRatioMode.IgnoreAspectRatio,
+    'keep': Qt.AspectRatioMode.KeepAspectRatio,
+    'expand': Qt.AspectRatioMode.KeepAspectRatioByExpanding,
 }
 
 #: Map from PlayerState enum values to QMediaPlayer states.
 state_map = {
-    'stopped': QMediaPlayer.StoppedState,
-    'playing': QMediaPlayer.PlayingState,
-    'paused': QMediaPlayer.PausedState,
+    'stopped': QMediaPlayer.State.StoppedState,
+    'playing': QMediaPlayer.State.PlayingState,
+    'paused': QMediaPlayer.State.PausedState,
 }
 
 #: Map from QMediaPlayer states to PlayerState enum values.
@@ -44,15 +44,15 @@ reversed_state_map = {value: key for key, value in state_map.items()}
 
 #: Map from QMediaPlayer media status values to MediaStatus enum values.
 media_status_map = {
-    QMediaPlayer.UnknownMediaStatus: 'unknown',
-    QMediaPlayer.NoMedia: 'no_media',
-    QMediaPlayer.LoadingMedia: 'loading',
-    QMediaPlayer.LoadedMedia: 'loaded',
-    QMediaPlayer.StalledMedia: 'stalled',
-    QMediaPlayer.BufferingMedia: 'buffering',
-    QMediaPlayer.BufferedMedia: 'buffered',
-    QMediaPlayer.EndOfMedia: 'end',
-    QMediaPlayer.InvalidMedia: 'invalid',
+    QMediaPlayer.MediaStatus.UnknownMediaStatus: 'unknown',
+    QMediaPlayer.MediaStatus.NoMedia: 'no_media',
+    QMediaPlayer.MediaStatus.LoadingMedia: 'loading',
+    QMediaPlayer.MediaStatus.LoadedMedia: 'loaded',
+    QMediaPlayer.MediaStatus.StalledMedia: 'stalled',
+    QMediaPlayer.MediaStatus.BufferingMedia: 'buffering',
+    QMediaPlayer.MediaStatus.BufferedMedia: 'buffered',
+    QMediaPlayer.MediaStatus.EndOfMedia: 'end',
+    QMediaPlayer.MediaStatus.InvalidMedia: 'invalid',
 }
 
 
@@ -198,17 +198,17 @@ class VideoEditor(Editor):
 
         self.control = QVideoWidget()
         self.control.setSizePolicy(
-            QSizePolicy.Expanding, QSizePolicy.Expanding
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
-        self.control.setBackgroundRole(QPalette.Window)
+        self.control.setBackgroundRole(QPalette.ColorRole.Window)
         self.media_player.setVideoOutput(self.control)
 
     def update_to_functional(self):
         self.control = ImageWidget(image_func=self.image_func)
         self.control.setSizePolicy(
-            QSizePolicy.Expanding, QSizePolicy.Expanding
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
-        self.control.setBackgroundRole(QPalette.Window)
+        self.control.setBackgroundRole(QPalette.ColorRole.Window)
 
         self.surface = VideoSurface(widget=self.control)
         self.surface.frameAvailable.connect(self.control.setImage)
@@ -229,9 +229,9 @@ class VideoEditor(Editor):
         """
         self.control = QVideoWidget()
         self.control.setSizePolicy(
-            QSizePolicy.Expanding, QSizePolicy.Expanding
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
-        self.control.setBackgroundRole(QPalette.Window)
+        self.control.setBackgroundRole(QPalette.ColorRole.Window)
 
         self.media_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self._set_video_url()
@@ -329,7 +329,7 @@ class VideoEditor(Editor):
         self.duration = duration / 1000.0
 
     def _error_emitted(self, error):
-        if error != QMediaPlayer.NoError:
+        if error != QMediaPlayer.Error.NoError:
             self.video_error = self.media_player.errorString()
         else:
             self.video_error = ''
@@ -423,8 +423,8 @@ class VideoEditor(Editor):
     def _update_volume(self):
         linear_volume = QAudio.convertVolume(
             self.volume / 100.0,
-            QAudio.LogarithmicVolumeScale,
-            QAudio.LinearVolumeScale,
+            QAudio.VolumeScale.LogarithmicVolumeScale,
+            QAudio.VolumeScale.LinearVolumeScale,
         )
         self.media_player.setVolume(int(linear_volume * 100))
 

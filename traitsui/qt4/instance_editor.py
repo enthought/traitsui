@@ -42,8 +42,8 @@ from .helper import position_window
 
 OrientationMap = {
     "default": None,
-    "horizontal": QtGui.QBoxLayout.LeftToRight,
-    "vertical": QtGui.QBoxLayout.TopToBottom,
+    "horizontal": QtGui.QBoxLayout.Direction.LeftToRight,
+    "vertical": QtGui.QBoxLayout.Direction.TopToBottom,
 }
 
 
@@ -58,7 +58,7 @@ class CustomEditor(Editor):
     ok_color = DropColor
 
     #: The orientation of the instance editor relative to the instance selector:
-    orientation = QtGui.QBoxLayout.TopToBottom
+    orientation = QtGui.QBoxLayout.Direction.TopToBottom
 
     #: Class constant:
     extra = 0
@@ -129,10 +129,10 @@ class CustomEditor(Editor):
             layout.setContentsMargins(0, 0, 0, 0)
             layout.addWidget(self._choice)
 
-            if orientation == QtGui.QBoxLayout.TopToBottom:
+            if orientation == QtGui.QBoxLayout.Direction.TopToBottom:
                 hline = QtGui.QFrame()
-                hline.setFrameShape(QtGui.QFrame.HLine)
-                hline.setFrameShadow(QtGui.QFrame.Sunken)
+                hline.setFrameShape(QtGui.QFrame.Shape.HLine)
+                hline.setFrameShadow(QtGui.QFrame.Shadow.Sunken)
 
                 layout.addWidget(hline)
 
@@ -411,7 +411,7 @@ class SimpleEditor(CustomEditor):
     _dialog_ui = Instance("traitsui.ui.UI")
 
     #: Class constants:
-    orientation = QtGui.QBoxLayout.LeftToRight
+    orientation = QtGui.QBoxLayout.Direction.LeftToRight
     extra = 2
 
     def create_editor(self, parent, layout):

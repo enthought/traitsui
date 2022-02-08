@@ -17,7 +17,7 @@ from traits.api import Any, Undefined
 class _LEDEditor(Editor):
     def init(self, parent):
         self.control = QtGui.QLCDNumber()
-        self.control.setSegmentStyle(QtGui.QLCDNumber.Flat)
+        self.control.setSegmentStyle(QtGui.QLCDNumber.SegmentStyle.Flat)
         self.set_tooltip()
 
     def update_editor(self):

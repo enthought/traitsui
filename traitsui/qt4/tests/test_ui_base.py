@@ -37,5 +37,5 @@ class TestStickyDialog(unittest.TestCase):
                 from pyface.qt import QtCore
 
                 self.assertFalse(
-                    ui2.control.windowFlags() & QtCore.Qt.WindowMaximized
+                    ui2.control.windowFlags() & QtCore.Qt.WindowState.WindowMaximized
                 )

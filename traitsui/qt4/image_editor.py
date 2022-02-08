@@ -54,7 +54,7 @@ class QImageView(QFrame):
         self._preserve_aspect_ratio = False
         self._allow_clipping = False
 
-        self.setBackgroundRole(QPalette.Window)
+        self.setBackgroundRole(QPalette.ColorRole.Window)
 
     # --------------------------------------------------------------------------
     # Private API
@@ -116,7 +116,7 @@ class QImageView(QFrame):
 
         # Finally, draw the pixmap into the calculated rect.
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.SmoothPixmapTransform)
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
         painter.drawPixmap(paint_x, paint_y, paint_width, paint_height, pixmap)
 
     # --------------------------------------------------------------------------

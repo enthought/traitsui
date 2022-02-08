@@ -53,7 +53,7 @@ class SimpleEditor(Editor):
             super().init(parent)
 
         pal = QtGui.QPalette(self.control.palette())
-        pal.setColor(QtGui.QPalette.Base, self.ok_color)
+        pal.setColor(QtGui.QPalette.ColorRole.Base, self.ok_color)
         self.control.setPalette(pal)
 
         # Install EventFilter on control to handle DND events.
@@ -84,9 +84,9 @@ class SimpleEditor(Editor):
 class _DropEventFilter(QtCore.QObject):
     def eventFilter(self, source, event):
         typ = event.type()
-        if typ == QtCore.QEvent.Drop:
+        if typ == QtCore.QEvent.Type.Drop:
             self.dropEvent(event)
-        elif typ == QtCore.QEvent.DragEnter:
+        elif typ == QtCore.QEvent.Type.DragEnter:
             self.dragEnterEvent(event)
         return super().eventFilter(source, event)
 

@@ -28,8 +28,8 @@ class RangeSlider(QtGui.QSlider):
         self._low = self.minimum()
         self._high = self.maximum()
 
-        self.pressed_control = QtGui.QStyle.SC_None
-        self.hover_control = QtGui.QStyle.SC_None
+        self.pressed_control = QtGui.QStyle.SubControl.SC_None
+        self.hover_control = QtGui.QStyle.SubControl.SC_None
         self.click_offset = 0
 
         # 0 for the low, 1 for the high, -1 for both
@@ -74,14 +74,14 @@ class RangeSlider(QtGui.QSlider):
 
             if self.pressed_control:
                 opt.activeSubControls = self.pressed_control
-                opt.state |= QtGui.QStyle.State_Sunken
+                opt.state |= QtGui.QStyle.StateFlag.State_Sunken
             else:
                 opt.activeSubControls = self.hover_control
 
             opt.sliderPosition = value
             opt.sliderValue = value
             style.drawComplexControl(
-                QtGui.QStyle.CC_Slider, opt, painter, self
+                QtGui.QStyle.ComplexControl.CC_Slider, opt, painter, self
             )
 
     def mousePressEvent(self, event):
@@ -164,7 +164,7 @@ class RangeSlider(QtGui.QSlider):
         self.sliderMoved.emit(new_pos)
 
     def __pick(self, pt):
-        if self.orientation() == QtCore.Qt.Horizontal:
+        if self.orientation() == QtCore.Qt.Orientation.Horizontal:
             return pt.x()
         else:
             return pt.y()
@@ -181,7 +181,7 @@ class RangeSlider(QtGui.QSlider):
             style.CC_Slider, opt, style.SC_SliderHandle, self
         )
 
-        if self.orientation() == QtCore.Qt.Horizontal:
+        if self.orientation() == QtCore.Qt.Orientation.Horizontal:
             slider_length = sr.width()
             slider_min = gr.x()
             slider_max = gr.right() - slider_length + 1

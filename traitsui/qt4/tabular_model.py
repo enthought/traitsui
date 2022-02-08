@@ -22,10 +22,10 @@ from .clipboard import PyMimeData
 
 # Mapping for trait alignment values to qt4 alignment values:
 alignment_map = {
-    "left": QtCore.Qt.AlignLeft,
-    "right": QtCore.Qt.AlignRight,
-    "center": QtCore.Qt.AlignHCenter,
-    "justify": QtCore.Qt.AlignJustify,
+    "left": QtCore.Qt.AlignmentFlag.AlignLeft,
+    "right": QtCore.Qt.AlignmentFlag.AlignRight,
+    "center": QtCore.Qt.AlignmentFlag.AlignHCenter,
+    "justify": QtCore.Qt.AlignmentFlag.AlignJustify,
 }
 
 # MIME type for internal table drag/drop operations
@@ -54,32 +54,32 @@ class TabularModel(QtCore.QAbstractTableModel):
         obj, name = editor.object, editor.name
         row, column = mi.row(), mi.column()
 
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole or role == QtCore.Qt.ItemDataRole.EditRole:
             return adapter.get_text(obj, name, row, column)
 
-        elif role == QtCore.Qt.DecorationRole:
+        elif role == QtCore.Qt.ItemDataRole.DecorationRole:
             image = editor._get_image(
                 adapter.get_image(obj, name, row, column)
             )
             if image is not None:
                 return image
 
-        elif role == QtCore.Qt.ToolTipRole:
+        elif role == QtCore.Qt.ItemDataRole.ToolTipRole:
             tooltip = adapter.get_tooltip(obj, name, row, column)
             if tooltip:
                 return tooltip
 
-        elif role == QtCore.Qt.FontRole:
+        elif role == QtCore.Qt.ItemDataRole.FontRole:
             font = adapter.get_font(obj, name, row, column)
             if font is not None:
                 return QtGui.QFont(font)
 
-        elif role == QtCore.Qt.TextAlignmentRole:
+        elif role == QtCore.Qt.ItemDataRole.TextAlignmentRole:
             string = adapter.get_alignment(obj, name, column)
-            alignment = alignment_map.get(string, QtCore.Qt.AlignLeft)
-            return int(alignment | QtCore.Qt.AlignVCenter)
+            alignment = alignment_map.get(string, QtCore.Qt.AlignmentFlag.AlignLeft)
+            return int(alignment | QtCore.Qt.AlignmentFlag.AlignVCenter)
 
-        elif role == QtCore.Qt.BackgroundRole:
+        elif role == QtCore.Qt.ItemDataRole.BackgroundRole:
             color = adapter.get_bg_color(obj, name, row, column)
             if color is not None:
                 if isinstance(color, SequenceTypes):
@@ -88,7 +88,7 @@ class TabularModel(QtCore.QAbstractTableModel):
                     q_color = QtGui.QColor(color)
                 return QtGui.QBrush(q_color)
 
-        elif role == QtCore.Qt.ForegroundRole:
+        elif role == QtCore.Qt.ItemDataRole.ForegroundRole:
             color = adapter.get_text_color(obj, name, row, column)
             if color is not None:
                 if isinstance(color, SequenceTypes):
@@ -101,7 +101,7 @@ class TabularModel(QtCore.QAbstractTableModel):
 
     def setData(self, mi, value, role):
         """Reimplmented to allow for modification for the object trait."""
-        if role != QtCore.Qt.EditRole:
+        if role != QtCore.Qt.ItemDataRole.EditRole:
             return False
 
         editor = self._editor
@@ -119,11 +119,11 @@ class TabularModel(QtCore.QAbstractTableModel):
         column = mi.column()
 
         if not mi.isValid():
-            return QtCore.Qt.ItemIsDropEnabled
+            return QtCore.Qt.ItemFlag.ItemIsDropEnabled
 
-        flags = QtCore.Qt.ItemIsEnabled
+        flags = QtCore.Qt.ItemFlag.ItemIsEnabled
         if editor.factory.selectable:
-            flags |= QtCore.Qt.ItemIsSelectable
+            flags |= QtCore.Qt.ItemFlag.ItemIsSelectable
 
         # If the adapter defines get_can_edit_cell(), use it to determine
         # editability over the row-wise get_can_edit().
@@ -135,36 +135,36 @@ class TabularModel(QtCore.QAbstractTableModel):
             if editor.adapter.get_can_edit_cell(
                 editor.object, editor.name, row, column
             ):
-                flags |= QtCore.Qt.ItemIsEditable
+                flags |= QtCore.Qt.ItemFlag.ItemIsEditable
         elif (
             editor.factory.editable
             and "edit" in editor.factory.operations
             and editor.adapter.get_can_edit(editor.object, editor.name, row)
         ):
-            flags |= QtCore.Qt.ItemIsEditable
+            flags |= QtCore.Qt.ItemFlag.ItemIsEditable
 
         if (
             editor.adapter.get_drag(editor.object, editor.name, row)
             is not None
         ):
-            flags |= QtCore.Qt.ItemIsDragEnabled
+            flags |= QtCore.Qt.ItemFlag.ItemIsDragEnabled
 
         if editor.factory.editable:
-            flags |= QtCore.Qt.ItemIsDropEnabled
+            flags |= QtCore.Qt.ItemFlag.ItemIsDropEnabled
 
         return flags
 
     def headerData(self, section, orientation, role):
         """Reimplemented to return the header data."""
-        if role != QtCore.Qt.DisplayRole:
+        if role != QtCore.Qt.ItemDataRole.DisplayRole:
             return None
 
         editor = self._editor
 
         label = None
-        if orientation == QtCore.Qt.Vertical:
+        if orientation == QtCore.Qt.Orientation.Vertical:
             label = editor.adapter.get_row_label(section, editor.object)
-        elif orientation == QtCore.Qt.Horizontal:
+        elif orientation == QtCore.Qt.Orientation.Horizontal:
             label = editor.adapter.get_label(section, editor.object)
 
         return label
@@ -257,7 +257,7 @@ class TabularModel(QtCore.QAbstractTableModel):
 
     def dropMimeData(self, mime_data, action, row, column, parent):
         """Reimplemented to allow items to be moved."""
-        if action == QtCore.Qt.IgnoreAction:
+        if action == QtCore.Qt.DropAction.IgnoreAction:
             return False
 
         # If dropped directly onto the parent, both row and column are -1.
@@ -271,7 +271,7 @@ class TabularModel(QtCore.QAbstractTableModel):
 
         # this is a drag from a tabular model
         data = mime_data.data(tabular_mime_type)
-        if not data.isNull() and action == QtCore.Qt.MoveAction:
+        if not data.isNull() and action == QtCore.Qt.DropAction.MoveAction:
             id_and_rows = [
                 int(s) for s in data.data().decode("utf8").split(" ")
             ]
@@ -301,7 +301,7 @@ class TabularModel(QtCore.QAbstractTableModel):
 
     def supportedDropActions(self):
         """Reimplemented to allow items to be moved."""
-        return QtCore.Qt.MoveAction | QtCore.Qt.CopyAction
+        return QtCore.Qt.DropAction.MoveAction | QtCore.Qt.DropAction.CopyAction
 
     # -------------------------------------------------------------------------
     #  TabularModel interface:

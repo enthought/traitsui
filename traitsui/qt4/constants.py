@@ -35,7 +35,7 @@ _palette = QtGui.QApplication.palette()
 DefaultTitle = "Edit properties"
 
 # Color of valid input
-OKColor = _palette.color(QtGui.QPalette.Base)
+OKColor = _palette.color(QtGui.QPalette.ColorRole.Base)
 
 # Color to highlight input errors
 ErrorColor = QtGui.QColor(255, 192, 192)
@@ -47,10 +47,10 @@ ReadonlyColor = QtGui.QColor(244, 243, 238)
 DropColor = QtGui.QColor(215, 242, 255)
 
 # Color for an editable field
-EditableColor = _palette.color(QtGui.QPalette.Base)
+EditableColor = _palette.color(QtGui.QPalette.ColorRole.Base)
 
 # Color for background of windows (like dialog background color)
-WindowColor = _palette.color(QtGui.QPalette.Window)
+WindowColor = _palette.color(QtGui.QPalette.ColorRole.Window)
 
 del _palette
 

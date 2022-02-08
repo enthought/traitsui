@@ -48,7 +48,7 @@ class TableImageRenderer(TableDelegate):
         QtGui.QStyledItemDelegate.paint(self, painter, option, index)
 
         # Now draw the image, if possible
-        value = index.data(QtCore.Qt.UserRole)
+        value = index.data(QtCore.Qt.ItemDataRole.UserRole)
         image = self.get_image_for_obj(value, index.row(), index.column())
         if image:
             image = image.create_bitmap()
@@ -71,7 +71,7 @@ class TableImageRenderer(TableDelegate):
         """
         size = QtGui.QStyledItemDelegate.sizeHint(self, option, index)
 
-        value = index.data(QtCore.Qt.UserRole)
+        value = index.data(QtCore.Qt.ItemDataRole.UserRole)
         image = self.get_image_for_obj(value, index.row(), index.column())
         if image:
             image = image.create_bitmap()

@@ -115,14 +115,14 @@ class _ListStrEditor(Editor):
         layout.setSpacing(0)
 
         if factory.title or factory.title_name:
-            header_view = QtGui.QHeaderView(QtCore.Qt.Horizontal, self.control)
+            header_view = QtGui.QHeaderView(QtCore.Qt.Orientation.Horizontal, self.control)
             self._header_view = header_view
             header_view.setModel(self.model)
             header_view.setMaximumHeight(header_view.sizeHint().height())
             if is_qt5:
-                header_view.setSectionResizeMode(QtGui.QHeaderView.Stretch)
+                header_view.setSectionResizeMode(QtGui.QHeaderView.ResizeMode.Stretch)
             else:
-                header_view.setResizeMode(QtGui.QHeaderView.Stretch)
+                header_view.setResizeMode(QtGui.QHeaderView.ResizeMode.Stretch)
             layout.addWidget(header_view)
         else:
             self._header_view = None
@@ -303,7 +303,7 @@ class _ListStrEditor(Editor):
                 smodel.clearSelection()
             else:
                 mi = self.model.index(selected_index)
-                smodel.select(mi, QtGui.QItemSelectionModel.ClearAndSelect)
+                smodel.select(mi, QtGui.QItemSelectionModel.SelectionFlag.ClearAndSelect)
                 self.list_view.scrollTo(mi)
 
     def _multi_selected_changed(self, selected):
@@ -337,7 +337,7 @@ class _ListStrEditor(Editor):
             for selected_index in selected_indices:
                 smodel.select(
                     self.model.index(selected_index),
-                    QtGui.QItemSelectionModel.Select,
+                    QtGui.QItemSelectionModel.SelectionFlag.Select,
                 )
             if selected_indices:
                 self.list_view.scrollTo(self.model.index(selected_indices[-1]))
@@ -349,12 +349,12 @@ class _ListStrEditor(Editor):
             for selected_index in event.removed:
                 smodel.select(
                     self.model.index(selected_index),
-                    QtGui.QItemSelectionModel.Deselect,
+                    QtGui.QItemSelectionModel.SelectionFlag.Deselect,
                 )
             for selected_index in event.added:
                 smodel.select(
                     self.model.index(selected_index),
-                    QtGui.QItemSelectionModel.Select,
+                    QtGui.QItemSelectionModel.SelectionFlag.Select,
                 )
 
     # -- List Control Event Handlers ------------------------------------------
@@ -450,7 +450,7 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
         QtGui.QStyledItemDelegate.paint(self, painter, option, index)
         if self._editor.factory.horizontal_lines:
             painter.save()
-            painter.setPen(option.palette.color(QtGui.QPalette.Dark))
+            painter.setPen(option.palette.color(QtGui.QPalette.ColorRole.Dark))
             painter.drawLine(
                 option.rect.bottomLeft(), option.rect.bottomRight()
             )
@@ -471,26 +471,26 @@ class _ListView(QtGui.QListView):
 
         # Configure the selection behavior
         if factory.multi_select:
-            mode = QtGui.QAbstractItemView.ExtendedSelection
+            mode = QtGui.QAbstractItemView.SelectionMode.ExtendedSelection
         else:
-            mode = QtGui.QAbstractItemView.SingleSelection
+            mode = QtGui.QAbstractItemView.SelectionMode.SingleSelection
         self.setSelectionMode(mode)
 
         # Configure drag and drop behavior
         self.setDragEnabled(True)
         self.setDragDropOverwriteMode(True)
-        self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+        self.setDragDropMode(QtGui.QAbstractItemView.DragDropMode.InternalMove)
         self.setDropIndicatorShown(True)
 
         if editor.factory.menu is False:
-            self.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
+            self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.NoContextMenu)
         elif editor.factory.menu is not False:
-            self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
 
         self.customContextMenuRequested.connect(editor._on_context_menu)
 
         # Configure context menu behavior
-        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
 
     def _dispose(self):
         """Clean up states in this view."""
@@ -498,7 +498,7 @@ class _ListView(QtGui.QListView):
 
     def mouseReleaseEvent(self, event):
         """Reimplemented to support listening to right clicked item."""
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == QtCore.Qt.MouseButton.RightButton:
             event.accept()
             self._editor._on_mouse_right_click(event.pos())
         super().mouseReleaseEvent(event)
@@ -511,8 +511,8 @@ class _ListView(QtGui.QListView):
         # Note that setting 'EditKeyPressed' as an edit trigger does not work on
         # most platforms, which is why we do this here.
         if (
-            event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return)
-            and self.state() != QtGui.QAbstractItemView.EditingState
+            event.key() in (QtCore.Qt.Key.Key_Enter, QtCore.Qt.Key.Key_Return)
+            and self.state() != QtGui.QAbstractItemView.State.EditingState
             and factory.editable
             and "edit" in factory.operations
         ):
@@ -527,7 +527,7 @@ class _ListView(QtGui.QListView):
                 self.edit(editor.model.index(row))
 
         elif (
-            event.key() in (QtCore.Qt.Key_Backspace, QtCore.Qt.Key_Delete)
+            event.key() in (QtCore.Qt.Key.Key_Backspace, QtCore.Qt.Key.Key_Delete)
             and factory.editable
             and "delete" in factory.operations
         ):
@@ -552,7 +552,7 @@ class _ListView(QtGui.QListView):
                 )
 
         elif (
-            event.key() == QtCore.Qt.Key_Insert
+            event.key() == QtCore.Qt.Key.Key_Insert
             and factory.editable
             and "insert" in factory.operations
         ):

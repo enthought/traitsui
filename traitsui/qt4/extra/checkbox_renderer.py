@@ -31,11 +31,11 @@ class CheckboxRenderer(TableDelegate):
     def editorEvent(self, event, model, option, index):
         """Reimplemented to handle mouse button clicks."""
         if (
-            event.type() == QtCore.QEvent.MouseButtonRelease
-            and event.button() == QtCore.Qt.LeftButton
+            event.type() == QtCore.QEvent.Type.MouseButtonRelease
+            and event.button() == QtCore.Qt.MouseButton.LeftButton
         ):
             column = index.model()._editor.columns[index.column()]
-            obj = index.data(QtCore.Qt.UserRole)
+            obj = index.data(QtCore.Qt.ItemDataRole.UserRole)
             checked = bool(column.get_raw_value(obj))
             column.set_value(obj, not checked)
             return True
@@ -46,22 +46,22 @@ class CheckboxRenderer(TableDelegate):
         """Reimplemented to paint the checkbox."""
         # Determine whether the checkbox is check or unchecked
         column = index.model()._editor.columns[index.column()]
-        obj = index.data(QtCore.Qt.UserRole)
+        obj = index.data(QtCore.Qt.ItemDataRole.UserRole)
         checked = column.get_raw_value(obj)
 
         # First draw the background
         painter.save()
         row_brushes = [option.palette.base(), option.palette.alternateBase()]
-        if option.state & QtGui.QStyle.State_Selected:
-            if option.state & QtGui.QStyle.State_Active:
-                color_group = QtGui.QPalette.Active
+        if option.state & QtGui.QStyle.StateFlag.State_Selected:
+            if option.state & QtGui.QStyle.StateFlag.State_Active:
+                color_group = QtGui.QPalette.ColorGroup.Active
             else:
-                color_group = QtGui.QPalette.Inactive
+                color_group = QtGui.QPalette.ColorGroup.Inactive
             bg_brush = option.palette.brush(
-                color_group, QtGui.QPalette.Highlight
+                color_group, QtGui.QPalette.ColorRole.Highlight
             )
         else:
-            bg_brush = index.data(QtCore.Qt.BackgroundRole)
+            bg_brush = index.data(QtCore.Qt.ItemDataRole.BackgroundRole)
             if bg_brush == NotImplemented or bg_brush is None:
                 if index.model()._editor.factory.alternate_bg_color:
                     bg_brush = row_brushes[index.row() % 2]
@@ -77,10 +77,10 @@ class CheckboxRenderer(TableDelegate):
         # Align the checkbox appropriately.
         box.rect = option.rect
         size = style.sizeFromContents(
-            QtGui.QStyle.CT_CheckBox, box, QtCore.QSize(), None
+            QtGui.QStyle.ContentsType.CT_CheckBox, box, QtCore.QSize(), None
         )
         box.rect.setWidth(size.width())
-        margin = style.pixelMetric(QtGui.QStyle.PM_ButtonMargin, box)
+        margin = style.pixelMetric(QtGui.QStyle.PixelMetric.PM_ButtonMargin, box)
         alignment = column.horizontal_alignment
         if alignment == "left":
             box.rect.setLeft(option.rect.left() + margin)
@@ -98,14 +98,14 @@ class CheckboxRenderer(TableDelegate):
 
         # We mark the checkbox always active even when not selected, so
         # it's clear if it's ticked or not on OSX. See bug #439
-        if option.state & QtGui.QStyle.State_Enabled:
-            box.state = QtGui.QStyle.State_Enabled | QtGui.QStyle.State_Active
+        if option.state & QtGui.QStyle.StateFlag.State_Enabled:
+            box.state = QtGui.QStyle.StateFlag.State_Enabled | QtGui.QStyle.StateFlag.State_Active
 
         if checked:
-            box.state |= QtGui.QStyle.State_On
+            box.state |= QtGui.QStyle.StateFlag.State_On
         else:
-            box.state |= QtGui.QStyle.State_Off
-        style.drawControl(QtGui.QStyle.CE_CheckBox, box, painter)
+            box.state |= QtGui.QStyle.StateFlag.State_Off
+        style.drawControl(QtGui.QStyle.ControlElement.CE_CheckBox, box, painter)
         painter.restore()
 
     def sizeHint(self, option, index):
@@ -113,5 +113,5 @@ class CheckboxRenderer(TableDelegate):
         box = QtGui.QStyleOptionButton()
         style = QtGui.QApplication.instance().style()
         return style.sizeFromContents(
-            QtGui.QStyle.CT_CheckBox, box, QtCore.QSize(), None
+            QtGui.QStyle.ContentsType.CT_CheckBox, box, QtCore.QSize(), None
         )

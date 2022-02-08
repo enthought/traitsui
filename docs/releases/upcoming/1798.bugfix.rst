@@ -1,0 +1,1 @@
+Convert Qt Enums to be compatible with PyQt6 (#1798)
