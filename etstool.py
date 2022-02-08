@@ -102,7 +102,7 @@ from tempfile import mkdtemp
 import click
 
 supported_combinations = {
-    '3.6': {'pyside2', 'pyqt5', 'wx', 'null'},
+    '3.6': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
@@ -113,7 +113,7 @@ DEFAULT_TOOLKIT = 'null'
 
 # Required runtime dependencies. Should match install_requires in setup.py
 dependencies = {
-    "pyface",
+    "pyface>=7.4",
     "traits",
 }
 
@@ -132,8 +132,14 @@ extra_dependencies = {
     'pyside2': {
         'pygments',
     },
+    'pyside6': {
+        'pygments',
+    },
     'pyqt5': {
         'pyqt5',
+        'pygments',
+    },
+    'pyqt6': {
         'pygments',
     },
     # XXX once wxPython 4 is available in EDM, we will want it here
@@ -182,8 +188,10 @@ doc_ignore = {
 }
 
 environment_vars = {
-    'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
-    'pyqt5': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
+    'pyside2': {'ETS_TOOLKIT': 'qt', 'QT_API': 'pyside2'},
+    'pyside6': {'ETS_TOOLKIT': 'qt', 'QT_API': 'pyside6'},
+    'pyqt5': {"ETS_TOOLKIT": "qt", "QT_API": "pyqt5"},
+    'pyqt6': {"ETS_TOOLKIT": "qt", "QT_API": "pyqt6"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
 }
@@ -238,14 +246,9 @@ def install(runtime, toolkit, environment, editable, source):
     )
 
     # edm commands to setup the development environment
-    if sys.platform == 'linux':
-        commands = [
-            "edm environments create {environment} --platform=rh6-x86_64 --force --version={runtime}"
-        ]
-    else:
-        commands = [
-            "edm environments create {environment} --force --version={runtime}"
-        ]
+    commands = [
+        "edm environments create {environment} --force --version={runtime}"
+    ]
 
     commands.extend(
         [
@@ -255,9 +258,17 @@ def install(runtime, toolkit, environment, editable, source):
         ]
     )
 
-    # pip install pyqt5 and pyside2, because we don't have them in EDM yet
+    # pip install pyqt5, pyqt6, pyside2 and pyside6, because we don't have them
+    # in EDM yet
     if toolkit == 'pyside2':
         commands.append("edm run -e {environment} -- pip install pyside2")
+    elif toolkit == 'pyqt6':
+        commands.append("edm run -e {environment} -- pip install pyqt6")
+    elif toolkit == 'pyside6':
+        if sys.platform == 'darwin':
+            commands.append("edm run -e {environment} -- pip install pyside6<6.2.2")
+        else:
+            commands.append("edm run -e {environment} -- pip install pyside6")
     elif toolkit == 'wx':
         if sys.platform != 'linux':
             commands.append("edm run -e {environment} -- pip install wxPython")
@@ -336,7 +347,7 @@ def test(runtime, toolkit, environment):
         # coverage run prevents local images to be loaded for demo examples
         # which are not defined in Python packages. Run with python directly
         # instead.
-        "edm run -e {environment} -- python -W default -m unittest discover -v {integrationtests}",
+        "edm run -e {environment} -- python -X faulthandler -W default -m unittest discover -v {integrationtests}",
     ]
 
     # We run in a tempdir to avoid accidentally picking up wrong traitsui

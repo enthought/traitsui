@@ -24,7 +24,7 @@
 """
 
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_pyside
 
 from pyface.api import ImageResource
 
@@ -191,7 +191,10 @@ class SimpleEditor(Editor):
         else:
             self.buttons = []
             # Asking the mapper to send the sender to the callback method
-            self.mapper.mapped.connect(self.popup_menu)
+            if is_pyside:
+                self.mapper.mappedInt.connect(self.popup_menu)
+            else:
+                self.mapper.mapped.connect(self.popup_menu)
 
         editor = self._editor
         for index, value in enumerate(self.value):
@@ -262,7 +265,10 @@ class SimpleEditor(Editor):
         # callback method. Unfortunately just sending the control does not
         # work for PyQt (tested on 4.11)
         self.mapper.setMapping(control, 0)
-        self.mapper.mapped.connect(self.popup_empty_menu)
+        if is_pyside:
+            self.mapper.mappedInt.connect(self.popup_empty_menu)
+        else:
+            self.mapper.mapped.connect(self.popup_empty_menu)
         control.is_empty = True
         self._cur_control = control
         self.buttons = [control]

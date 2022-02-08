@@ -13,7 +13,7 @@
 """
 
 
-from pyface.qt import QtCore, QtGui, is_qt5
+from pyface.qt import QtCore, QtGui, is_qt4
 
 from .editor import Editor
 from .enum_editor import BaseEditor as BaseEnumEditor
@@ -215,16 +215,16 @@ class ImageEnumTablePopupView(QtGui.QTableView):
         """Configure the appearence of the table view."""
         QtGui.QTableView.__init__(self, parent)
         hheader = self.horizontalHeader()
-        if is_qt5:
-            hheader.setSectionResizeMode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
-        else:
+        if is_qt4:
             hheader.setResizeMode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
+        else:
+            hheader.setSectionResizeMode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
         hheader.hide()
         vheader = self.verticalHeader()
-        if is_qt5:
-            vheader.setSectionResizeMode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
-        else:
+        if is_qt4:
             vheader.setResizeMode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
+        else:
+            vheader.setSectionResizeMode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
         vheader.hide()
         self.setShowGrid(False)
 

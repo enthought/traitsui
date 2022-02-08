@@ -18,7 +18,7 @@ from ..table_column import ObjectColumn
 
 if ETSConfig.toolkit == "wx":
     from pyface.ui.wx.grid.checkbox_renderer import CheckboxRenderer
-elif ETSConfig.toolkit == "qt4":
+elif ETSConfig.toolkit in {"qt", "qt4"}:
     from ..qt4.extra.checkbox_renderer import CheckboxRenderer
 else:
     raise NotImplementedError("No checkbox renderer for backend")

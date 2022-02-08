@@ -118,12 +118,14 @@ def mouse_click_qwidget(control, delay):
         if delay > 0:
             QTest.qSleep(delay)
         control.click()
-    else:
+    elif control is not None:
         QTest.mouseClick(
             control,
             QtCore.Qt.MouseButton.LeftButton,
             delay=delay,
         )
+    else:
+        raise ValueError("control is None")
 
 
 def mouse_click_tab_index(tab_widget, index, delay):

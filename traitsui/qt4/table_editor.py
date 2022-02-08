@@ -25,7 +25,7 @@
 """
 
 
-from pyface.qt import QtCore, QtGui, is_qt5
+from pyface.qt import QtCore, QtGui, is_qt4
 from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
 from pyface.ui_traits import Image
@@ -70,16 +70,15 @@ from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
 
 
-if is_qt5:
+if is_qt4:
 
     def set_qheader_section_resize_mode(header):
-        return header.setSectionResizeMode
-
+        return header.setResizeMode
 
 else:
 
     def set_qheader_section_resize_mode(header):
-        return header.setResizeMode
+        return header.setSectionResizeMode
 
 
 class TableEditor(Editor, BaseTableEditor):
