@@ -78,7 +78,7 @@ class SimpleEditor(Editor):
         """
         self.control = WebView()
         self.control.setSizePolicy(
-            QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+            QtGui.QSizePolicy.Policy.Expanding, QtGui.QSizePolicy.Policy.Expanding
         )
 
         if self.factory.open_externally:

@@ -294,7 +294,7 @@ class SourceEditor(Editor):
             )
         else:
             processed = False
-        if not processed and event.event.matches(QtGui.QKeySequence.Find):
+        if not processed and event.event.matches(QtGui.QKeySequence.StandardKey.Find):
             self._find_widget.show()
 
     def _dim_color_changed(self):

@@ -53,7 +53,7 @@ class HeaderEventFilter(QtCore.QObject):
         self.editor = editor
 
     def eventFilter(self, obj, event):
-        if event.type() == QtCore.QEvent.ContextMenu:
+        if event.type() == QtCore.QEvent.Type.ContextMenu:
             self.editor._on_column_context_menu(event.pos())
             return True
         return False
@@ -210,7 +210,7 @@ class TabularEditor(Editor):
             self._on_column_click
         )
 
-        control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        control.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         control.customContextMenuRequested.connect(self._on_context_menu)
 
         self.header_event_filter = HeaderEventFilter(self)
@@ -431,8 +431,8 @@ class TabularEditor(Editor):
                     self.model.index(
                         selected_row, max(self.selected_column, 0)
                     ),
-                    QtGui.QItemSelectionModel.ClearAndSelect
-                    | QtGui.QItemSelectionModel.Rows,
+                    QtGui.QItemSelectionModel.SelectionFlag.ClearAndSelect
+                    | QtGui.QItemSelectionModel.SelectionFlag.Rows,
                 )
                 # Once selected, scroll to the row
                 self.scroll_to_row = selected_row
@@ -469,8 +469,8 @@ class TabularEditor(Editor):
             smodel.clearSelection()
             smodel.select(
                 selection,
-                QtGui.QItemSelectionModel.Select
-                | QtGui.QItemSelectionModel.Rows,
+                QtGui.QItemSelectionModel.SelectionFlag.Select
+                | QtGui.QItemSelectionModel.SelectionFlag.Rows,
             )
 
     def _multi_selected_rows_items_changed(self, event):
@@ -479,14 +479,14 @@ class TabularEditor(Editor):
             for row in event.removed:
                 smodel.select(
                     self.model.index(row, 0),
-                    QtGui.QItemSelectionModel.Deselect
-                    | QtGui.QItemSelectionModel.Rows,
+                    QtGui.QItemSelectionModel.SelectionFlag.Deselect
+                    | QtGui.QItemSelectionModel.SelectionFlag.Rows,
                 )
             for row in event.added:
                 smodel.select(
                     self.model.index(row, 0),
-                    QtGui.QItemSelectionModel.Select
-                    | QtGui.QItemSelectionModel.Rows,
+                    QtGui.QItemSelectionModel.SelectionFlag.Select
+                    | QtGui.QItemSelectionModel.SelectionFlag.Rows,
                 )
 
     def _selected_column_changed(self, selected_column):
@@ -497,8 +497,8 @@ class TabularEditor(Editor):
                     self.model.index(
                         max(self.selected_row, 0), selected_column
                     ),
-                    QtGui.QItemSelectionModel.ClearAndSelect
-                    | QtGui.QItemSelectionModel.Rows,
+                    QtGui.QItemSelectionModel.SelectionFlag.ClearAndSelect
+                    | QtGui.QItemSelectionModel.SelectionFlag.Rows,
                 )
                 # Once selected, scroll to the column
                 self.scroll_to_column = selected_column
@@ -670,9 +670,9 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
 
         # FIXME: 'styleHint' is returning bogus (negative) values. Why?
         # style = QtGui.QApplication.instance().style()
-        # color = style.styleHint(QtGui.QStyle.SH_Table_GridLineColor, option)
+        # color = style.styleHint(QtGui.QStyle.StyleHint.SH_Table_GridLineColor, option)
         # painter.setPen(QtGui.QColor(color))
-        painter.setPen(option.palette.color(QtGui.QPalette.Dark))
+        painter.setPen(option.palette.color(QtGui.QPalette.ColorRole.Dark))
 
         if self._horizontal_lines:
             painter.drawLine(
@@ -706,10 +706,12 @@ class _TableView(QtGui.QTableView):
 
         if factory.show_row_titles and factory.auto_resize_rows:
             if is_qt4:
-                vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+                vheader.setResizeMode(
+                    QtGui.QHeaderView.ResizeMode.ResizeToContents
+                )
             else:
                 vheader.setSectionResizeMode(
-                    QtGui.QHeaderView.ResizeToContents
+                    QtGui.QHeaderView.ResizeMode.ResizeToContents
                 )
         else:
             # Set a default height for rows. Although setting the resize mode to
@@ -744,11 +746,11 @@ class _TableView(QtGui.QTableView):
         self.setItemDelegate(_ItemDelegate(self))
 
         # Configure the selection behaviour.
-        self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.setSelectionBehavior(QtGui.QAbstractItemView.SelectionBehavior.SelectRows)
         if factory.multi_select:
-            mode = QtGui.QAbstractItemView.ExtendedSelection
+            mode = QtGui.QAbstractItemView.SelectionMode.ExtendedSelection
         else:
-            mode = QtGui.QAbstractItemView.SingleSelection
+            mode = QtGui.QAbstractItemView.SelectionMode.SingleSelection
         self.setSelectionMode(mode)
 
         # Configure drag and drop behavior
@@ -756,9 +758,9 @@ class _TableView(QtGui.QTableView):
         if factory.editable:
             self.viewport().setAcceptDrops(True)
         if factory.drag_move:
-            self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+            self.setDragDropMode(QtGui.QAbstractItemView.DragDropMode.InternalMove)
         else:
-            self.setDragDropMode(QtGui.QAbstractItemView.DragDrop)
+            self.setDragDropMode(QtGui.QAbstractItemView.DragDropMode.DragDrop)
         self.setDropIndicatorShown(True)
 
     def keyPressEvent(self, event):
@@ -769,8 +771,8 @@ class _TableView(QtGui.QTableView):
         # Note that setting 'EditKeyPressed' as an edit trigger does not work on
         # most platforms, which is why we do this here.
         if (
-            event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return)
-            and self.state() != QtGui.QAbstractItemView.EditingState
+            event.key() in (QtCore.Qt.Key.Key_Enter, QtCore.Qt.Key.Key_Return)
+            and self.state() != QtGui.QAbstractItemView.State.EditingState
             and factory.editable
             and "edit" in factory.operations
         ):
@@ -785,7 +787,7 @@ class _TableView(QtGui.QTableView):
                 self.edit(editor.model.index(row, 0))
 
         elif (
-            event.key() in (QtCore.Qt.Key_Backspace, QtCore.Qt.Key_Delete)
+            event.key() in (QtCore.Qt.Key.Key_Backspace, QtCore.Qt.Key.Key_Delete)
             and factory.editable
             and "delete" in factory.operations
         ):
@@ -798,7 +800,7 @@ class _TableView(QtGui.QTableView):
                 editor.model.removeRow(editor.selected_row)
 
         elif (
-            event.key() == QtCore.Qt.Key_Insert
+            event.key() == QtCore.Qt.Key.Key_Insert
             and factory.editable
             and "insert" in factory.operations
         ):

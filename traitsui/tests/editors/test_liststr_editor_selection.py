@@ -125,7 +125,7 @@ def set_selected_single(editor, index):
 
         smodel = editor.list_view.selectionModel()
         mi = editor.model.index(index)
-        smodel.select(mi, QItemSelectionModel.ClearAndSelect)
+        smodel.select(mi, QItemSelectionModel.SelectionFlag.ClearAndSelect)
 
     else:
         raise unittest.SkipTest("Test not implemented for this toolkit")
@@ -147,7 +147,7 @@ def set_selected_multiple(editor, indices):
         smodel = editor.list_view.selectionModel()
         for index in indices:
             mi = editor.model.index(index)
-            smodel.select(mi, QItemSelectionModel.Select)
+            smodel.select(mi, QItemSelectionModel.SelectionFlag.Select)
 
     else:
         raise unittest.SkipTest("Test not implemented for this toolkit")
@@ -195,8 +195,8 @@ def right_click_item(editor, index):
         rect = view.visualRect(q_model_index)
         QTest.mouseClick(
             view.viewport(),
-            QtCore.Qt.RightButton,
-            QtCore.Qt.NoModifier,
+            QtCore.Qt.MouseButton.RightButton,
+            QtCore.Qt.KeyboardModifier.NoModifier,
             rect.center(),
         )
     else:
@@ -223,8 +223,8 @@ def right_click_center(editor):
         rect = view.rect()
         QTest.mouseClick(
             view.viewport(),
-            QtCore.Qt.RightButton,
-            QtCore.Qt.NoModifier,
+            QtCore.Qt.MouseButton.RightButton,
+            QtCore.Qt.KeyboardModifier.NoModifier,
             rect.center(),
         )
     else:
@@ -766,7 +766,7 @@ class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
                 list_view = editor.list_view
                 mi = editor.model.index(1)
                 list_view.selectionModel().select(
-                    mi, QItemSelectionModel.ClearAndSelect
+                    mi, QItemSelectionModel.SelectionFlag.ClearAndSelect
                 )
 
         obj.selected = "value2"

@@ -28,7 +28,7 @@ class ProgressRenderer(TableDelegate):
         """Paint the progressbar."""
         # Get the column and object
         column = index.model()._editor.columns[index.column()]
-        obj = index.data(QtCore.Qt.UserRole)
+        obj = index.data(QtCore.Qt.ItemDataRole.UserRole)
 
         # set up progress bar options
         progress_bar_option = QtGui.QStyleOptionProgressBar()
@@ -47,6 +47,6 @@ class ProgressRenderer(TableDelegate):
         painter.save()
         painter.translate(option.rect.left(), option.rect.top())
         style.drawControl(
-            QtGui.QStyle.CE_ProgressBar, progress_bar_option, painter
+            QtGui.QStyle.ControlElement.CE_ProgressBar, progress_bar_option, painter
         )
         painter.restore()

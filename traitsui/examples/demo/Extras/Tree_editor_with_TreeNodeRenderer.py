@@ -97,17 +97,17 @@ class SparklineRenderer(AbstractTreeNodeRenderer):
         height = option.rect.height()
         plot_height = ys.ptp()
         extra = height - plot_height
-        if bool(option.displayAlignment & QtCore.Qt.AlignVCenter):
+        if bool(option.displayAlignment & QtCore.Qt.AlignmentFlag.AlignVCenter):
             ys += extra / 2
         elif bool(option.displayAlignment & QtCore.Qt.Bottom):
             ys += extra
 
-        if bool(option.state & QtGui.QStyle.State_Selected):
+        if bool(option.state & QtGui.QStyle.StateFlag.State_Selected):
             painter.fillRect(option.rect, option.palette.highlight())
 
         points = [QtCore.QPointF(x, y) for x, y in zip(xs, ys)]
         old_pen = painter.pen()
-        if bool(option.state & QtGui.QStyle.State_Selected):
+        if bool(option.state & QtGui.QStyle.StateFlag.State_Selected):
             painter.setPen(QtGui.QPen(option.palette.highlightedText(), 0))
         try:
             if qt_api.startswith('pyside'):

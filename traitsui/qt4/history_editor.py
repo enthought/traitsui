@@ -34,7 +34,7 @@ class _HistoryEditor(Editor):
         """
         self.control = control = QtGui.QComboBox()
         control.setEditable(True)
-        control.setInsertPolicy(QtGui.QComboBox.InsertAtTop)
+        control.setInsertPolicy(QtGui.QComboBox.InsertPolicy.InsertAtTop)
 
         if self.factory.entries > 0:
             control.model().rowsInserted.connect(self._truncate)

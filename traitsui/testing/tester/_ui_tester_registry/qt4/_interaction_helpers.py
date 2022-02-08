@@ -45,7 +45,7 @@ def key_click(widget, key, delay):
     QTest.keyClick(
         widget,
         mapping[key],
-        QtCore.Qt.NoModifier,
+        QtCore.Qt.KeyboardModifier.NoModifier,
         delay=delay,
     )
 
@@ -121,7 +121,7 @@ def mouse_click_qwidget(control, delay):
     elif control is not None:
         QTest.mouseClick(
             control,
-            QtCore.Qt.LeftButton,
+            QtCore.Qt.MouseButton.LeftButton,
             delay=delay,
         )
     else:
@@ -151,8 +151,8 @@ def mouse_click_tab_index(tab_widget, index, delay):
     rect = tabbar.tabRect(index)
     QTest.mouseClick(
         tabbar,
-        QtCore.Qt.LeftButton,
-        QtCore.Qt.NoModifier,
+        QtCore.Qt.MouseButton.LeftButton,
+        QtCore.Qt.KeyboardModifier.NoModifier,
         rect.center(),
         delay=delay,
     )
@@ -202,8 +202,8 @@ def mouse_click_item_view(model, view, index, delay):
     rect = view.visualRect(index)
     QTest.mouseClick(
         view.viewport(),
-        QtCore.Qt.LeftButton,
-        QtCore.Qt.NoModifier,
+        QtCore.Qt.MouseButton.LeftButton,
+        QtCore.Qt.KeyboardModifier.NoModifier,
         rect.center(),
         delay=delay,
     )

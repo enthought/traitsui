@@ -39,7 +39,7 @@ def QImage_from_np(image):
     bytesPerLine = 4 * width
 
     image = QImage(
-        image8.data, width, height, bytesPerLine, QImage.Format_RGB32
+        image8.data, width, height, bytesPerLine, QImage.Format.Format_RGB32
     )
     return image
 

@@ -74,14 +74,14 @@ class Editor(UIEditor):
             control = self.control
 
         message_box = QtGui.QMessageBox(
-            QtGui.QMessageBox.Information,
+            QtGui.QMessageBox.Icon.Information,
             self.description + " value error",
             str(excp),
-            buttons=QtGui.QMessageBox.Ok,
+            buttons=QtGui.QMessageBox.StandardButton.Ok,
             parent=control,
         )
-        message_box.setTextFormat(QtCore.Qt.PlainText)
-        message_box.setEscapeButton(QtGui.QMessageBox.Ok)
+        message_box.setTextFormat(QtCore.Qt.TextFormat.PlainText)
+        message_box.setEscapeButton(QtGui.QMessageBox.StandardButton.Ok)
         message_box.exec_()
 
     def set_tooltip_text(self, control, text):
@@ -206,12 +206,12 @@ class Editor(UIEditor):
                 color = ErrorColor
                 if getattr(item, "_ok_color", None) is None:
                     item._ok_color = QtGui.QColor(
-                        pal.color(QtGui.QPalette.Base)
+                        pal.color(QtGui.QPalette.ColorRole.Base)
                     )
             else:
                 color = getattr(item, "_ok_color", OKColor)
 
-            pal.setColor(QtGui.QPalette.Base, color)
+            pal.setColor(QtGui.QPalette.ColorRole.Base, color)
             item.setPalette(pal)
 
     def _invalid_changed(self, state):
@@ -314,7 +314,7 @@ class Editor(UIEditor):
         ----------
         direction : QtGui.QBoxLayout.Direction
             Directionality of the group that contains this editor. Either
-            QtGui.QBoxLayout.LeftToRight or QtGui.QBoxLayout.TopToBottom
+            QtGui.QBoxLayout.Direction.LeftToRight or QtGui.QBoxLayout.Direction.TopToBottom
 
         resizable : bool
             True if control should be resizable in the orientation opposite
@@ -331,21 +331,21 @@ class Editor(UIEditor):
 
         policy = self.control.sizePolicy()
 
-        if direction == QtGui.QBoxLayout.LeftToRight:
+        if direction == QtGui.QBoxLayout.Direction.LeftToRight:
             if springy:
                 policy.setHorizontalStretch(stretch)
-                policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setHorizontalPolicy(QtGui.QSizePolicy.Policy.Expanding)
             if resizable:
                 policy.setVerticalStretch(stretch)
-                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setVerticalPolicy(QtGui.QSizePolicy.Policy.Expanding)
 
         else:  # TopToBottom
             if springy:
                 policy.setVerticalStretch(stretch)
-                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setVerticalPolicy(QtGui.QSizePolicy.Policy.Expanding)
             if resizable:
                 policy.setHorizontalStretch(stretch)
-                policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setHorizontalPolicy(QtGui.QSizePolicy.Policy.Expanding)
 
         self.control.setSizePolicy(policy)
 

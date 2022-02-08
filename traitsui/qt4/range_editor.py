@@ -118,13 +118,13 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         self._label_lo = QtGui.QLabel()
         self._label_lo.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         if factory.label_width > 0:
             self._label_lo.setMinimumWidth(factory.label_width)
         panel.addWidget(self._label_lo)
 
-        self.control.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.control.slider = slider = QtGui.QSlider(QtCore.Qt.Orientation.Horizontal)
         slider.setTracking(factory.auto_set)
         slider.setMinimum(0)
         slider.setMaximum(10000)
@@ -389,17 +389,17 @@ class LargeRangeSliderEditor(BaseRangeEditor):
 
         # Lower limit label:
         self.control.label_lo = label_lo = QtGui.QLabel()
-        label_lo.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        label_lo.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignVCenter)
         panel.addWidget(label_lo)
 
         # Lower limit button:
         self.control.button_lo = IconButton(
-            QtGui.QStyle.SP_ArrowLeft, self.reduce_range
+            QtGui.QStyle.StandardPixmap.SP_ArrowLeft, self.reduce_range
         )
         panel.addWidget(self.control.button_lo)
 
         # Slider:
-        self.control.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.control.slider = slider = QtGui.QSlider(QtCore.Qt.Orientation.Horizontal)
         slider.setTracking(factory.auto_set)
         slider.setMinimum(0)
         slider.setMaximum(10000)
@@ -411,7 +411,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
 
         # Upper limit button:
         self.control.button_hi = IconButton(
-            QtGui.QStyle.SP_ArrowRight, self.increase_range
+            QtGui.QStyle.StandardPixmap.SP_ArrowRight, self.increase_range
         )
         panel.addWidget(self.control.button_hi)
 
@@ -741,7 +741,7 @@ class RangeTextEditor(TextEditor):
 
         if self.control is not None:
             pal = QtGui.QPalette(self.control.palette())
-            pal.setColor(QtGui.QPalette.Base, col)
+            pal.setColor(QtGui.QPalette.ColorRole.Base, col)
             self.control.setPalette(pal)
 
 

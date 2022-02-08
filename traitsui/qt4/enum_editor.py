@@ -36,8 +36,8 @@ from .constants import OKColor, ErrorColor
 from .editor import Editor
 
 completion_mode_map = {
-    "popup": QtGui.QCompleter.PopupCompletion,
-    "inline": QtGui.QCompleter.InlineCompletion,
+    "popup": QtGui.QCompleter.CompletionMode.PopupCompletion,
+    "inline": QtGui.QCompleter.CompletionMode.InlineCompletion,
 }
 
 
@@ -177,7 +177,7 @@ class SimpleEditor(BaseEditor):
                 control.lineEdit().editingFinished.connect(
                     self.update_autoset_text_object
                 )
-            control.setInsertPolicy(QtGui.QComboBox.NoInsert)
+            control.setInsertPolicy(QtGui.QComboBox.InsertPolicy.NoInsert)
 
         self._no_enum_update = 0
         self.set_tooltip()
@@ -221,11 +221,11 @@ class SimpleEditor(BaseEditor):
     def set_size_policy(self, direction, resizable, springy, stretch):
         super().set_size_policy(direction, resizable, springy, stretch)
 
-        if (direction == QtGui.QBoxLayout.LeftToRight and springy) or (
-            direction != QtGui.QBoxLayout.LeftToRight and resizable
+        if (direction == QtGui.QBoxLayout.Direction.LeftToRight and springy) or (
+            direction != QtGui.QBoxLayout.Direction.LeftToRight and resizable
         ):
             self.control.setSizeAdjustPolicy(
-                QtGui.QComboBox.AdjustToContentsOnFirstShow
+                QtGui.QComboBox.SizeAdjustPolicy.AdjustToContentsOnFirstShow
             )
 
     # -------------------------------------------------------------------------
@@ -235,16 +235,16 @@ class SimpleEditor(BaseEditor):
     def create_combo_box(self):
         """Returns the QComboBox used for the editor control."""
         control = QtGui.QComboBox()
-        control.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
+        control.setSizeAdjustPolicy(QtGui.QComboBox.SizeAdjustPolicy.AdjustToContents)
         control.setSizePolicy(
-            QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed
+            QtGui.QSizePolicy.Policy.Maximum, QtGui.QSizePolicy.Policy.Fixed
         )
         return control
 
     def _set_background(self, col):
         le = self.control.lineEdit()
         pal = QtGui.QPalette(le.palette())
-        pal.setColor(QtGui.QPalette.Base, col)
+        pal.setColor(QtGui.QPalette.ColorRole.Base, col)
         le.setPalette(pal)
 
     #  Signal handlers -------------------------------------------------------
@@ -381,7 +381,7 @@ class RadioEditor(BaseEditor):
                     # The connection type is set to workaround Qt5 + MacOSX
                     # issue with event dispatching. See enthought/traitsui#1308
                     rb.clicked.connect(
-                        self._mapper.map, type=QtCore.Qt.QueuedConnection
+                        self._mapper.map, type=QtCore.Qt.ConnectionType.QueuedConnection
                     )
                     self._mapper.setMapping(rb, index)
 

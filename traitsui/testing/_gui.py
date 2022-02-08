@@ -34,7 +34,7 @@ def process_cascade_events():
         from pyface.qt import QtCore
 
         event_loop = QtCore.QEventLoop()
-        while event_loop.processEvents(QtCore.QEventLoop.AllEvents):
+        while event_loop.processEvents(QtCore.QEventLoop.ProcessEventsFlag.AllEvents):
             pass
     else:
         from pyface.api import GUI

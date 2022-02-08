@@ -149,7 +149,7 @@ class _LiveWindow(BaseDialog):
                     self.undo = self.add_button(
                         button,
                         bbox,
-                        QtGui.QDialogButtonBox.ActionRole,
+                        QtGui.QDialogButtonBox.ButtonRole.ActionRole,
                         self._on_undo,
                         False,
                         default=default,
@@ -163,7 +163,7 @@ class _LiveWindow(BaseDialog):
                     self.redo = self.add_button(
                         button,
                         bbox,
-                        QtGui.QDialogButtonBox.ActionRole,
+                        QtGui.QDialogButtonBox.ButtonRole.ActionRole,
                         self._on_redo,
                         False,
                         "Redo",
@@ -178,7 +178,7 @@ class _LiveWindow(BaseDialog):
                     self.revert = self.add_button(
                         button,
                         bbox,
-                        QtGui.QDialogButtonBox.ResetRole,
+                        QtGui.QDialogButtonBox.ButtonRole.ResetRole,
                         self._on_revert,
                         False,
                         default=default,
@@ -193,7 +193,7 @@ class _LiveWindow(BaseDialog):
                     self.ok = self.add_button(
                         button,
                         bbox,
-                        QtGui.QDialogButtonBox.AcceptRole,
+                        QtGui.QDialogButtonBox.ButtonRole.AcceptRole,
                         self.control.accept,
                         default=default,
                     )
@@ -203,7 +203,7 @@ class _LiveWindow(BaseDialog):
                     self.add_button(
                         button,
                         bbox,
-                        QtGui.QDialogButtonBox.RejectRole,
+                        QtGui.QDialogButtonBox.ButtonRole.RejectRole,
                         self.control.reject,
                         default=default,
                     )
@@ -212,7 +212,7 @@ class _LiveWindow(BaseDialog):
                     self.add_button(
                         button,
                         bbox,
-                        QtGui.QDialogButtonBox.HelpRole,
+                        QtGui.QDialogButtonBox.ButtonRole.HelpRole,
                         self._on_help,
                         default=default,
                     )
@@ -221,7 +221,7 @@ class _LiveWindow(BaseDialog):
                     self.add_button(
                         button,
                         bbox,
-                        QtGui.QDialogButtonBox.ActionRole,
+                        QtGui.QDialogButtonBox.ButtonRole.ActionRole,
                         default=default,
                     )
 

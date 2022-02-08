@@ -35,7 +35,7 @@ from traits.api import Trait, TraitHandler, TraitError
 
 # Mapping of strings to valid QFont style hints.
 font_families = {
-    "default": QtGui.QFont.AnyStyle,
+    "default": QtGui.QFont.StyleHint.AnyStyle,
     "decorative": QtGui.QFont.Decorative,
     "roman": QtGui.QFont.Serif,
     "script": QtGui.QFont.SansSerif,
@@ -45,12 +45,12 @@ font_families = {
 
 # Mapping of strings to QFont styles.
 font_styles = {
-    "slant": QtGui.QFont.StyleOblique,
-    "italic": QtGui.QFont.StyleItalic,
+    "slant": QtGui.QFont.Style.StyleOblique,
+    "italic": QtGui.QFont.Style.StyleItalic,
 }
 
 # Mapping of strings to QFont weights.
-font_weights = {"light": QtGui.QFont.Light, "bold": QtGui.QFont.Bold}
+font_weights = {"light": QtGui.QFont.Weight.Light, "bold": QtGui.QFont.Weight.Bold}
 
 # Strings to ignore in text representations of fonts
 font_noise = ["pt", "point", "family"]
@@ -58,12 +58,12 @@ font_noise = ["pt", "point", "family"]
 
 def font_to_str(font):
     """Converts a QFont into a string description of itself."""
-    weight = {QtGui.QFont.Light: " Light", QtGui.QFont.Bold: " Bold"}.get(
+    weight = {QtGui.QFont.Weight.Light: " Light", QtGui.QFont.Weight.Bold: " Bold"}.get(
         font.weight(), ""
     )
     style = {
-        QtGui.QFont.StyleOblique: " Slant",
-        QtGui.QFont.StyleItalic: " Italic",
+        QtGui.QFont.Style.StyleOblique: " Slant",
+        QtGui.QFont.Style.StyleItalic: " Italic",
     }.get(font.style(), "")
     underline = ""
     if font.underline():
@@ -84,8 +84,8 @@ def create_traitsfont(value):
 
     point_size = None
     family = ""
-    style = QtGui.QFont.StyleNormal
-    weight = QtGui.QFont.Normal
+    style = QtGui.QFont.Style.StyleNormal
+    weight = QtGui.QFont.Weight.Normal
     underline = False
     facename = []
 

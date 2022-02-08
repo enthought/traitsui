@@ -80,7 +80,7 @@ class SimpleEditor(Editor):
             control.setReadOnly(True)
 
         if factory.password:
-            control.setEchoMode(QtGui.QLineEdit.Password)
+            control.setEchoMode(QtGui.QLineEdit.EchoMode.Password)
 
         if wtype == QtGui.QTextEdit:
             control.textChanged.connect(self.update_object)
@@ -114,7 +114,7 @@ class SimpleEditor(Editor):
         # default horizontal policy is Expand, set this to Minimum
         if not (self.item.resizable) and not self.item.springy:
             policy = self.control.sizePolicy()
-            policy.setHorizontalPolicy(QtGui.QSizePolicy.Minimum)
+            policy.setHorizontalPolicy(QtGui.QSizePolicy.Policy.Minimum)
             self.control.setSizePolicy(policy)
         self.set_error_state(False)
         self.set_tooltip()
@@ -215,7 +215,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
         if self.factory.readonly_allow_selection:
             flags = (
                 self.control.textInteractionFlags()
-                | QtCore.Qt.TextSelectableByMouse
+                | QtCore.Qt.TextInteractionFlag.TextSelectableByMouse
             )
             self.control.setTextInteractionFlags(flags)
 
