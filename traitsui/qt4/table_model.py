@@ -38,16 +38,16 @@ logger = logging.getLogger(__name__)
 
 # Mapping for trait alignment values to qt4 horizontal alignment constants
 h_alignment_map = {
-    "left": QtCore.Qt.AlignLeft,
-    "center": QtCore.Qt.AlignHCenter,
-    "right": QtCore.Qt.AlignRight,
+    "left": QtCore.Qt.AlignmentFlag.AlignLeft,
+    "center": QtCore.Qt.AlignmentFlag.AlignHCenter,
+    "right": QtCore.Qt.AlignmentFlag.AlignRight,
 }
 
 # Mapping for trait alignment values to qt4 vertical alignment constants
 v_alignment_map = {
-    "top": QtCore.Qt.AlignTop,
-    "center": QtCore.Qt.AlignVCenter,
-    "bottom": QtCore.Qt.AlignBottom,
+    "top": QtCore.Qt.AlignmentFlag.AlignTop,
+    "center": QtCore.Qt.AlignmentFlag.AlignVCenter,
+    "bottom": QtCore.Qt.AlignmentFlag.AlignBottom,
 }
 
 # MIME type for internal table drag/drop operations
@@ -97,36 +97,36 @@ class TableModel(QtCore.QAbstractTableModel):
             # probably during shutdown, but I haven't investigated
             return None
 
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole or role == QtCore.Qt.ItemDataRole.EditRole:
             text = column.get_value(obj)
             if text is not None:
                 return text
 
-        elif role == QtCore.Qt.DecorationRole:
+        elif role == QtCore.Qt.ItemDataRole.DecorationRole:
             image = self._editor._get_image(column.get_image(obj))
             if image is not None:
                 return image
 
-        elif role == QtCore.Qt.ToolTipRole:
+        elif role == QtCore.Qt.ItemDataRole.ToolTipRole:
             tooltip = column.get_tooltip(obj)
             if tooltip:
                 return tooltip
 
-        elif role == QtCore.Qt.FontRole:
+        elif role == QtCore.Qt.ItemDataRole.FontRole:
             font = column.get_text_font(obj)
             if font is None:
                 font = self._editor.factory.cell_font
             if font is not None:
                 return QtGui.QFont(font)
 
-        elif role == QtCore.Qt.TextAlignmentRole:
+        elif role == QtCore.Qt.ItemDataRole.TextAlignmentRole:
             string = column.get_horizontal_alignment(obj)
-            h_alignment = h_alignment_map.get(string, QtCore.Qt.AlignLeft)
+            h_alignment = h_alignment_map.get(string, QtCore.Qt.AlignmentFlag.AlignLeft)
             string = column.get_vertical_alignment(obj)
-            v_alignment = v_alignment_map.get(string, QtCore.Qt.AlignVCenter)
+            v_alignment = v_alignment_map.get(string, QtCore.Qt.AlignmentFlag.AlignVCenter)
             return int(h_alignment | v_alignment)
 
-        elif role == QtCore.Qt.BackgroundRole:
+        elif role == QtCore.Qt.ItemDataRole.BackgroundRole:
             color = column.get_cell_color(obj)
             if color is None:
                 if column.is_editable(obj):
@@ -140,7 +140,7 @@ class TableModel(QtCore.QAbstractTableModel):
             q_color = as_qcolor(color)
             return QtGui.QBrush(q_color)
 
-        elif role == QtCore.Qt.ForegroundRole:
+        elif role == QtCore.Qt.ItemDataRole.ForegroundRole:
             color = column.get_text_color(obj)
             if color is None:
                 color = self._editor.factory.cell_color_
@@ -148,15 +148,15 @@ class TableModel(QtCore.QAbstractTableModel):
                 q_color = as_qcolor(color)
                 return QtGui.QBrush(q_color)
 
-        elif role == QtCore.Qt.UserRole:
+        elif role == QtCore.Qt.ItemDataRole.UserRole:
             return obj
 
-        elif role == QtCore.Qt.CheckStateRole:
+        elif role == QtCore.Qt.ItemDataRole.CheckStateRole:
             if column.get_type(obj) == "bool" and column.show_checkbox:
                 if column.get_raw_value(obj):
-                    return QtCore.Qt.Checked
+                    return QtCore.Qt.CheckState.Checked
                 else:
-                    return QtCore.Qt.Unchecked
+                    return QtCore.Qt.CheckState.Unchecked
 
         return None
 
@@ -167,14 +167,14 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if not mi.isValid():
             if editor.factory.reorderable:
-                return QtCore.Qt.ItemIsDropEnabled
+                return QtCore.Qt.ItemFlag.ItemIsDropEnabled
             else:
-                return QtCore.Qt.NoItemFlags
+                return QtCore.Qt.ItemFlag.NoItemFlags
 
         flags = (
-            QtCore.Qt.ItemIsSelectable
-            | QtCore.Qt.ItemIsEnabled
-            | QtCore.Qt.ItemIsDragEnabled
+            QtCore.Qt.ItemFlag.ItemIsSelectable
+            | QtCore.Qt.ItemFlag.ItemIsEnabled
+            | QtCore.Qt.ItemFlag.ItemIsDragEnabled
         )
 
         obj = editor.items()[mi.row()]
@@ -182,13 +182,13 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if editor.factory:
             if editor.factory.editable and column.is_editable(obj):
-                flags |= QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsDropEnabled
+                flags |= QtCore.Qt.ItemFlag.ItemIsEditable | QtCore.Qt.ItemFlag.ItemIsDropEnabled
 
             if editor.factory.reorderable:
-                flags |= QtCore.Qt.ItemIsDropEnabled
+                flags |= QtCore.Qt.ItemFlag.ItemIsDropEnabled
 
             if column.get_type(obj) == "bool" and column.show_checkbox:
-                flags |= QtCore.Qt.ItemIsUserCheckable
+                flags |= QtCore.Qt.ItemFlag.ItemIsUserCheckable
 
         return flags
 
@@ -197,15 +197,15 @@ class TableModel(QtCore.QAbstractTableModel):
 
         editor = self._editor
 
-        if orientation == QtCore.Qt.Horizontal:
+        if orientation == QtCore.Qt.Orientation.Horizontal:
             column = editor.columns[section]
 
-            if role == QtCore.Qt.DisplayRole:
+            if role == QtCore.Qt.ItemDataRole.DisplayRole:
                 return column.get_label()
 
-        elif orientation == QtCore.Qt.Vertical:
+        elif orientation == QtCore.Qt.Orientation.Vertical:
 
-            if role == QtCore.Qt.DisplayRole:
+            if role == QtCore.Qt.ItemDataRole.DisplayRole:
                 return str(section + 1)
 
         if editor.factory is None:
@@ -213,17 +213,17 @@ class TableModel(QtCore.QAbstractTableModel):
             # probably during shutdown, but I haven't investigated
             return None
 
-        if role == QtCore.Qt.FontRole:
+        if role == QtCore.Qt.ItemDataRole.FontRole:
             font = editor.factory.label_font
             if font is not None:
                 return QtGui.QFont(font)
 
-        elif role == QtCore.Qt.BackgroundRole:
+        elif role == QtCore.Qt.ItemDataRole.BackgroundRole:
             color = editor.factory.label_bg_color_
             if color is not None:
                 return color
 
-        elif role == QtCore.Qt.ForegroundRole:
+        elif role == QtCore.Qt.ItemDataRole.ForegroundRole:
             color = editor.factory.label_color_
             if color is not None:
                 return color
@@ -305,12 +305,12 @@ class TableModel(QtCore.QAbstractTableModel):
     def dropMimeData(self, mime_data, action, row, column, parent):
         """Reimplemented to allow items to be moved."""
 
-        if action == QtCore.Qt.IgnoreAction:
+        if action == QtCore.Qt.DropAction.IgnoreAction:
             return False
 
         # this is a drag from a table model?
         data = mime_data.data(mime_type)
-        if not data.isNull() and action == QtCore.Qt.MoveAction:
+        if not data.isNull() and action == QtCore.Qt.DropAction.MoveAction:
             id_and_rows = [
                 int(s) for s in data.data().decode("utf8").split(" ")
             ]
@@ -346,7 +346,7 @@ class TableModel(QtCore.QAbstractTableModel):
     def supportedDropActions(self):
         """Reimplemented to allow items to be moved."""
 
-        return QtCore.Qt.MoveAction
+        return QtCore.Qt.DropAction.MoveAction
 
     # -------------------------------------------------------------------------
     #  Utility methods

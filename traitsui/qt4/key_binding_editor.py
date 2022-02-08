@@ -90,10 +90,10 @@ class KeyBindingEditor(Editor):
                     "'%s' has already been assigned to '%s'.\n"
                     "Do you wish to continue?"
                     % (key_name, cur_binding.description),
-                    QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
-                    QtGui.QMessageBox.No,
+                    QtGui.QMessageBox.StandardButton.Yes | QtGui.QMessageBox.StandardButton.No,
+                    QtGui.QMessageBox.StandardButton.No,
                 )
-                != QtGui.QMessageBox.Yes
+                != QtGui.QMessageBox.StandardButton.Yes
             ):
                 return
 
@@ -110,12 +110,12 @@ class KeyBindingCtrl(QtGui.QLabel):
     def __init__(self, editor, parent=None):
         super().__init__(parent)
 
-        self.setFocusPolicy(QtCore.Qt.StrongFocus)
+        self.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
         self.setIndent(4)
         self.setMinimumWidth(160)
 
         pal = QtGui.QPalette(self.palette())
-        pal.setColor(QtGui.QPalette.Window, QtCore.Qt.white)
+        pal.setColor(QtGui.QPalette.ColorRole.Window, QtCore.Qt.GlobalColor.white)
         self.setPalette(pal)
         self.setAutoFillBackground(True)
 
@@ -128,7 +128,7 @@ class KeyBindingCtrl(QtGui.QLabel):
     def keyPressEvent(self, event):
         """Handle keyboard keys being pressed."""
         # Ignore presses of the control and shift keys.
-        if event.key() not in (QtCore.Qt.Key_Control, QtCore.Qt.Key_Shift):
+        if event.key() not in (QtCore.Qt.Key.Key_Control, QtCore.Qt.Key.Key_Shift):
             self.editor.key = event
 
     def paintEvent(self, event):
@@ -140,13 +140,13 @@ class KeyBindingCtrl(QtGui.QLabel):
         p = QtGui.QPainter(self)
 
         if self.editor.has_focus:
-            p.setRenderHint(QtGui.QPainter.Antialiasing, True)
+            p.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
             pen = QtGui.QPen(QtGui.QColor("tomato"))
             pen.setWidth(2)
             p.setPen(pen)
             p.drawRect(1, 1, w - 2, h - 2)
         else:
-            p.setPen(self.palette().color(QtGui.QPalette.Mid))
+            p.setPen(self.palette().color(QtGui.QPalette.ColorRole.Mid))
             p.drawRect(0, 0, w - 1, h - 1)
 
         p.end()

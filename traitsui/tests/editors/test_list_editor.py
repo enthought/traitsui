@@ -303,3 +303,26 @@ class TestNotebookListEditor(unittest.TestCase):
                 tester.find_by_name(ui, "people").locate(Index(0)).perform(
                     MouseClick()
                 )
+
+    # regression test for enthought/traitsui#1790
+    def test_initial_selected(self):
+        class PhoneBookWithSelected(Phonebook):
+            selected = Instance(Person)
+
+            traits_view = View(
+                Item(
+                    "people",
+                    style="custom",
+                    editor=ListEditor(
+                        use_notebook=True,
+                        selected='selected',
+                    ),
+                )
+            )
+
+        tester = UITester()
+        phonebook = PhoneBookWithSelected(people=get_people())
+        with tester.create_ui(phonebook) as ui:
+            self.assertEqual(
+                phonebook.selected, phonebook.people[0]
+            )

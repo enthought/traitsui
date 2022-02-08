@@ -97,14 +97,14 @@ class ReadonlyEditor(Editor):
     # -------------------------------------------------------------------------
 
     text_alignment_map = {
-        "left": QtCore.Qt.AlignLeft,
-        "right": QtCore.Qt.AlignRight,
-        "just": QtCore.Qt.AlignJustify,
-        "top": QtCore.Qt.AlignLeft,
-        "bottom": QtCore.Qt.AlignBottom,
-        "vcenter": QtCore.Qt.AlignVCenter,
-        "hcenter": QtCore.Qt.AlignHCenter,
-        "center": QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter,
+        "left": QtCore.Qt.AlignmentFlag.AlignLeft,
+        "right": QtCore.Qt.AlignmentFlag.AlignRight,
+        "just": QtCore.Qt.AlignmentFlag.AlignJustify,
+        "top": QtCore.Qt.AlignmentFlag.AlignLeft,
+        "bottom": QtCore.Qt.AlignmentFlag.AlignBottom,
+        "vcenter": QtCore.Qt.AlignmentFlag.AlignVCenter,
+        "hcenter": QtCore.Qt.AlignmentFlag.AlignHCenter,
+        "center": QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignHCenter,
     }
 
     def init(self, parent):
@@ -147,5 +147,5 @@ class _SimpleField(QtGui.QLineEdit):
     def mouseReleaseEvent(self, e):
         QtGui.QLineEdit.mouseReleaseEvent(self, e)
 
-        if e.button() == QtCore.Qt.LeftButton:
+        if e.button() == QtCore.Qt.MouseButton.LeftButton:
             self._editor.popup_editor()

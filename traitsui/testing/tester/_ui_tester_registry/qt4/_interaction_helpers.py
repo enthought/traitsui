@@ -45,7 +45,7 @@ def key_click(widget, key, delay):
     QTest.keyClick(
         widget,
         mapping[key],
-        QtCore.Qt.NoModifier,
+        QtCore.Qt.KeyboardModifier.NoModifier,
         delay=delay,
     )
 
@@ -118,12 +118,14 @@ def mouse_click_qwidget(control, delay):
         if delay > 0:
             QTest.qSleep(delay)
         control.click()
-    else:
+    elif control is not None:
         QTest.mouseClick(
             control,
-            QtCore.Qt.LeftButton,
+            QtCore.Qt.MouseButton.LeftButton,
             delay=delay,
         )
+    else:
+        raise ValueError("control is None")
 
 
 def mouse_click_tab_index(tab_widget, index, delay):
@@ -149,8 +151,8 @@ def mouse_click_tab_index(tab_widget, index, delay):
     rect = tabbar.tabRect(index)
     QTest.mouseClick(
         tabbar,
-        QtCore.Qt.LeftButton,
-        QtCore.Qt.NoModifier,
+        QtCore.Qt.MouseButton.LeftButton,
+        QtCore.Qt.KeyboardModifier.NoModifier,
         rect.center(),
         delay=delay,
     )
@@ -187,7 +189,7 @@ def mouse_click_item_view(model, view, index, delay):
         Model from which QModelIndex will be obtained
     view : QAbstractItemView
         View from which the widget identified by the index will be
-        found and key sequence be performed.
+        found and mouse click be performed.
     index : QModelIndex
 
     Raises
@@ -200,11 +202,132 @@ def mouse_click_item_view(model, view, index, delay):
     rect = view.visualRect(index)
     QTest.mouseClick(
         view.viewport(),
+        QtCore.Qt.MouseButton.LeftButton,
+        QtCore.Qt.KeyboardModifier.NoModifier,
+        rect.center(),
+        delay=delay,
+    )
+
+
+def mouse_dclick_item_view(model, view, index, delay):
+    """ Perform mouse double click on the given QAbstractItemModel (model) and
+    QAbstractItemView (view) with the given row and column.
+
+    Parameters
+    ----------
+    model : QAbstractItemModel
+        Model from which QModelIndex will be obtained
+    view : QAbstractItemView
+        View from which the widget identified by the index will be
+        found and mouse double click be performed.
+    index : QModelIndex
+
+    Raises
+    ------
+    LookupError
+        If the index cannot be located.
+        Note that the index error provides more
+    """
+    check_q_model_index_valid(index)
+    rect = view.visualRect(index)
+    QTest.mouseDClick(
+        view.viewport(),
         QtCore.Qt.LeftButton,
         QtCore.Qt.NoModifier,
         rect.center(),
         delay=delay,
     )
+
+
+def key_sequence_item_view(model, view, index, sequence, delay=0):
+    """ Perform Key Sequence on the given QAbstractItemModel (model) and
+    QAbstractItemView (view) with the given row and column.
+
+    Parameters
+    ----------
+    model : QAbstractItemModel
+        Model from which QModelIndex will be obtained
+    view : QAbstractItemView
+        View from which the widget identified by the index will be
+        found and key sequence be performed.
+    index : QModelIndex
+    sequence : str
+        Sequence of characters to be inserted to the widget identifed
+        by the row and column.
+
+    Raises
+    ------
+    Disabled
+        If the widget cannot be edited.
+    LookupError
+        If the index cannot be located.
+        Note that the index error provides more
+    """
+    check_q_model_index_valid(index)
+    widget = view.indexWidget(index)
+    if widget is None:
+        raise Disabled(
+            "No editable widget for item at row {!r} and column {!r}".format(
+                index.row(), index.column()
+            )
+        )
+    QTest.keyClicks(widget, sequence, delay=delay)
+
+
+def key_click_item_view(model, view, index, key, delay=0):
+    """ Perform key press on the given QAbstractItemModel (model) and
+    QAbstractItemView (view) with the given row and column.
+
+    Parameters
+    ----------
+    model : QAbstractItemModel
+        Model from which QModelIndex will be obtained
+    view : QAbstractItemView
+        View from which the widget identified by the index will be
+        found and key press be performed.
+    index : int
+    key : str
+        Key to be pressed.
+
+    Raises
+    ------
+    Disabled
+        If the widget cannot be edited.
+    LookupError
+        If the index cannot be located.
+        Note that the index error provides more
+    """
+    check_q_model_index_valid(index)
+    widget = view.indexWidget(index)
+    if widget is None:
+        raise Disabled(
+            "No editable widget for item at row {!r} and column {!r}".format(
+                index.row(), index.column()
+            )
+        )
+    key_click(widget, key=key, delay=delay)
+
+
+def get_display_text_item_view(model, view, index):
+    """ Return the textural representation for the given model, row and column.
+
+    Parameters
+    ----------
+    model : QAbstractItemModel
+        Model from which QModelIndex will be obtained
+    view : QAbstractItemView
+        View from which the widget identified by the index will be
+        found and key press be performed.
+    index : int
+
+    Raises
+    ------
+    LookupError
+        If the index cannot be located.
+        Note that the index error provides more
+    """
+    check_q_model_index_valid(index)
+    return model.data(index, QtCore.Qt.DisplayRole)
 
 
 def mouse_click_combobox(combobox, index, delay):

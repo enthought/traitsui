@@ -24,7 +24,7 @@
 """
 
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_pyside
 
 from pyface.api import ImageResource
 
@@ -120,14 +120,14 @@ class SimpleEditor(Editor):
         if self.scrollable:
             # Create a scrolled window to hold all of the list item controls:
             self.control = QtGui.QScrollArea()
-            self.control.setFrameShape(QtGui.QFrame.NoFrame)
+            self.control.setFrameShape(QtGui.QFrame.Shape.NoFrame)
             self.control.setWidgetResizable(True)
             self._list_pane = QtGui.QWidget()
         else:
             self.control = QtGui.QWidget()
             self._list_pane = self.control
         self._list_pane.setSizePolicy(
-            QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+            QtGui.QSizePolicy.Policy.Expanding, QtGui.QSizePolicy.Policy.Expanding
         )
 
         # Create a mapper to identify which icon button requested a contextmenu
@@ -135,7 +135,7 @@ class SimpleEditor(Editor):
 
         # Create a widget with a grid layout as the container.
         layout = QtGui.QGridLayout(self._list_pane)
-        layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignTop)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
@@ -191,7 +191,10 @@ class SimpleEditor(Editor):
         else:
             self.buttons = []
             # Asking the mapper to send the sender to the callback method
-            self.mapper.mapped.connect(self.popup_menu)
+            if is_pyside:
+                self.mapper.mappedInt.connect(self.popup_menu)
+            else:
+                self.mapper.mapped.connect(self.popup_menu)
 
         editor = self._editor
         for index, value in enumerate(self.value):
@@ -262,7 +265,10 @@ class SimpleEditor(Editor):
         # callback method. Unfortunately just sending the control does not
         # work for PyQt (tested on 4.11)
         self.mapper.setMapping(control, 0)
-        self.mapper.mapped.connect(self.popup_empty_menu)
+        if is_pyside:
+            self.mapper.mappedInt.connect(self.popup_empty_menu)
+        else:
+            self.mapper.mapped.connect(self.popup_empty_menu)
         control.is_empty = True
         self._cur_control = control
         self.buttons = [control]
@@ -478,7 +484,7 @@ class NotebookEditor(Editor):
             self.control.setDocumentMode(True)
             self.control.tabBar().setDocumentMode(True)
         elif self.factory.dock_style == "vertical":
-            self.control.setTabPosition(QtGui.QTabWidget.West)
+            self.control.setTabPosition(QtGui.QTabWidget.TabPosition.West)
 
         # Create the button to close tabs, if necessary:
         if self.factory.deletable:
@@ -487,7 +493,7 @@ class NotebookEditor(Editor):
             button.setToolTip("Remove current tab ")
             button.setIcon(ImageResource("closetab").create_icon())
 
-            self.control.setCornerWidget(button, QtCore.Qt.TopRightCorner)
+            self.control.setCornerWidget(button, QtCore.Qt.Corner.TopRightCorner)
             button.clicked.connect(self.close_current)
             self.close_button = button
 
@@ -498,7 +504,7 @@ class NotebookEditor(Editor):
             self.control.customContextMenuRequested.connect(
                 self._context_menu_requested
             )
-            self.control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            self.control.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
 
         # Set up the additional 'list items changed' event handler needed for
         # a list based trait. Note that we want to fire the update_editor_item
@@ -526,7 +532,7 @@ class NotebookEditor(Editor):
 
             # Remember the page for later deletion processing:
             self._uis.append([ui.control, ui, view_object, monitoring])
-
+        self._tab_activated(0)
         if self.selected:
             self._selected_changed(self.selected)
 

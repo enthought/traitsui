@@ -82,12 +82,12 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 
     def str_font(self, font):
         """Returns the text representation of the specified object trait value."""
-        weight = {QtGui.QFont.Light: " Light", QtGui.QFont.Bold: " Bold"}.get(
+        weight = {QtGui.QFont.Weight.Light: " Light", QtGui.QFont.Weight.Bold: " Bold"}.get(
             font.weight(), ""
         )
         style = {
-            QtGui.QFont.StyleOblique: " Slant",
-            QtGui.QFont.StyleItalic: " Italic",
+            QtGui.QFont.Style.StyleOblique: " Slant",
+            QtGui.QFont.Style.StyleItalic: " Italic",
         }.get(font.style(), "")
         return "%s point %s%s%s" % (
             font.pointSize(),

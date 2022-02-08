@@ -26,14 +26,12 @@
 
 import os.path
 
-from pyface.qt import QtCore, QtGui, is_qt5, qt_api
+from pyface.api import SystemMetrics
+from pyface.qt import QtCore, QtGui, is_qt5, is_pyqt
 from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
-
-
-is_pyqt = qt_api in {"pyqt", "pyqt5"}
 
 
 #: Layout orientation for a control and its associated editor
@@ -84,9 +82,9 @@ def position_window(window, width=None, height=None, parent=None):
     that the window completely fits on the screen if possible.
     """
     # Get the available geometry of the screen containing the window.
-    sgeom = QtGui.QApplication.desktop().availableGeometry(window)
-    screen_dx = sgeom.width()
-    screen_dy = sgeom.height()
+    system_metrics = SystemMetrics()
+    screen_dx = system_metrics.screen_width
+    screen_dy = system_metrics.screen_height
 
     # Use the frame geometry even though it is very unlikely that the X11 frame
     # exists at this point.
@@ -159,7 +157,7 @@ class IconButton(QtGui.QPushButton):
         sty = QtGui.QApplication.instance().style()
 
         # Get the minimum icon size to use.
-        ico_sz = sty.pixelMetric(QtGui.QStyle.PM_ButtonIconSize)
+        ico_sz = sty.pixelMetric(QtGui.QStyle.PixelMetric.PM_ButtonIconSize)
 
         if isinstance(icon, str):
             pm = pixmap_cache(icon)
@@ -181,7 +179,7 @@ class IconButton(QtGui.QPushButton):
         # Configure the button.
         self.setIcon(ico)
         self.setFlat(True)
-        self.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.clicked.connect(slot)
 
@@ -200,7 +198,7 @@ class IconButton(QtGui.QPushButton):
         option = QtGui.QStyleOptionButton()
         self.initStyleOption(option)
         size = self.style().sizeFromContents(
-            QtGui.QStyle.CT_ToolButton, option, option.iconSize
+            QtGui.QStyle.ContentsType.CT_ToolButton, option, option.iconSize
         )
         return size
 
@@ -257,7 +255,7 @@ def wrap_text_with_elision(text, font, width, height):
         # elide last line as we ran out of room
         last_line = paragraph[line_start:]
         lines[-1] = font_metrics.elidedText(
-            last_line, QtCore.Qt.ElideRight, width
+            last_line, QtCore.Qt.TextElideMode.ElideRight, width
         )
 
     return lines

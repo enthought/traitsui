@@ -39,13 +39,13 @@ if is_qt():
             self.n_events = 0
 
         def event(self, event):
-            if event.type() != QtCore.QEvent.User:
+            if event.type() != QtCore.QEvent.Type.User:
                 return super().event(event)
 
             self.n_events += 1
 
             if self.n_events < self.max_n_events:
-                new_event = QtCore.QEvent(QtCore.QEvent.User)
+                new_event = QtCore.QEvent(QtCore.QEvent.Type.User)
                 QtCore.QCoreApplication.postEvent(self, new_event)
             return True
 
@@ -110,7 +110,7 @@ class TestProcessEventsRepeated(unittest.TestCase):
             # number of times as max_n_events
             for _ in range(q_object.max_n_events):
                 QtCore.QCoreApplication.processEvents(
-                    QtCore.QEventLoop.AllEvents
+                    QtCore.QEventLoop.ProcessEventsFlag.AllEvents
                 )
 
         max_n_events = 10
@@ -118,12 +118,12 @@ class TestProcessEventsRepeated(unittest.TestCase):
         self.addCleanup(cleanup, q_object)
 
         QtCore.QCoreApplication.postEvent(
-            q_object, QtCore.QEvent(QtCore.QEvent.User)
+            q_object, QtCore.QEvent(QtCore.QEvent.Type.User)
         )
 
         # sanity check calling processEvents does not process
         # cascade of events.
-        QtCore.QCoreApplication.processEvents(QtCore.QEventLoop.AllEvents)
+        QtCore.QCoreApplication.processEvents(QtCore.QEventLoop.ProcessEventsFlag.AllEvents)
         self.assertEqual(q_object.n_events, 1)
 
         # when
@@ -136,7 +136,7 @@ class TestProcessEventsRepeated(unittest.TestCase):
         # are still pending tasks left. Run process events at least the same
         # number of times as max_n_events to verify
         for _ in range(max_n_events):
-            QtCore.QCoreApplication.processEvents(QtCore.QEventLoop.AllEvents)
+            QtCore.QCoreApplication.processEvents(QtCore.QEventLoop.ProcessEventsFlag.AllEvents)
 
         n_left_behind_events = q_object.n_events - actual
         msg = (

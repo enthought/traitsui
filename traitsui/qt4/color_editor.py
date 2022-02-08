@@ -24,7 +24,7 @@
 """
 
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_pyside
 
 from traitsui.editors.color_editor import (
     ToolkitEditorFactory as BaseToolkitEditorFactory,
@@ -96,9 +96,9 @@ class SimpleColorEditor(BaseSimpleEditor):
     def popup_editor(self):
         """Invokes the pop-up editor for an object trait."""
         color = self.factory.to_qt4_color(self)
-        options = QtGui.QColorDialog.ShowAlphaChannel
+        options = QtGui.QColorDialog.ColorDialogOption.ShowAlphaChannel
         if not self.factory.use_native_dialog:
-            options |= QtGui.QColorDialog.DontUseNativeDialog
+            options |= QtGui.QColorDialog.ColorDialogOption.DontUseNativeDialog
         color = QtGui.QColorDialog.getColor(
             color, self.control, "Select Color", options
         )
@@ -208,12 +208,12 @@ def set_color(editor):
     color = editor.factory.to_qt4_color(editor)
     pal = QtGui.QPalette(editor.control.palette())
 
-    pal.setColor(QtGui.QPalette.Base, color)
+    pal.setColor(QtGui.QPalette.ColorRole.Base, color)
 
     if color.red() > 192 or color.blue() > 192 or color.green() > 192:
-        pal.setColor(QtGui.QPalette.Text, QtCore.Qt.black)
+        pal.setColor(QtGui.QPalette.ColorRole.Text, QtCore.Qt.GlobalColor.black)
     else:
-        pal.setColor(QtGui.QPalette.Text, QtCore.Qt.white)
+        pal.setColor(QtGui.QPalette.ColorRole.Text, QtCore.Qt.GlobalColor.white)
 
     editor.control.setPalette(pal)
 
@@ -279,7 +279,7 @@ def color_editor_for(editor, parent):
             color = color_samples[r * cols + c]
             color_text = "%d,%d,%d,%d" % color.getRgb()
             control.setStyleSheet(sheet_template % color_text)
-            control.setAttribute(QtCore.Qt.WA_LayoutUsesWidgetRect, True)
+            control.setAttribute(QtCore.Qt.WidgetAttribute.WA_LayoutUsesWidgetRect, True)
 
             control.clicked.connect(mapper.map)
             mapper.setMapping(control, color_text)
@@ -289,7 +289,10 @@ def color_editor_for(editor, parent):
 
             i += 1
 
-    mapper.mapped[str].connect(editor.update_object_from_swatch)
+    if is_pyside:
+        mapper.mappedString.connect(editor.update_object_from_swatch)
+    else:
+        mapper.mapped[str].connect(editor.update_object_from_swatch)
 
     panel.addLayout(grid)
 

@@ -38,7 +38,7 @@ class SimpleEditor(Editor):
         if self.factory.allow_selection:
             flags = (
                 self.control.textInteractionFlags()
-                | QtCore.Qt.TextSelectableByMouse
+                | QtCore.Qt.TextInteractionFlag.TextSelectableByMouse
             )
             self.control.setTextInteractionFlags(flags)
         self.set_tooltip()

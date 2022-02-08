@@ -141,16 +141,18 @@ class _StickyDialog(QtGui.QDialog):
         # _StickyDialog open where one has a Window flag and other has a Dialog
         # flag results in the latter (Dialog) to be always placed on top of
         # the former (Window).
-        flags = QtCore.Qt.Window
+        flags = QtCore.Qt.WindowType.Window
         if not ui.view.resizable:
-            flags |= QtCore.Qt.WindowSystemMenuHint
-            layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+            flags |= QtCore.Qt.WindowType.WindowSystemMenuHint
+            layout.setSizeConstraint(QtGui.QLayout.SizeConstraint.SetFixedSize)
         try:
-            flags |= QtCore.Qt.WindowCloseButtonHint
+            flags |= QtCore.Qt.WindowType.WindowCloseButtonHint
             if ui.view.resizable:
-                flags |= (
-                    QtCore.Qt.WindowMinimizeButtonHint
-                    | QtCore.Qt.WindowMaximizeButtonHint
+                # Cast to int to deal with cast-to-int deprecation warning on
+                # PyQt5 5.12.3
+                flags |= int(
+                    QtCore.Qt.WindowType.WindowMinimizeButtonHint
+                    | QtCore.Qt.WindowType.WindowMaximizeButtonHint
                 )
         except AttributeError:
             # Either PyQt or Qt is too old.
@@ -179,12 +181,12 @@ class _StickyDialog(QtGui.QDialog):
         the Enter key if no default button has been explicitly set."""
 
         if (
-            e.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return)
+            e.key() in (QtCore.Qt.Key.Key_Enter, QtCore.Qt.Key.Key_Return)
             and not self._ui.view.default_button
         ):
             return
 
-        if e.key() == QtCore.Qt.Key_Escape and not self._ok_to_close():
+        if e.key() == QtCore.Qt.Key.Key_Escape and not self._ok_to_close():
             return
 
         QtGui.QDialog.keyPressEvent(self, e)
@@ -312,7 +314,7 @@ class BaseDialog(BasePanel):
         if style == BaseDialog.NONMODAL:
             ui.control.show()
         else:
-            ui.control.setWindowModality(QtCore.Qt.ApplicationModal)
+            ui.control.setWindowModality(QtCore.Qt.WindowModality.ApplicationModal)
             ui.control.exec_()
 
     def set_icon(self, icon=None):

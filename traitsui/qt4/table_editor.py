@@ -25,7 +25,7 @@
 """
 
 
-from pyface.qt import QtCore, QtGui, is_qt5
+from pyface.qt import QtCore, QtGui, is_qt4
 from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
 from pyface.ui_traits import Image
@@ -70,16 +70,15 @@ from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
 
 
-if is_qt5:
+if is_qt4:
 
     def set_qheader_section_resize_mode(header):
-        return header.setSectionResizeMode
-
+        return header.setResizeMode
 
 else:
 
     def set_qheader_section_resize_mode(header):
-        return header.setResizeMode
+        return header.setSectionResizeMode
 
 
 class TableEditor(Editor, BaseTableEditor):
@@ -223,7 +222,7 @@ class TableEditor(Editor, BaseTableEditor):
         # the triangle indicating it is the sort index, even though no sorting
         # has actually been done. Sort here for UI/model consistency.
         if self.factory.sortable and not self.factory.reorderable:
-            self.model.sort(0, QtCore.Qt.AscendingOrder)
+            self.model.sort(0, QtCore.Qt.SortOrder.AscendingOrder)
 
         # Connect to the mode specific selection handler and select the first
         # row/column/cell. Do this before creating the edit_view to make sure
@@ -263,11 +262,11 @@ class TableEditor(Editor, BaseTableEditor):
             self.control = main_view
         else:
             if factory.orientation == "horizontal":
-                self.control = QtGui.QSplitter(QtCore.Qt.Horizontal)
+                self.control = QtGui.QSplitter(QtCore.Qt.Orientation.Horizontal)
             else:
-                self.control = QtGui.QSplitter(QtCore.Qt.Vertical)
+                self.control = QtGui.QSplitter(QtCore.Qt.Orientation.Vertical)
             self.control.setSizePolicy(
-                QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+                QtGui.QSizePolicy.Policy.Expanding, QtGui.QSizePolicy.Policy.Expanding
             )
             self.control.addWidget(main_view)
             self.control.setStretchFactor(0, 2)
@@ -466,7 +465,7 @@ class TableEditor(Editor, BaseTableEditor):
 
         mode = self.factory.selection_mode
         indexes = []
-        flags = QtGui.QItemSelectionModel.ClearAndSelect
+        flags = QtGui.QItemSelectionModel.SelectionFlag.ClearAndSelect
 
         # In the case of row or column selection, we need a dummy value for the
         # other dimension that has not been filtered.
@@ -475,7 +474,7 @@ class TableEditor(Editor, BaseTableEditor):
 
         # Selection mode is 'row' or 'rows'
         if mode.startswith("row"):
-            flags |= QtGui.QItemSelectionModel.Rows
+            flags |= QtGui.QItemSelectionModel.SelectionFlag.Rows
             items = self.items()
             for obj in objects:
                 try:
@@ -486,7 +485,7 @@ class TableEditor(Editor, BaseTableEditor):
 
         # Selection mode is 'column' or 'columns'
         elif mode.startswith("column"):
-            flags |= QtGui.QItemSelectionModel.Columns
+            flags |= QtGui.QItemSelectionModel.SelectionFlag.Columns
             for name in objects:
                 column = self._column_index_from_name(name)
                 if column != -1:
@@ -514,7 +513,7 @@ class TableEditor(Editor, BaseTableEditor):
             index = self.model.mapFromSource(index)
             if index.isValid():
                 smodel.setCurrentIndex(
-                    index, QtGui.QItemSelectionModel.NoUpdate
+                    index, QtGui.QItemSelectionModel.SelectionFlag.NoUpdate
                 )
                 selection.select(index, index)
 
@@ -876,7 +875,7 @@ class TableDelegate(QtGui.QStyledItemDelegate):
         control.setParent(parent)
 
         # Required for QMouseEvents to propagate to the widget
-        control.setFocusPolicy(QtCore.Qt.StrongFocus)
+        control.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
 
         # The table view's background will shine through unless the editor
         # paints its own background
@@ -894,21 +893,21 @@ class TableDelegate(QtGui.QStyledItemDelegate):
     def paint(self, painter, option, index):
         self.initStyleOption(option, index)
 
-        if (option.state & QtGui.QStyle.State_Selected) and (
-            option.state & QtGui.QStyle.State_Active
+        if (option.state & QtGui.QStyle.StateFlag.State_Selected) and (
+            option.state & QtGui.QStyle.StateFlag.State_Active
         ):
             factory = self.parent()._editor.factory
             if factory.selection_bg_color is not None:
                 option.palette.setColor(
-                    QtGui.QPalette.Highlight, factory.selection_bg_color_
+                    QtGui.QPalette.ColorRole.Highlight, factory.selection_bg_color_
                 )
             if factory.selection_color is not None:
                 option.palette.setColor(
-                    QtGui.QPalette.HighlightedText, factory.selection_color_
+                    QtGui.QPalette.ColorRole.HighlightedText, factory.selection_color_
                 )
 
         QtGui.QApplication.style().drawControl(
-            QtGui.QStyle.CE_ItemViewItem, option, painter, None
+            QtGui.QStyle.ControlElement.CE_ItemViewItem, option, painter, None
         )
 
 
@@ -917,28 +916,28 @@ class TableView(QtGui.QTableView):
 
     _SELECTION_MAP = {
         "row": (
-            QtGui.QAbstractItemView.SelectRows,
-            QtGui.QAbstractItemView.SingleSelection,
+            QtGui.QAbstractItemView.SelectionBehavior.SelectRows,
+            QtGui.QAbstractItemView.SelectionMode.SingleSelection,
         ),
         "rows": (
-            QtGui.QAbstractItemView.SelectRows,
-            QtGui.QAbstractItemView.ExtendedSelection,
+            QtGui.QAbstractItemView.SelectionBehavior.SelectRows,
+            QtGui.QAbstractItemView.SelectionMode.ExtendedSelection,
         ),
         "column": (
-            QtGui.QAbstractItemView.SelectColumns,
-            QtGui.QAbstractItemView.SingleSelection,
+            QtGui.QAbstractItemView.SelectionBehavior.SelectColumns,
+            QtGui.QAbstractItemView.SelectionMode.SingleSelection,
         ),
         "columns": (
-            QtGui.QAbstractItemView.SelectColumns,
-            QtGui.QAbstractItemView.ExtendedSelection,
+            QtGui.QAbstractItemView.SelectionBehavior.SelectColumns,
+            QtGui.QAbstractItemView.SelectionMode.ExtendedSelection,
         ),
         "cell": (
-            QtGui.QAbstractItemView.SelectItems,
-            QtGui.QAbstractItemView.SingleSelection,
+            QtGui.QAbstractItemView.SelectionBehavior.SelectItems,
+            QtGui.QAbstractItemView.SelectionMode.SingleSelection,
         ),
         "cells": (
-            QtGui.QAbstractItemView.SelectItems,
-            QtGui.QAbstractItemView.ExtendedSelection,
+            QtGui.QAbstractItemView.SelectionBehavior.SelectItems,
+            QtGui.QAbstractItemView.SelectionMode.ExtendedSelection,
         ),
     }
 
@@ -962,11 +961,11 @@ class TableView(QtGui.QTableView):
 
         # Configure the editing behavior.
         triggers = (
-            QtGui.QAbstractItemView.DoubleClicked
-            | QtGui.QAbstractItemView.SelectedClicked
+            QtGui.QAbstractItemView.EditTrigger.DoubleClicked
+            | QtGui.QAbstractItemView.EditTrigger.SelectedClicked
         )
         if factory.edit_on_first_click and not factory.reorderable:
-            triggers |= QtGui.QAbstractItemView.CurrentChanged
+            triggers |= QtGui.QAbstractItemView.EditTrigger.CurrentChanged
         self.setEditTriggers(triggers)
 
         # Configure the reordering and sorting behavior.
@@ -975,7 +974,7 @@ class TableView(QtGui.QTableView):
         self.setDropIndicatorShown(True)
 
         if factory.reorderable:
-            self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+            self.setDragDropMode(QtGui.QAbstractItemView.DragDropMode.InternalMove)
         if factory.sortable:
             self.setSortingEnabled(True)
 
@@ -1031,7 +1030,7 @@ class TableView(QtGui.QTableView):
         """Reimplemented to create context menu for the vertical header."""
 
         vheader = self.verticalHeader()
-        if obj is vheader and event.type() == QtCore.QEvent.ContextMenu:
+        if obj is vheader and event.type() == QtCore.QEvent.Type.ContextMenu:
             event.accept()
             editor = self._editor
             row = vheader.logicalIndexAt(event.pos().y())
@@ -1088,7 +1087,7 @@ class TableView(QtGui.QTableView):
             return size_hint
 
         width = self.style().pixelMetric(
-            QtGui.QStyle.PM_ScrollBarExtent, QtGui.QStyleOptionHeader(), self
+            QtGui.QStyle.PixelMetric.PM_ScrollBarExtent, QtGui.QStyleOptionHeader(), self
         )
         for column in range(len(self._editor.columns)):
             width += self.sizeHintForColumn(column)
@@ -1130,18 +1129,18 @@ class TableView(QtGui.QTableView):
             option = QtGui.QStyleOptionHeader()
             width += (
                 style.pixelMetric(
-                    QtGui.QStyle.PM_HeaderGripMargin, option, self
+                    QtGui.QStyle.PixelMetric.PM_HeaderGripMargin, option, self
                 )
                 * 2
             )
             if editor.factory.sortable and not editor.factory.reorderable:
                 # Add size of sort indicator
                 width += style.pixelMetric(
-                    QtGui.QStyle.PM_HeaderMarkSize, option, self
+                    QtGui.QStyle.PixelMetric.PM_HeaderMarkSize, option, self
                 )
                 # Add distance between sort indicator and text
                 width += style.pixelMetric(
-                    QtGui.QStyle.PM_HeaderMargin, option, self
+                    QtGui.QStyle.PixelMetric.PM_HeaderMargin, option, self
                 )
             return max(base_width, width)
 
@@ -1217,23 +1216,23 @@ class TableView(QtGui.QTableView):
             factory.editable and (insertable or factory.deletable)
         ) or factory.reorderable:
             vheader.installEventFilter(self)
-            set_resize_mode(QtGui.QHeaderView.ResizeToContents)
+            set_resize_mode(QtGui.QHeaderView.ResizeMode.ResizeToContents)
         elif not factory.show_row_labels:
             vheader.hide()
         if factory.row_height > 0:
             vheader.setDefaultSectionSize(factory.row_height)
         self.setAlternatingRowColors(factory.alternate_bg_color)
-        self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollMode.ScrollPerPixel)
         # Configure the column headings.
         # We detect if there are any stretchy sections at all; if not, then
         # we make the last non-fixed-size column stretchy.
         hheader = self.horizontalHeader()
         set_resize_mode = set_qheader_section_resize_mode(hheader)
         resize_mode_map = dict(
-            interactive=QtGui.QHeaderView.Interactive,
-            fixed=QtGui.QHeaderView.Fixed,
-            stretch=QtGui.QHeaderView.Stretch,
-            resize_to_contents=QtGui.QHeaderView.ResizeToContents,
+            interactive=QtGui.QHeaderView.ResizeMode.Interactive,
+            fixed=QtGui.QHeaderView.ResizeMode.Fixed,
+            stretch=QtGui.QHeaderView.ResizeMode.Stretch,
+            resize_to_contents=QtGui.QHeaderView.ResizeMode.ResizeToContents,
         )
         stretchable_columns = []
         for i, column in enumerate(editor.columns):
@@ -1246,7 +1245,7 @@ class TableView(QtGui.QTableView):
             hheader.setStretchLastSection(True)
         else:
             # hheader.setSectionResizeMode(
-            #     stretchable_columns[-1], QtGui.QHeaderView.Stretch)
+            #     stretchable_columns[-1], QtGui.QHeaderView.ResizeMode.Stretch)
             hheader.setStretchLastSection(False)
         if factory.show_column_labels:
             hheader.setHighlightSections(False)

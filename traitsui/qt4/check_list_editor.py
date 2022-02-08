@@ -27,7 +27,7 @@ user interface toolkit.
 
 import logging
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_pyside
 
 from traits.api import Any, Callable, List, Str, TraitError, Tuple
 
@@ -155,7 +155,10 @@ class CustomEditor(SimpleEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        self._mapper.mapped[str].connect(self.update_object)
+        if is_pyside:
+            self._mapper.mappedString.connect(self.update_object)
+        else:
+            self._mapper.mapped[str].connect(self.update_object)
 
     def dispose(self):
         """Disposes of the contents of an editor."""
@@ -165,7 +168,10 @@ class CustomEditor(SimpleEditor):
 
         # signal from create_control
         if self._mapper is not None:
-            self._mapper.mapped[str].disconnect(self.update_object)
+            if is_pyside:
+                self._mapper.mappedString.disconnect(self.update_object)
+            else:
+                self._mapper.mapped[str].disconnect(self.update_object)
             self._mapper = None
 
         # enthought/traitsui#884
@@ -212,9 +218,9 @@ class CustomEditor(SimpleEditor):
                     cb.value = values[index]
 
                     if cb.value in cur_value:
-                        cb.setCheckState(QtCore.Qt.Checked)
+                        cb.setCheckState(QtCore.Qt.CheckState.Checked)
                     else:
-                        cb.setCheckState(QtCore.Qt.Unchecked)
+                        cb.setCheckState(QtCore.Qt.CheckState.Unchecked)
 
                     cb.clicked.connect(self._mapper.map)
                     self._connections_to_rebuild.append(
@@ -231,7 +237,7 @@ class CustomEditor(SimpleEditor):
         """Handles the user clicking one of the custom check boxes."""
         cb = self._mapper.mapping(label)
         cur_value = parse_value(self.value)
-        if cb.checkState() == QtCore.Qt.Checked:
+        if cb.checkState() == QtCore.Qt.CheckState.Checked:
             cur_value.append(cb.value)
         elif cb.value in cur_value:
             cur_value.remove(cb.value)
@@ -248,9 +254,9 @@ class CustomEditor(SimpleEditor):
         new_values = parse_value(self.value)
         for cb in self.control.findChildren(QtGui.QCheckBox, None):
             if cb.value in new_values:
-                cb.setCheckState(QtCore.Qt.Checked)
+                cb.setCheckState(QtCore.Qt.CheckState.Checked)
             else:
-                cb.setCheckState(QtCore.Qt.Unchecked)
+                cb.setCheckState(QtCore.Qt.CheckState.Unchecked)
 
 
 class TextEditor(BaseTextEditor):

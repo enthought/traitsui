@@ -11,7 +11,8 @@ name: Test with EDM
 on: pull_request
 
 env:
-  INSTALL_EDM_VERSION: 3.2.3
+  INSTALL_EDM_VERSION: 3.3.1
+  QT_MAC_WANTS_LAYER: 1
 
 jobs:
 
@@ -20,7 +21,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        toolkit: ['pyqt5', 'pyside2']
+        toolkit: ['pyqt5', 'pyside2', 'pyside6']
         include:
           - os: ubuntu-latest
             toolkit: 'null'

@@ -13,7 +13,7 @@
 """
 
 
-from pyface.qt import QtGui
+from pyface.qt import QtGui, is_qt4, is_qt5
 
 from .editor import Editor
 
@@ -34,7 +34,7 @@ class _HistoryEditor(Editor):
         """
         self.control = control = QtGui.QComboBox()
         control.setEditable(True)
-        control.setInsertPolicy(QtGui.QComboBox.InsertAtTop)
+        control.setInsertPolicy(QtGui.QComboBox.InsertPolicy.InsertAtTop)
 
         if self.factory.entries > 0:
             control.model().rowsInserted.connect(self._truncate)
@@ -42,7 +42,10 @@ class _HistoryEditor(Editor):
         if self.factory.auto_set:
             control.editTextChanged.connect(self.update_object)
         else:
-            control.activated[str].connect(self.update_object)
+            if is_qt4 or is_qt5:
+                control.activated[str].connect(self.update_object)
+            else:
+                control.textActivated.connect(self.update_object)
 
         self.set_tooltip()
 

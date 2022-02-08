@@ -22,7 +22,7 @@
 
 from os.path import abspath, splitext, isfile, exists
 
-from pyface.qt import QtCore, QtGui, is_qt5
+from pyface.qt import QtCore, QtGui, is_qt4
 from traits.api import Any, Callable, List, Event, File, Str, TraitError, Tuple
 
 from .editor import Editor
@@ -69,7 +69,7 @@ class SimpleEditor(SimpleTextEditor):
                 (control.editingFinished, self.update_object)
             )
 
-        button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
+        button = IconButton(QtGui.QStyle.StandardPixmap.SP_DirIcon, self.show_file_dialog)
         layout.addWidget(button)
 
         self.set_tooltip(control)
@@ -111,7 +111,7 @@ class SimpleEditor(SimpleTextEditor):
         # one to be created).
         dlg = self._create_file_dialog()
 
-        if dlg.exec_() == QtGui.QDialog.Accepted:
+        if dlg.exec_() == QtGui.QDialog.DialogCode.Accepted:
             files = dlg.selectedFiles()
 
             if len(files) > 0:
@@ -176,10 +176,10 @@ class CustomEditor(SimpleTextEditor):
 
         # Don't apply filters to directories and don't show "." and ".."
         model.setFilter(
-            QtCore.QDir.AllDirs
-            | QtCore.QDir.Files
-            | QtCore.QDir.Drives
-            | QtCore.QDir.NoDotAndDotDot
+            QtCore.QDir.Filter.AllDirs
+            | QtCore.QDir.Filter.Files
+            | QtCore.QDir.Filter.Drives
+            | QtCore.QDir.Filter.NoDotAndDotDot
         )
 
         # Hide filtered out files instead of only disabling them
@@ -216,10 +216,10 @@ class CustomEditor(SimpleTextEditor):
 
         # This is needed to enable horizontal scrollbar.
         header = self.control.header()
-        if is_qt5:
-            header.setSectionResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        if is_qt4:
+            header.setResizeMode(0, QtGui.QHeaderView.ResizeMode.ResizeToContents)
         else:
-            header.setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+            header.setSectionResizeMode(0, QtGui.QHeaderView.ResizeMode.ResizeToContents)
         header.setStretchLastSection(False)
 
     def dispose(self):
@@ -288,7 +288,7 @@ class _TreeView(QtGui.QTreeView):
         self._editor = editor
 
     def event(self, event):
-        if event.type() == QtCore.QEvent.ToolTip:
+        if event.type() == QtCore.QEvent.Type.ToolTip:
             index = self.indexAt(event.pos())
             if index and index.isValid():
                 QtGui.QToolTip.showText(event.globalPos(), index.data(), self)
@@ -302,7 +302,7 @@ class _TreeView(QtGui.QTreeView):
 
     def keyPressEvent(self, keyevent):
         key = keyevent.key()
-        if key == QtCore.Qt.Key_Return or key == QtCore.Qt.Key_Enter:
+        if key == QtCore.Qt.Key.Key_Return or key == QtCore.Qt.Key.Key_Enter:
             self._editor._on_dclick(self.selectedIndexes()[0])
             keyevent.accept()
         QtGui.QTreeView.keyPressEvent(self, keyevent)

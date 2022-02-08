@@ -273,7 +273,7 @@ if is_qt():
 
     class EditorWithCustomWidget(ToolkitSpecificEditor):
         def init(self, parent):
-            self.control = QtGui.QSplitter(QtCore.Qt.Horizontal)
+            self.control = QtGui.QSplitter(QtCore.Qt.Orientation.Horizontal)
 
             widget = CustomWidget(editor=self)
             self.control.addWidget(widget)

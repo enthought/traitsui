@@ -1,0 +1,1 @@
+Fix NotebookEditor initial `selected` (#1791)

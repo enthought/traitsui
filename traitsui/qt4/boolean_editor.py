@@ -61,9 +61,9 @@ class SimpleEditor(Editor):
         editor.
         """
         if self.value:
-            self.control.setCheckState(QtCore.Qt.Checked)
+            self.control.setCheckState(QtCore.Qt.CheckState.Checked)
         else:
-            self.control.setCheckState(QtCore.Qt.Unchecked)
+            self.control.setCheckState(QtCore.Qt.CheckState.Unchecked)
 
 
 class ReadonlyEditor(Editor):
@@ -79,7 +79,7 @@ class ReadonlyEditor(Editor):
         self.control.setReadOnly(True)
 
         pal = QtGui.QPalette(self.control.palette())
-        pal.setColor(QtGui.QPalette.Base, ReadonlyColor)
+        pal.setColor(QtGui.QPalette.ColorRole.Base, ReadonlyColor)
         self.control.setPalette(pal)
 
     # -------------------------------------------------------------------------

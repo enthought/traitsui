@@ -56,7 +56,7 @@ class SimpleEditor(Editor):
 
         if self.factory.values_trait:
             self.control = QtGui.QToolButton()
-            self.control.toolButtonStyle = QtCore.Qt.ToolButtonTextOnly
+            self.control.toolButtonStyle = QtCore.Qt.ToolButtonStyle.ToolButtonTextOnly
             self.control.setText(self.string_value(label))
             self.object.observe(
                 self._update_menu, self.factory.values_trait + ".items"
@@ -78,7 +78,7 @@ class SimpleEditor(Editor):
         # See enthought/traitsui#1308
         self.control.clicked.connect(
             self.update_object,
-            type=QtCore.Qt.QueuedConnection,
+            type=QtCore.Qt.ConnectionType.QueuedConnection,
         )
         self.set_tooltip()
 

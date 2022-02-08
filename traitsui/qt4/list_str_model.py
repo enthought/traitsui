@@ -48,17 +48,17 @@ class ListStrModel(QtCore.QAbstractListModel):
         adapter = editor.adapter
         index = mi.row()
 
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole or role == QtCore.Qt.ItemDataRole.EditRole:
             if editor.is_auto_add(index):
                 text = adapter.get_default_text(editor.object, editor.name)
             else:
                 text = adapter.get_text(editor.object, editor.name, index)
-            if role == QtCore.Qt.DisplayRole and text == "":
+            if role == QtCore.Qt.ItemDataRole.DisplayRole and text == "":
                 # FIXME: This is a hack to make empty strings editable.
                 text = " "
             return text
 
-        elif role == QtCore.Qt.DecorationRole:
+        elif role == QtCore.Qt.ItemDataRole.DecorationRole:
             if editor.is_auto_add(index):
                 image = adapter.get_default_image(editor.object, editor.name)
             else:
@@ -67,12 +67,12 @@ class ListStrModel(QtCore.QAbstractListModel):
             if image is not None:
                 return image
 
-        elif role == QtCore.Qt.ToolTipRole:
+        elif role == QtCore.Qt.ItemDataRole.ToolTipRole:
             tooltip = adapter.get_tooltip(editor.object, editor.name, index)
             if tooltip:
                 return tooltip
 
-        elif role == QtCore.Qt.BackgroundRole:
+        elif role == QtCore.Qt.ItemDataRole.BackgroundRole:
             if editor.is_auto_add(index):
                 color = adapter.get_default_bg_color(
                     editor.object, editor.name
@@ -86,7 +86,7 @@ class ListStrModel(QtCore.QAbstractListModel):
                     q_color = QtGui.QColor(color)
                 return QtGui.QBrush(q_color)
 
-        elif role == QtCore.Qt.ForegroundRole:
+        elif role == QtCore.Qt.ItemDataRole.ForegroundRole:
             if editor.is_auto_add(index):
                 color = adapter.get_default_text_color(
                     editor.object, editor.name
@@ -130,14 +130,14 @@ class ListStrModel(QtCore.QAbstractListModel):
         editor = self._editor
         index = mi.row()
 
-        flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
+        flags = QtCore.Qt.ItemFlag.ItemIsSelectable | QtCore.Qt.ItemFlag.ItemIsEnabled
 
         if (
             editor.factory.editable
             and "edit" in editor.factory.operations
             and editor.adapter.get_can_edit(editor.object, editor.name, index)
         ):
-            flags |= QtCore.Qt.ItemIsEditable
+            flags |= QtCore.Qt.ItemFlag.ItemIsEditable
 
         if (
             editor.factory.editable
@@ -145,15 +145,15 @@ class ListStrModel(QtCore.QAbstractListModel):
             and editor.adapter.get_drag(editor.object, editor.name, index)
             is not None
         ):
-            flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
+            flags |= QtCore.Qt.ItemFlag.ItemIsDragEnabled | QtCore.Qt.ItemFlag.ItemIsDropEnabled
 
         return flags
 
     def headerData(self, section, orientation, role):
         """Reimplemented to return title for vertical header data."""
         if (
-            orientation != QtCore.Qt.Horizontal
-            or role != QtCore.Qt.DisplayRole
+            orientation != QtCore.Qt.Orientation.Horizontal
+            or role != QtCore.Qt.ItemDataRole.DisplayRole
         ):
             return None
 
@@ -222,7 +222,7 @@ class ListStrModel(QtCore.QAbstractListModel):
 
     def dropMimeData(self, mime_data, action, row, column, parent):
         """Reimplemented to allow items to be moved."""
-        if action == QtCore.Qt.IgnoreAction:
+        if action == QtCore.Qt.DropAction.IgnoreAction:
             return False
 
         data = mime_data.data(mime_type)
@@ -235,7 +235,7 @@ class ListStrModel(QtCore.QAbstractListModel):
 
     def supportedDropActions(self):
         """Reimplemented to allow items to be moved."""
-        return QtCore.Qt.MoveAction
+        return QtCore.Qt.DropAction.MoveAction
 
     # -------------------------------------------------------------------------
     #  ListStrModel interface:

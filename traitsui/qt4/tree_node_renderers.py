@@ -59,7 +59,7 @@ class WordWrapRenderer(AbstractTreeNodeRenderer):
         lines = wrap_text_with_elision(text, option.font, width, height)
 
         old_pen = painter.pen()
-        if bool(option.state & QtGui.QStyle.State_Selected):
+        if bool(option.state & QtGui.QStyle.StateFlag.State_Selected):
             painter.setPen(QtGui.QPen(option.palette.highlightedText(), 0))
         try:
             rect = painter.drawText(

@@ -26,6 +26,7 @@ from traitsui.tests._tools import (
     BaseTestMixin,
     is_qt,
     is_qt5,
+    is_qt6,
     is_wx,
     process_cascade_events,
     requires_toolkit,
@@ -198,8 +199,8 @@ SEARCHER.skip_file_if(
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Misc", "demo_group_size.py"),
-    is_wx,
-    "enable tries to import a missing constant. See enthought/enable#307",
+    is_qt6,
+    "enable tries to import a missing constant. See enthought/enable#891",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Standard_Editors", "VideoEditor_demo.py"),

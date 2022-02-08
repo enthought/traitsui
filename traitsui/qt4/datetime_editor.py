@@ -12,7 +12,7 @@
 """
 
 
-from pyface.qt import QtGui, qt_api
+from pyface.qt import QtGui, is_pyside
 from pyface.qt.QtCore import QDateTime
 from traits.api import Datetime, observe
 
@@ -68,7 +68,7 @@ class SimpleEditor(Editor):
     def update_object(self, q_datetime):
         """Handles the user entering input data in the edit control."""
         try:
-            if qt_api == 'pyside2':
+            if is_pyside:
                 self.value = q_datetime.toPython()
             else:
                 self.value = q_datetime.toPyDateTime()

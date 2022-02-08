@@ -56,7 +56,7 @@ class SearchWidget(QtGui.QLineEdit):
         """Sets the greyed-out descriptive text."""
         palette = QtGui.QApplication.instance().palette()
         palette.setColor(
-            QtGui.QPalette.Text, palette.color(QtGui.QPalette.Dark)
+            QtGui.QPalette.ColorRole.Text, palette.color(QtGui.QPalette.ColorRole.Dark)
         )
         self.setPalette(palette)
         self.setText(self._desc)
