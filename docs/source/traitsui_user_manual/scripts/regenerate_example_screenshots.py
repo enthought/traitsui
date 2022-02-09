@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -13,7 +13,7 @@ on the "The Predefined Trait Editor Factories" and "Advanced Trait Editors"
 pages of the documentation.
 
 Note: This script assumes it is being run from the traitsui root directory.
-ie. one should run 
+ie. one should run
 `python docs/source/traitsui_user_manual/scripts/regenerate_example_screenshots.py`
 """
 import contextlib
