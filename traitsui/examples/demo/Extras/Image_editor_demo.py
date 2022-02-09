@@ -29,9 +29,8 @@ from traitsui.api import View, VGroup, Item, ImageEditor
 # The images folder is in the same folder as this file:
 search_path = [dirname(__file__)]
 
+
 # Define the demo class:
-
-
 class Employee(HasTraits):
 
     # Define the traits:
@@ -79,6 +78,7 @@ class Employee(HasTraits):
         ),
         resizable=True,
     )
+
 
 # generate a 2D NumPy array of RGB values
 gradient = np.empty(shape=(256, 256, 3), dtype='uint8')
