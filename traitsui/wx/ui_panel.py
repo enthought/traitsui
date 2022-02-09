@@ -1219,7 +1219,7 @@ class HTMLHelpWindow(wx.Frame):
 HeadingText = None
 
 
-def heading_text(*args, create=False,  **kw):
+def heading_text(*args, create=False, **kw):
     """Create a Pyface HeadingText control."""
     global HeadingText
 
