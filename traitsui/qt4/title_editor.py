@@ -21,19 +21,23 @@
 # ------------------------------------------------------------------------------
 
 
-from pyface.qt import QtCore
+from pyface.qt import QtCore, QtGui
 
 from .editor import Editor
 
-from pyface.heading_text import HeadingText
+from pyface.api import HeadingText
 
 
 class SimpleEditor(Editor):
+
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
         widget.
         """
-        self._control = HeadingText(None)
+        if isinstance(parent, QtGui.QLayout):
+            parent = parent.parentWidget()
+        self._control = HeadingText(parent=parent, create=False)
+        self._control.create()
         self.control = self._control.control
         if self.factory.allow_selection:
             flags = (
@@ -48,6 +52,15 @@ class SimpleEditor(Editor):
         editor.
         """
         self._control.text = self.str_value
+
+    def dispose(self):
+        """Cleanly dispose of the editor.
+
+        This ensures that the wrapped Pyface Widget is cleaned-up.
+        """
+        if self._control is not None:
+            self._control.destroy()
+        super().dispose()
 
 
 CustomEditor = SimpleEditor
