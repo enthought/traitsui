@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------
 #
-#  Copyright (c) 2007, Enthought, Inc.
+#  (C) Copyright 2007-2022 Enthought, Inc., Austin, TX
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
