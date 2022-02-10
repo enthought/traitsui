@@ -51,5 +51,4 @@ class _ImageEditor(Editor):
         """
         if self.factory.image is None:
             value = self.value
-            if isinstance(value, ImageResource):
-                self.control.Bitmap(convert_bitmap(value))
+            self.control.Bitmap(convert_bitmap(value))

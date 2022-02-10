@@ -276,8 +276,7 @@ class _ImageEditor(Editor):
         """
         if self.factory.image is None:
             value = self.value
-            if isinstance(value, ImageResource):
-                self.control.setPixmap(convert_bitmap(value))
+            self.control.setPixmap(convert_bitmap(value))
         self.control.setScaledContents(self.factory.scale)
         self.control.setAllowUpscaling(self.factory.allow_upscaling)
         self.control.setPreserveAspectRatio(self.factory.preserve_aspect_ratio)
