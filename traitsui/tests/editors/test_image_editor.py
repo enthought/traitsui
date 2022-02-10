@@ -8,7 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
-""" Tests pertaining to the AnimatedGIFEditor
+""" Tests pertaining to the ImageEditor
 """
 
 import unittest
@@ -40,7 +40,7 @@ class ImageDisplay(HasTraits):
 
 
 @requires_toolkit([ToolkitName.wx])
-class TestAnimatedGIFEditor(BaseTestMixin, unittest.TestCase):
+class TestImageEditor(BaseTestMixin, unittest.TestCase):
 
     def test_image_editor_static(self):
         obj1 = ImageDisplay()
