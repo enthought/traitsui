@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -9,7 +9,7 @@
 # Thanks for using Enthought open source!
 
 """
-Test the initialization of a Datetime when given minimum and maximum 
+Test the initialization of a Datetime when given minimum and maximum
 dates in the DatetimeEditor
 """
 from datetime import datetime, timedelta
@@ -42,7 +42,7 @@ class DatetimeInitDailog(HasTraits):
     def _date_default(self):
         return DATE
 
-    traits_view = View(Item('date', 
+    traits_view = View(Item('date',
                             editor=DatetimeEditor(
                                 maximum_datetime=MAX_DATE,
                                 minimum_datetime=MIN_DATE)))

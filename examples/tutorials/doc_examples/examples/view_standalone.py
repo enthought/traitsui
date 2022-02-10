@@ -1,4 +1,4 @@
-#  Copyright (c) 2007, Enthought, Inc.
+#  (C) Copyright 2007-2022 Enthought, Inc., Austin, TX
 #  License: BSD Style.
 
 # view_standalone.py --- Example of a view as a

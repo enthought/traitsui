@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -9,7 +9,7 @@
 # Thanks for using Enthought open source!
 
 """ This file provides tests for the demo of the same name located in the
-directory one level up.  
+directory one level up.
 """
 import os
 import runpy
