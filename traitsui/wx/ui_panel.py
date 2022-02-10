@@ -1226,6 +1226,6 @@ def heading_text(*args, create=False, **kw):
     if HeadingText is None:
         from pyface.api import HeadingText
 
-    widget = HeadingText(create=create, *args, **kw)
+    widget = HeadingText(*args, create=create, **kw)
     widget.create()
     return widget
