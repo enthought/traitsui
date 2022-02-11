@@ -168,7 +168,7 @@ class _Panel(BasePanel):
 
             # Handle any view title.
             if title != "":
-                layout.addWidget(heading_text(None, text=view.title).control)
+                layout.addWidget(heading_text(parent=w, text=view.title).control)
 
             if isinstance(self.control, QtGui.QWidget):
                 layout.addWidget(self.control)
@@ -1349,11 +1349,13 @@ class HTMLHelpWindow(QtGui.QDialog):
 HeadingText = None
 
 
-def heading_text(*args, **kw):
+def heading_text(*args, create=False, **kw):
     """Create a Pyface HeadingText control."""
     global HeadingText
 
     if HeadingText is None:
         from pyface.api import HeadingText
 
-    return HeadingText(*args, **kw)
+    widget = HeadingText(*args, create=create, **kw)
+    widget.create()
+    return widget

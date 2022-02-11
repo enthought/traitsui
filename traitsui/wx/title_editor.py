@@ -14,7 +14,7 @@
 
 from .editor import Editor
 
-from pyface.heading_text import HeadingText
+from pyface.api import HeadingText
 
 # FIXME: TitleEditor (the editor factory for title editors) is a proxy class
 # defined here just for backward compatibility. The class has been moved to
@@ -29,28 +29,29 @@ from traitsui.editors.title_editor import TitleEditor
 
 class _TitleEditor(Editor):
 
-    # -------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    # -------------------------------------------------------------------------
-
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
         widget.
         """
-        self._control = HeadingText(parent)
+        self._control = HeadingText(parent=parent, create=False)
+        self._control.create()
         self.control = self._control.control
         self.set_tooltip()
-
-    # -------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    # -------------------------------------------------------------------------
 
     def update_editor(self):
         """Updates the editor when the object trait changes external to the
         editor.
         """
         self._control.text = self.str_value
+
+    def dispose(self):
+        """Cleanly dispose of the editor.
+
+        This ensures that the wrapped Pyface Widget is cleaned-up.
+        """
+        if self._control is not None:
+            self._control.destroy()
+        super().dispose()
 
 
 SimpleEditor = _TitleEditor
