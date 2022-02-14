@@ -16,6 +16,7 @@ from ast import literal_eval
 import wx
 
 from pyface.color import Color as PyfaceColor
+from pyface.util.color_parser import color_table
 from traits.api import Trait, TraitError
 
 
@@ -38,6 +39,7 @@ class W3CColourDatabase(object):
     _database = wx.ColourDatabase()
 
     def __init__(self):
+        # correct for differences in definitions
         self._color_names = [
             "aqua",
             "black",
@@ -67,6 +69,11 @@ class W3CColourDatabase(object):
         self.AddColour("purple", wx.Colour(0x80, 0x00, 0x80, 255))
         self.AddColour("silver", wx.Colour(0xC0, 0xC0, 0xC0, 255))
         self.AddColour("teal", wx.Colour(0, 0x80, 0x80, 255))
+
+        # add all the standard colours
+        for name, rgba in color_table.items():
+            rgba_bytes = tuple(int(x * 255) for x in rgba)
+            self.AddColour(name, wx.Colour(*rgba_bytes))
 
     def AddColour(self, name, color):
         if name not in self._color_names:
@@ -151,76 +158,7 @@ convert_to_color.info = (
 # -------------------------------------------------------------------------
 
 standard_colors = {}
-for name in [
-    "aquamarine",
-    "black",
-    "blue",
-    "blue violet",
-    "brown",
-    "cadet blue",
-    "coral",
-    "cornflower blue",
-    "cyan",
-    "dark grey",
-    "dark green",
-    "dark olive green",
-    "dark orchid",
-    "dark slate blue",
-    "dark slate grey",
-    "dark turquoise",
-    "dim grey",
-    "firebrick",
-    "forest green",
-    "gold",
-    "goldenrod",
-    "grey",
-    "green",
-    "green yellow",
-    "indian red",
-    "khaki",
-    "light blue",
-    "light grey",
-    "light steel blue",
-    "lime green",
-    "magenta",
-    "maroon",
-    "medium aquamarine",
-    "medium blue",
-    "medium forest green",
-    "medium goldenrod",
-    "medium orchid",
-    "medium sea green",
-    "medium slate blue",
-    "medium spring green",
-    "medium turquoise",
-    "medium violet red",
-    "midnight blue",
-    "navy",
-    "orange",
-    "orange red",
-    "orchid",
-    "pale green",
-    "pink",
-    "plum",
-    "purple",
-    "red",
-    "salmon",
-    "sea green",
-    "sienna",
-    "sky blue",
-    "slate blue",
-    "spring green",
-    "steel blue",
-    "tan",
-    "thistle",
-    "turquoise",
-    "violet",
-    "violet red",
-    "wheat",
-    "white",
-    "yellow",
-    "yellow green",
-]:
+for name in color_table:
     try:
         wx_color = w3c_color_database.Find(name)
         standard_colors[name] = convert_to_color(None, None, wx_color)

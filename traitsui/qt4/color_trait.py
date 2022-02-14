@@ -27,7 +27,7 @@ from ast import literal_eval
 
 from pyface.qt import QtGui
 from pyface.color import Color as PyfaceColor
-
+from pyface.util.color_parser import color_table
 from traits.api import Trait, TraitError
 
 
@@ -39,6 +39,14 @@ def convert_to_color(object, name, value):
     except Exception:
         tup = value
 
+    if isinstance(value, str):
+        # Allow for spaces in the string value.
+        value = value.replace(" ", "")
+
+        # is it in the color table?
+        if value in color_table:
+            tup = tuple(int(x * 255) for x in color_table[value])
+
     if isinstance(tup, tuple):
         if 3 <= len(tup) <= 4:
             try:
@@ -48,12 +56,8 @@ def convert_to_color(object, name, value):
         else:
             raise TraitError
     elif isinstance(value, PyfaceColor):
-        return value.to_toolkit()
+        color = value.to_toolkit()
     else:
-        if isinstance(value, str):
-            # Allow for spaces in the string value.
-            value = value.replace(" ", "")
-
         # Let the standard ctors handle the value.
         try:
             color = QtGui.QColor(value)
@@ -78,12 +82,10 @@ convert_to_color.info = (
 #  Standard colors:
 # -------------------------------------------------------------------------
 
-# Note that this is slightly different from the wx implementation in that the
-# names do not include spaces and the full set of SVG color keywords is
-# supported.
 standard_colors = {}
-for name in QtGui.QColor.colorNames():
-    standard_colors[str(name)] = QtGui.QColor(name)
+for name, rgba in color_table.items():
+    rgba_bytes = tuple(int(x * 255) for x in rgba)
+    standard_colors[str(name)] = QtGui.QColor(*rgba_bytes)
 
 # -------------------------------------------------------------------------
 #  Callable that returns an instance of the PyQtToolkitEditorFactory for color

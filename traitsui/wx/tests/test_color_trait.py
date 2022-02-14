@@ -35,60 +35,70 @@ class TestWxColor(unittest.TestCase):
 
         self.assertIsInstance(obj.color, wx.Colour)
         self.assertEqual(obj.color.Get(), (255, 255, 255, 255))
+        self.assertIsInstance(obj.color_, wx.Colour)
+        self.assertEqual(obj.color_.Get(), (255, 255, 255, 255))
 
     def test_tuple_rgb(self):
         obj = ObjectWithColor(color=(0, 128, 255))
 
         self.assertIsInstance(obj.color, wx.Colour)
         self.assertEqual(obj.color.Get(), (0, 128, 255, 255))
+        self.assertIsInstance(obj.color_, wx.Colour)
+        self.assertEqual(obj.color_.Get(), (0, 128, 255, 255))
 
     def test_tuple_rgba(self):
         obj = ObjectWithColor(color=(0, 128, 255, 64))
 
         self.assertIsInstance(obj.color, wx.Colour)
         self.assertEqual(obj.color.Get(), (0, 128, 255, 64))
+        self.assertIsInstance(obj.color_, wx.Colour)
+        self.assertEqual(obj.color_.Get(), (0, 128, 255, 64))
 
     def test_name_string(self):
         obj = ObjectWithColor(color="maroon")
 
         self.assertIsInstance(obj.color, wx.Colour)
         self.assertEqual(obj.color.Get(), (128, 0, 0, 255))
+        self.assertIsInstance(obj.color_, wx.Colour)
+        self.assertEqual(obj.color_.Get(), (128, 0, 0, 255))
 
     def test_rgb_string(self):
         obj = ObjectWithColor(color="(0, 128, 255)")
 
         self.assertIsInstance(obj.color, wx.Colour)
         self.assertEqual(obj.color.Get(), (0, 128, 255, 255))
+        self.assertIsInstance(obj.color_, wx.Colour)
+        self.assertEqual(obj.color_.Get(), (0, 128, 255, 255))
 
     def test_rgba_string(self):
         obj = ObjectWithColor(color="(0, 128, 255, 64)")
 
         self.assertIsInstance(obj.color, wx.Colour)
         self.assertEqual(obj.color.Get(), (0, 128, 255, 64))
-
-    def test_rgb_int_string(self):
-        obj = ObjectWithColor(color="0x0088ff")
-
-        self.assertIsInstance(obj.color, wx.Colour)
-        self.assertEqual(obj.color.Get(), (0x00, 0x88, 0xff, 0xff))
+        self.assertIsInstance(obj.color_, wx.Colour)
+        self.assertEqual(obj.color_.Get(), (0, 128, 255, 64))
 
     def test_rgb_int(self):
         obj = ObjectWithColor(color=0x0088ff)
 
         self.assertIsInstance(obj.color, wx.Colour)
         self.assertEqual(obj.color.Get(), (0x00, 0x88, 0xff, 0xff))
+        self.assertIsInstance(obj.color_, wx.Colour)
+        self.assertEqual(obj.color_.Get(), (0x00, 0x88, 0xff, 0xff))
 
     def test_pyface_color(self):
         obj = ObjectWithColor(color=PyfaceColor(rgba=(0.0, 0.5, 1.0, 0.25)))
 
         self.assertIsInstance(obj.color, wx.Colour)
         self.assertEqual(obj.color.Get(), (0, 128, 255, 64))
+        self.assertIsInstance(obj.color_, wx.Colour)
+        self.assertEqual(obj.color_.Get(), (0, 128, 255, 64))
 
     def test_default_none(self):
-        obj = ObjectWithColorAllowsNone()
+        obj = ObjectWithColorAllowsNone(color=None)
 
-        self.assertIsInstance(obj.color, wx.Colour)
-        self.assertEqual(obj.color.Get(), (255, 255, 255, 255))
+        self.assertIsNone(obj.color)
+        self.assertIsNone(obj.color_)
 
     def test_bad_color(self):
         with self.assertRaises(TraitError):
