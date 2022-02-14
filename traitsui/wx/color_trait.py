@@ -11,20 +11,12 @@
 """ Trait definition for a wxPython-based color.
 """
 
+from ast import literal_eval
 
 import wx
 
 from pyface.color import Color as PyfaceColor
-
 from traits.api import Trait, TraitError
-
-# Version dependent imports (ColourPtr not defined in wxPython 2.5):
-try:
-    ColourPtr = wx.ColourPtr
-except:
-
-    class ColourPtr(object):
-        pass
 
 
 # -------------------------------------------------------------------------
@@ -117,9 +109,6 @@ def convert_to_color(object, name, value):
 
     elif isinstance(value, PyfaceColor):
         return value.to_toolkit()
-
-    elif isinstance(value, ColourPtr):
-        return wx.Colour(value.Red(), value.Green(), value.Blue())
 
     elif isinstance(value, wx.Colour):
         return value
