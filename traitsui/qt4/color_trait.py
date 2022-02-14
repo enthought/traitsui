@@ -23,8 +23,10 @@
 """ Trait definition for a PyQt-based color.
 """
 
+from ast import literal_eval
 
 from pyface.qt import QtGui
+from pyface.color import Color as PyfaceColor
 
 from traits.api import Trait, TraitError
 
@@ -33,8 +35,8 @@ def convert_to_color(object, name, value):
     """Converts a number into a QColor object."""
     # Try the toolkit agnostic format.
     try:
-        tup = eval(value)
-    except:
+        tup = literal_eval(value)
+    except Exception:
         tup = value
 
     if isinstance(tup, tuple):
@@ -45,6 +47,8 @@ def convert_to_color(object, name, value):
                 raise TraitError
         else:
             raise TraitError
+    elif isinstance(value, PyfaceColor):
+        return value.to_toolkit()
     else:
         if isinstance(value, str):
             # Allow for spaces in the string value.

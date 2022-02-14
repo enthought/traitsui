@@ -14,6 +14,8 @@
 
 import wx
 
+from pyface.color import Color as PyfaceColor
+
 from traits.api import Trait, TraitError
 
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
@@ -112,6 +114,9 @@ def convert_to_color(object, name, value):
     """Converts a number into a wxColour object."""
     if isinstance(value, tuple):
         return tuple_to_wxcolor(value)
+
+    elif isinstance(value, PyfaceColor):
+        return value.to_toolkit()
 
     elif isinstance(value, ColourPtr):
         return wx.Colour(value.Red(), value.Green(), value.Blue())
