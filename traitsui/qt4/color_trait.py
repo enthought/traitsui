@@ -27,6 +27,7 @@ from ast import literal_eval
 
 from pyface.qt import QtGui
 from pyface.color import Color as PyfaceColor
+from pyface.util.color_helpers import channels_to_ints
 from pyface.util.color_parser import color_table
 from traits.api import Trait, TraitError
 
@@ -45,7 +46,7 @@ def convert_to_color(object, name, value):
 
         # is it in the color table?
         if value in color_table:
-            tup = tuple(int(x * 255) for x in color_table[value])
+            tup = channels_to_ints(color_table[value])
 
     if isinstance(tup, tuple):
         if 3 <= len(tup) <= 4:
@@ -84,7 +85,7 @@ convert_to_color.info = (
 
 standard_colors = {}
 for name, rgba in color_table.items():
-    rgba_bytes = tuple(int(x * 255) for x in rgba)
+    rgba_bytes = channels_to_ints(rgba)
     standard_colors[str(name)] = QtGui.QColor(*rgba_bytes)
 
 # -------------------------------------------------------------------------

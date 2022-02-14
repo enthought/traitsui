@@ -16,6 +16,7 @@ from ast import literal_eval
 import wx
 
 from pyface.color import Color as PyfaceColor
+from pyface.util.color_helpers import channels_to_ints
 from pyface.util.color_parser import color_table
 from traits.api import Trait, TraitError
 
@@ -72,7 +73,7 @@ class W3CColourDatabase(object):
 
         # add all the standard colours
         for name, rgba in color_table.items():
-            rgba_bytes = tuple(int(x * 255) for x in rgba)
+            rgba_bytes = channels_to_ints(rgba)
             self.AddColour(name, wx.Colour(*rgba_bytes))
 
     def AddColour(self, name, color):
