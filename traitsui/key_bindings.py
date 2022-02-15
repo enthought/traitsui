@@ -25,17 +25,18 @@ from traits.api import (
     cached_property,
     observe,
 )
-
-from .api import HGroup, Item, KeyBindingEditor, ListEditor, View, toolkit
-
 from traits.trait_base import SequenceTypes
 
-# -------------------------------------------------------------------------
-#  Key binding trait definition:
-# -------------------------------------------------------------------------
+from .editors.key_binding_editor import KeyBindingEditor
+from .editors.list_editor import ListEditor
+from .group import HGroup
+from .item import Item
+from .toolkit import toolkit
+from .view import View
 
-# Trait definition for key bindings
-Binding = Str(event="binding", editor=KeyBindingEditor())
+
+#: Trait definition for key bindings
+Binding = Str(editor=KeyBindingEditor())
 
 
 class KeyBinding(HasStrictTraits):
@@ -60,6 +61,16 @@ class KeyBinding(HasStrictTraits):
     #: KeyBindings object that "owns" the KeyBinding
     owner = Instance("KeyBindings")
 
+    def match(self, binding):
+        return any(binding == x for x in {self.binding1, self.binding2})
+
+    def clear_binding(self, binding):
+        if binding == self.binding1:
+            self.binding1 = self.binding2
+            self.binding2 = ""
+        if binding == self.binding2:
+            self.binding2 = ""
+
     # -------------------------------------------------------------------------
     #  Traits view definitions:
     # -------------------------------------------------------------------------
@@ -73,10 +84,6 @@ class KeyBinding(HasStrictTraits):
         )
     )
 
-    def _binding_changed(self):
-        if self.owner is not None:
-            self.owner.binding_modified = self
-
 
 class KeyBindings(HasPrivateTraits):
     """A set of key bindings."""
@@ -86,7 +93,7 @@ class KeyBindings(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     #: Set of defined key bindings (redefined dynamically)
-    bindings = List(KeyBinding)
+    bindings = List(Instance(KeyBinding))
 
     #: Optional prefix to add to each method name
     prefix = Str()
@@ -109,9 +116,6 @@ class KeyBindings(HasPrivateTraits):
     #: The child KeyBindings of this object (if any):
     children = List(transient=True)
 
-    #: Event fired when one of the contained KeyBinding objects is changed
-    binding_modified = Event(KeyBinding)
-
     #: Control that currently has the focus (if any)
     focus_owner = Any(transient=True)
 
@@ -123,7 +127,7 @@ class KeyBindings(HasPrivateTraits):
         [
             Item(
                 "bindings",
-                style="custom",
+                style="readonly",
                 show_label=False,
                 editor=ListEditor(style="custom"),
             ),
@@ -138,16 +142,14 @@ class KeyBindings(HasPrivateTraits):
     )
 
     def __init__(self, *bindings, **traits):
-        super().__init__(**traits)
-
-        if (len(bindings) == 1) and isinstance(bindings[0], SequenceTypes):
+        # initialize bindings
+        if len(bindings) == 1 and isinstance(bindings[0], SequenceTypes):
             bindings = bindings[0]
+        traits.setdefault("bindings", list(bindings))
+        for binding in traits["bindings"]:
+            binding.owner = self
 
-        n = len(bindings)
-        self.add_trait(
-            "bindings", List(KeyBinding, minlen=n, maxlen=n, mode="list")
-        )
-        self.bindings = [binding.trait_set(owner=self) for binding in bindings]
+        super().__init__(**traits)
 
     def do(self, event, controllers=[], *args, **kw):
         """Processes a keyboard event."""
@@ -203,12 +205,8 @@ class KeyBindings(HasPrivateTraits):
     def key_binding_for(self, binding, key_name):
         """Returns the current binding for a specified key (if any)."""
         if key_name != "":
-            for a_binding in self.bindings:
-                if (a_binding is not binding) and (
-                    (key_name == a_binding.binding1)
-                    or (key_name == a_binding.binding2)
-                ):
-                    return a_binding
+            for a_binding in self._match_binding(key_name, skip={binding}):
+                return a_binding
 
         return None
 
@@ -224,20 +222,11 @@ class KeyBindings(HasPrivateTraits):
 
     # -- Event Handlers -------------------------------------------------------
 
-    def _binding_modified_changed(self, binding):
-        """Handles a binding being changed."""
-        binding1 = binding.binding1
-        binding2 = binding.binding2
-        for a_binding in self.bindings:
-            if binding is not a_binding:
-                if binding1 == a_binding.binding1:
-                    a_binding.binding1 = ""
-                if binding1 == a_binding.binding2:
-                    a_binding.binding2 = ""
-                if binding2 == a_binding.binding1:
-                    a_binding.binding1 = ""
-                if binding2 == a_binding.binding2:
-                    a_binding.binding2 = ""
+    @observe('bindings:items:[binding1,binding2]')
+    def _binding_updated(self, event):
+        if event.new != "":
+            for a_binding in self._match_binding(event.new, skip={event.object}):
+                a_binding.clear_binding(event.new)
 
     def _focus_owner_changed(self, old, new):
         """Handles the focus owner being changed."""
@@ -256,15 +245,6 @@ class KeyBindings(HasPrivateTraits):
             for item in event.added:
                 item.parent = self
 
-    # -- object Method Overrides ----------------------------------------------
-
-    def __setstate__(self, state):
-        """Restores the state of a previously pickled object."""
-        n = len(state["bindings"])
-        self.add_trait("bindings", List(KeyBinding, minlen=n, maxlen=n))
-        self.__dict__.update(state)
-        self.bindings = self.bindings[:]
-
     # -- Private Methods ------------------------------------------------------
 
     def _get_bindings(self, bindings):
@@ -280,25 +260,22 @@ class KeyBindings(HasPrivateTraits):
         this KeyBindings object and all of its children.
         """
         # Search through our own bindings for a match:
-        for binding in self.bindings:
-            if (key_name == binding.binding1) or (
-                key_name == binding.binding2
-            ):
-                method_name = "%s%s%s" % (
-                    self.prefix,
-                    binding.method_name,
-                    self.suffix,
-                )
-                for controller in controllers + self.controllers:
-                    method = getattr(controller, method_name, None)
-                    if method is not None:
-                        result = method(*args)
-                        if result is not False:
-                            return True
+        for binding in self._match_binding(key_name):
+            method_name = "%s%s%s" % (
+                self.prefix,
+                binding.method_name,
+                self.suffix,
+            )
+            for controller in controllers + self.controllers:
+                method = getattr(controller, method_name, None)
+                if method is not None:
+                    result = method(*args)
+                    if result is not False:
+                        return True
 
-                if binding.method_name == "edit_bindings":
-                    self.edit()
-                    return True
+            if binding.method_name == "edit_bindings":
+                self.edit()
+                return True
 
         # If recursive, continue searching through a children's bindings:
         if recursive:
@@ -308,3 +285,12 @@ class KeyBindings(HasPrivateTraits):
 
         # Indicate no one processed the key:
         return False
+
+    def _match_binding(self, binding, skip=frozenset()):
+        """Return all KeyBinding instances that match the given binding.
+        """
+        return (
+            a_binding
+            for a_binding in self.bindings
+            if a_binding not in skip and a_binding.match(binding)
+        )
