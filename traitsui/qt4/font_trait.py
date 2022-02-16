@@ -86,9 +86,12 @@ def font_to_str(font):
 
 
 def create_traitsfont(value):
-    """Create a TraitFont object from a string description."""
+    """Create a TraitFont object.
+
+    This can take either a string description, a QFont, or a Pyface Font.
+    """
     if isinstance(value, PyfaceFont):
-        value = value.to_toolkit()
+        return TraitsFont(value.to_toolkit())
     if isinstance(value, QtGui.QFont):
         return TraitsFont(value)
 
@@ -115,7 +118,7 @@ def create_traitsfont(value):
                 try:
                     point_size = int(lword)
                     continue
-                except:
+                except ValueError:
                     pass
             facename.append(word)
 

@@ -13,7 +13,7 @@ import unittest
 from pyface.font import Font as PyfaceFont
 from pyface.util.font_parser import simple_parser
 from pyface.qt.QtGui import QFont, QFontInfo, QApplication
-from traits.api import HasTraits
+from traits.api import HasTraits, TraitError
 
 from ..font_trait import (
     PyQtFont, TraitsFont, create_traitsfont, font_families, font_styles,
@@ -128,6 +128,15 @@ class TestPyQtFont(unittest.TestCase):
 
         self.assertIsInstance(obj.font, TraitsFont)
         self.assert_qfont_equal(obj.font, font.to_toolkit())
+
+    def test_font_trait_none(self):
+        obj = FontExample(font=None)
+
+        self.assertIsNone(obj.font)
+
+    def test_font_trait_bad(self):
+        with self.assertRaises(TraitError):
+            obj = FontExample(font=1)
 
     def test_traits_font_reduce(self):
         traits_font = TraitsFont(

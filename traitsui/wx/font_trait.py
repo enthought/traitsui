@@ -14,6 +14,7 @@
 
 import wx
 
+from pyface.font import Font as PyfaceFont
 from traits.api import Trait, TraitHandler, TraitError
 
 # -------------------------------------------------------------------------
@@ -28,10 +29,15 @@ font_families = {
     "script": wx.FONTFAMILY_SCRIPT,
     "swiss": wx.FONTFAMILY_SWISS,
     "modern": wx.FONTFAMILY_MODERN,
+    "typewriter": wx.FONTFAMILY_TELETYPE,
 }
 
 # Mapping of strings to wxFont styles
-font_styles = {"slant": wx.FONTSTYLE_SLANT, "italic": wx.FONTSTYLE_ITALIC}
+font_styles = {
+    "slant": wx.FONTSTYLE_SLANT,
+    "oblique": wx.FONTSTYLE_SLANT,
+    "italic": wx.FONTSTYLE_ITALIC,
+}
 
 # Mapping of strings wxFont weights
 font_weights = {"light": wx.FONTWEIGHT_LIGHT, "bold": wx.FONTWEIGHT_BOLD}
@@ -42,17 +48,26 @@ font_noise = ["pt", "point", "family"]
 
 def font_to_str(font):
     """Converts a wx.Font into a string description of itself."""
+    family = {
+        wx.FONTFAMILY_DECORATIVE: "decorative family",
+        wx.FONTFAMILY_ROMAN: "roman family",
+        wx.FONTFAMILY_SCRIPT: "script family",
+        wx.FONTFAMILY_SWISS: "swiss family",
+        wx.FONTFAMILY_MODERN: "modern family",
+        wx.FONTFAMILY_TELETYPE: "typewriter family",
+    }.get(font.GetFamily(), "")
     weight = {wx.FONTWEIGHT_LIGHT: " Light", wx.FONTWEIGHT_BOLD: " Bold"}.get(
         font.GetWeight(), ""
     )
-    style = {wx.FONTSTYLE_SLANT: " Slant", wx.FONTSTYLE_ITALIC: " Italic"}.get(
+    style = {wx.FONTSTYLE_SLANT: " Oblique", wx.FONTSTYLE_ITALIC: " Italic"}.get(
         font.GetStyle(), ""
     )
     underline = ""
     if font.GetUnderlined():
         underline = " underline"
-    return "%s point %s%s%s%s" % (
+    return "%s point %s%s%s%s%s" % (
         font.GetPointSize(),
+        family,
         font.GetFaceName(),
         style,
         weight,
@@ -62,8 +77,10 @@ def font_to_str(font):
 
 def create_traitsfont(value):
     """Create a TraitFont object from a string description."""
+    if isinstance(value, PyfaceFont):
+        return TraitsFont(value.to_toolkit())
     if isinstance(value, wx.Font):
-        value = font_to_str(value)
+        return TraitsFont(value)
 
     point_size = None
     family = wx.FONTFAMILY_DEFAULT
@@ -86,12 +103,18 @@ def create_traitsfont(value):
                 try:
                     point_size = int(lword)
                     continue
-                except:
+                except ValueError:
                     pass
             facename.append(word)
-    return TraitsFont(
-        point_size or 10, family, style, weight, underline, " ".join(facename)
-    )
+    if facename:
+        font = TraitsFont(
+            point_size or 10, family, style, weight, underline, " ".join(facename)
+        )
+        return font
+    else:
+        return TraitsFont(
+            point_size or 10, family, style, weight, underline
+        )
 
 
 class TraitsFont(wx.Font):
