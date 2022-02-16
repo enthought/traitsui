@@ -25,8 +25,9 @@
 
 
 from pyface.qt import QtGui
-
+from pyface.font import Font as PyfaceFont
 from traits.api import Trait, TraitHandler, TraitError
+
 
 
 # -------------------------------------------------------------------------
@@ -36,16 +37,17 @@ from traits.api import Trait, TraitHandler, TraitError
 # Mapping of strings to valid QFont style hints.
 font_families = {
     "default": QtGui.QFont.StyleHint.AnyStyle,
-    "decorative": QtGui.QFont.Decorative,
-    "roman": QtGui.QFont.Serif,
-    "script": QtGui.QFont.SansSerif,
-    "swiss": QtGui.QFont.SansSerif,
-    "modern": QtGui.QFont.TypeWriter,
+    "decorative": QtGui.QFont.StyleHint.Decorative,
+    "roman": QtGui.QFont.StyleHint.Serif,
+    "script": QtGui.QFont.StyleHint.Cursive,
+    "swiss": QtGui.QFont.StyleHint.SansSerif,
+    "modern": QtGui.QFont.StyleHint.TypeWriter,
 }
 
 # Mapping of strings to QFont styles.
 font_styles = {
     "slant": QtGui.QFont.Style.StyleOblique,
+    "oblique": QtGui.QFont.Style.StyleOblique,
     "italic": QtGui.QFont.Style.StyleItalic,
 }
 
@@ -58,11 +60,18 @@ font_noise = ["pt", "point", "family"]
 
 def font_to_str(font):
     """Converts a QFont into a string description of itself."""
+    style_hint = {
+        QtGui.QFont.StyleHint.Decorative: "decorative",
+        QtGui.QFont.StyleHint.Serif: "roman",
+        QtGui.QFont.StyleHint.Cursive: "script",
+        QtGui.QFont.StyleHint.SansSerif: "swiss",
+        QtGui.QFont.StyleHint.TypeWriter: "modern",
+    }.get(font.styleHint(), "")
     weight = {QtGui.QFont.Weight.Light: " Light", QtGui.QFont.Weight.Bold: " Bold"}.get(
         font.weight(), ""
     )
     style = {
-        QtGui.QFont.Style.StyleOblique: " Slant",
+        QtGui.QFont.Style.StyleOblique: " Oblique",
         QtGui.QFont.Style.StyleItalic: " Italic",
     }.get(font.style(), "")
     underline = ""
@@ -79,11 +88,14 @@ def font_to_str(font):
 
 def create_traitsfont(value):
     """Create a TraitFont object from a string description."""
+    if isinstance(value, PyfaceFont):
+        value = value.to_toolkit()
     if isinstance(value, QtGui.QFont):
         return TraitsFont(value)
 
     point_size = None
     family = ""
+    style_hint = QtGui.QFont.StyleHint.AnyStyle
     style = QtGui.QFont.Style.StyleNormal
     weight = QtGui.QFont.Weight.Normal
     underline = False
@@ -92,9 +104,7 @@ def create_traitsfont(value):
     for word in value.split():
         lword = word.lower()
         if lword in font_families:
-            f = QtGui.QFont()
-            f.setStyleHint(font_families[lword])
-            family = f.defaultFamily()
+            style_hint = font_families[lword]
         elif lword in font_styles:
             style = font_styles[lword]
         elif lword in font_weights:
@@ -118,6 +128,7 @@ def create_traitsfont(value):
     else:
         fnt = TraitsFont()
 
+    fnt.setStyleHint(style_hint)
     fnt.setStyle(style)
     fnt.setWeight(weight)
     fnt.setUnderline(underline)
