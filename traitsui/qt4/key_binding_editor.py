@@ -27,6 +27,7 @@ key binding editor).
 
 
 from pyface.qt import QtCore, QtGui
+from pyface.api import YES, confirm
 
 from traits.api import Bool, Event
 
@@ -57,47 +58,34 @@ class KeyBindingEditor(Editor):
         """
         self.control = KeyBindingCtrl(self)
 
-    def update_object(self, event):
-        """Handles the user entering input data in the edit control."""
-        try:
-            self.value = value = key_event_to_name(event)
-            self._binding.text = value
-        except:
-            pass
-
     def update_editor(self):
         """Updates the editor when the object trait changes externally to the
         editor.
         """
         self.control.setText(self.value)
 
-    def update_focus(self, has_focus):
-        """Updates the current focus setting of the control."""
-        if has_focus:
-            self._binding.border_size = 1
-            self.object.owner.focus_owner = self._binding
-
     def _key_changed(self, event):
         """Handles a keyboard event."""
         binding = self.object
         key_name = key_event_to_name(event)
-        cur_binding = binding.owner.key_binding_for(binding, key_name)
+        cur_binding = self.ui.parent.handler.key_binding_for(binding, key_name)
         if cur_binding is not None:
-            if (
-                QtGui.QMessageBox.question(
-                    self.control,
-                    "Duplicate Key Definition",
-                    "'%s' has already been assigned to '%s'.\n"
+            result = confirm(
+                parent=self.control,
+                message=(
+                    f"{key_name!r} has already been assigned to "
+                    f"'{cur_binding.description}'.\n"
                     "Do you wish to continue?"
-                    % (key_name, cur_binding.description),
-                    QtGui.QMessageBox.StandardButton.Yes | QtGui.QMessageBox.StandardButton.No,
-                    QtGui.QMessageBox.StandardButton.No,
-                )
-                != QtGui.QMessageBox.StandardButton.Yes
-            ):
+                ),
+                title="Duplicate Key Definition",
+            )
+            if result != YES:
                 return
 
         self.value = key_name
+        # Need to manually update editor because loopback protection doesn't
+        # catch the change.
+        self.update_editor()
 
     def _clear_changed(self):
         """Handles a clear field event."""

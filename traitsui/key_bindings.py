@@ -30,6 +30,7 @@ from traits.trait_base import SequenceTypes
 from .editors.key_binding_editor import KeyBindingEditor
 from .editors.list_editor import ListEditor
 from .group import HGroup
+from .handler import ModelView
 from .item import Item
 from .toolkit import toolkit
 from .view import View
@@ -116,30 +117,9 @@ class KeyBindings(HasPrivateTraits):
     #: The child KeyBindings of this object (if any):
     children = List(transient=True)
 
-    #: Control that currently has the focus (if any)
-    focus_owner = Any(transient=True)
-
     # -------------------------------------------------------------------------
     #  Traits view definitions:
     # -------------------------------------------------------------------------
-
-    traits_view = View(
-        [
-            Item(
-                "bindings",
-                style="readonly",
-                show_label=False,
-                editor=ListEditor(style="custom"),
-            ),
-            "|{Click on an entry field, then press the key to "
-            "assign. Double-click a field to clear it.}<>",
-        ],
-        title="Update Key Bindings",
-        kind="livemodal",
-        resizable=True,
-        width=0.4,
-        height=0.4,
-    )
 
     def __init__(self, *bindings, **traits):
         # initialize bindings
@@ -194,21 +174,12 @@ class KeyBindings(HasPrivateTraits):
         del self.children
         del self.bindings
 
-        self.parent = self._root = self.focus_owner = None
+        self.parent = self._root = None
 
     def edit(self):
         """Edits a possibly hierarchical set of KeyBindings."""
-        bindings = list(set(self.root._get_bindings([])))
-        bindings.sort(key=lambda x: "%s%02d" % (x.binding1[-1:], x.binding1))
-        KeyBindings(bindings).edit_traits()
-
-    def key_binding_for(self, binding, key_name):
-        """Returns the current binding for a specified key (if any)."""
-        if key_name != "":
-            for a_binding in self._match_binding(key_name, skip={binding}):
-                return a_binding
-
-        return None
+        model_view = KeyBindingsHandler(model=self)
+        ui = model_view.edit_traits()
 
     # -- Property Implementations ---------------------------------------------
 
@@ -227,11 +198,6 @@ class KeyBindings(HasPrivateTraits):
         if event.new != "":
             for a_binding in self._match_binding(event.new, skip={event.object}):
                 a_binding.clear_binding(event.new)
-
-    def _focus_owner_changed(self, old, new):
-        """Handles the focus owner being changed."""
-        if old is not None:
-            old.border_size = 0
 
     @observe("children.items")
     def _children_modified(self, event):
@@ -294,3 +260,48 @@ class KeyBindings(HasPrivateTraits):
             for a_binding in self.bindings
             if a_binding not in skip and a_binding.match(binding)
         )
+
+
+class KeyBindingsHandler(ModelView):
+
+    bindings = List(Instance(KeyBinding))
+
+    def key_binding_for(self, binding, key_name):
+        """Returns the current binding for a specified key (if any)."""
+        if key_name != "":
+            for a_binding in self._match_binding(key_name, skip={binding}):
+                return a_binding
+
+        return None
+
+    def _match_binding(self, binding, skip=frozenset()):
+        """Return all KeyBinding instances that match the given binding.
+        """
+        return (
+            a_binding
+            for a_binding in self.bindings
+            if a_binding not in skip and a_binding.match(binding)
+        )
+
+    def _bindings_default(self):
+        bindings = list(set(self.model.root._get_bindings([])))
+        bindings.sort(key=lambda x: (x.binding1[-1:], x.binding1))
+        return bindings
+
+    traits_view = View(
+        [
+            Item(
+                "bindings",
+                style="readonly",
+                show_label=False,
+                editor=ListEditor(style="custom"),
+            ),
+            "|{Click on an entry field, then press the key to "
+            "assign. Double-click a field to clear it.}<>",
+        ],
+        title="Update Key Bindings",
+        kind="livemodal",
+        resizable=True,
+        width=0.4,
+        height=0.4,
+    )
