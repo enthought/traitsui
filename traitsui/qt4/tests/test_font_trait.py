@@ -92,7 +92,7 @@ class TestPyQtFont(unittest.TestCase):
         self.assert_qfont_equal(traits_font, font.to_toolkit())
         self.assertEqual(
             font_to_str(traits_font),
-            "18 point comic sans Oblique Bold underline"
+            "18 point courier Oblique Bold underline"
         )
 
     def test_font_trait_default(self):
