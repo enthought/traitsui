@@ -39,6 +39,7 @@ class ImageDisplay(HasTraits):
     image = Image()
 
 
+@requires_toolkit([ToolkitName.wx, ToolkitName.qt])
 class TestImageEditor(BaseTestMixin, unittest.TestCase):
 
     def test_image_editor_static(self):
