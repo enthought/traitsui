@@ -29,7 +29,6 @@ from pyface.font import Font as PyfaceFont
 from traits.api import Trait, TraitHandler, TraitError
 
 
-
 # -------------------------------------------------------------------------
 #  Convert a string into a valid QFont object (if possible):
 # -------------------------------------------------------------------------
