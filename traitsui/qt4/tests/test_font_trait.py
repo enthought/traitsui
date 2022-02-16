@@ -84,16 +84,12 @@ class TestPyQtFont(unittest.TestCase):
         self.assert_qfont_equal(traits_font, font)
 
     def test_create_traitsfont_pyface_font(self):
-        args = simple_parser("18 pt Bold Oblique Underline Courier typewriter")
+        args = simple_parser("18 pt Bold Oblique Underline Courier")
         font = PyfaceFont(**args)
         traits_font = create_traitsfont(font)
 
         self.assertIsInstance(traits_font, TraitsFont)
         self.assert_qfont_equal(traits_font, font.to_toolkit())
-        self.assertEqual(
-            font_to_str(traits_font),
-            "18 point courier Oblique Bold underline"
-        )
 
     def test_font_trait_default(self):
         obj = FontExample()
