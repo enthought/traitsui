@@ -66,13 +66,13 @@ class QImageView(QFrame):
         """
         pixmap = self._pixmap
         if pixmap is None:
-            return
+            super().paintEvent(event)
 
         pm_size = pixmap.size()
         pm_width = pm_size.width()
         pm_height = pm_size.height()
         if pm_width == 0 or pm_height == 0:
-            return
+            super().paintEvent(event)
 
         width = self.size().width()
         height = self.size().height()
@@ -282,3 +282,8 @@ class _ImageEditor(Editor):
         self.control.setAllowUpscaling(self.factory.allow_upscaling)
         self.control.setPreserveAspectRatio(self.factory.preserve_aspect_ratio)
         self.control.setAllowClipping(self.factory.allow_clipping)
+
+    def dispose(self):
+        if self.control is not None:
+            self.control.setPixmap(None)
+        super().dispose()
