@@ -39,7 +39,6 @@ class ImageDisplay(HasTraits):
     image = Image()
 
 
-@requires_toolkit([ToolkitName.wx])
 class TestImageEditor(BaseTestMixin, unittest.TestCase):
 
     def test_image_editor_static(self):
@@ -48,7 +47,7 @@ class TestImageEditor(BaseTestMixin, unittest.TestCase):
             Item(
                 'image',
                 editor=ImageEditor(
-                    image=ImageResource(absolute_path=filename1),
+                    image=ImageResource(filename1),
                 ),
             )
         )
@@ -59,7 +58,7 @@ class TestImageEditor(BaseTestMixin, unittest.TestCase):
 
     def test_image_editor_resource(self):
         obj1 = ImageDisplay(
-            image=ImageResource(absolute_path=filename1)
+            image=ImageResource(filename1)
         )
         view = View(
             Item(
@@ -70,7 +69,7 @@ class TestImageEditor(BaseTestMixin, unittest.TestCase):
 
         # This should not fail.
         with create_ui(obj1, dict(view=view)) as ui:
-            obj1.image = ImageResource(absolute_path=filename2)
+            obj1.image = ImageResource(filename2)
 
     def test_image_editor_array(self):
         try:

@@ -40,8 +40,12 @@ class _ImageEditor(Editor):
         image = self.factory.image
         if image is None:
             image = self.value
+        if image is not None:
+            bitmap = convert_bitmap(image)
+        else:
+            bitmap = None
 
-        self.control = ImageControl(parent, convert_bitmap(image), padding=0)
+        self.control = ImageControl(parent, bitmap, padding=0)
 
         self.set_tooltip()
 
@@ -51,4 +55,8 @@ class _ImageEditor(Editor):
         """
         if self.factory.image is None:
             value = self.value
-            self.control.Bitmap(convert_bitmap(value))
+            if value is not None:
+                bitmap = convert_bitmap(value)
+            else:
+                bitmap = None
+            self.control.Bitmap(bitmap)
