@@ -21,6 +21,7 @@ from traitsui.api import ImageEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
     create_ui,
+    is_qt,
     requires_toolkit,
     ToolkitName,
 )
@@ -109,6 +110,12 @@ class TestImageEditor(BaseTestMixin, unittest.TestCase):
             from pyface.api import PILImage
         except ImportError:
             self.skipTest("Pillow is not available")
+        if is_qt:
+            try:
+                # is ImageQt available as well
+                from PIL.ImageQt import ImageQt
+            except ImportError:
+                self.skipTest("ImageQt is not available")
 
         pil_image_1 = PIL.Image.open(filename1)
         pil_image_2 = PIL.Image.open(filename2)
