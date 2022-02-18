@@ -14,6 +14,7 @@
 
 
 from pyface.ui_traits import Image
+from pyface.action.schema.api import ActionManagerBuilder
 from traits.api import (
     Any,
     Bool,
@@ -172,11 +173,17 @@ class View(ViewElement):
     #: The top-level Group object for the view:
     content = Content
 
-    #: The menu bar for the view. Usually requires a custom **handler**:
+    #: The menu bar for the view. Usually requires a custom **handler**.
+    #: This may be either a MenuBarManager or a MenuBarSchema
     menubar = Any  # Instance( pyface.action.MenuBarManager )
 
-    #: The toolbar for the view. Usually requires a custom **handler**:
+    #: The toolbar for the view. Usually requires a custom **handler**.
+    #: This may be either a ToolBarManager or a ToolBarSchema
     toolbar = Any  # Instance( pyface.action.ToolBarManager )
+
+    #: The ActionManagerBuilder to use with menu and toolbar schemas.
+    #: The controller will usually be overridden.
+    action_manager_builder = Any
 
     #: Status bar items to add to the view's status bar. The value can be:
     #:
@@ -466,3 +473,6 @@ class View(ViewElement):
         return "( %s )" % ", ".join(
             [item.__repr__() for item in self.content.content]
         )
+
+    def _action_manager_builder_default(self):
+        return ActionManagerBuilder()

@@ -13,9 +13,10 @@ Test that menu and toolbar actions are triggered.
 """
 
 from functools import partial
-import pyface
 import unittest
 
+import pyface
+from pyface.action.schema.api import ActionSchema, SGroup, SMenu, SMenuBar, SToolBar
 from traits.has_traits import HasTraits
 from traits.trait_types import Bool
 from traitsui.menu import Action, ActionGroup, Menu, MenuBar, ToolBar
@@ -52,6 +53,45 @@ class DialogWithToolbar(HasTraits):
     menubar = MenuBar(Menu(ActionGroup(TestAction), name="&Test menu"))
 
     toolbar = ToolBar(ActionGroup(TestAction))
+
+    traits_view = View(
+        Item(
+            label="Click the button on the toolbar or the menu item.\n"
+            "The 'Action successful' element should turn to True."
+        ),
+        Item("action_successful", style="readonly"),
+        menubar=menubar,
+        toolbar=toolbar,
+        buttons=[TestAction, "OK"],
+    )
+
+
+class DialogWithSchema(HasTraits):
+    """Test dialog with toolbar and menu schemas."""
+
+    action_successful = Bool(False)
+
+    def test_clicked(self):
+        self.action_successful = True
+
+    menubar = SMenuBar(
+        SMenu(
+            SGroup(
+                ActionSchema(
+                    action_factory=lambda **traits: TestAction,
+                ),
+            ),
+            name="&Test menu",
+        ),
+    )
+
+    toolbar = SToolBar(
+        SGroup(
+            ActionSchema(
+                action_factory=lambda **traits: TestAction,
+            ),
+        ),
+    )
 
     traits_view = View(
         Item(
@@ -149,10 +189,7 @@ class TestActions(BaseTestMixin, unittest.TestCase):
 
     # ----- wx tests
 
-    @unittest.skipIf(
-        not is_mac_os,
-        "Problem with triggering toolbar actions on Linux and Windows. Issue #428.",  # noqa: E501
-    )
+    @unittest.skip("Problem with triggering toolbar actions. Issue #428.")
     @requires_toolkit([ToolkitName.wx])
     def test_wx_toolbar_action(self):
         # Behavior: when clicking on a toolbar action, the corresponding
@@ -162,7 +199,8 @@ class TestActions(BaseTestMixin, unittest.TestCase):
 
         def _wx_trigger_toolbar_action(ui):
             # long road to get at the Id of the toolbar button
-            toolbar_item = ui.view.toolbar.groups[0].items[0]
+            toolbar_control = ui.control.GetToolBar()
+            toolbar_item = toolbar_control.tool_bar_manager.groups[0].items[0]
             toolbar_item_wrapper = toolbar_item._wrappers[0]
             control_id = toolbar_item_wrapper.control_id
 
@@ -172,8 +210,7 @@ class TestActions(BaseTestMixin, unittest.TestCase):
             )
 
             # send the event to the toolbar
-            toolbar = ui.control.FindWindowByName("toolbar")
-            toolbar.ProcessEvent(click_event)
+            toolbar_control.ProcessEvent(click_event)
 
         self._test_actions(_wx_trigger_toolbar_action)
 
@@ -200,6 +237,93 @@ class TestActions(BaseTestMixin, unittest.TestCase):
             ui.control.ProcessEvent(click_event)
 
         self._test_actions(_wx_trigger_button_action)
+
+    # TODO: I couldn't find a way to press menu items programmatically for wx
+
+
+class TestActionSchemas(BaseTestMixin, unittest.TestCase):
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
+    def _test_actions(self, trigger_action_func):
+        """Template test for wx, qt4, menu, and toolbar testing."""
+        # Behavior: when clicking on a menu or toolbar action,
+        # the corresponding function should be executed
+
+        # create dialog with toolbar adn menu
+        dialog = DialogWithSchema()
+        with reraise_exceptions(), create_ui(dialog) as ui:
+
+            # press toolbar or menu button
+            trigger_action_func(ui)
+
+            # verify that the action was triggered
+            self.assertTrue(dialog.action_successful)
+
+    # ----- Qt tests
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_qt_toolbar_action(self):
+        # Behavior: when clicking on a toolbar action, the corresponding
+        # function should be executed
+
+        # Bug: in the Qt4 backend, a
+        # TypeError: perform() takes exactly 2 arguments (1 given) was raised
+        # instead
+
+        qt_trigger_toolbar_action = partial(
+            _qt_trigger_action, pyface.ui.qt4.action.tool_bar_manager._ToolBar
+        )
+
+        self._test_actions(qt_trigger_toolbar_action)
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_qt_menu_action(self):
+        # Behavior: when clicking on a menu action, the corresponding function
+        # should be executed
+
+        # Bug: in the Qt4 backend, a
+        # TypeError: perform() takes exactly 2 arguments (1 given) was raised
+        # instead
+
+        qt_trigger_menu_action = partial(
+            _qt_trigger_action, pyface.ui.qt4.action.menu_manager._Menu
+        )
+
+        self._test_actions(qt_trigger_menu_action)
+
+    # ----- wx tests
+
+    @unittest.skipIf(
+        not is_mac_os,
+        "Problem with triggering toolbar actions on Linux and Windows. Issue #428.",  # noqa: E501
+    )
+    @requires_toolkit([ToolkitName.wx])
+    def test_wx_toolbar_action(self):
+        # Behavior: when clicking on a toolbar action, the corresponding
+        # function should be executed
+
+        import wx
+
+        def _wx_trigger_toolbar_action(ui):
+            # long road to get at the Id of the toolbar button
+            toolbar_control = ui.control.GetToolBar()
+            toolbar_item = toolbar_control.tool_bar_manager.groups[0].items[0]
+            toolbar_item_wrapper = toolbar_item._wrappers[0]
+            control_id = toolbar_item_wrapper.control_id
+
+            # build event that clicks the button
+            click_event = wx.CommandEvent(
+                wx.wxEVT_COMMAND_TOOL_CLICKED, control_id
+            )
+
+            # send the event to the toolbar
+            toolbar_control.ProcessEvent(click_event)
+
+        self._test_actions(_wx_trigger_toolbar_action)
 
     # TODO: I couldn't find a way to press menu items programmatically for wx
 

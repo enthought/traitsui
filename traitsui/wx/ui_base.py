@@ -14,6 +14,9 @@
 
 import wx
 
+from pyface.action.schema.api import (
+    ActionManagerBuilder, MenuBarSchema, ToolBarSchema,
+)
 from traits.api import HasPrivateTraits, Instance
 
 from traitsui.base_panel import BasePanel as _BasePanel
@@ -144,6 +147,10 @@ class BaseDialog(_BasePanel):
     def add_menubar(self):
         """Adds a menu bar to the dialog."""
         menubar = self.ui.view.menubar
+        menubar = self.ui.view.menubar
+        if isinstance(menubar, MenuBarSchema):
+            builder = self.ui.view.action_manager_builder
+            menubar = builder.create_action_manager(menubar)
         if menubar is not None:
             self._last_group = self._last_parent = None
             self.control.SetMenuBar(
@@ -154,6 +161,9 @@ class BaseDialog(_BasePanel):
     def add_toolbar(self):
         """Adds a toolbar to the dialog."""
         toolbar = self.ui.view.toolbar
+        if isinstance(toolbar, ToolBarSchema):
+            builder = self.ui.view.action_manager_builder
+            toolbar = builder.create_action_manager(toolbar)
         if toolbar is not None:
             self._last_group = self._last_parent = None
             self.control.SetToolBar(
