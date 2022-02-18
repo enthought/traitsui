@@ -31,25 +31,33 @@ from pyface.api import SystemMetrics
 
 _palette = QtGui.QApplication.palette()
 
-# Default dialog title
+_base = _palette.color(QtGui.QPalette.ColorRole.Base)
+
+#: We are in dark mode if field background colour HSV value is dark.
+is_dark = (_base.value() < 0x80)
+
+#: Default dialog title
 DefaultTitle = "Edit properties"
 
-# Color of valid input
-OKColor = _palette.color(QtGui.QPalette.ColorRole.Base)
+#: Color of valid input
+OKColor = _base
 
-# Color to highlight input errors
-ErrorColor = QtGui.QColor(255, 192, 192)
+#: Color to highlight input errors
+if is_dark:
+    ErrorColor = QtGui.QColor(0xcf, 0x66, 0x79)
+else:
+    ErrorColor = QtGui.QColor(255, 192, 192)
 
-# Color for background of read-only fields
-ReadonlyColor = QtGui.QColor(244, 243, 238)
+#: Color for background of read-only fields
+ReadonlyColor = _palette.color(QtGui.QPalette.ColorRole.Window)
 
-# Color for background of fields where objects can be dropped
-DropColor = QtGui.QColor(215, 242, 255)
+#: Color for background of fields where objects can be dropped
+DropColor = _palette.color(QtGui.QPalette.ColorRole.Base)
 
-# Color for an editable field
-EditableColor = _palette.color(QtGui.QPalette.ColorRole.Base)
+#: Color for an editable field
+EditableColor = _base
 
-# Color for background of windows (like dialog background color)
+#: Color for background of windows (like dialog background color)
 WindowColor = _palette.color(QtGui.QPalette.ColorRole.Window)
 
 del _palette

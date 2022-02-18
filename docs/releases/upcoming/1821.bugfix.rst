@@ -1,0 +1,1 @@
+Improve error colors for dark mode on Qt.
