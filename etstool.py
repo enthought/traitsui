@@ -128,7 +128,6 @@ source_dependencies = {
 # The following should match extras_require in setup.py but with package
 # names compatible with EDM
 extra_dependencies = {
-    # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': {
         'pygments',
     },
@@ -160,6 +159,7 @@ extra_dependencies = {
     'editors': {
         'numpy',
         'pandas',
+        'pillow',
     },
     # Test dependencies also applied to installation from PYPI
     'test': {

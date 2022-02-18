@@ -34,14 +34,14 @@ class ImageControl(wx.Window):
         self, parent, bitmap, selected=None, handler=None, padding=10
     ):
         """Initializes the object."""
-        wx.Window.__init__(
-            self,
-            parent,
-            -1,
-            size=wx.Size(
+        if bitmap is not None:
+            size = wx.Size(
                 bitmap.GetWidth() + padding, bitmap.GetHeight() + padding
-            ),
-        )
+            )
+        else:
+            size = wx.Size(32 + padding, 32 + padding)
+
+        wx.Window.__init__(self, parent, -1, size=size,)
         self._bitmap = bitmap
         self._selected = selected
         self._handler = handler
@@ -82,6 +82,8 @@ class ImageControl(wx.Window):
             if bitmap != self._bitmap:
                 self._bitmap = bitmap
                 self.Refresh()
+        else:
+            self._bitmap = None
 
         return self._bitmap
 
@@ -141,6 +143,8 @@ class ImageControl(wx.Window):
         wdc = wx.PaintDC(self)
         wdx, wdy = self.GetClientSize()
         bitmap = self._bitmap
+        if bitmap is None:
+            return
         bdx = bitmap.GetWidth()
         bdy = bitmap.GetHeight()
         wdc.DrawBitmap(bitmap, (wdx - bdx) // 2, (wdy - bdy) // 2, True)

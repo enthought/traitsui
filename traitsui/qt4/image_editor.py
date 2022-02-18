@@ -262,7 +262,10 @@ class _ImageEditor(Editor):
             image = self.value
 
         self.control = QImageView()
-        self.control.setPixmap(convert_bitmap(image))
+        if image is not None:
+            self.control.setPixmap(convert_bitmap(image))
+        else:
+            self.control.setPixmap(None)
         self.control.setScaledContents(self.factory.scale)
         self.control.setAllowUpscaling(self.factory.allow_upscaling)
         self.control.setPreserveAspectRatio(self.factory.preserve_aspect_ratio)
@@ -276,8 +279,10 @@ class _ImageEditor(Editor):
         """
         if self.factory.image is None:
             value = self.value
-            if isinstance(value, ImageResource):
+            if value is not None:
                 self.control.setPixmap(convert_bitmap(value))
+            else:
+                self.control.setPixmap(None)
         self.control.setScaledContents(self.factory.scale)
         self.control.setAllowUpscaling(self.factory.allow_upscaling)
         self.control.setPreserveAspectRatio(self.factory.preserve_aspect_ratio)
