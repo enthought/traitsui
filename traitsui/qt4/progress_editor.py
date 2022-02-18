@@ -93,9 +93,7 @@ class SimpleEditor(Editor):
         self.progress.min = self.min
         self.progress.max = self.max
         self.progress.message = self.message
-        if self.value:
-            self.progress.update(self.value)
-        return
+        self.progress.update(self.value)
 
     def _min_changed(self):
         self.update_editor()
