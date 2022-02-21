@@ -142,3 +142,15 @@ class TestPyQtColor(unittest.TestCase):
     def test_bad_color(self):
         with self.assertRaises(TraitError):
             ObjectWithColor(color="not a color")
+
+    def test_bad_tuple(self):
+        with self.assertRaises(TraitError):
+            ObjectWithColor(color=(0xff, 0xff))
+
+    def test_bad_tuple_not_int(self):
+        with self.assertRaises(TraitError):
+            ObjectWithColor(color=("not an int", 0xff, 0xff))
+
+    def test_bad_tuple_string(self):
+        with self.assertRaises(TraitError):
+            ObjectWithColor(color="(0xff, 0xff)")

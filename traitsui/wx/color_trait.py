@@ -122,19 +122,18 @@ def convert_to_color(object, name, value):
         return value
 
     elif isinstance(value, str):
+        # Allow for spaces in the string value.
+        value = value.replace(" ", "")
 
         if value in standard_colors:
             return standard_colors[value]
 
-        # Check for tuple-ness
-        tmp = value.strip()
-        if (
-            tmp.startswith("(")
-            and tmp.endswith(")")
-            and tmp.count(",") in (2, 3)
-        ):
-            tup = eval(tmp)
-            return tuple_to_wxcolor(tup)
+        # Check for tuple string
+        try:
+            tup = literal_eval(value)
+        except Exception:
+            raise TraitError
+        return tuple_to_wxcolor(tup)
 
     else:
         try:

@@ -55,12 +55,20 @@ class TestWxColor(unittest.TestCase):
         self.assertEqual(obj.color_.Get(), (0, 128, 255, 64))
 
     def test_name_string(self):
-        obj = ObjectWithColor(color="maroon")
+        obj = ObjectWithColor(color="rebeccapurple")
 
         self.assertIsInstance(obj.color, wx.Colour)
-        self.assertEqual(obj.color.Get(), (128, 0, 0, 255))
+        self.assertEqual(obj.color.Get(), (0x66, 0x33, 0x99, 0xff))
         self.assertIsInstance(obj.color_, wx.Colour)
-        self.assertEqual(obj.color_.Get(), (128, 0, 0, 255))
+        self.assertEqual(obj.color_.Get(), (0x66, 0x33, 0x99, 0xff))
+
+    def test_name_string_with_space(self):
+        obj = ObjectWithColor(color="rebecca purple")
+
+        self.assertIsInstance(obj.color, wx.Colour)
+        self.assertEqual(obj.color.Get(), (0x66, 0x33, 0x99, 0xff))
+        self.assertIsInstance(obj.color_, wx.Colour)
+        self.assertEqual(obj.color_.Get(), (0x66, 0x33, 0x99, 0xff))
 
     def test_rgb_string(self):
         obj = ObjectWithColor(color="(0, 128, 255)")
@@ -103,3 +111,15 @@ class TestWxColor(unittest.TestCase):
     def test_bad_color(self):
         with self.assertRaises(TraitError):
             ObjectWithColor(color="not a color")
+
+    def test_bad_tuple(self):
+        with self.assertRaises(TraitError):
+            ObjectWithColor(color=(0xff, 0xff))
+
+    def test_bad_tuple_not_int(self):
+        with self.assertRaises(TraitError):
+            ObjectWithColor(color=("not an int", 0xff, 0xff))
+
+    def test_bad_tuple_string(self):
+        with self.assertRaises(TraitError):
+            ObjectWithColor(color="(0xff, 0xff)")
