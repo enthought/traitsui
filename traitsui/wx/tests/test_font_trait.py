@@ -173,7 +173,7 @@ class TestPyQtFont(unittest.TestCase):
             "18 point Comic Sans Oblique Bold underline",
         )
 
-    def assert_qfont_equal(self, font, other):
+    def assert_wxfont_equal(self, font, other):
         self.assertIsInstance(font, wx.Font)
         self.assertIsInstance(other, wx.Font)
 

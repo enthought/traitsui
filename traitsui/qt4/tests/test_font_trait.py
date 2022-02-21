@@ -72,7 +72,7 @@ class TestPyQtFont(unittest.TestCase):
                 self.assertIsInstance(result, TraitsFont)
                 self.assert_qfont_equal(result, expected)
 
-                # round-trip trhough font_to_str
+                # round-trip through font_to_str
                 result_2 = create_traitsfont(font_to_str(result))
                 self.assert_qfont_equal(result, result_2)
 

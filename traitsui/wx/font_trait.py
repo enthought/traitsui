@@ -76,7 +76,7 @@ def font_to_str(font):
 
 
 def create_traitsfont(value):
-    """Create a TraitFont object from a string description."""
+    """Create a TraitsFont object from a string description."""
     if isinstance(value, PyfaceFont):
         return TraitsFont(value.to_toolkit())
     if isinstance(value, wx.Font):

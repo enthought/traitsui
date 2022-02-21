@@ -86,7 +86,7 @@ def font_to_str(font):
 
 
 def create_traitsfont(value):
-    """Create a TraitFont object.
+    """Create a TraitsFont object.
 
     This can take either a string description, a QFont, or a Pyface Font.
     """
