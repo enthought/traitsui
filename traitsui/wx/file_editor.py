@@ -198,7 +198,7 @@ class SimpleEditor(SimpleTextEditor):
         dlg = FileDialog(
             parent=self.get_control_widget(),
             default_path=self._file_name.text(),
-            action=self.factory.dialog_style,
+            action="save" if self.factory.dialog_style == "save as" else "open",
             wildcard=wildcard,
         )
         return dlg
