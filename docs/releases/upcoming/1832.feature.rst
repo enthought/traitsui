@@ -1,0 +1,1 @@
+Remove uses of the archaic `property_depends_on` decorator.

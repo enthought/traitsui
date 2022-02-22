@@ -73,7 +73,6 @@ from traits.api import (
     Bool,
     Str,
     Property,
-    property_depends_on,
 )
 
 from traitsui.api import View, VGroup, Item
@@ -90,15 +89,17 @@ class System(HasTraits):
     velocity = Range(0.0, 100.0)
 
     # The kinetic energy of the system:
-    kinetic_energy = Property(Float)
+    kinetic_energy = Property(Float, observe='mass, velocity')
 
     # The current error status of the system:
     error = Property(
-        Bool, sync_to_view='mass.invalid, velocity.invalid, status.invalid'
+        Bool,
+        sync_to_view='mass.invalid, velocity.invalid, status.invalid',
+        observe='kinetic_energy',
     )
 
     # The current status of the system:
-    status = Property(Str)
+    status = Property(Str, observe='error')
 
     view = View(
         VGroup(
@@ -117,15 +118,12 @@ class System(HasTraits):
         )
     )
 
-    @property_depends_on('mass, velocity')
     def _get_kinetic_energy(self):
         return (self.mass * self.velocity * self.velocity) / 2.0
 
-    @property_depends_on('kinetic_energy')
     def _get_error(self):
         return self.kinetic_energy > 50000.0
 
-    @property_depends_on('error')
     def _get_status(self):
         if self.error:
             return 'The kinetic energy of the system is too high.'
