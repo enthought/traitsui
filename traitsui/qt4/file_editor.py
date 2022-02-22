@@ -23,6 +23,7 @@
 from os.path import abspath, splitext, isfile, exists
 
 from pyface.qt import QtCore, QtGui, is_qt4
+from pyface.api import FileDialog, OK
 from traits.api import Any, Callable, List, Event, File, Str, TraitError, Tuple
 
 from .editor import Editor
@@ -110,18 +111,11 @@ class SimpleEditor(SimpleTextEditor):
         # file name is to be used (ie. an existing one to be opened or a new
         # one to be created).
         dlg = self._create_file_dialog()
+        dlg.open()
 
-        if dlg.exec_() == QtGui.QDialog.DialogCode.Accepted:
-            files = dlg.selectedFiles()
-
-            if len(files) > 0:
-                file_name = str(files[0])
-
-                if self.factory.truncate_ext:
-                    file_name = splitext(file_name)[0]
-
-                self.value = file_name
-                self.update_editor()
+        if dlg.return_code == OK:
+            self.value = dlg.path
+            self.update_editor()
 
     def get_error_control(self):
         """Returns the editor's control for indicating error status."""
@@ -131,17 +125,13 @@ class SimpleEditor(SimpleTextEditor):
 
     def _create_file_dialog(self):
         """Creates the correct type of file dialog."""
-        dlg = QtGui.QFileDialog(self.control)
-        dlg.selectFile(self._file_name.text())
-
-        if self.factory.dialog_style == "open":
-            dlg.setAcceptMode(dlg.AcceptOpen)
-        elif self.factory.dialog_style == "save":
-            dlg.setAcceptMode(dlg.AcceptSave)
-
-        if len(self.factory.filter) > 0:
-            dlg.setNameFilters(self.factory.filter)
-
+        wildcard = " ".join(self.factory.filter)
+        dlg = FileDialog(
+            parent=self.get_control_widget(),
+            default_path=self._file_name.text(),
+            action="save" if self.factory.dialog_style == "save as" else "open",
+            wildcard=wildcard,
+        )
         return dlg
 
 
