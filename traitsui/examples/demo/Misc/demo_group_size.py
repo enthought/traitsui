@@ -20,11 +20,9 @@ surgery at several levels to get the desired layout.
 We separate the left and right groups by a splitter (HSplit), and also
 make the window itself resizable.
 
-This demo includes a simple Chaco plot for variety, but it is not a Chaco demo.
-
 """
 from numpy import linspace, pi, sin
-from traits.api import HasTraits, Instance, Str, Int
+from traits.api import Code, HasTraits, Instance, Str, Int
 
 # UItem is Unlabeled Item
 from traitsui.api import (
@@ -36,8 +34,6 @@ from traitsui.api import (
     VGroup,
     HGroup,
 )
-from chaco.api import Plot, AbstractPlotData, ArrayPlotData
-from enable.component_editor import ComponentEditor
 
 
 class InstanceUItem(UItem):
@@ -47,27 +43,18 @@ class InstanceUItem(UItem):
     editor = Instance(InstanceEditor, ())
 
 
-class PlotView(HasTraits):
+class CodeView(HasTraits):
     """Defines a sub-view whose size we wish to explicitly control."""
 
     n = Int(123)
-    data = Instance(AbstractPlotData)
-    plot1 = Instance(Plot)
+    code = Code()
     view = View(
         # This HGroup keeps 'n' from over-widening, by implicitly placing
         # a spring to the right of the item.
         HGroup(Item('n')),
-        UItem('plot1', editor=ComponentEditor()),
+        UItem('code'),
         resizable=True,
     )
-
-    def create_plot(self, data, name, color):
-        p = Plot(self.data)
-        p.plot(data, name=name, color=color)
-        return p
-
-    def _data_changed(self):
-        self.plot1 = self.create_plot(("x", "y1"), "sin plot", "red")
 
 
 class VerticalBar(HasTraits):
@@ -86,15 +73,15 @@ class VerticalBar(HasTraits):
 
 class BigView(HasTraits):
     """Defines the top-level view. It contains two side-by-side panels (a
-    vertical bar and a plot under an integer) whose relative sizes we wish
-    to control explicitly. If these were simply defined as Groups, we could
-    not control their sizes. But by extracting them as separate classes with
-    their own views, the resizing becomes possible, because they are loaded
-    as Items now.
+    vertical bar and a code editor under an integer) whose relative sizes we
+    wish to control explicitly. If these were simply defined as Groups, we
+    could not control their sizes. But by extracting them as separate classes
+    with their own views, the resizing becomes possible, because they are
+    loaded as Items now.
     """
 
     bar = Instance(VerticalBar, ())
-    plot = Instance(PlotView)
+    code = Instance(CodeView)
     view = View(
         HSplit(
             # Specify pixel width of each sub-view. (Or, to specify
@@ -102,7 +89,7 @@ class BigView(HasTraits):
             # We specify the height here for sake of demonstration;
             # it could also be specified for the top-level view.
             InstanceUItem('bar', width=150),
-            InstanceUItem('plot', width=500, height=500),
+            InstanceUItem('code', width=500, height=500),
             show_border=True,
         ),
         resizable=True,
@@ -110,6 +97,6 @@ class BigView(HasTraits):
 
 
 x = linspace(-2 * pi, 2 * pi, 100)
-pv = PlotView(data=ArrayPlotData(x=x, y1=sin(x)))
-bv = BigView(plot=pv)
+pv = CodeView(code=open(__file__).read())
+bv = BigView(code=pv)
 bv.configure_traits()
