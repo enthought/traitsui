@@ -43,7 +43,7 @@ from traits.api import (
     List,
     Range,
     Property,
-    property_depends_on,
+    cached_property,
 )
 
 from traitsui.api import View, VGroup, Item, TableEditor
@@ -68,9 +68,9 @@ class Factor(HasTraits):
     n = Int()
 
     # The list of factors of 'n':
-    factors = Property(List)
+    factors = Property(List, observe='n')
 
-    @property_depends_on('n')
+    @cached_property
     def _get_factors(self):
         n = self.n
         i = 1
@@ -146,7 +146,7 @@ class Factors(HasTraits):
     max_n = Range(1, 1000, 20, mode='slider')
 
     # The list of Factor objects:
-    factors = Property(List)
+    factors = Property(List, observe='max_n')
 
     # The view of the list of Factor objects:
     view = View(
@@ -167,7 +167,7 @@ class Factors(HasTraits):
         resizable=True,
     )
 
-    @property_depends_on('max_n')
+    @cached_property
     def _get_factors(self):
         return [Factor(n=i + 1) for i in range(self.max_n)]
 

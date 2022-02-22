@@ -41,8 +41,8 @@ from traits.api import (
     HasTraits,
     Property,
     Directory,
-    property_depends_on,
     register_factory,
+    cached_property
 )
 
 from traitsui.api import (
@@ -111,7 +111,7 @@ class FileTreeDemo(HasTraits):
     root_path = Directory(entries=10)
 
     # The root of the file tree:
-    root = Property()
+    root = Property(observe='root_path')
 
     # The traits view to display:
     view = View(
@@ -132,7 +132,7 @@ class FileTreeDemo(HasTraits):
 
     # -- Property Implementations ---------------------------------------------
 
-    @property_depends_on('root_path')
+    @cached_property
     def _get_root(self):
         return File(path=self.root_path)
 

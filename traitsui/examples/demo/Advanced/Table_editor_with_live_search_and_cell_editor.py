@@ -87,30 +87,33 @@ from os import walk, listdir
 from os.path import basename, dirname, splitext, join
 
 from traits.api import (
-    HasTraits,
-    File,
-    Directory,
-    Str,
-    Bool,
-    Int,
-    Enum,
-    Instance,
-    Property,
     Any,
-    property_depends_on,
+    Bool,
+    Directory,
+    Enum,
+    File,
+    HasTraits,
+    Instance,
+    Int,
+    List,
+    Property,
+    Str,
+    cached_property,
+    observe,
 )
 
 from traitsui.api import (
-    View,
-    VGroup,
-    VSplit,
+    CodeEditor,
+    DNDEditor,
     HGroup,
+    HistoryEditor,
     Item,
     TableEditor,
-    CodeEditor,
+    TableFilter,
     TitleEditor,
-    HistoryEditor,
-    DNDEditor,
+    VGroup,
+    View,
+    VSplit,
 )
 
 from traitsui.table_column import ObjectColumn
@@ -205,31 +208,34 @@ class LiveSearch(HasTraits):
     case_sensitive = Bool(False)
 
     # The live search table filter:
-    filter = Property  # Instance( TableFilter )
+    filter = Property(Instance(TableFilter), observe='search, case_sensitive')
 
     # The current list of source files being searched:
-    source_files = Property  # List( SourceFile )
+    source_files = Property(
+        List(Instance("SourceFile")),
+        observe='root, recursive, file_type',
+    )
 
     # The currently selected source file:
-    selected = Any  # Instance( SourceFile )
+    selected = Instance("SourceFile")
 
     # The contents of the currently selected source file:
-    selected_contents = Property  # List( Str )
+    selected_contents = Property(List(Str), observe='selected')
 
     # The currently selected match:
     selected_match = Int()
 
     # The text line corresponding to the selected match:
-    selected_line = Property  # Int
+    selected_line = Property(Int, observe='selected, selected_match')
 
     # The full name of the currently selected source file:
-    selected_full_name = Property  # File
+    selected_full_name = Property(File, observe='selected.full_name')
 
     # The list of marked lines for the currently selected file:
-    mark_lines = Property  # List( Int )
+    mark_lines = Property(List(Int), observe='selected')
 
     # Summary of current number of files and matches:
-    summary = Property  # Str
+    summary = Property(Str, observe='source_files, search, case_sensitive')
 
     # -- Traits UI Views ------------------------------------------------------
 
@@ -295,14 +301,14 @@ class LiveSearch(HasTraits):
 
     # -- Property Implementations ---------------------------------------------
 
-    @property_depends_on('search, case_sensitive')
+    @cached_property
     def _get_filter(self):
         if len(self.search) == 0:
             return lambda x: True
 
         return lambda x: len(x.matches) > 0
 
-    @property_depends_on('root, recursive, file_type')
+    @cached_property
     def _get_source_files(self):
         root = self.root
         if root == '':
@@ -328,21 +334,20 @@ class LiveSearch(HasTraits):
             if splitext(file_name)[1] in file_types
         ]
 
-    @property_depends_on('selected')
     def _get_selected_contents(self):
         if self.selected is None:
             return ''
 
         return ''.join(self.selected.contents)
 
-    @property_depends_on('selected')
+    @cached_property
     def _get_mark_lines(self):
         if self.selected is None:
             return []
 
         return [int(match.split(':', 1)[0]) for match in self.selected.matches]
 
-    @property_depends_on('selected, selected_match')
+    @cached_property
     def _get_selected_line(self):
         selected = self.selected
         if (selected is None) or (len(selected.matches) == 0):
@@ -350,14 +355,14 @@ class LiveSearch(HasTraits):
 
         return int(selected.matches[self.selected_match - 1].split(':', 1)[0])
 
-    @property_depends_on('selected')
+    @cached_property
     def _get_selected_full_name(self):
         if self.selected is None:
             return ''
 
         return self.selected.full_name
 
-    @property_depends_on('source_files, search, case_sensitive')
+    @cached_property
     def _get_summary(self):
         source_files = self.source_files
         search = self.search
@@ -380,10 +385,12 @@ class LiveSearch(HasTraits):
 
     # -- Traits Event Handlers ------------------------------------------------
 
-    def _selected_changed(self):
+    @observe('selected')
+    def _update_selected_match(self, event):
         self.selected_match = 1
 
-    def _source_files_changed(self):
+    @observe('source_files')
+    def _update_selected_file(self, event):
         if len(self.source_files) > 0:
             self.selected = self.source_files[0]
         else:
@@ -402,28 +409,26 @@ class SourceFile(HasTraits):
     full_name = File()
 
     # The base file name of the source file:
-    base_name = Property  # Str
+    base_name = Property(Str, observe='full_name')
 
     # The portion of the file path beyond the root search path:
-    ext_path = Property  # Str
+    ext_path = Property(Str, observe='full_name')
 
     # The contents of the source file:
-    contents = Property  # List( Str )
+    contents = Property(List(Str), observe='full_name')
 
     # The list of matches for the current search criteria:
-    matches = Property  # List( Str )
+    matches = Property(List(Str), observe='full_name, live_search.[search, case_sensitive]')
 
     # -- Property Implementations ---------------------------------------------
 
-    @property_depends_on('full_name')
     def _get_base_name(self):
         return basename(self.full_name)
 
-    @property_depends_on('full_name')
     def _get_ext_path(self):
         return dirname(self.full_name)[len(self.live_search.root) :]
 
-    @property_depends_on('full_name')
+    @cached_property
     def _get_contents(self):
         try:
             with open(self.full_name, 'rU', encoding='utf8') as fh:
@@ -432,7 +437,7 @@ class SourceFile(HasTraits):
         except Exception:
             return ''
 
-    @property_depends_on('full_name, live_search.[search, case_sensitive]')
+    @cached_property
     def _get_matches(self):
         search = self.live_search.search
         if search == '':
