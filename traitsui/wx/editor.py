@@ -61,17 +61,6 @@ class Editor(UIEditor):
         if self.control.GetValue() != new_value:
             self.control.SetValue(new_value)
 
-    def error(self, excp):
-        """Handles an error that occurs while setting the object's trait value."""
-        dlg = wx.MessageDialog(
-            self.control,
-            str(excp),
-            self.description + " value error",
-            wx.OK | wx.ICON_INFORMATION,
-        )
-        dlg.ShowModal()
-        dlg.Destroy()
-
     def set_tooltip_text(self, control, text):
         """Sets the tooltip for a specified control."""
         control.SetToolTip(text)
