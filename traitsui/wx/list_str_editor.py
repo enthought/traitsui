@@ -154,6 +154,18 @@ class _ListStrEditor(Editor):
     #: The current search string:
     search = Str()
 
+    # -- Private traits -------------------------------------------------------
+
+    # Not exhaustive list: other private traits in the class implicitly rely on
+    # HasPrivateTraits behavior and have not been declared. NOTE: to avoid name
+    # conflicts and for better readability, declaring is preferable.
+
+    #: Row above which the mouse was last seen hovering
+    _last_hover_row = Int(-1)
+
+    #: Content of the tooltip currently shown (or "" if nothing shown)
+    _last_tooltip = Str()
+
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
         widget.
@@ -591,10 +603,8 @@ class _ListStrEditor(Editor):
     def _motion(self, event):
         """Handles the user moving the mouse."""
         row, _ = self.control.HitTest(wx.Point(event.GetX(), event.GetY()))
-        # NOTE: relies on HasPrivateTraits initializing _last_row and
-        # _last_tooltip to None if they haven't yet been set.
-        if row != self._last_row:
-            self._last_row = row
+        if row != self._last_hover_row:
+            self._last_hover_row = row
             if row == -1:
                 tooltip = ""
             else:
