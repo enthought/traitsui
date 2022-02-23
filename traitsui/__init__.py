@@ -30,7 +30,6 @@ __extras_require__ = {
     "examples": [
         # Dependencies for examples
         "apptools",
-        "chaco",  # for a very simple example, see enthought/traitsui#1139
         "h5py",
         "numpy",
         "pandas",

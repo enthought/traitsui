@@ -1,0 +1,1 @@
+Remove tests and examples that depend on Chaco and Enable.
