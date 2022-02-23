@@ -67,6 +67,11 @@ class ListStrModel(QtCore.QAbstractListModel):
             if image is not None:
                 return image
 
+        elif role == QtCore.Qt.ItemDataRole.ToolTipRole:
+            tooltip = adapter.get_tooltip(editor.object, editor.name, index)
+            if tooltip:
+                return tooltip
+
         elif role == QtCore.Qt.ItemDataRole.BackgroundRole:
             if editor.is_auto_add(index):
                 color = adapter.get_default_bg_color(

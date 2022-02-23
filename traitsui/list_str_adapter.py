@@ -132,6 +132,9 @@ class ListStrAdapter(HasPrivateTraits):
     #: The current value (if any).
     value = Any()
 
+    #: The tooltip information for a item.
+    tooltip = Str(update=True)
+
     #: List of optional delegated adapters.
     adapters = List(IListStrAdapter, update=True)
 
@@ -209,6 +212,16 @@ class ListStrAdapter(HasPrivateTraits):
         list item.
         """
         return self._result_for("get_text", object, trait, index)
+
+    def get_tooltip(self, object, trait, index):
+        """Returns a string containing the tooltip to display for a specified
+        *object.trait[index]* list item.
+
+        Users should return *self.tooltip* to use the Adapter's default, or the
+        empty string to disable the tooltip for this row (in which case the Item's
+        tooltip, if present, will be shown on QT).
+        """
+        return self._result_for("get_tooltip", object, trait, index)
 
     # -- Adapter methods that are not sensitive to item type ------------------
 
@@ -294,6 +307,9 @@ class ListStrAdapter(HasPrivateTraits):
 
     def _get_text(self):
         return str(self.item)
+
+    def _get_tooltip(self):
+        return self.tooltip
 
     # -- Private Methods ------------------------------------------------------
 
