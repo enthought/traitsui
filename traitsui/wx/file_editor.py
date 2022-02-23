@@ -142,7 +142,10 @@ class SimpleEditor(SimpleTextEditor):
             dlg.open()
 
             if dlg.return_code == OK:
-                self.value = dlg.path
+                if self.factory.truncate:
+                    self.value = splitext(dlg.path)
+                else:
+                    self.value = dlg.path
                 self.update_editor()
 
     def get_error_control(self):
