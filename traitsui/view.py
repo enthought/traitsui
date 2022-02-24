@@ -175,11 +175,11 @@ class View(ViewElement):
 
     #: The menu bar for the view. Usually requires a custom **handler**.
     #: This may be either a MenuBarManager or a MenuBarSchema
-    menubar = Any  # Instance( pyface.action.MenuBarManager )
+    menubar = Any
 
     #: The toolbar for the view. Usually requires a custom **handler**.
     #: This may be either a ToolBarManager or a ToolBarSchema
-    toolbar = Any  # Instance( pyface.action.ToolBarManager )
+    toolbar = Any
 
     #: The ActionManagerBuilder to use with menu and toolbar schemas.
     #: The controller will usually be overridden.
