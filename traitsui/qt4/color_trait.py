@@ -49,10 +49,10 @@ def convert_to_color(object, name, value):
             tup = channels_to_ints(color_table[value])
 
     if isinstance(tup, tuple):
-        if 3 <= len(tup) <= 4:
+        if 3 <= len(tup) <= 4 and all(isinstance(x, int) for x in tup):
             try:
                 color = QtGui.QColor(*tup)
-            except TypeError:
+            except Exception:
                 raise TraitError
         else:
             raise TraitError
