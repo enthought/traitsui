@@ -113,7 +113,8 @@ DEFAULT_TOOLKIT = 'null'
 
 # Required runtime dependencies. Should match install_requires in setup.py
 dependencies = {
-    "pyface>=7.4",
+    # temporarily get pyface from pip until EDM release
+    # "pyface>=7.4.1",
     "traits",
 }
 
