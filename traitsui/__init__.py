@@ -14,7 +14,7 @@ try:
 except ImportError:
     __version__ = "not-built"
 
-__requires__ = ["traits>=6.2.0", "pyface>=7.4.0"]
+__requires__ = ["traits>=6.2.0", "pyface>=7.4.1"]
 __extras_require__ = {
     "wx": ["wxpython>=4", "numpy"],
     "pyqt": ["pyqt>=4.10", "pygments"],
