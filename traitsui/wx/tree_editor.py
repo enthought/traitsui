@@ -910,6 +910,8 @@ class SimpleEditor(Editor):
             if nid == nids[0]:
                 object = sel_object
                 not_handled = node.select(object)
+                # need to break here to preserve node value for use later
+                break
 
         # Set the value of the new selection:
         if self.factory.selection_mode == "single":
