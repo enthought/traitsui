@@ -9,6 +9,7 @@ GV (Gael Varoquaux)     Public Domain             N/A
 Qt                      GNU LGPL 2.1
 Nuvola                  LGPL                      image_LICENSE_Nuvola.txt
 OOo                     LGPL                      image_LICENSE_OOo.txt
+Python                  PSF Trademark             https://www.python.org/community/logos/
 
 Unless stated in this file, icons are the work of Enthought, and are
 released under a 3 clause BSD license.
@@ -17,6 +18,9 @@ Files and original authors:
 ----------------------------------------------------------------------------
 traitsui/examples/demo/Applications/images:
                       blue_ball.png | Nuvola
+
+traitsui/examples/demo/Extras/images:
+                    python-logo.png | Python
 
 traitsui/extras/images:
                            next.png | Nuvola
