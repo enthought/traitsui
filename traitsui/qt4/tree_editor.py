@@ -888,6 +888,8 @@ class SimpleEditor(Editor):
                 if id(nid) == id(nids[0]):
                     object = sel_object
                     not_handled = node.select(sel_object)
+                    # need to break here to preserve node value for use later
+                    break
         else:
             nid = None
             object = None
