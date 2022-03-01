@@ -28,7 +28,7 @@ from traitsui.tests._tools import (
 
 
 filename1 = pkg_resources.resource_filename(
-    "traitsui", "examples/demo/Extras/images/e-logo-rev.png"
+    "traitsui", "examples/demo/Extras/images/python-logo.png"
 )
 filename2 = pkg_resources.resource_filename(
     "traitsui", "examples/demo/Extras/images/info.png"
