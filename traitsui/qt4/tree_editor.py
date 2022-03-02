@@ -1293,6 +1293,8 @@ class SimpleEditor(Editor):
         node, object, nid = self._data
         self._data = None
         new_object = factory()
+        if new_object is None:
+            return  # support None-type returns from factory
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:
