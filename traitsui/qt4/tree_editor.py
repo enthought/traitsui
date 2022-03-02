@@ -875,10 +875,10 @@ class SimpleEditor(Editor):
 
         selected = []
         if len(nids) > 0:
+            selected = [self._get_node_data(nid)[2] for nid in nids]
             for nid in nids:
                 # If there is a real selection, get the associated object:
                 expanded, node, sel_object = self._get_node_data(nid)
-                selected.append(sel_object)
 
                 # Try to inform the node specific handler of the selection, if
                 # there are multiple selections, we only care about the first

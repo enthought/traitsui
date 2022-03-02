@@ -895,14 +895,13 @@ class SimpleEditor(Editor):
         not_handled = True
         nids = self._tree.GetSelections()
 
-        selected = []
+        selected = [self._get_node_data(nid)[2] for nid in nids if nid.IsOk()]
         for nid in nids:
             if not nid.IsOk():
                 continue
 
             # If there is a real selection, get the associated object:
             expanded, node, sel_object = self._get_node_data(nid)
-            selected.append(sel_object)
 
             # Try to inform the node specific handler of the selection,
             # if there are multiple selections, we only care about the
