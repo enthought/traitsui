@@ -874,22 +874,21 @@ class SimpleEditor(Editor):
         nids = self._tree.selectedItems()
 
         selected = []
+        first = True
         if len(nids) > 0:
             for nid in nids:
                 # If there is a real selection, get the associated object:
-                expanded, node, sel_object = self._get_node_data(nid)
+                expanded, sel_node, sel_object = self._get_node_data(nid)
                 selected.append(sel_object)
 
                 # Try to inform the node specific handler of the selection, if
                 # there are multiple selections, we only care about the first
                 # (or maybe the last makes more sense?)
-
-                # QTreeWidgetItem does not have an equal operator, so use id()
-                if id(nid) == id(nids[0]):
+                if first:
+                    node = sel_node
                     object = sel_object
                     not_handled = node.select(sel_object)
-                    # need to break here to preserve node value for use later
-                    break
+                    first = False
         else:
             nid = None
             object = None
