@@ -732,7 +732,7 @@ class FillPanel(object):
             method_to_call = getattr(label, method_dict[kind])
             try:
                 cond_value = eval(when, globals(), context)
-                method_to_call(cond_value)
+                method_to_call(bool(cond_value))
             except Exception:
                 # catch errors in the validate_when expression
                 from traitsui.api import raise_to_debug

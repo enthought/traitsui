@@ -32,10 +32,10 @@ However, it is possible to define a 'settable cached' property which in addition
 to the capabilities of a normal 'cached' property, also allows the property's
 value to be explicitly set.
 
-To accomplish this, simply set the 'settable' argument to the
-'property_depends_on' decorator to True (see the '_get_c' method in the
-example code). When set this way, an appropriate 'setter' method is
-automatically generated for the associated property.
+To accomplish this, simply add a '_set_*' method as usual for a settable property
+(see the '_set_c' method in the example code) which takes the value provided
+and changes the values the property depends on appropriately based on the new
+value.
 
 This allows code to set the value of the property directly if desired, subject
 to any constraints specified in the property declaration. For example, in the

@@ -20,7 +20,7 @@
 """ Defines various directory editor for the PyQt user interface toolkit.
 """
 
-from pyface.qt import QtGui
+from pyface.api import DirectoryDialog
 
 from .file_editor import (
     SimpleEditor as SimpleFileEditor,
@@ -35,11 +35,11 @@ class SimpleEditor(SimpleFileEditor):
 
     def _create_file_dialog(self):
         """Creates the correct type of file dialog."""
-        dlg = QtGui.QFileDialog(self.control)
-        dlg.selectFile(self._file_name.text())
-        dlg.setFileMode(QtGui.QFileDialog.FileMode.Directory)
-        dlg.setOptions(QtGui.QFileDialog.Option.ShowDirsOnly)
 
+        dlg = DirectoryDialog(
+            parent=self.get_control_widget(),
+            default_path=self._file_name.text(),
+        )
         return dlg
 
 

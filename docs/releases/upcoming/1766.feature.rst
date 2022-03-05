@@ -1,0 +1,1 @@
+Allow per-row tooltips in the ListStrEditor's adapter (#1766)

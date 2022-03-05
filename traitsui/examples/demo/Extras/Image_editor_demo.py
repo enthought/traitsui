@@ -91,7 +91,7 @@ popup = Employee(
     name='William Murchison',
     dept='Receiving',
     email='wmurchison@acme.com',
-    picture=ImageResource('e-logo-rev', search_path=search_path),
+    picture=ImageResource('python-logo', search_path=search_path),
     gradient=ArrayImage(data=gradient),
 )
 

@@ -981,3 +981,15 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
             mdtester = ModalDialogTester(trigger_error)
             mdtester.open_and_run(check_and_close)
             self.assertTrue(mdtester.dialog_was_opened)
+
+    def test_get_control_widget(self):
+        user_object = UserObject(user_auxiliary=UserObject())
+        context = {"object": user_object}
+        editor = create_editor(context=context)
+        editor.prepare(None)
+
+        control = editor.get_control_widget()
+        try:
+            self.assertIsNotNone(control)
+        finally:
+            editor.dispose()

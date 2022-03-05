@@ -19,10 +19,10 @@ from traitsui.menu import NoButtons
 
 class ArrayEditorTest(HasPrivateTraits):
 
-    three = Array(np.int, (3, 3))
+    three = Array(np.int64, (3, 3))
 
     four = Array(
-        np.float,
+        np.float64,
         (4, 4),
         editor=ArrayEditor(width=-50),
     )

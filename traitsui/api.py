@@ -139,9 +139,10 @@ Menus and Actions
 - :attr:`~.UndoAction`
 - :attr:`~.UndoButton`
 
-Table UI
---------
+Table and List UI
+-----------------
 
+- :class:`~.ListStrAdapter`
 - :class:`~.TabularAdapter`
 - :attr:`~.TableEditor`
 
@@ -344,6 +345,8 @@ from .item import (
     UReadonly,
     spring,
 )
+
+from .list_str_adapter import ListStrAdapter
 
 from .menu import (
     Action,

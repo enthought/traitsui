@@ -28,7 +28,10 @@ logger = logging.getLogger(__name__)
 
 
 class QtView(View):
-    """A View that allows the specification of Qt style sheets."""
+    """A View that allows the specification of Qt style sheets.
+
+    This works with any non-modal View.
+    """
 
     #: An optional string containing a Qt style sheet.
     style_sheet = Str()
@@ -59,6 +62,9 @@ class QtView(View):
         ui = super().ui(
             context, parent, kind, view_elements, handler, id, scrollable, args
         )
+
+        if not ui.control:
+            return ui
 
         if self.style_sheet:
             ui.control.setStyleSheet(self.style_sheet)
