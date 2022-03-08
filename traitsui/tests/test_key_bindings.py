@@ -14,7 +14,7 @@ from unittest.mock import Mock
 from traits.testing.api import UnittestTools
 
 
-from ..key_bindings import KeyBinding, KeyBindings
+from ..key_bindings import KeyBinding, KeyBindings, KeyBindingsHandler
 
 
 class Controller1:
@@ -115,50 +115,6 @@ class TestKeyBindings(UnittestTools, unittest.TestCase):
         key_binding = bindings[1]
         self.assertEqual(key_binding.binding1, "Ctrl-V")
         self.assertEqual(key_binding.binding2, "Ctrl-W")
-
-    def test_key_binding_for_match(self):
-        bindings = [
-            KeyBinding(binding1="Ctrl-S", binding2="Ctrl-T", method_name="m1"),
-            KeyBinding(binding1="Ctrl-U", binding2="", method_name="m2"),
-        ]
-        key_bindings = KeyBindings(bindings=bindings)
-
-        binding = key_bindings.key_binding_for(bindings[0], "Ctrl-U")
-
-        self.assertIs(binding, bindings[1])
-
-    def test_key_binding_for_no_match(self):
-        bindings = [
-            KeyBinding(binding1="Ctrl-S", binding2="Ctrl-T", method_name="m1"),
-            KeyBinding(binding1="Ctrl-U", binding2="", method_name="m2"),
-        ]
-        key_bindings = KeyBindings(bindings=bindings)
-
-        binding = key_bindings.key_binding_for(bindings[0], "Ctrl-V")
-
-        self.assertIsNone(binding)
-
-    def test_key_binding_for_match_self(self):
-        bindings = [
-            KeyBinding(binding1="Ctrl-S", binding2="Ctrl-T", method_name="m1"),
-            KeyBinding(binding1="Ctrl-U", binding2="", method_name="m2"),
-        ]
-        key_bindings = KeyBindings(bindings=bindings)
-
-        binding = key_bindings.key_binding_for(bindings[0], "Ctrl-S")
-
-        self.assertIsNone(binding)
-
-    def test_key_binding_for_match_empty(self):
-        bindings = [
-            KeyBinding(binding1="Ctrl-S", binding2="Ctrl-T", method_name="m1"),
-            KeyBinding(binding1="Ctrl-U", binding2="", method_name="m2"),
-        ]
-        key_bindings = KeyBindings(bindings=bindings)
-
-        binding = key_bindings.key_binding_for(bindings[0], "")
-
-        self.assertIsNone(binding)
 
     def test_clear_bindings_match(self):
         bindings = [
@@ -269,3 +225,54 @@ class TestKeyBindings(UnittestTools, unittest.TestCase):
 
         self.assertFalse(result)
         self.assertIsNone(controller.called)
+
+
+class TestKeyBindingsHandler(unittest.TestCase):
+
+    def test_key_binding_for_match(self):
+        bindings = [
+            KeyBinding(binding1="Ctrl-S", binding2="Ctrl-T", method_name="m1"),
+            KeyBinding(binding1="Ctrl-U", binding2="", method_name="m2"),
+        ]
+        key_bindings = KeyBindings(bindings=bindings)
+        handler = KeyBindingsHandler(model=key_bindings)
+
+        binding = handler.key_binding_for(bindings[0], "Ctrl-U")
+
+        self.assertIs(binding, bindings[1])
+
+    def test_key_binding_for_no_match(self):
+        bindings = [
+            KeyBinding(binding1="Ctrl-S", binding2="Ctrl-T", method_name="m1"),
+            KeyBinding(binding1="Ctrl-U", binding2="", method_name="m2"),
+        ]
+        key_bindings = KeyBindings(bindings=bindings)
+        handler = KeyBindingsHandler(model=key_bindings)
+
+        binding = handler.key_binding_for(bindings[0], "Ctrl-V")
+
+        self.assertIsNone(binding)
+
+    def test_key_binding_for_match_self(self):
+        bindings = [
+            KeyBinding(binding1="Ctrl-S", binding2="Ctrl-T", method_name="m1"),
+            KeyBinding(binding1="Ctrl-U", binding2="", method_name="m2"),
+        ]
+        key_bindings = KeyBindings(bindings=bindings)
+        handler = KeyBindingsHandler(model=key_bindings)
+
+        binding = handler.key_binding_for(bindings[0], "Ctrl-S")
+
+        self.assertIsNone(binding)
+
+    def test_key_binding_for_match_empty(self):
+        bindings = [
+            KeyBinding(binding1="Ctrl-S", binding2="Ctrl-T", method_name="m1"),
+            KeyBinding(binding1="Ctrl-U", binding2="", method_name="m2"),
+        ]
+        key_bindings = KeyBindings(bindings=bindings)
+        handler = KeyBindingsHandler(model=key_bindings)
+
+        binding = handler.key_binding_for(bindings[0], "")
+
+        self.assertIsNone(binding)

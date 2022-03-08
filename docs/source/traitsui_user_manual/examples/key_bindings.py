@@ -28,6 +28,7 @@ key_bindings = KeyBindings(
     KeyBinding(
         binding1='Ctrl-k',
         description='Edit key bindings',
+        # special method name handled internally
         method_name='edit_bindings',
     ),
 )
@@ -41,10 +42,6 @@ class CodeHandler(Handler):
 
     def run_script(self, info):
         info.object.status = "run script"
-
-    def edit_bindings(self, info):
-        info.object.status = "edit bindings"
-        key_bindings.edit_traits()
 
 
 class KBCodeExample(HasPrivateTraits):
@@ -70,7 +67,7 @@ class KBCodeExample(HasPrivateTraits):
 
     @observe('kb')
     def _edit_key_bindings(self, event):
-        key_bindings.edit_traits()
+        key_bindings.edit()
 
 
 if __name__ == '__main__':
