@@ -1,1 +1,0 @@
-Fix Dynamic EnumEditor on qt (#1719)

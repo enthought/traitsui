@@ -1,1 +1,0 @@
-Require Pyface 7.4.1.
