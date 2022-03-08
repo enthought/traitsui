@@ -883,7 +883,6 @@ class SimpleEditor(Editor):
 
                 # Try to inform the node specific handler of the selection, if
                 # there are multiple selections, we only care about the first
-                # (or maybe the last makes more sense?)
                 if first:
                     node = sel_node
                     object = sel_object
