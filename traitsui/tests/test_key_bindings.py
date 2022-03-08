@@ -227,7 +227,7 @@ class TestKeyBindings(UnittestTools, unittest.TestCase):
         self.assertIsNone(controller.called)
 
 
-class TestKeyBindingsHandler(UnittestTools, unittest.TestCase):
+class TestKeyBindingsHandler(unittest.TestCase):
 
     def test_key_binding_for_match(self):
         bindings = [

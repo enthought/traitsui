@@ -27,8 +27,8 @@ key binding editor).
 
 
 from pyface.qt import QtCore, QtGui
-from pyface.api import YES, confirm
 
+from pyface.api import YES, confirm
 from traits.api import Bool, Event
 
 from .editor import Editor
@@ -83,8 +83,8 @@ class KeyBindingEditor(Editor):
                 return
 
         self.value = key_name
-        # Need to manually update editor because loopback protection doesn't
-        # catch the change.
+        # Need to manually update editor because the update to the value
+        # won't get transferred to toolkit object due to loopback protection.
         self.update_editor()
 
     def _clear_changed(self):
