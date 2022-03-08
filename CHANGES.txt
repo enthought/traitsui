@@ -18,7 +18,7 @@ Highlights of this release
   Color and Font traits.
 * The image editor can now use any Pyface IImage instance, allowing simple
   dynamic image editing.
-* numerous bugfixes and small improvements to existing editors.
+* Numerous bugfixes and small improvements to existing editors.
 
 Thanks To
 ~~~~~~~~~

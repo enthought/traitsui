@@ -5,7 +5,7 @@ TraitsUI: Traits-capable windowing framework
 The TraitsUI project provides a toolkit-independent GUI abstraction layer,
 which is used to support the "visualization" features of the
 `Traits <http://github.com/enthought/traits>`__ package.
-You can write model using the Traits API and specify a GUI using the TraitsUI
+You can write a model using the Traits API and specify a GUI using the TraitsUI
 API (views, items, editors, etc.), and let TraitsUI and your selected toolkit
 back-end (Qt or Wx) take care of the details of displaying them.
 
@@ -23,7 +23,7 @@ Given a Traits model like the following::
 
     person = Person(age=30)
 
-An using TraitsUI to specify and display a GUI view::
+And using TraitsUI to specify and display a GUI view::
 
     from traitsui.api import Item, RangeEditor, View
 
