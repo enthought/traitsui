@@ -1,1 +1,0 @@
-Pyface Fonts can be used with TraitsUI Font traits.

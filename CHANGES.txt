@@ -1,8 +1,108 @@
 Traits UI Changelog
 ===================
 
+Release 7.3.0
+-------------
+
+TraitsUI 7.3.0 is a minor release which includes numerous bug fixes,
+documentation improvements, code maintenance changes, and enhancements.
+
+Highlights of this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* The most important new features are experimental support for Qt6, both for
+  PySide6 and PyQt6 (although the latter is less complete).
+* Qt4 is deprecated and is no longer being tested in CI.  Support will be
+  removed in the next major release.
+* The new Pyface Font and Color classes can now be used with the TraitsUI
+  Color and Font traits.
+* The image editor can now use any Pyface IImage instance, allowing simple
+  dynamic image editing.
+* numerous bugfixes and small improvements to existing editors.
+
+Thanks To
+~~~~~~~~~
+
+* Chris Angell
+* Aaron Ayres
+* Per A. Brodtkorb
+* Mark Dickinson
+* Petr Kungurtsev
+* Eric Larson
+* Nicola De Mitri
+* Rahul Poruri
+* PyHannes
+* Diego Ramirez
+* Pedro Rivotti
+* Corran Webster
+
+Features
+~~~~~~~~
+
+* Expose TreeEditor actions and IconSize in traitsui.editors.api (#1690)
+* Add UITester support for qt TableEditor (#1707)
+* Add UITester DirectoryEditor support (#1710)
+* Add an expand_all method to TreeEditor (#1726)
+* Used Black to ensure a uniform codestyle for TraitsUI (#1760)
+* Allow per-row tooltips in the ListStrEditor's adapter (#1766)
+* PySide6 support (#1803)
+* Add support for Pyface Color and standaize color names  (#1812)
+* Pyface Fonts can be used with TraitsUI Font traits (#1819)
+* Add ListStrAdapter to traitsui.api (#1823)
+* Remove uses of the archaic `property_depends_on` decorator (#1832)
+* Require Pyface 7.4.1 (#1840)
+
+Fixes
+~~~~~
+
+* Call HasPrivateTraits.__init__() in GroupEditor.__init__ (#1674)
+* Add RangeEditor support for format_func and deprecate ``format`` trait on
+  RangeEditor factory / toolkit specific Editor implementations (#1684)
+* Fix Dynamic EnumEditor on qt (#1719)
+* Fix ProgressColumn bars overlapping with PyQt5 and PySide2 (#1721)
+* Fix selectable InstanceEditor combobox updates (#1725)
+* Fix Qt InstanceEditor appearance when None selected (#1728)
+* Prevent RangeTextEditor from allowing values outside range (#1731)
+* Fix droppable InstanceEditor (#1733)
+* Fix double error dialogs (#1734)
+* Convert ``traitsui.instance_choice.InstanceChoiceItem`` into an instance of
+  ``traits.api.ABCHasStrictTraits`` to avoid users from instantiating the
+  object directly (#1738)
+* Fix issue with incorrect items added via context menu in a TreeEditor (#1745)
+* Fix name errors and refactor flake8 config to reduce the chance of future errors. (#1754)
+* Fix NotebookEditor initial `selected` (#1791)
+* Convert Qt Enums to be compatible with PyQt6 (#1798)
+* Fix SimpleSpinEditor "enter set" on qt (#1804)
+* Fix issue with ImageEditor not updating for all IImage implementations. (#1810)
+* Fix issues with KeyBindings. (#1817)
+* Fix the KeyBindingEditor. (#1820)
+* Improve error colors for dark mode on Qt. (#1821)
+
+Documentation changes
+~~~~~~~~~~~~~~~~~~~~~
+
+* Move "array_editor" to "StandardEditors" contributed examples (#1691)
+
+Test suite
+~~~~~~~~~~
+
+* Stop testing against pyqt4 on CI (#1686)
+* Remove tests and examples that depend on Chaco and Enable. (#1833)
+
+Release 7.2.1
+-------------
+
+TraitsUI 7.2.1 is a bugfix release which updates TraitsUI to explicitly require
+Traits 6.2+ and Pyface 7.3+.
+
+Build and continuous integration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Explicitly require traits 6.2 and pyface 7.3 (#1666, #1668)
+
 Release 7.2.0
 -------------
+
 TraitsUI 7.2.0 is a minor release which includes numerous bug fixes,
 documentation improvements, code maintenance changes, and enhancements.
 

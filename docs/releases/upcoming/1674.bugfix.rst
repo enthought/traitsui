@@ -1,1 +1,0 @@
-Call HasPrivateTraits.__init__() in GroupEditor.__init__ (#1674)

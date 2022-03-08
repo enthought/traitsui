@@ -1,1 +1,0 @@
-Add UITester support for qt TableEditor (#1707)

@@ -1,1 +1,0 @@
-Used Black to ensure a uniform codestyle for TraitsUI. (#1760)
