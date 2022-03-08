@@ -21,10 +21,10 @@ from io import open
 # together with information from the version control system, and then injected
 # into the package source.
 MAJOR = 7
-MINOR = 3
+MINOR = 4
 MICRO = 0
 PRERELEASE = ""
-IS_RELEASED = True
+IS_RELEASED = False
 
 # If this file is part of a Git export (for example created with "git archive",
 # or downloaded from GitHub), ARCHIVE_COMMIT_HASH gives the full hash of the
