@@ -36,7 +36,6 @@ def trait_set_side_effect(**traits):
 
     def side_effect(self, *args, **kwargs):
         self.trait_set(**traits)
-        self.print_traits()
         return mock.DEFAULT
 
     return side_effect
