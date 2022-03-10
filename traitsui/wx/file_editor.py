@@ -143,7 +143,7 @@ class SimpleEditor(SimpleTextEditor):
 
             if dlg.return_code == OK:
                 if self.factory.truncate_ext:
-                    self.value = splitext(dlg.path)
+                    self.value = splitext(dlg.path)[0]
                 else:
                     self.value = dlg.path
                 self.update_editor()
