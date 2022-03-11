@@ -90,7 +90,7 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
             else:
                 cols = self.factory.cols
                 rows = (len(self.names) + cols - 1) / cols
-                row, col = index / cols, index % cols
+                row, col = index // cols, index % cols
                 self.control.setModelColumn(col)
                 self.control.setCurrentIndex(row)
             self._no_enum_update -= 1
@@ -281,7 +281,7 @@ class ImageEnumModel(QtCore.QAbstractTableModel):
     def rowCount(self, mi):
         """Reimplemented to return the number of rows."""
         cols = self._editor.factory.cols
-        result = (len(self._editor.names) + cols - 1) / cols
+        result = (len(self._editor.names) + cols - 1) // cols
         return result
 
     def columnCount(self, mi):
