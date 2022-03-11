@@ -9,8 +9,11 @@
 # Thanks for using Enthought open source!
 
 import unittest
+from unittest import mock
 
+from pyface.api import OK
 from traits.api import Event, File, HasTraits
+
 from traitsui.api import FileEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -27,6 +30,15 @@ class FileModel(HasTraits):
     reload_event = Event()
 
     existing_filepath = File(exists=True)
+
+
+def trait_set_side_effect(**traits):
+
+    def side_effect(self, *args, **kwargs):
+        self.trait_set(**traits)
+        return mock.DEFAULT
+
+    return side_effect
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -99,6 +111,42 @@ class TestSimpleFileEditor(BaseTestMixin, unittest.TestCase):
 
             # the widget is synchronized to the trait value.
             self.assertEqual(filepath_field.inspect(DisplayedText()), "")
+
+    @mock.patch(
+        "pyface.api.FileDialog.open",
+        autospec=True,
+        side_effect=trait_set_side_effect(
+            return_code=OK,
+            path="some_file.txt",
+        ),
+    )
+    def test_show_file_dialog(self, mock_open):
+        view = View(Item("filepath", editor=FileEditor()))
+        obj = FileModel()
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            editor = ui.get_editors("filepath")[0]
+            editor.show_file_dialog()
+
+            self.assertEqual(editor.value, "some_file.txt")
+
+    @mock.patch(
+        "pyface.api.FileDialog.open",
+        autospec=True,
+        side_effect=trait_set_side_effect(
+            return_code=OK,
+            path="some_file.txt",
+        ),
+    )
+    def test_show_file_dialog_truncate_ext(self, mock_open):
+        view = View(Item("filepath", editor=FileEditor(truncate_ext=True)))
+        obj = FileModel()
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            editor = ui.get_editors("filepath")[0]
+            editor.show_file_dialog()
+
+            self.assertEqual(editor.value, "some_file")
 
 
 # Run this against wx too when enthought/traitsui#752 is also fixed.
