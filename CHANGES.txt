@@ -1,6 +1,28 @@
 Traits UI Changelog
 ===================
 
+Release 7.3.1
+-------------
+
+TraitsUI 7.3.1 is a bugfix release that resolves a couple of critical errors in
+some Editors.
+
+Thanks To
+~~~~~~~~~
+
+* Mark Dickinson
+* Steven Kern
+* Orion Poplawski
+* Rahul Poruri
+* Corran Webster
+
+Fixes
+~~~~~
+
+* Fix an issue with KeyBindingsEditor double-click and dark mode colors (#1864)
+* Fix an issue with integer division in ImageEnumEditor (#1862)
+* Fix an attribute name and type error in the FileEditor (#1860)
+
 Release 7.3.0
 -------------
 
