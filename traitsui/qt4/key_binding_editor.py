@@ -90,22 +90,21 @@ class KeyBindingEditor(Editor):
     def _clear_changed(self):
         """Handles a clear field event."""
         self.value = ""
+        # Need to manually update editor because the update to the value
+        # won't get transferred to toolkit object due to loopback protection.
+        self.update_editor()
 
 
-class KeyBindingCtrl(QtGui.QLabel):
+class KeyBindingCtrl(QtGui.QLineEdit):
     """PyQt control for editing key bindings."""
 
     def __init__(self, editor, parent=None):
         super().__init__(parent)
 
         self.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
-        self.setIndent(4)
         self.setMinimumWidth(160)
-
-        pal = QtGui.QPalette(self.palette())
-        pal.setColor(QtGui.QPalette.ColorRole.Window, QtCore.Qt.GlobalColor.white)
-        self.setPalette(pal)
-        self.setAutoFillBackground(True)
+        self.setMaximumWidth(160)
+        self.setReadOnly(True)
 
         # Save the reference to the controlling editor object:
         self.editor = editor
@@ -121,23 +120,20 @@ class KeyBindingCtrl(QtGui.QLabel):
 
     def paintEvent(self, event):
         """Updates the screen."""
-        QtGui.QLabel.paintEvent(self, event)
-
-        w = self.width()
-        h = self.height()
-        p = QtGui.QPainter(self)
+        super().paintEvent(event)
 
         if self.editor.has_focus:
+            w = self.width()
+            h = self.height()
+            p = QtGui.QPainter(self)
+
             p.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
             pen = QtGui.QPen(QtGui.QColor("tomato"))
             pen.setWidth(2)
             p.setPen(pen)
             p.drawRect(1, 1, w - 2, h - 2)
-        else:
-            p.setPen(self.palette().color(QtGui.QPalette.ColorRole.Mid))
-            p.drawRect(0, 0, w - 1, h - 1)
 
-        p.end()
+            p.end()
 
     def focusInEvent(self, event):
         """Handles getting the focus."""
