@@ -15,7 +15,6 @@
 from contextlib import contextmanager
 from functools import partial
 
-from pyface.api import information
 from traits.api import (
     Any,
     Bool,
@@ -162,6 +161,8 @@ class Editor(HasPrivateTraits):
         excp : Exception
             The exception which occurred.
         """
+        from pyface.api import information
+
         information(
             parent=self.get_control_widget(),
             title=self.description + " value error",
