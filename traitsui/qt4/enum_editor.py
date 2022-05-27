@@ -316,7 +316,7 @@ class RadioEditor(BaseEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        if is_pyside:
+        if is_pyside and QtCore.__version_info__ >= (5, 15):
             self._mapper.mappedInt.connect(self.update_object)
         else:
             self._mapper.mapped.connect(self.update_object)

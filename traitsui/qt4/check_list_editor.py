@@ -155,7 +155,7 @@ class CustomEditor(SimpleEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        if is_pyside:
+        if is_pyside and QtCore.__version_info__ >= (5, 15):
             self._mapper.mappedString.connect(self.update_object)
         else:
             self._mapper.mapped[str].connect(self.update_object)
@@ -168,7 +168,7 @@ class CustomEditor(SimpleEditor):
 
         # signal from create_control
         if self._mapper is not None:
-            if is_pyside:
+            if is_pyside and QtCore.__version_info__ >= (5, 15):
                 self._mapper.mappedString.disconnect(self.update_object)
             else:
                 self._mapper.mapped[str].disconnect(self.update_object)
