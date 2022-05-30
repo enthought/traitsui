@@ -70,15 +70,14 @@ def load_tests(loader, standard_tests, pattern):
         TestSuite representing all package tests that did not match specified
         exclusion pattern.
     """
+    # Make sure the right toolkit is up and running before importing tests
+    from traitsui.toolkit import toolkit
+    toolkit()
+
     from os.path import dirname
     from unittest import TestSuite
     from traits.etsconfig.api import ETSConfig
     from traitsui.tests._tools import filter_tests
-
-    # Make sure the right toolkit is up and running before importing tests
-    from traitsui.toolkit import toolkit
-
-    toolkit()
 
     if ETSConfig.toolkit.startswith("qt"):
         exclusion_pattern = "wx"
