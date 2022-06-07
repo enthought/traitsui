@@ -70,7 +70,8 @@ def load_tests(loader, standard_tests, pattern):
         TestSuite representing all package tests that did not match specified
         exclusion pattern.
     """
-    import logging, sys
+    import logging
+    import sys
     logging.basicConfig(level=logging.DEBUG)
     root_logger = logging.getLogger()
     root_logger.addHandler(logging.StreamHandler(sys.__stdout__))
