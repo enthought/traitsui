@@ -181,7 +181,6 @@ class TestInteractions(unittest.TestCase):
                 textbox, command.KeySequence("abc"), 0
             )
 
-    @unittest.skip("Temporarily skipping during debugging")
     def test_key_click(self):
         textbox = QtGui.QLineEdit()
         change_slot = mock.Mock()
