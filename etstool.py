@@ -266,7 +266,7 @@ def install(runtime, toolkit, environment, editable, source):
     elif toolkit == 'pyqt6':
         commands.append("edm run -e {environment} -- pip install pyqt6")
     elif toolkit == 'pyside6':
-        if sys.platform == 'darwin':
+        if sys.platform == 'darwin' or sys.platform == 'linux':
             commands.append("edm run -e {environment} -- pip install pyside6<6.2.2")
         else:
             commands.append("edm run -e {environment} -- pip install pyside6")
