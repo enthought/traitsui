@@ -19,8 +19,14 @@ __extras_require__ = {
     "wx": ["wxpython>=4", "numpy"],
     "pyqt": ["pyqt>=4.10", "pygments"],
     "pyqt5": ["pyqt5", "pygments"],
-    "pyside2": ["pyside2", "shiboken2", "pygments"],
-    "pyside6": ["pyside6", "shiboken6", "pygments"],
+    "pyside2": ["pyside2", "pygments"],
+    "pyside6": [
+        # Avoid https://bugreports.qt.io/browse/PYSIDE-1797, which causes
+        # some versions of PySide6 to be unimportable on Python 3.6 and 3.7.
+        "pyside6!=6.2.2,!=6.2.2.1,!=6.2.3,!=6.2.4,!=6.3.0; python_version<'3.8'",
+        "pyside6; python_version>='3.8'",
+        "pygments",
+    ],
     "docs": ["enthought-sphinx-theme", "sphinx"],
     "demo": [
         # to be deprecated, see enthought/traitsui#950
