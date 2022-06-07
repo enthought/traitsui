@@ -204,9 +204,9 @@ class TestInteractions(unittest.TestCase):
         # Now "Enter" should not finish editing, but instead go to next line
         textbox.textChanged.connect(lambda: change_slot())
         _interaction_helpers.key_click_qwidget(
-            textbox, command.KeyClick("Enter"), 0
+            textbox, command.KeyClick("Return"), 0
         )
-        # self.assertEqual(change_slot.call_count, 1)
+        self.assertEqual(change_slot.call_count, 1)
         self.assertEqual(textbox.toPlainText(), "\n")
 
         # for a QLabel, one can try a key click and nothing will happen
