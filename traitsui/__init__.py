@@ -75,6 +75,12 @@ def load_tests(loader, standard_tests, pattern):
     from traits.etsconfig.api import ETSConfig
     from traitsui.tests._tools import filter_tests
 
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+    logger = logging.getLogger()
+    logger.debug("Art this thing working?")
+    logger.error("Printer on fire")
+
     # Make sure the right toolkit is up and running before importing tests
     from traitsui.toolkit import toolkit
 
