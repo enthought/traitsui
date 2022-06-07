@@ -8,6 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
+import sys
 import unittest
 from unittest import mock
 
@@ -181,6 +182,7 @@ class TestInteractions(unittest.TestCase):
                 textbox, command.KeySequence("abc"), 0
             )
 
+    @unittest.skipIf(sys.platform.startswith("win"), "temp skip on Windows")
     def test_key_click(self):
         textbox = QtGui.QLineEdit()
         change_slot = mock.Mock()
