@@ -267,7 +267,7 @@ def install(runtime, toolkit, environment, editable, source):
         commands.append("edm run -e {environment} -- pip install pyqt6")
     elif toolkit == 'pyside6':
         # On Linux and macOS, some versions of PySide6 between 6.2.2 and 6.3.0
-        # are broken on Python 3.6. See
+        # are unimportable on Python 3.6 and Python 3.7. See
         # https://bugreports.qt.io/browse/PYSIDE-1797. It may be possible to
         # remove this workaround once PySide6 6.3.1 or later is released.
         if sys.platform in {'darwin', 'linux'}:
