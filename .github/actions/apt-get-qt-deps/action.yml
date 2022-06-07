@@ -18,4 +18,5 @@ runs:
         sudo apt-get install libxcb-xinerama0
         sudo apt-get install pulseaudio
         sudo apt-get install libpulse-mainloop-glib0
+        sudo apt-get install freeglut3 freeglut3-dev
       shell: bash
