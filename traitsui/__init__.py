@@ -70,17 +70,6 @@ def load_tests(loader, standard_tests, pattern):
         TestSuite representing all package tests that did not match specified
         exclusion pattern.
     """
-    import logging
-    import sys
-    logging.basicConfig(level=logging.DEBUG)
-    root_logger = logging.getLogger()
-    root_logger.addHandler(logging.StreamHandler(sys.__stdout__))
-
-    # Validate that logging is working as expected.
-    print("Testing a plain print")
-    root_logger.debug("Art this thing working?")
-    root_logger.error("Printer on fire")
-
     from os.path import dirname
     from unittest import TestSuite
     from traits.etsconfig.api import ETSConfig
