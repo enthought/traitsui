@@ -20,5 +20,4 @@ runs:
         sudo apt-get install libpulse-mainloop-glib0
         # Needed to work around https://bugreports.qt.io/browse/PYSIDE-1547
         sudo apt-get install libopengl0 -y
-        sudo apt-get install freeglut3 freeglut3-dev
       shell: bash
