@@ -39,6 +39,7 @@ __extras_require__ = {
         "h5py",
         "numpy",
         "pandas",
+        "pillow",
         "tables",
     ],
     "editors": [
