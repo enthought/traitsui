@@ -1,8 +1,9 @@
 # This workflow targets stable released dependencies from PyPI
 # The matrix is conservative to avoid using too much public resources.
 
-# We test only Qt support; the test suite is currently not maintained
-# for wxPython.
+# We test only Qt support in this workflow; the test suite is currently not
+# maintained for wxPython. See test-with-pip-wx.yml for a separate
+# wxPython-only workflow.
 
 name: Test with PyPI and Qt
 
