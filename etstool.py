@@ -284,6 +284,11 @@ def install(runtime, toolkit, environment, editable, source):
                 "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04/ wxPython"
             )
 
+    # Temporarily install "sphinx-copybutton" from PyPI
+    commands.append(
+        "edm run -e {environment} -- python -m pip install sphinx-copybutton"
+    )
+
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)
 
