@@ -136,7 +136,7 @@ class TestImageEditor(BaseTestMixin, unittest.TestCase):
 
     def test_image_editor_none(self):
 
-        obj1 = ImageDisplay()
+        obj1 = ImageDisplay(image=None)
         view = View(
             Item(
                 'image',
