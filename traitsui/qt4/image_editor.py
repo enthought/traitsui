@@ -67,6 +67,7 @@ class QImageView(QFrame):
         pixmap = self._pixmap
         if pixmap is None:
             super().paintEvent(event)
+            return
 
         pm_size = pixmap.size()
         pm_width = pm_size.width()
