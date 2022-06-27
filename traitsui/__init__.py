@@ -27,7 +27,7 @@ __extras_require__ = {
         "pyside6; python_version>='3.8'",
         "pygments",
     ],
-    "docs": ["enthought-sphinx-theme", "sphinx"],
+    "docs": ["enthought-sphinx-theme", "sphinx", "sphinx-copybutton"],
     "demo": [
         # to be deprecated, see enthought/traitsui#950
         "configobj",
