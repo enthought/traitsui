@@ -131,7 +131,9 @@ if is_qt5:
                 cloned_frame.width(),
                 cloned_frame.height(),
                 cloned_frame.bytesPerLine(),
-                QVideoFrame.imageFormatFromPixelFormat(cloned_frame.pixelFormat()),
+                QVideoFrame.imageFormatFromPixelFormat(
+                    cloned_frame.pixelFormat()
+                ),
             )
             self.frameAvailable.emit(image)
             return True
@@ -389,7 +391,7 @@ class VideoEditor(Editor):
         if is_qt5:
             self.buffer = self.media_player.bufferStatus()
         else:
-            self.buffer = self.media_player.bufferProgress()
+            self.buffer = int(self.media_player.bufferProgress() * 100)
 
     def _notify_interval_changed_emitted(self, interval):
         self.notify_interval = interval / 1000.0
@@ -414,7 +416,10 @@ class VideoEditor(Editor):
     def _media_content_observer(self, event):
         self.video_error = ''
         if self.media_player is not None:
-            self.media_player.setMedia(self.media_content)
+            if is_qt5:
+                self.media_player.setMedia(self.media_content)
+            else:
+                self.media_player.setSource(self.media_content)
 
     @observe('muted')
     def _muted_observer(self, event):
