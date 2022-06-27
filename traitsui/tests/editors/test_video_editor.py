@@ -18,7 +18,7 @@ import pkg_resources
 from traits.api import Bool, Callable, File, Float, HasTraits, Range, Str
 from traitsui.api import ContextValue, Item, View
 from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
-from traitsui.tests._tools import BaseTestMixin, create_ui
+from traitsui.tests._tools import BaseTestMixin, create_ui, is_qt5, is_qt6
 
 filename = pkg_resources.resource_filename('traitsui.testing', 'data/test.mp4')
 
@@ -38,6 +38,7 @@ class MovieTheater(HasTraits):
     image_func = Callable()
 
 
+@unittest.skipIf(not is_qt5() and not is_qt6(), 'Requires Qt5 or 6')
 class TestVideoEditor(BaseTestMixin, unittest.TestCase):
     def setUp(self):
         BaseTestMixin.setUp(self)
