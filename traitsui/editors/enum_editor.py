@@ -15,7 +15,7 @@ traits user interface toolkits.
 import os
 import sys
 
-from traits.api import Any, Range, Enum, Bool
+from traits.api import Any, Range, Enum, Bool, Str
 
 from traitsui.editor_factory import EditorWithListFactory
 from traitsui.toolkit import toolkit_object
@@ -52,6 +52,12 @@ class EnumEditor(EditorWithListFactory):
 
     #: Completion mode for editors with text-entry (Qt only):
     completion_mode = CompletionMode
+
+    #: Whether values trait contains separators (Qt only)
+    use_separator = Bool(False)
+
+    #: The separator string used in values trait (Qt only)
+    separator = Str("")
 
     # -------------------------------------------------------------------------
     #  'Editor' factory methods:
