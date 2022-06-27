@@ -308,7 +308,7 @@ class VideoEditor(Editor):
                 self.media_player.playbackStateChanged.connect(
                     self._state_changed_emitted
                 )
-                self.media_player.errorChanged.connect(self._error_emitted)
+                self.media_player.errorOccurred.connect(self._error_emitted)
                 self.media_player.bufferProgressChanged.connect(
                     self._buffer_status_changed_emitted
                 )
@@ -339,7 +339,7 @@ class VideoEditor(Editor):
                 self.media_player.playbackStateChanged.disconnect(
                     self._state_changed_emitted
                 )
-                self.media_player.errorChanged.disconnect(self._error_emitted)
+                self.media_player.errorOccurred.disconnect(self._error_emitted)
                 self.media_player.bufferProgressChanged.disconnect(
                     self._buffer_status_changed_emitted
                 )
