@@ -17,6 +17,7 @@ Please refer to the `VideoEditor API docs`_ for further information.
 """
 import numpy as np
 from PIL import Image
+from pyface.qt import is_qt5
 from pyface.qt.QtGui import QImage
 from traits.api import (
     Bool,
@@ -177,8 +178,11 @@ class VideoEditorDemo(HasTraits):
 
 url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"  # noqa: E501
 # Create the demo:
-demo = VideoEditorDemo(image_func=test_image_func, video_url=url)
-# demo = VideoEditorDemo(video_url=url)
+if is_qt5:
+    demo = VideoEditorDemo(image_func=test_image_func, video_url=url)
+else:
+    # Qt 6 can't do on-the-fly image manipulation
+    demo = VideoEditorDemo(video_url=url)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

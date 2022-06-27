@@ -9,18 +9,18 @@
 # Thanks for using Enthought open source!
 
 """Traits UI 'display only' video editor."""
+from pyface.qt import is_qt5
 from pyface.qt.QtCore import QPoint, Qt, QUrl, Signal
 from pyface.qt.QtGui import QImage, QPainter, QPalette, QSizePolicy
 from pyface.qt.QtMultimedia import (
-    QAbstractVideoBuffer,
-    QAbstractVideoSurface,
     QAudio,
-    QMediaContent,
     QMediaPlayer,
     QVideoFrame,
 )
 from pyface.qt.QtMultimediaWidgets import QVideoWidget
-from traits.api import Bool, Callable, Float, Instance, Range, Str, observe
+from traits.api import (
+    Any, Bool, Callable, Float, Instance, Range, Str, observe,
+)
 from traitsui.editors.video_editor import AspectRatio, MediaStatus, PlayerState
 
 from .editor import Editor
@@ -33,18 +33,24 @@ aspect_ratio_map = {
 }
 
 #: Map from PlayerState enum values to QMediaPlayer states.
-state_map = {
-    'stopped': QMediaPlayer.State.StoppedState,
-    'playing': QMediaPlayer.State.PlayingState,
-    'paused': QMediaPlayer.State.PausedState,
-}
+if is_qt5:
+    state_map = {
+        'stopped': QMediaPlayer.State.StoppedState,
+        'playing': QMediaPlayer.State.PlayingState,
+        'paused': QMediaPlayer.State.PausedState,
+    }
+else:
+    state_map = {
+        'stopped': QMediaPlayer.PlaybackState.StoppedState,
+        'playing': QMediaPlayer.PlaybackState.PlayingState,
+        'paused': QMediaPlayer.PlaybackState.PausedState,
+    }
 
 #: Map from QMediaPlayer states to PlayerState enum values.
 reversed_state_map = {value: key for key, value in state_map.items()}
 
 #: Map from QMediaPlayer media status values to MediaStatus enum values.
 media_status_map = {
-    QMediaPlayer.MediaStatus.UnknownMediaStatus: 'unknown',
     QMediaPlayer.MediaStatus.NoMedia: 'no_media',
     QMediaPlayer.MediaStatus.LoadingMedia: 'loading',
     QMediaPlayer.MediaStatus.LoadedMedia: 'loaded',
@@ -54,73 +60,81 @@ media_status_map = {
     QMediaPlayer.MediaStatus.EndOfMedia: 'end',
     QMediaPlayer.MediaStatus.InvalidMedia: 'invalid',
 }
+if is_qt5:
+    media_status_map[QMediaPlayer.MediaStatus.UnknownMediaStatus] = 'unknown'
 
 
-class ImageWidget(QVideoWidget):
-    """Paints a QImage to the window body."""
+if is_qt5:
+    # These classes support dynamically modifying the video stream frames but
+    # only work on Qt5
+    from pyface.qt.QtMultimedia import QAbstractVideoSurface
 
-    def __init__(self, parent=None, image_func=None):
-        import numpy as np
+    class ImageWidget(QVideoWidget):
+        """Paints a QImage to the window body."""
 
-        super().__init__(parent)
-        self.image = QImage()
-        self._np_image = np.zeros(shape=(0, 0, 4))
-        self.painter = None
-        self.resizeEvent(None)
-        if image_func is None:
+        def __init__(self, parent=None, image_func=None):
+            import numpy as np
 
-            def I_fun(image, bbox):
-                # Don't bother with creating an ndarray version
-                return image, self._np_image
+            super().__init__(parent)
+            self.image = QImage()
+            self._np_image = np.zeros(shape=(0, 0, 4))
+            self.painter = None
+            self.resizeEvent(None)
+            if image_func is None:
 
-            self.image_func = I_fun
-        else:
-            self.image_func = image_func
+                def I_fun(image, bbox):
+                    # Don't bother with creating an ndarray version
+                    return image, self._np_image
 
-    def resizeEvent(self, event):
-        s = self.size()
-        self.width = s.width()
-        self.height = s.height()
+                self.image_func = I_fun
+            else:
+                self.image_func = image_func
 
-    def setImage(self, image):
-        self.image, self._np_image = self.image_func(
-            image, (self.width, self.height)
-        )
-        self.update()
+        def resizeEvent(self, event):
+            s = self.size()
+            self.width = s.width()
+            self.height = s.height()
 
-    def paintEvent(self, event):
-        super().paintEvent(event)
-        if self.painter is None:
-            self.painter = QPainter()
-        self.painter.begin(self)
-        if self.image:
-            self.painter.drawImage(QPoint(0, 0), self.image)
-        self.painter.end()
+        def setImage(self, image):
+            self.image, self._np_image = self.image_func(
+                image, (self.width, self.height)
+            )
+            self.update()
 
+        def paintEvent(self, event):
+            super().paintEvent(event)
+            if self.painter is None:
+                self.painter = QPainter()
+            self.painter.begin(self)
+            if self.image:
+                self.painter.drawImage(QPoint(0, 0), self.image)
+            self.painter.end()
 
-class VideoSurface(QAbstractVideoSurface):
+    class VideoSurface(QAbstractVideoSurface):
 
-    frameAvailable = Signal(['QImage'])
+        frameAvailable = Signal(['QImage'])
 
-    def __init__(self, widget=None):
-        super().__init__()
-        self.widget = widget
+        def __init__(self, widget=None):
+            super().__init__()
+            self.widget = widget
 
-    def supportedPixelFormats(self, handleType):
-        return [QVideoFrame.Format_RGB32]
+        def supportedPixelFormats(self, handleType):
+            return [QVideoFrame.Format_RGB32]
 
-    def present(self, frame):
-        cloned_frame = QVideoFrame(frame)
-        cloned_frame.map(QAbstractVideoBuffer.ReadOnly)
-        image = QImage(
-            cloned_frame.bits(),
-            cloned_frame.width(),
-            cloned_frame.height(),
-            cloned_frame.bytesPerLine(),
-            QVideoFrame.imageFormatFromPixelFormat(cloned_frame.pixelFormat()),
-        )
-        self.frameAvailable.emit(image)
-        return True
+        def present(self, frame):
+            from pyface.qt.QtMultimedia import QAbstractVideoBuffer
+
+            cloned_frame = QVideoFrame(frame)
+            cloned_frame.map(QAbstractVideoBuffer.ReadOnly)
+            image = QImage(
+                cloned_frame.bits(),
+                cloned_frame.width(),
+                cloned_frame.height(),
+                cloned_frame.bytesPerLine(),
+                QVideoFrame.imageFormatFromPixelFormat(cloned_frame.pixelFormat()),
+            )
+            self.frameAvailable.emit(image)
+            return True
 
 
 class VideoEditor(Editor):
@@ -135,11 +149,12 @@ class VideoEditor(Editor):
     #: Does the drawing onto the image plane
     control = Instance(QVideoWidget)
 
-    #: Handles the image pulling so the frames can be processed.
-    surface = Instance(QAbstractVideoSurface)
+    #: Handles the image pulling so the frames can be processed.  Qt5 only.
+    surface = Any()
 
-    #: The QMediaObject that holds the connection to the video stream.
-    media_content = Instance(QMediaContent)
+    #: The QMediaObject (Qt5) or QUrl (Qt6+) that holds the connection to the
+    #: video stream.
+    media_content = Any()
 
     #: The QMediaPlayer that controls playback of the video stream.
     media_player = Instance(QMediaPlayer)
@@ -189,6 +204,7 @@ class VideoEditor(Editor):
 
     #: The change in position required for an update to be emitted.
     #: Synchronized to the trait named by factory.notify_interval.
+    #: This is only used on Qt5.
     notify_interval = Float(1.0)
 
     def update_to_regular(self):
@@ -233,10 +249,19 @@ class VideoEditor(Editor):
         )
         self.control.setBackgroundRole(QPalette.ColorRole.Window)
 
-        self.media_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+        if is_qt5:
+            self.media_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+        else:
+            self.media_player = QMediaPlayer()
         self._set_video_url()
         self.media_player.setVideoOutput(self.control)
-        self.media_player.setMuted(self.muted)
+        if not is_qt5:
+            from pyface.qt.QtMultimedia import QAudioOutput
+            self._audio = QAudioOutput()
+            self._audio.setMuted(self.muted)
+            self.media_player.setAudioOutput(self._audio)
+        else:
+            self.media_player.setMuted(self.muted)
         self._update_state()
         self._update_aspect_ratio()
         self._update_muted()
@@ -266,54 +291,77 @@ class VideoEditor(Editor):
 
     def _connect_signals(self):
         if self.media_player is not None:
-            self.media_player.stateChanged.connect(self._state_changed_emitted)
+            if is_qt5:
+                self.media_player.stateChanged.connect(
+                    self._state_changed_emitted
+                )
+                self.media_player.error.connect(self._error_emitted)
+                self.media_player.bufferStatusChanged.connect(
+                    self._buffer_status_changed_emitted
+                )
+                self.media_player.notifyIntervalChanged.connect(
+                    self._notify_interval_changed_emitted
+                )
+            else:
+                self.media_player.playbackStateChanged.connect(
+                    self._state_changed_emitted
+                )
+                self.media_player.errorChanged.connect(self._error_emitted)
+                self.media_player.bufferProgressChanged.connect(
+                    self._buffer_status_changed_emitted
+                )
             self.media_player.positionChanged.connect(
                 self._position_changed_emitted
             )
             self.media_player.durationChanged.connect(
                 self._duration_changed_emitted
             )
-            self.media_player.error.connect(self._error_emitted)
             self.media_player.mediaStatusChanged.connect(
                 self._media_status_changed_emitted
-            )
-            self.media_player.bufferStatusChanged.connect(
-                self._buffer_status_changed_emitted
-            )
-            self.media_player.notifyIntervalChanged.connect(
-                self._notify_interval_changed_emitted
             )
 
     def _disconnect_signals(self):
         if self.media_player is not None:
-            self.media_player.stateChanged.disconnect(
-                self._state_changed_emitted
-            )
+            if is_qt5:
+                self.media_player.stateChanged.disconnect(
+                    self._state_changed_emitted
+                )
+                self.media_player.error.disconnect(self._error_emitted)
+                self.media_player.bufferStatusChanged.disconnect(
+                    self._buffer_status_changed_emitted
+                )
+                self.media_player.notifyIntervalChanged.disconnect(
+                    self._notify_interval_changed_emitted
+                )
+            else:
+                self.media_player.playbackStateChanged.disconnect(
+                    self._state_changed_emitted
+                )
+                self.media_player.errorChanged.disconnect(self._error_emitted)
+                self.media_player.bufferProgressChanged.disconnect(
+                    self._buffer_status_changed_emitted
+                )
             self.media_player.positionChanged.disconnect(
                 self._position_changed_emitted
             )
             self.media_player.durationChanged.disconnect(
                 self._duration_changed_emitted
             )
-            self.media_player.error.disconnect(self._error_emitted)
             self.media_player.mediaStatusChanged.disconnect(
                 self._media_status_changed_emitted
-            )
-            self.media_player.bufferStatusChanged.disconnect(
-                self._buffer_status_changed_emitted
-            )
-            self.media_player.notifyIntervalChanged.disconnect(
-                self._notify_interval_changed_emitted
             )
 
     def _set_video_url(self):
         qurl = QUrl.fromUserInput(self.value)
-        if qurl.isValid():
-            self.media_content = QMediaContent(qurl)
-            self.control.updateGeometry()
+        if is_qt5:
+            from pyface.qt.QtMultimedia import QMediaContent
+            if qurl.isValid():
+                self.media_content = QMediaContent(qurl)
+            else:
+                self.media_content = QMediaContent(None)
         else:
-            self.media_content = QMediaContent(None)
-            self.control.updateGeometry()
+            self.media_content = qurl
+        self.control.updateGeometry()
 
     # Signal handlers -------------------------------------------------------
 
@@ -338,7 +386,10 @@ class VideoEditor(Editor):
         self.media_status = media_status_map[self.media_player.mediaStatus()]
 
     def _buffer_status_changed_emitted(self, error):
-        self.buffer = self.media_player.bufferStatus()
+        if is_qt5:
+            self.buffer = self.media_player.bufferStatus()
+        else:
+            self.buffer = self.media_player.bufferProgress()
 
     def _notify_interval_changed_emitted(self, interval):
         self.notify_interval = interval / 1000.0
@@ -354,6 +405,8 @@ class VideoEditor(Editor):
     def _image_func_observer(self, event):
         if self.image_func is None:
             self.update_to_regular()
+        elif not is_qt5:
+            raise ValueError("image_func is not supported on Qt6")
         else:
             self.update_to_functional()
 
@@ -400,7 +453,10 @@ class VideoEditor(Editor):
         self.control.setAspectRatioMode(aspect_ratio_map[self.aspect_ratio])
 
     def _update_muted(self):
-        self.media_player.setMuted(self.muted)
+        if is_qt5:
+            self.media_player.setMuted(self.muted)
+        else:
+            self._audio.setMuted(self.muted)
 
     def _update_playback_rate(self):
         self.media_player.setPlaybackRate(self.playback_rate)
@@ -426,9 +482,14 @@ class VideoEditor(Editor):
             QAudio.VolumeScale.LogarithmicVolumeScale,
             QAudio.VolumeScale.LinearVolumeScale,
         )
-        self.media_player.setVolume(int(linear_volume * 100))
+        if is_qt5:
+            self.media_player.setVolume(int(linear_volume * 100))
+        else:
+            self._audio.setVolume(linear_volume)
 
     def _update_notify_interval(self):
-        # interval is given in ms
-        interval = int(self.notify_interval * 1000)
-        self.media_player.setNotifyInterval(interval)
+        # only used on Qt5
+        if is_qt5:
+            # interval is given in ms
+            interval = int(self.notify_interval * 1000)
+            self.media_player.setNotifyInterval(interval)
