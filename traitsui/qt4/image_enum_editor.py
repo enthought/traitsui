@@ -99,7 +99,21 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         """Rebuilds the contents of the editor whenever the original factory
         object's **values** trait changes.
         """
-        self.control.model().reset()
+        # unlike other EnumEditor subclasses, this doesn't ever need rebuilding
+        pass
+
+    # Trait change handlers --------------------------------------------------
+
+    def _update_values_and_rebuild_editor(self, event):
+        """Handles the underlying object model's enumeration set or factory's
+        values being changed.
+        """
+        self.control.model().beginResetModel()
+        try:
+            super()._update_values_and_rebuild_editor(event)
+        finally:
+            # this changes the model, and updates the items
+            self.control.model().endResetModel()
 
 
 class CustomEditor(BaseEditor, CustomEnumEditor):
@@ -185,7 +199,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
             QtGui.QStyle.SC_ComboBoxArrow,
             None,
         )
-        option.rect.setWidth(option.rect.width() - arrow.width())
+        option.rect.setWidth(int(option.rect.width() - arrow.width()))
         target = QtGui.QStyle.alignedRect(
             QtCore.Qt.LayoutDirection.LeftToRight,
             QtCore.Qt.AlignmentFlag.AlignCenter,

@@ -242,7 +242,7 @@ def wrap_text_with_elision(text, font, width, height):
             line = text_layout.createLine()
             if not line.isValid():
                 break
-            line.setLineWidth(width)
+            line.setLineWidth(int(width))
             line_start = line.textStart()
             line_end = line_start + line.textLength()
             line_text = paragraph[line_start:line_end].rstrip()

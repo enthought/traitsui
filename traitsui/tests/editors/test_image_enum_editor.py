@@ -245,11 +245,9 @@ class TestImageEnumEditorMapping(BaseTestMixin, unittest.TestCase):
                 {"top right": "TOP RIGHT", "top left": "TOP LEFT"},
             )
 
-    @unittest.skip("Issue enthought/traitsui#844")
     def test_simple_editor_mapping_values(self):
         self.check_enum_mappings_value_change("simple")
 
-    @unittest.skip("Issue enthought/traitsui#844")
     def test_simple_editor_mapping_name(self):
         self.check_enum_mappings_name_change("simple")
 
