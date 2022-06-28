@@ -75,7 +75,7 @@ class TableImageRenderer(TableDelegate):
         image = self.get_image_for_obj(value, index.row(), index.column())
         if image:
             image = image.create_bitmap()
-            size.setWidth(max(image.width(), size.width()))
-            size.setHeight(max(image.height(), size.height()))
+            size.setWidth(int(max(image.width(), size.width())))
+            size.setHeight(int(max(image.height(), size.height())))
 
         return size

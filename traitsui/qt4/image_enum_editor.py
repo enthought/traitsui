@@ -199,7 +199,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
             QtGui.QStyle.SC_ComboBoxArrow,
             None,
         )
-        option.rect.setWidth(option.rect.width() - arrow.width())
+        option.rect.setWidth(int(option.rect.width() - arrow.width()))
         target = QtGui.QStyle.alignedRect(
             QtCore.Qt.LayoutDirection.LeftToRight,
             QtCore.Qt.AlignmentFlag.AlignCenter,

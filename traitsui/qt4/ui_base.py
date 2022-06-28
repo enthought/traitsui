@@ -378,7 +378,7 @@ class BaseDialog(BasePanel):
                 if width <= 1.0:
                     stretch = int(100 * width)
                 else:
-                    item_control.setMinimumWidth(width)
+                    item_control.setMinimumWidth(int(width))
                 control.addWidget(item_control, stretch)
 
                 # Set up event listener for updating the status text
