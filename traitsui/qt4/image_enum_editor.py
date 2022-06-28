@@ -151,7 +151,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
             width = 0
             for col in range(self._editor.factory.cols):
                 width += view.sizeHintForColumn(col)
-            view.setMinimumWidth(width)
+            view.setMinimumWidth(int(width))
         else:
             self.setItemDelegate(delegate)
 
@@ -185,7 +185,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
             QtGui.QStyle.SC_ComboBoxArrow,
             None,
         )
-        option.rect.setWidth(option.rect.width() - arrow.width())
+        option.rect.setWidth(int(option.rect.width() - arrow.width()))
         target = QtGui.QStyle.alignedRect(
             QtCore.Qt.LayoutDirection.LeftToRight,
             QtCore.Qt.AlignmentFlag.AlignCenter,
