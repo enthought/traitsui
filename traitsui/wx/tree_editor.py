@@ -895,7 +895,7 @@ class SimpleEditor(Editor):
         not_handled = True
         nids = self._tree.GetSelections()
 
-        selected = []
+        selected = [self._get_node_data(nid)[2] for nid in nids if nid.IsOk()]
         first = True
         for nid in nids:
             if not nid.IsOk():
@@ -903,7 +903,6 @@ class SimpleEditor(Editor):
 
             # If there is a real selection, get the associated object:
             expanded, sel_node, sel_object = self._get_node_data(nid)
-            selected.append(sel_object)
 
             # Try to inform the node specific handler of the selection,
             # if there are multiple selections, we only care about the
@@ -1505,6 +1504,8 @@ class SimpleEditor(Editor):
         node, object, nid = self._data
         self._data = None
         new_object = factory()
+        if new_object is None:
+            return  # support None-type returns from factory
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:

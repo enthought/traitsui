@@ -876,10 +876,10 @@ class SimpleEditor(Editor):
         selected = []
         first = True
         if len(nids) > 0:
+            selected = [self._get_node_data(nid)[2] for nid in nids]
             for nid in nids:
                 # If there is a real selection, get the associated object:
                 expanded, sel_node, sel_object = self._get_node_data(nid)
-                selected.append(sel_object)
 
                 # Try to inform the node specific handler of the selection, if
                 # there are multiple selections, we only care about the first
@@ -1291,6 +1291,8 @@ class SimpleEditor(Editor):
         node, object, nid = self._data
         self._data = None
         new_object = factory()
+        if new_object is None:
+            return  # support None-type returns from factory
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:
