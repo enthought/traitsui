@@ -1,0 +1,1 @@
+Fix the ImageEnumEditor on Qt5+ (#1910)
