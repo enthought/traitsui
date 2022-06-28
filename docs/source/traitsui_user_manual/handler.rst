@@ -561,6 +561,16 @@ created, as in the following code::
        toolbar=ToolBar(my_action),
     )
 
+Schemas
+:::::::
+
+Pyface also provides action Schemas as a way to specify MenuBars, Toolbars and
+their components without instantiating them.  These are particularly used in
+the Tasks framework.  TraitsUI supports their use in Views, permitting better
+interoperability.  The primary advantage of Schemas is that the deferred
+instantiation makes it less likely to have unintentionally shared state between
+declarative Views.
+
 
 .. _undo_redo:
 
