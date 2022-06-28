@@ -99,8 +99,8 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         """Rebuilds the contents of the editor whenever the original factory
         object's **values** trait changes.
         """
-        # This forces the model to completely rebuild itself.
-        self.control.model().endResetModel()
+        # unlike other EnumEditor subclasses, this doesn't ever need rebuilding
+        pass
 
     # Trait change handlers --------------------------------------------------
 
@@ -109,7 +109,11 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         values being changed.
         """
         self.control.model().beginResetModel()
-        super()._update_values_and_rebuild_editor(event)
+        try:
+            super()._update_values_and_rebuild_editor(event)
+        finally:
+            # this changes the model, and updates the items
+            self.control.model().endResetModel()
 
 
 class CustomEditor(BaseEditor, CustomEnumEditor):
