@@ -123,11 +123,6 @@ def _qt_click_button(ui):
 
 
 class TestActions(BaseTestMixin, unittest.TestCase):
-    def setUp(self):
-        BaseTestMixin.setUp(self)
-
-    def tearDown(self):
-        BaseTestMixin.tearDown(self)
 
     def _test_actions(self, trigger_action_func):
         """Template test for wx, qt4, menu, and toolbar testing."""
@@ -189,7 +184,9 @@ class TestActions(BaseTestMixin, unittest.TestCase):
 
     # ----- wx tests
 
-    @unittest.skip("Problem with triggering toolbar actions. Issue #428.")
+    @unittest.skip(
+        "Problem with triggering toolbar actions. Issue #428 and #1843."
+    )
     @requires_toolkit([ToolkitName.wx])
     def test_wx_toolbar_action(self):
         # Behavior: when clicking on a toolbar action, the corresponding
