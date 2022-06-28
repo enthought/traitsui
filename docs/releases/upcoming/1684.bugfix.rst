@@ -1,2 +1,0 @@
-Add RangeEditor support for format_func and deprecate ``format`` trait on
-RangeEditor factory / toolkit specific Editor implementations (#1684)

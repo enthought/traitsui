@@ -1,0 +1,1 @@
+Add a copy button to code blocks in documentation (#1904)

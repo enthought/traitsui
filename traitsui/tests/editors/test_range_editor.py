@@ -404,7 +404,9 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
                 float_value_text.inspect(DisplayedText()), "0.2 ..."
             )
 
-    # regression test for enthought/traitsui#737
+    # regression test for enthought/traitsui#737. Hangs with a popup
+    # dialog on wx. (xref: enthought/traitsui#1901)
+    @requires_toolkit([ToolkitName.qt])
     def test_set_text_out_of_range(self):
         model = RangeModel()
         view = View(

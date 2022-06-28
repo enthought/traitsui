@@ -33,6 +33,7 @@ extensions = [
     'sphinx.ext.napoleon',
     # Link to code in sphinx generated API docs
     "sphinx.ext.viewcode",
+    "sphinx_copybutton",
     'traits.util.trait_documenter',
 ]
 
@@ -79,6 +80,12 @@ today_fmt = '%B %d, %Y'
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
+# Options for Sphinx copybutton extension
+# ---------------------------------------
+
+# Matches prompts - "$ ", ">>>" and "..."
+copybutton_prompt_text = r">>> |\.\.\. |\$ "
+copybutton_prompt_is_regexp = True
 
 # Options for HTML output
 # -----------------------

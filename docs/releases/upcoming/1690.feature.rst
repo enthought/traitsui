@@ -1,1 +1,0 @@
-Expose TreeEditor actions and IconSize in traitsui.editors.api (#1690)

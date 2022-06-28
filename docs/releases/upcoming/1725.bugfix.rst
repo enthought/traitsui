@@ -1,1 +1,0 @@
-Fix selectable InstanceEditor combobox updates (#1725)

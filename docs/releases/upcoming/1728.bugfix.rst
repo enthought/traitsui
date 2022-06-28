@@ -1,1 +1,0 @@
-Fix Qt InstanceEditor appearance when None selected (#1728)
