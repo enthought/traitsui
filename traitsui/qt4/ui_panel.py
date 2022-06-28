@@ -925,12 +925,12 @@ class _GroupPanel(object):
                     else:
                         item_height = max(item_height, height)
 
-                    control.setMinimumWidth(max(int(item_width), 0))
-                    control.setMinimumHeight(max(int(item_height), 0))
+                    control.setMinimumWidth(max(item_width, 0))
+                    control.setMinimumHeight(max(item_height, 0))
                     if (stretch == 0 or not is_horizontal) and force_width:
-                        control.setMaximumWidth(int(item_width))
+                        control.setMaximumWidth(item_width)
                     if (stretch == 0 or is_horizontal) and force_height:
-                        control.setMaximumHeight(int(item_height))
+                        control.setMaximumHeight(item_height)
 
                 # Set size and stretch policies
                 self._set_item_size_policy(editor, item, label, stretch)
