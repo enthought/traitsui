@@ -200,6 +200,7 @@ class _ListStrEditor(Editor):
         )
         if self._header_view is not None:
             self._header_view.setModel(None)
+            self._header_view.deleteLater()
             self._header_view = None
 
         self.list_view._dispose()
