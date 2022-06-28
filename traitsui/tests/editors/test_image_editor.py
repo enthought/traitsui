@@ -28,7 +28,7 @@ from traitsui.tests._tools import (
 
 
 filename1 = pkg_resources.resource_filename(
-    "traitsui", "examples/demo/Extras/images/e-logo-rev.png"
+    "traitsui", "examples/demo/Extras/images/python-logo.png"
 )
 filename2 = pkg_resources.resource_filename(
     "traitsui", "examples/demo/Extras/images/info.png"
@@ -136,7 +136,7 @@ class TestImageEditor(BaseTestMixin, unittest.TestCase):
 
     def test_image_editor_none(self):
 
-        obj1 = ImageDisplay()
+        obj1 = ImageDisplay(image=None)
         view = View(
             Item(
                 'image',

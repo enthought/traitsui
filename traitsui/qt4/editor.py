@@ -65,24 +65,16 @@ class Editor(UIEditor):
         if self.control.text() != new_value:
             self.control.setText(new_value)
 
-    def error(self, excp):
-        """Handles an error that occurs while setting the object's trait value."""
-        # Make sure the control is a widget rather than a layout.
-        if isinstance(self.control, QtGui.QLayout):
-            control = self.control.parentWidget()
-        else:
-            control = self.control
+    def get_control_widget(self):
+        """Get the concrete widget for the control.
 
-        message_box = QtGui.QMessageBox(
-            QtGui.QMessageBox.Icon.Information,
-            self.description + " value error",
-            str(excp),
-            buttons=QtGui.QMessageBox.StandardButton.Ok,
-            parent=control,
-        )
-        message_box.setTextFormat(QtCore.Qt.TextFormat.PlainText)
-        message_box.setEscapeButton(QtGui.QMessageBox.StandardButton.Ok)
-        message_box.exec_()
+        Some editors may use a QLayout  instead of a Qwidget, which may not be
+        suitable for certain usages (eg. for parenting other widgets).
+        """
+        if isinstance(self.control, QtGui.QLayout):
+            return self.control.parentWidget()
+        else:
+            return self.control
 
     def set_tooltip_text(self, control, text):
         """Sets the tooltip for a specified control."""

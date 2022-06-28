@@ -11,10 +11,11 @@
 """ Defines various directory editors for the wxPython user interface toolkit.
 """
 
+from os.path import isdir
 
 import wx
 
-from os.path import isdir
+from pyface.api import DirectoryDialog
 
 from .file_editor import (
     SimpleEditor as SimpleFileEditor,
@@ -34,8 +35,10 @@ class SimpleEditor(SimpleFileEditor):
 
     def _create_file_dialog(self):
         """Creates the correct type of file dialog."""
-        dlg = wx.DirDialog(self.control, message="Select a Directory")
-        dlg.SetPath(self._file_name.GetValue())
+        dlg = DirectoryDialog(
+            parent=self.get_control_widget(),
+            default_path=self._file_name.text(),
+        )
         return dlg
 
     def _create_file_popup(self):

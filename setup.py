@@ -21,7 +21,7 @@ from io import open
 # together with information from the version control system, and then injected
 # into the package source.
 MAJOR = 7
-MINOR = 3
+MINOR = 4
 MICRO = 0
 PRERELEASE = ""
 IS_RELEASED = False

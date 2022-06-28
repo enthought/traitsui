@@ -11,11 +11,11 @@
 """ Defines file editors for the wxPython user interface toolkit.
 """
 
+from os.path import abspath, split, splitext, isfile, exists
 
 import wx
 
-from os.path import abspath, split, splitext, isfile, exists
-
+from pyface.api import FileDialog, OK
 from traits.api import List, Str, Event, Any, observe, TraitError
 
 from .text_editor import SimpleEditor as SimpleTextEditor
@@ -139,14 +139,13 @@ class SimpleEditor(SimpleTextEditor):
             self.popup = self._create_file_popup()
         else:
             dlg = self._create_file_dialog()
-            rc = dlg.ShowModal() == wx.ID_OK
-            file_name = abspath(dlg.GetPath())
-            dlg.Destroy()
-            if rc:
-                if self.factory.truncate_ext:
-                    file_name = splitext(file_name)[0]
+            dlg.open()
 
-                self.value = file_name
+            if dlg.return_code == OK:
+                if self.factory.truncate_ext:
+                    self.value = splitext(dlg.path)[0]
+                else:
+                    self.value = dlg.path
                 self.update_editor()
 
     def get_error_control(self):
@@ -195,28 +194,16 @@ class SimpleEditor(SimpleTextEditor):
     def _create_file_dialog(self):
         """Creates the correct type of file dialog."""
         if len(self.factory.filter) > 0:
-            wildcard = "|".join(self.factory.filter[:])
+            wildcard = "|".join(self.factory.filter)
         else:
             wildcard = "All Files (*.*)|*.*"
 
-        if self.factory.dialog_style == "save":
-            style = wx.FD_SAVE
-        elif self.factory.dialog_style == "open":
-            style = wx.FD_OPEN
-        else:
-            style = wx.FD_DEFAULT_STYLE
-
-        directory, filename = split(self._get_value())
-
-        dlg = wx.FileDialog(
-            self.control,
-            defaultDir=directory,
-            defaultFile=filename,
-            message="Select a File",
+        dlg = FileDialog(
+            parent=self.get_control_widget(),
+            default_path=self._file_name.text(),
+            action="save" if self.factory.dialog_style == "save as" else "open",
             wildcard=wildcard,
-            style=style,
         )
-
         return dlg
 
     def _create_file_popup(self):

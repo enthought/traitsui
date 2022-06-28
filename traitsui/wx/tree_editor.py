@@ -896,20 +896,23 @@ class SimpleEditor(Editor):
         nids = self._tree.GetSelections()
 
         selected = []
+        first = True
         for nid in nids:
             if not nid.IsOk():
                 continue
 
             # If there is a real selection, get the associated object:
-            expanded, node, sel_object = self._get_node_data(nid)
+            expanded, sel_node, sel_object = self._get_node_data(nid)
             selected.append(sel_object)
 
             # Try to inform the node specific handler of the selection,
             # if there are multiple selections, we only care about the
             # first (or maybe the last makes more sense?)
-            if nid == nids[0]:
+            if first:
+                node = sel_node
                 object = sel_object
                 not_handled = node.select(object)
+                first = False
 
         # Set the value of the new selection:
         if self.factory.selection_mode == "single":

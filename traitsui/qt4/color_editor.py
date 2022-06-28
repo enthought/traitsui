@@ -289,7 +289,7 @@ def color_editor_for(editor, parent):
 
             i += 1
 
-    if is_pyside:
+    if is_pyside and QtCore.__version_info__ >= (5, 15):
         mapper.mappedString.connect(editor.update_object_from_swatch)
     else:
         mapper.mapped[str].connect(editor.update_object_from_swatch)

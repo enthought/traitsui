@@ -11,6 +11,8 @@
 """ General regression tests for various fixed bugs.
 """
 
+from subprocess import check_output, STDOUT
+import sys
 import unittest
 
 from traits.api import DelegatesTo, Event, HasTraits, Instance, Undefined
@@ -55,3 +57,13 @@ class TestRegression(BaseTestMixin, unittest.TestCase):
             object=Parent(),
             name="not_a_trait",
         )
+
+    def test_importing_view_does_not_import_toolkit(self):
+        output = check_output(
+            [sys.executable, "-c",
+             "import sys; from traitsui.view import View;"
+             "print(list(sys.modules.keys()))"],
+            stderr=STDOUT
+        )
+        output = output.decode('ascii')
+        self.assertFalse('QtCore' in output)

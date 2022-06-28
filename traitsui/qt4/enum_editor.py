@@ -162,7 +162,7 @@ class SimpleEditor(BaseEditor):
         super().init(parent)
 
         self.control = control = self.create_combo_box()
-        control.addItems(self.names)
+        self._add_items_to_combo_box()
 
         control.currentIndexChanged.connect(self.update_object)
 
@@ -212,7 +212,7 @@ class SimpleEditor(BaseEditor):
         self.control.blockSignals(True)
         try:
             self.control.clear()
-            self.control.addItems(self.names)
+            self._add_items_to_combo_box()
         finally:
             self.control.blockSignals(False)
 
@@ -240,6 +240,13 @@ class SimpleEditor(BaseEditor):
             QtGui.QSizePolicy.Policy.Maximum, QtGui.QSizePolicy.Policy.Fixed
         )
         return control
+
+    def _add_items_to_combo_box(self):
+        for name in self.names:
+            if self.factory.use_separator and name == self.factory.separator:
+                self.control.insertSeparator(self.control.count())
+            else:
+                self.control.addItem(name)
 
     def _set_background(self, col):
         le = self.control.lineEdit()
@@ -316,7 +323,7 @@ class RadioEditor(BaseEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        if is_pyside:
+        if is_pyside and QtCore.__version_info__ >= (5, 15):
             self._mapper.mappedInt.connect(self.update_object)
         else:
             self._mapper.mapped.connect(self.update_object)

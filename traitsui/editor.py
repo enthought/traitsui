@@ -33,7 +33,6 @@ from traits.api import (
     Undefined,
     cached_property,
 )
-
 from traits.trait_base import not_none, xgetattr, xsetattr
 
 from .editor_factory import EditorFactory
@@ -157,14 +156,19 @@ class Editor(HasPrivateTraits):
     def error(self, excp):
         """Handles an error that occurs while setting the object's trait value.
 
-        This should normally be overridden in a subclass.
-
         Parameters
         ----------
         excp : Exception
             The exception which occurred.
         """
-        pass
+        from pyface.api import information
+
+        information(
+            parent=self.get_control_widget(),
+            title=self.description + " value error",
+            message=str(excp),
+            text_format='plain',
+        )
 
     def set_focus(self):
         """Assigns focus to the editor's underlying toolkit widget.
@@ -477,6 +481,15 @@ class Editor(HasPrivateTraits):
             return "Specifies " + text
 
         return None
+
+    def get_control_widget(self):
+        """Get the concrete widget for the control.
+
+        The default implementation returns the control, however some editors
+        in some backends may store a layout or sizer instead of a proper widget
+        or control, which may not be suitable for certain usages.
+        """
+        return self.control
 
     # -- Utility context managers --------------------------------------------
 

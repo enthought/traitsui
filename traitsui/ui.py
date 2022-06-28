@@ -31,7 +31,6 @@ from traits.api import (
     Str,
     TraitError,
     observe,
-    property_depends_on,
 )
 
 from traits.trait_base import traits_home, is_str

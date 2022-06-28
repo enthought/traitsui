@@ -14,14 +14,20 @@ try:
 except ImportError:
     __version__ = "not-built"
 
-__requires__ = ["traits>=6.2.0", "pyface>=7.4.0"]
+__requires__ = ["traits>=6.2.0", "pyface>=7.4.1"]
 __extras_require__ = {
     "wx": ["wxpython>=4", "numpy"],
     "pyqt": ["pyqt>=4.10", "pygments"],
     "pyqt5": ["pyqt5", "pygments"],
-    "pyside2": ["pyside2", "shiboken2", "pygments"],
-    "pyside6": ["pyside6", "shiboken6", "pygments"],
-    "docs": ["enthought-sphinx-theme", "sphinx"],
+    "pyside2": ["pyside2", "pygments"],
+    "pyside6": [
+        # Avoid https://bugreports.qt.io/browse/PYSIDE-1797, which causes
+        # some versions of PySide6 to be unimportable on Python 3.6 and 3.7.
+        "pyside6!=6.2.2,!=6.2.2.1,!=6.2.3,!=6.2.4,!=6.3.0; python_version<'3.8'",
+        "pyside6; python_version>='3.8'",
+        "pygments",
+    ],
+    "docs": ["enthought-sphinx-theme", "sphinx", "sphinx-copybutton"],
     "demo": [
         # to be deprecated, see enthought/traitsui#950
         "configobj",
@@ -30,10 +36,10 @@ __extras_require__ = {
     "examples": [
         # Dependencies for examples
         "apptools",
-        "chaco",  # for a very simple example, see enthought/traitsui#1139
         "h5py",
         "numpy",
         "pandas",
+        "pillow",
         "tables",
     ],
     "editors": [

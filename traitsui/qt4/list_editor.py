@@ -191,7 +191,7 @@ class SimpleEditor(Editor):
         else:
             self.buttons = []
             # Asking the mapper to send the sender to the callback method
-            if is_pyside:
+            if is_pyside and QtCore.__version_info__ >= (5, 15):
                 self.mapper.mappedInt.connect(self.popup_menu)
             else:
                 self.mapper.mapped.connect(self.popup_menu)
@@ -265,7 +265,7 @@ class SimpleEditor(Editor):
         # callback method. Unfortunately just sending the control does not
         # work for PyQt (tested on 4.11)
         self.mapper.setMapping(control, 0)
-        if is_pyside:
+        if is_pyside and QtCore.__version_info__ >= (5, 15):
             self.mapper.mappedInt.connect(self.popup_empty_menu)
         else:
             self.mapper.mapped.connect(self.popup_empty_menu)

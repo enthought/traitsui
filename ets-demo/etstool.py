@@ -144,7 +144,6 @@ full_app_dependencies = {
     'traitsui',
     # dependencies needed for examples
     "apptools",
-    "chaco",
     "h5py",
     "numpy",
     "pandas",

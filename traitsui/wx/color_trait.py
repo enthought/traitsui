@@ -11,18 +11,14 @@
 """ Trait definition for a wxPython-based color.
 """
 
+from ast import literal_eval
 
 import wx
 
+from pyface.color import Color as PyfaceColor
+from pyface.util.color_helpers import channels_to_ints
+from pyface.util.color_parser import color_table
 from traits.api import Trait, TraitError
-
-# Version dependent imports (ColourPtr not defined in wxPython 2.5):
-try:
-    ColourPtr = wx.ColourPtr
-except:
-
-    class ColourPtr(object):
-        pass
 
 
 # -------------------------------------------------------------------------
@@ -44,6 +40,7 @@ class W3CColourDatabase(object):
     _database = wx.ColourDatabase()
 
     def __init__(self):
+        # correct for differences in definitions
         self._color_names = [
             "aqua",
             "black",
@@ -73,6 +70,11 @@ class W3CColourDatabase(object):
         self.AddColour("purple", wx.Colour(0x80, 0x00, 0x80, 255))
         self.AddColour("silver", wx.Colour(0xC0, 0xC0, 0xC0, 255))
         self.AddColour("teal", wx.Colour(0, 0x80, 0x80, 255))
+
+        # add all the standard colours
+        for name, rgba in color_table.items():
+            rgba_bytes = channels_to_ints(rgba)
+            self.AddColour(name, wx.Colour(*rgba_bytes))
 
     def AddColour(self, name, color):
         if name not in self._color_names:
@@ -113,26 +115,25 @@ def convert_to_color(object, name, value):
     if isinstance(value, tuple):
         return tuple_to_wxcolor(value)
 
-    elif isinstance(value, ColourPtr):
-        return wx.Colour(value.Red(), value.Green(), value.Blue())
+    elif isinstance(value, PyfaceColor):
+        return value.to_toolkit()
 
     elif isinstance(value, wx.Colour):
         return value
 
     elif isinstance(value, str):
+        # Allow for spaces in the string value.
+        value = value.replace(" ", "")
 
         if value in standard_colors:
             return standard_colors[value]
 
-        # Check for tuple-ness
-        tmp = value.strip()
-        if (
-            tmp.startswith("(")
-            and tmp.endswith(")")
-            and tmp.count(",") in (2, 3)
-        ):
-            tup = eval(tmp)
-            return tuple_to_wxcolor(tup)
+        # Check for tuple string
+        try:
+            tup = literal_eval(value)
+        except Exception:
+            raise TraitError
+        return tuple_to_wxcolor(tup)
 
     else:
         try:
@@ -157,76 +158,7 @@ convert_to_color.info = (
 # -------------------------------------------------------------------------
 
 standard_colors = {}
-for name in [
-    "aquamarine",
-    "black",
-    "blue",
-    "blue violet",
-    "brown",
-    "cadet blue",
-    "coral",
-    "cornflower blue",
-    "cyan",
-    "dark grey",
-    "dark green",
-    "dark olive green",
-    "dark orchid",
-    "dark slate blue",
-    "dark slate grey",
-    "dark turquoise",
-    "dim grey",
-    "firebrick",
-    "forest green",
-    "gold",
-    "goldenrod",
-    "grey",
-    "green",
-    "green yellow",
-    "indian red",
-    "khaki",
-    "light blue",
-    "light grey",
-    "light steel blue",
-    "lime green",
-    "magenta",
-    "maroon",
-    "medium aquamarine",
-    "medium blue",
-    "medium forest green",
-    "medium goldenrod",
-    "medium orchid",
-    "medium sea green",
-    "medium slate blue",
-    "medium spring green",
-    "medium turquoise",
-    "medium violet red",
-    "midnight blue",
-    "navy",
-    "orange",
-    "orange red",
-    "orchid",
-    "pale green",
-    "pink",
-    "plum",
-    "purple",
-    "red",
-    "salmon",
-    "sea green",
-    "sienna",
-    "sky blue",
-    "slate blue",
-    "spring green",
-    "steel blue",
-    "tan",
-    "thistle",
-    "turquoise",
-    "violet",
-    "violet red",
-    "wheat",
-    "white",
-    "yellow",
-    "yellow green",
-]:
+for name in color_table:
     try:
         wx_color = w3c_color_database.Find(name)
         standard_colors[name] = convert_to_color(None, None, wx_color)

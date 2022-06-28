@@ -18,7 +18,7 @@ import wx
 
 from traits.api import Bool, Event
 
-from pyface.wx.dialog import confirmation
+from pyface.api import YES, confirm
 
 from .editor import Editor
 
@@ -51,25 +51,11 @@ class KeyBindingEditor(Editor):
         """
         self.control = KeyBindingCtrl(self, parent, size=wx.Size(160, 19))
 
-    def update_object(self, event):
-        """Handles the user entering input data in the edit control."""
-        try:
-            self.value = value = key_event_to_name(event)
-            self._binding.text = value
-        except:
-            pass
-
     def update_editor(self):
         """Updates the editor when the object trait changes externally to the
         editor.
         """
         self.control.Refresh()
-
-    def update_focus(self, has_focus):
-        """Updates the current focus setting of the control."""
-        if has_focus:
-            self._binding.border_size = 1
-            self.object.owner.focus_owner = self._binding
 
     def _key_changed(self, event):
         """Handles a keyboard event."""
@@ -77,16 +63,16 @@ class KeyBindingEditor(Editor):
         key_name = key_event_to_name(event)
         cur_binding = binding.owner.key_binding_for(binding, key_name)
         if cur_binding is not None:
-            if (
-                confirmation(
-                    None,
-                    "'%s' has already been assigned to '%s'.\n"
+            result = confirm(
+                parent=self.control,
+                message=(
+                    f"{key_name!r} has already been assigned to "
+                    f"'{cur_binding.description}'.\n"
                     "Do you wish to continue?"
-                    % (key_name, cur_binding.description),
-                    "Duplicate Key Definition",
-                )
-                == 5104
-            ):
+                ),
+                title="Duplicate Key Definition",
+            )
+            if result != YES:
                 return
 
         self.value = key_name

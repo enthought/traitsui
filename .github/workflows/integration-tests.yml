@@ -16,9 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         toolkit: ['pyside2']
-        # Dependencies include chaco/enable, whose installation fails
-        # on Python 3.8 and 3.9
-        python-version: [3.6]
+        python-version: [3.6, 3.8, 3.9]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out
@@ -52,7 +50,7 @@ jobs:
       - name: Notify Slack channel on failure
         uses: voxmedia/github-action-slack-notify-build@v1
         with:
-          channel_id: ${{ secrets.ETS_BOTS_SLACK_CHANNEL_ID }}
+          channel_id: ${{ secrets.ETS_SLACK_CHANNEL_ID }}
           status: FAILED
           color: danger
         env:

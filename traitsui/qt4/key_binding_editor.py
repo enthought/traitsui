@@ -28,6 +28,7 @@ key binding editor).
 
 from pyface.qt import QtCore, QtGui
 
+from pyface.api import YES, confirm
 from traits.api import Bool, Event
 
 from .editor import Editor
@@ -57,67 +58,53 @@ class KeyBindingEditor(Editor):
         """
         self.control = KeyBindingCtrl(self)
 
-    def update_object(self, event):
-        """Handles the user entering input data in the edit control."""
-        try:
-            self.value = value = key_event_to_name(event)
-            self._binding.text = value
-        except:
-            pass
-
     def update_editor(self):
         """Updates the editor when the object trait changes externally to the
         editor.
         """
         self.control.setText(self.value)
 
-    def update_focus(self, has_focus):
-        """Updates the current focus setting of the control."""
-        if has_focus:
-            self._binding.border_size = 1
-            self.object.owner.focus_owner = self._binding
-
     def _key_changed(self, event):
         """Handles a keyboard event."""
         binding = self.object
         key_name = key_event_to_name(event)
-        cur_binding = binding.owner.key_binding_for(binding, key_name)
+        cur_binding = self.ui.parent.handler.key_binding_for(binding, key_name)
         if cur_binding is not None:
-            if (
-                QtGui.QMessageBox.question(
-                    self.control,
-                    "Duplicate Key Definition",
-                    "'%s' has already been assigned to '%s'.\n"
+            result = confirm(
+                parent=self.control,
+                message=(
+                    f"{key_name!r} has already been assigned to "
+                    f"'{cur_binding.description}'.\n"
                     "Do you wish to continue?"
-                    % (key_name, cur_binding.description),
-                    QtGui.QMessageBox.StandardButton.Yes | QtGui.QMessageBox.StandardButton.No,
-                    QtGui.QMessageBox.StandardButton.No,
-                )
-                != QtGui.QMessageBox.StandardButton.Yes
-            ):
+                ),
+                title="Duplicate Key Definition",
+            )
+            if result != YES:
                 return
 
         self.value = key_name
+        # Need to manually update editor because the update to the value
+        # won't get transferred to toolkit object due to loopback protection.
+        self.update_editor()
 
     def _clear_changed(self):
         """Handles a clear field event."""
         self.value = ""
+        # Need to manually update editor because the update to the value
+        # won't get transferred to toolkit object due to loopback protection.
+        self.update_editor()
 
 
-class KeyBindingCtrl(QtGui.QLabel):
+class KeyBindingCtrl(QtGui.QLineEdit):
     """PyQt control for editing key bindings."""
 
     def __init__(self, editor, parent=None):
         super().__init__(parent)
 
         self.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
-        self.setIndent(4)
         self.setMinimumWidth(160)
-
-        pal = QtGui.QPalette(self.palette())
-        pal.setColor(QtGui.QPalette.ColorRole.Window, QtCore.Qt.GlobalColor.white)
-        self.setPalette(pal)
-        self.setAutoFillBackground(True)
+        self.setMaximumWidth(160)
+        self.setReadOnly(True)
 
         # Save the reference to the controlling editor object:
         self.editor = editor
@@ -133,23 +120,20 @@ class KeyBindingCtrl(QtGui.QLabel):
 
     def paintEvent(self, event):
         """Updates the screen."""
-        QtGui.QLabel.paintEvent(self, event)
-
-        w = self.width()
-        h = self.height()
-        p = QtGui.QPainter(self)
+        super().paintEvent(event)
 
         if self.editor.has_focus:
+            w = self.width()
+            h = self.height()
+            p = QtGui.QPainter(self)
+
             p.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
             pen = QtGui.QPen(QtGui.QColor("tomato"))
             pen.setWidth(2)
             p.setPen(pen)
             p.drawRect(1, 1, w - 2, h - 2)
-        else:
-            p.setPen(self.palette().color(QtGui.QPalette.ColorRole.Mid))
-            p.drawRect(0, 0, w - 1, h - 1)
 
-        p.end()
+            p.end()
 
     def focusInEvent(self, event):
         """Handles getting the focus."""
