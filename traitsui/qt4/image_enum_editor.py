@@ -151,7 +151,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
             width = 0
             for col in range(self._editor.factory.cols):
                 width += view.sizeHintForColumn(col)
-            view.setMinimumWidth(int(width))
+            view.setMinimumWidth(width)
         else:
             self.setItemDelegate(delegate)
 
