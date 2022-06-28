@@ -118,7 +118,7 @@ class _ListStrEditor(Editor):
             header_view = QtGui.QHeaderView(QtCore.Qt.Orientation.Horizontal, self.control)
             self._header_view = header_view
             header_view.setModel(self.model)
-            header_view.setMaximumHeight(header_view.sizeHint().height())
+            header_view.setMaximumHeight(int(header_view.sizeHint().height()))
             if is_qt4:
                 header_view.setResizeMode(QtGui.QHeaderView.ResizeMode.Stretch)
             else:

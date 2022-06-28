@@ -1091,7 +1091,7 @@ class TableView(QtGui.QTableView):
         )
         for column in range(len(self._editor.columns)):
             width += self.sizeHintForColumn(column)
-        size_hint.setWidth(width)
+        size_hint.setWidth(int(width))
         return size_hint
 
     def sizeHintForColumn(self, column_index):

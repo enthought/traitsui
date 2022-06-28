@@ -325,7 +325,7 @@ class TabularEditor(Editor):
         num_columns = len(self.adapter.columns)
         if cws is not None and num_columns == len(cws):
             for column in range(num_columns):
-                self.control.setColumnWidth(column, cws[column])
+                self.control.setColumnWidth(column, int(cws[column]))
 
     def save_prefs(self):
         """Returns any user preference information associated with the editor."""
