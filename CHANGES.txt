@@ -20,6 +20,7 @@ Thanks To
 * Prabhu Ramachandran
 * Ioannis Tziakos
 * Corran Webster
+* John Wiggins
 * Hai Yan
 
 Features
