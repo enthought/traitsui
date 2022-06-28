@@ -81,12 +81,8 @@ if is_qt5:
             self.painter = None
             self.resizeEvent(None)
             if image_func is None:
-
-                def I_fun(image, bbox):
-                    # Don't bother with creating an ndarray version
-                    return image, self._np_image
-
-                self.image_func = I_fun
+                # Don't bother with creating an ndarray version
+                self.image_func = lambda image, bbox: image, self._np_image
             else:
                 self.image_func = image_func
 
@@ -209,6 +205,9 @@ class VideoEditor(Editor):
     #: This is only used on Qt5.
     notify_interval = Float(1.0)
 
+    #: Qt6-specific QAudioOutput handler.
+    _audio = Any()
+
     def update_to_regular(self):
         if self.surface is not None:
             self.surface.frameAvailable.disconnect(self.control.setImage)
@@ -257,13 +256,14 @@ class VideoEditor(Editor):
             self.media_player = QMediaPlayer()
         self._set_video_url()
         self.media_player.setVideoOutput(self.control)
-        if not is_qt5:
+        if is_qt5:
+            self.media_player.setMuted(self.muted)
+        else:
             from pyface.qt.QtMultimedia import QAudioOutput
+
             self._audio = QAudioOutput()
             self._audio.setMuted(self.muted)
             self.media_player.setAudioOutput(self._audio)
-        else:
-            self.media_player.setMuted(self.muted)
         self._update_state()
         self._update_aspect_ratio()
         self._update_muted()
@@ -280,6 +280,8 @@ class VideoEditor(Editor):
         if self.media_player is not None:
             # Avoid a segfault if the media player is currently playing
             self.media_player.setVideoOutput(None)
+            if not is_qt5:
+                self.media_player.setAudioOutput(None)
 
         super().dispose()
 
