@@ -35,6 +35,7 @@ Fixes
 * Fix VideoEditor for Qt6 (#1908)
 * Fix the ImageEnumEditor on Qt5+ (#1910)
 * Fix some height and width calls for Qt and Python 3.10+ (#1911)
+* Fix a crash on PyQt5 when a Group has no content (#1914)
 * Numerous fixes for tests and CI (#1897, #1893, #1889, #1894, #1898, #1899,
   #1990, #1902, #1903)
 
