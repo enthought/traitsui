@@ -505,8 +505,8 @@ specify either the trait attribute (with the *name* parameter), or the set of
 values to display (with the *values* parameter). The *name* parameter can be an
 extended trait name. The *values* parameter can be a list, tuple, or dictionary,
 or a "mapped" trait.  When using *names* or *values*, the *use_separator* flag
-turns the string value specified by the *separator* trait to instead insert a
-separator into the set of values, to allow grouping (this is currently only
+replaces any occurences of the value specified by *separator* with a separator
+in the pop-up menu, allowing grouping of entries (this is currently only
 supported in the Qt backend).
 
 By default, an enumeration editor sorts its values alphabetically. To specify a
