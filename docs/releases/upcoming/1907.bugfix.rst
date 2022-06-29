@@ -1,1 +1,0 @@
-Fix ImageEditor paintEvent when image is None. (#1907)

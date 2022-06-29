@@ -1,1 +1,0 @@
-Fix some height and width calls for Qt and Python 3.10+ (#1911)
