@@ -6,7 +6,7 @@ Release 7.4.0
 
 This is a minor release which fixes a number of bugs and adds a couple of
 small features.  The most significant changes are the ability to add separators
-to EnumEditor comboboxes, the ability to use Pyface action Schemas for menubars
+to EnumEditor comboboxes, the ability to use Pyface action Schemas for menu bars
 and toolbars in Views, and getting the VideoEditor working against the new
 QtMultimedia APIs in Qt6.
 
