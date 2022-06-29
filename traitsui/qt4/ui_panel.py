@@ -318,7 +318,8 @@ def _fill_panel(panel, content, ui, item_handler=None):
                 new = page
             else:
                 new = QtGui.QWidget()
-                new.setLayout(page)
+                if page is not None:
+                    new.setLayout(page)
 
             layout = new.layout()
             if layout is not None:
