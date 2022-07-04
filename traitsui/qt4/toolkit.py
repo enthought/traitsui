@@ -382,8 +382,8 @@ class GUIToolkit(Toolkit):
 
         # This may be called from within the finished() signal handler so we
         # need to do the delete after the handler has returned.
-        control.hide()
         control.deleteLater()
+        control.hide()
 
     def destroy_children(self, control):
         """Destroys all of the child controls of a specified GUI toolkit
