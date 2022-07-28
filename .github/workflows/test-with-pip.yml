@@ -16,6 +16,7 @@ on:
 jobs:
   # Tests against Qt/Python packages from PyPI
   pip-qt:
+    if: github.repository == 'enthought/traitsui'
     env:
       # Enforce selection of toolkit
       ETS_TOOLKIT: qt
