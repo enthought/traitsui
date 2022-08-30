@@ -719,8 +719,10 @@ class RangeTextEditor(TextEditor):
         self.sync_value(factory.high_name, "high", "from")
 
         # force value to start in range
-        if not (self.low <= self.value <= self.high):
+        if self.low is not None and self.low > self.value:
             self.value = self.low
+        elif self.high is not None and self.high < self.value:
+            self.value = self.low if self.low is not None else self.high
 
     def update_object(self):
         """Handles the user entering input data in the edit control."""
