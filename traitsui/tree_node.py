@@ -100,6 +100,7 @@ class TreeNode(HasPrivateTraits):
 
     #: List of object classes than can be added or copied. Elements of the list
     #: can be either:
+    #:
     #: - the klass itself that can be added or copied
     #: - 2-tuples of the form (klass, prompt) in which case klass is as above
     #:   and prompt is a boolean indicating whether or not to prompt the user

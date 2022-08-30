@@ -1,6 +1,48 @@
 Traits UI Changelog
 ===================
 
+Release 7.4.0
+-------------
+
+This is a minor release which fixes a number of bugs and adds a couple of
+small features.  The most significant changes are the ability to add separators
+to EnumEditor comboboxes, the ability to use Pyface action Schemas for menu bars
+and toolbars in Views, and getting the VideoEditor working against the new
+QtMultimedia APIs in Qt6.
+
+Thanks To
+~~~~~~~~~
+
+* Aaron Ayres
+* Mark Dickinson
+* Rahul Poruri
+* PyHannes
+* Prabhu Ramachandran
+* Ioannis Tziakos
+* Corran Webster
+* John Wiggins
+* Hai Yan
+
+Features
+~~~~~~~~
+* Separators in Combobox EnumEditors. (#1885)
+* Allow the use of Pyface Schemas for View menus and toolbars. (#1827)
+
+Fixes
+~~~~~
+* Delay imports which force toolkit selection (#1883)
+* Fix ImageEditor paintEvent when image is None. (#1907)
+* Fix VideoEditor for Qt6 (#1908)
+* Fix the ImageEnumEditor on Qt5+ (#1910)
+* Fix some height and width calls for Qt and Python 3.10+ (#1911)
+* Fix a crash on PyQt5 when a Group has no content (#1914)
+* Numerous fixes for tests and CI (#1897, #1893, #1889, #1894, #1898, #1899,
+  #1990, #1902, #1903)
+
+Documentation changes
+~~~~~~~~~~~~~~~~~~~~~
+* Add a copy button to code blocks in documentation (#1904)
+
 Release 7.3.1
 -------------
 
