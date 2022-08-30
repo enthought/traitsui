@@ -46,6 +46,9 @@ class SimpleEditor(SimpleTextEditor):
     #: handler.
     _connections_to_remove = List(Tuple(Any(), Callable()))
 
+    #: Wildcard filter to apply to the file dialog:
+    filter = filter_trait
+
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
         widget.
@@ -74,6 +77,9 @@ class SimpleEditor(SimpleTextEditor):
         layout.addWidget(button)
 
         self.set_tooltip(control)
+
+        self.filter = self.factory.filter
+        self.sync_value(self.factory.filter_name, "filter", "from", is_list=True)
 
     def dispose(self):
         """Disposes of the contents of an editor."""
