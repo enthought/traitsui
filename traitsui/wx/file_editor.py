@@ -46,6 +46,9 @@ class SimpleEditor(SimpleTextEditor):
     #: The popup file control (an Instance( PopupFile )):
     popup = Any()
 
+    #: Wildcard filter to apply to the file dialog:
+    filter = filter_trait
+
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
         widget.
@@ -91,6 +94,9 @@ class SimpleEditor(SimpleTextEditor):
         self._button = button
 
         self.set_tooltip(control)
+
+        self.filter = factory.filter
+        self.sync_value(factory.filter_name, "filter", "from", is_list=True)
 
     def dispose(self):
         """Disposes of the contents of an editor."""
