@@ -78,7 +78,7 @@ def mouse_click(func):
 
 @mouse_click
 def mouse_click_button(control, delay):
-    """Performs a mouce click on a wx button.
+    """Performs a mouse click on a wx button.
 
     Parameters
     ----------
@@ -93,7 +93,7 @@ def mouse_click_button(control, delay):
 
 @mouse_click
 def mouse_click_checkbox(control, delay):
-    """Performs a mouce click on a wx check box.
+    """Performs a mouse click on a wx check box.
 
     Parameters
     ----------
@@ -109,7 +109,7 @@ def mouse_click_checkbox(control, delay):
 
 @mouse_click
 def mouse_click_combobox_or_choice(control, index, delay):
-    """Performs a mouce click on either a wx combo box or a wx choice on the
+    """Performs a mouse click on either a wx combo box or a wx choice on the
     entry at the given index.
 
     Parameters
@@ -141,7 +141,7 @@ def mouse_click_combobox_or_choice(control, index, delay):
 
 @mouse_click
 def mouse_click_listbox(control, index, delay):
-    """Performs a mouce click on a wx list box on the entry at
+    """Performs a mouse click on a wx list box on the entry at
     the given index.
 
     Parameters
@@ -160,7 +160,7 @@ def mouse_click_listbox(control, index, delay):
 
 @mouse_click
 def mouse_click_radiobutton(control, delay):
-    """Performs a mouce click on a wx radio button.
+    """Performs a mouse click on a wx radio button.
 
     Parameters
     ----------
@@ -176,7 +176,7 @@ def mouse_click_radiobutton(control, delay):
 
 @mouse_click
 def mouse_click_object(control, delay):
-    """Performs a mouce click on a wxTextCtrl.
+    """Performs a mouse click on a wxTextCtrl.
 
     Parameters
     ----------
@@ -221,7 +221,7 @@ def mouse_click_notebook_tab_index(control, index, delay):
 
 
 def mouse_click_checkbox_child_in_panel(control, index, delay):
-    """Performs a mouce click on a child of a Wx Panel.
+    """Performs a mouse click on a child of a Wx Panel.
 
     Parameters
     ----------
@@ -245,7 +245,7 @@ def mouse_click_checkbox_child_in_panel(control, index, delay):
 
 
 def mouse_click_radiobutton_child_in_panel(control, index, delay):
-    """Performs a mouce click on a child of a Wx Panel.
+    """Performs a mouse click on a child of a Wx Panel.
 
     Parameters
     ----------
