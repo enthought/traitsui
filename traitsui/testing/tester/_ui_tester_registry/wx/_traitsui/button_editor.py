@@ -17,7 +17,7 @@ from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
 def mouse_click_ImageButton(wrapper, interaction):
-    """Performs a mouce click on an pyface.ui.wx.ImageButton object.
+    """Performs a mouse click on an pyface.ui.wx.ImageButton object.
 
     Parameters
     ----------

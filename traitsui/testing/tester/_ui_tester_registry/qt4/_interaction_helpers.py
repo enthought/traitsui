@@ -101,7 +101,7 @@ def displayed_text_qobject(widget):
 
 
 def mouse_click_qwidget(control, delay):
-    """Performs a mouce click on a Qt widget.
+    """Performs a mouse click on a Qt widget.
 
     Parameters
     ----------
