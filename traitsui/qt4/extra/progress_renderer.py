@@ -11,6 +11,7 @@
 """ A renderer which displays a progress bar. """
 
 # System library imports
+import sys
 from pyface.qt import QtCore, QtGui
 
 # ETS imports
@@ -41,12 +42,19 @@ class ProgressRenderer(TableDelegate):
 
         # Draw it
         style = QtGui.QApplication.instance().style()
-        # save painter state, translate painter to cell location, and then
-        # restore painter state after drawing to solve enthought/traitsui#964
-        # ref: https://forum.qt.io/topic/105375/qitemdelegate-for-drawing-progress-bar-working-but-won-t-move-off-origin  # noqa: E501
-        painter.save()
-        painter.translate(option.rect.left(), option.rect.top())
-        style.drawControl(
-            QtGui.QStyle.ControlElement.CE_ProgressBar, progress_bar_option, painter
-        )
-        painter.restore()
+        if sys.platform == "darwin":
+            # Save painter state, translate painter to cell location, and then
+            # restore painter state after drawing to solve enthought/traitsui#964
+            # This seems to be mac only.
+            # ref: https://forum.qt.io/topic/105375/qitemdelegate-for-drawing-progress-bar-working-but-won-t-move-off-origin  # noqa: E501
+            painter.save()
+            painter.translate(option.rect.left(), option.rect.top())
+            style.drawControl(
+                QtGui.QStyle.ControlElement.CE_ProgressBar, progress_bar_option, painter
+            )
+            painter.restore()
+        else:
+            # For non-mac platforms, just draw.
+            style.drawControl(
+                QtGui.QStyle.ControlElement.CE_ProgressBar, progress_bar_option, painter
+            )
