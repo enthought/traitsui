@@ -58,4 +58,3 @@ class ProgressRenderer(TableDelegate):
             style.drawControl(
                 QtGui.QStyle.ControlElement.CE_ProgressBar, progress_bar_option, painter
             )
-
