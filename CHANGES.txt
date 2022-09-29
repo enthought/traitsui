@@ -1,6 +1,18 @@
 Traits UI Changelog
 ===================
 
+Release 7.4.1
+-------------
+
+This is a bug fix release which resolves an issue with RangeEditor not handling
+None for either the high or low value, as well as an issue with ProgressColumn
+rendering.
+
+Fixes
+-----
+* Fix range text editor bug (#1931)
+* Fix issue with progress column rendering on Linux and Windows. (#1937)
+
 Release 7.4.0
 -------------
 
