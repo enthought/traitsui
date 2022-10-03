@@ -8,10 +8,24 @@ This is a bug fix release which resolves an issue with RangeEditor not handling
 None for either the high or low value, as well as an issue with ProgressColumn
 rendering.
 
+Thanks To
+---------
+
+* Steve Allen
+* Chris Angell
+* Aaron Ayres
+* Maxwell Grady
+* Johannes Loibl
+* Rahul Poruri
+* Corran Webster
+* Hai Yan
+
 Fixes
 -----
-* Fix range text editor bug (#1931)
 * Fix issue with progress column rendering on Linux and Windows. (#1937)
+* Fix typos in docstrings (#1935)
+* Fix range text editor bug (#1931)
+* Fix issue where file editor filters were not used in simple editor (#1930)
 
 Release 7.4.0
 -------------
