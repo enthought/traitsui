@@ -12,6 +12,7 @@ on:
 
 jobs:
   test:
+    if: github.repository == 'enthought/traitsui'
     strategy:
       matrix:
         os: [ubuntu-latest]
