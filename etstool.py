@@ -275,7 +275,7 @@ def install(runtime, toolkit, environment, editable, source):
             commands.append(
                 "edm run -e {environment} -- pip install pyside6<6.2.2")
         else:
-            commands.append('edm run -e {environment} -- pip install "pyside6<6.4"')
+            commands.append('edm run -e {environment} -- pip install "pyside6<6.4.0"')
     elif toolkit == 'wx':
         if sys.platform != 'linux':
             commands.append("edm run -e {environment} -- pip install wxPython")
