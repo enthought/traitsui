@@ -1,0 +1,1 @@
+Fix RangeTextEditor handling of None for low/high (#1950)
