@@ -22,7 +22,7 @@ from io import open
 # into the package source.
 MAJOR = 7
 MINOR = 4
-MICRO = 1
+MICRO = 2
 PRERELEASE = ""
 IS_RELEASED = True
 
