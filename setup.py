@@ -22,9 +22,9 @@ from io import open
 # into the package source.
 MAJOR = 7
 MINOR = 4
-MICRO = 2
+MICRO = 3
 PRERELEASE = ""
-IS_RELEASED = True
+IS_RELEASED = False
 
 # If this file is part of a Git export (for example created with "git archive",
 # or downloaded from GitHub), ARCHIVE_COMMIT_HASH gives the full hash of the
