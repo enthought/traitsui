@@ -1,6 +1,28 @@
 Traits UI Changelog
 ===================
 
+Release 7.4.2
+-------------
+
+This is a small bug fix release which resolves a couple of bugs in the
+RangeEditor and TreeEditor.  It also pins the PySide6 version to < 6.4.0 due
+to incompatibilities with the new enum system, which should improve the install
+experience.
+
+Thanks To
+---------
+
+* Aaron Ayres
+* hopeful0
+* Corran Webster
+
+Fixes
+-----
+
+* Fix RangeTextEditor handling of None for low/high (#1950)
+* Pin PySide6 to < 6.4 (#1951)
+* Fix issues with shared "New" context menu in TreeEditor (#1953)
+
 Release 7.4.1
 -------------
 
