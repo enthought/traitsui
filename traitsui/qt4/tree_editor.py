@@ -948,7 +948,7 @@ class SimpleEditor(Editor):
             editor.setUpdatesEnabled(True)
 
     def _on_context_menu(self, pos):
-        """Handles the user requesting a context menuright clicking on a tree node."""
+        """Handles the user requesting a context menu on a tree node."""
         nid = self._tree.itemAt(pos)
 
         if nid is None:
@@ -986,8 +986,9 @@ class SimpleEditor(Editor):
             # Use the menu specified by the node:
             group = menu.find_group(NewAction)
             if group is not None:
-                # Only set it the first time:
-                group.id = ""
+                # Reset the group for the current usage in case it is shared
+                # - the call to `node.get_add()` is potentially dynamic
+                group.clear()
                 actions = self._new_actions(node, object)
                 if len(actions) > 0:
                     group.insert(0, Menu(name="New", *actions))
