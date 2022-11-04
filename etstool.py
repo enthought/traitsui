@@ -270,11 +270,12 @@ def install(runtime, toolkit, environment, editable, source):
         # are unimportable on Python 3.6 and Python 3.7. See
         # https://bugreports.qt.io/browse/PYSIDE-1797. It may be possible to
         # remove this workaround once PySide6 6.3.1 or later is released.
+        # Also there are currently issues with PySide 6.4
         if sys.platform in {'darwin', 'linux'}:
             commands.append(
                 "edm run -e {environment} -- pip install pyside6<6.2.2")
         else:
-            commands.append("edm run -e {environment} -- pip install pyside6")
+            commands.append('edm run -e {environment} -- pip install "pyside6<6.4.0"')
     elif toolkit == 'wx':
         if sys.platform != 'linux':
             commands.append("edm run -e {environment} -- pip install wxPython")

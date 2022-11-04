@@ -25,6 +25,9 @@ jobs:
         include:
           - os: ubuntu-latest
             toolkit: 'null'
+        exclude:
+          - os: windows-latest
+            toolkit: pyside6
     runs-on: ${{ matrix.os }}
     env:
       # Set root directory, mainly for Windows, so that the EDM Python
