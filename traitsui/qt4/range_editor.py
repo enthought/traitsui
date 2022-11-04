@@ -729,8 +729,11 @@ class RangeTextEditor(TextEditor):
             if self.evaluate is not None:
                 value = self.evaluate(value)
 
-            if not (self.low <= value <= self.high):
+            if self.low is not None and self.low > value:
                 value = self.low
+                col = ErrorColor
+            elif self.high is not None and self.high < value:
+                value = self.low if self.low is not None else self.high
                 col = ErrorColor
             else:
                 col = OKColor

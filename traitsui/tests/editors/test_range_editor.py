@@ -75,6 +75,10 @@ class RangeExcludeLow(HasTraits):
     x = Range(low=0.0, high=1.0, value=0.1, exclude_low=True)
 
 
+class ModelWithRangeTrait(HasTraits):
+    value = Range(low=0, high=None, value=1)
+
+
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestRangeEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
     def setUp(self):
@@ -147,6 +151,24 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
+            # sanity check
+            self.assertEqual(model.value, 1)
+            number_field_text = tester.find_by_name(ui, "value")
+            if is_windows and is_wx():
+                # For RangeTextEditor on wx and windows, the textbox
+                # automatically gets focus and the full content is selected.
+                # Insertion point is moved to keep the test consistent
+                number_field_text.perform(KeyClick("End"))
+            number_field_text.perform(KeyClick("0"))
+            number_field_text.perform(KeyClick("Enter"))
+            displayed = number_field_text.inspect(DisplayedText())
+            self.assertEqual(model.value, 10)
+            self.assertEqual(displayed, str(model.value))
+
+    def test_range_text_editor_set_with_text_valid_and_none_bound(self):
+        model = ModelWithRangeTrait()
+        tester = UITester()
+        with tester.create_ui(model) as ui:
             # sanity check
             self.assertEqual(model.value, 1)
             number_field_text = tester.find_by_name(ui, "value")
