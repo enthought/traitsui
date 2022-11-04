@@ -1138,8 +1138,11 @@ class SimpleEditor(Editor):
                 # Use the menu specified by the node:
                 group = menu.find_group(NewAction)
                 if group is not None:
-                    # Only set it the first time:
-                    group.id = ""
+                    # Reset the group for the current usage in case it is
+                    # shared - the call to `node.get_add()` is potentially
+                    # dynamic and the callback `_menu_new_node()` captures
+                    # state about this particular TreeEditor instance
+                    group.clear()
                     actions = self._new_actions(node, object)
                     if len(actions) > 0:
                         group.insert(0, Menu(name="New", *actions))
