@@ -23,8 +23,9 @@ __extras_require__ = {
     "pyside6": [
         # Avoid https://bugreports.qt.io/browse/PYSIDE-1797, which causes
         # some versions of PySide6 to be unimportable on Python 3.6 and 3.7.
-        "pyside6!=6.2.2,!=6.2.2.1,!=6.2.3,!=6.2.4,!=6.3.0; python_version<'3.8'",
-        "pyside6; python_version>='3.8'",
+        # Also avoid PySide 6.4 until enum issue is resolved.
+        "pyside6!=6.2.2,!=6.2.2.1,!=6.2.3,!=6.2.4,!=6.3.0,<6.4.0; python_version<'3.8'",
+        "pyside6<6.4.0; python_version>='3.8'",
         "pygments",
     ],
     "docs": ["enthought-sphinx-theme", "sphinx", "sphinx-copybutton"],
