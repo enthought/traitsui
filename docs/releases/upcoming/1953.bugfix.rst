@@ -1,0 +1,1 @@
+Fix issues with shared "New" context menu in TreeEditor (#1953)
