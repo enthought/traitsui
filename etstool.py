@@ -103,10 +103,11 @@ import click
 
 supported_combinations = {
     '3.6': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
+    '3.8': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
-DEFAULT_RUNTIME = '3.6'
+DEFAULT_RUNTIME = '3.8'
 
 # Default toolkit to use if none specified.
 DEFAULT_TOOLKIT = 'null'
@@ -154,18 +155,22 @@ extra_dependencies = {
         'h5py',
         'numpy',
         'pandas',
-        'pytables',
     },
     # Optional dependencies for some editors
     'editors': {
         'numpy',
         'pandas',
-        'pillow',
     },
     # Test dependencies also applied to installation from PYPI
     'test': {
         'packaging',
     },
+}
+
+# Extra runtime dependencies
+runtime_dependencies = {
+    "3.6": {"pillow", "pytables"},
+    "3.8": {"pillow_simd", "tables"},
 }
 
 # Dependencies for CI jobs using this file.
@@ -195,6 +200,13 @@ environment_vars = {
     'pyqt6': {"ETS_TOOLKIT": "qt", "QT_API": "pyqt6"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
+}
+
+edm_versions = {
+    ('3.6', 'pyside2'),
+    ('3.6', 'pyqt5'),
+    ('3.8', 'pyside6'),
+    ('3.8', 'pyqt6'),
 }
 
 # Location of documentation files
@@ -243,6 +255,7 @@ def install(runtime, toolkit, environment, editable, source):
         | extra_dependencies["test"]
         | extra_dependencies["examples"]
         | extra_dependencies["editors"]
+        | runtime_dependencies[runtime]
         | ci_dependencies
     )
 
@@ -251,20 +264,18 @@ def install(runtime, toolkit, environment, editable, source):
         "edm environments create {environment} --force --version={runtime}"
     ]
 
-    commands.extend(
-        [
-            "edm install -y -e {environment} " + " ".join(packages),
-            "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
-            "edm run -e {environment} -- python setup.py clean --all",
-        ]
-    )
-
     # pip install pyqt5, pyqt6, pyside2 and pyside6, because we don't have them
     # in EDM yet
-    if toolkit == 'pyside2':
-        commands.append("edm run -e {environment} -- pip install pyside2")
-    elif toolkit == 'pyqt6':
-        commands.append("edm run -e {environment} -- pip install pyqt6")
+    if (runtime, toolkit) in edm_versions:
+        packages.add(toolkit)
+    elif toolkit == 'wx':
+        if sys.platform != 'linux':
+            commands.append("edm run -e {environment} -- pip install wxPython")
+        else:
+            # XXX this is mainly for TravisCI workers; need a generic solution
+            commands.append(
+                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04/ wxPython"
+            )
     elif toolkit == 'pyside6':
         # On Linux and macOS, some versions of PySide6 between 6.2.2 and 6.3.0
         # are unimportable on Python 3.6 and Python 3.7. See
@@ -276,14 +287,16 @@ def install(runtime, toolkit, environment, editable, source):
                 "edm run -e {environment} -- pip install pyside6<6.2.2")
         else:
             commands.append('edm run -e {environment} -- pip install "pyside6<6.4.0"')
-    elif toolkit == 'wx':
-        if sys.platform != 'linux':
-            commands.append("edm run -e {environment} -- pip install wxPython")
-        else:
-            # XXX this is mainly for TravisCI workers; need a generic solution
-            commands.append(
-                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04/ wxPython"
-            )
+    else:
+        commands.append(f"edm run -e {environment} -- pip install {toolkit}")
+
+    commands.extend(
+        [
+            "edm install -y -e {environment} " + " ".join(packages),
+            "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
+            "edm run -e {environment} -- python setup.py clean --all",
+        ]
+    )
 
     # Temporarily install "sphinx-copybutton" from PyPI
     commands.append(
