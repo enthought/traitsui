@@ -202,6 +202,7 @@ environment_vars = {
     'null': {'ETS_TOOLKIT': 'null'},
 }
 
+# toolkit versions in EDM
 edm_versions = {
     ('3.6', 'pyside2'),
     ('3.6', 'pyqt5'),
@@ -262,12 +263,13 @@ def install(runtime, toolkit, environment, editable, source):
     # edm commands to setup the development environment
     commands = [
         "edm environments create {environment} --force --version={runtime}"
+        "edm install -y -e {environment} " + " ".join(packages),
     ]
 
-    # pip install pyqt5, pyqt6, pyside2 and pyside6, because we don't have them
-    # in EDM yet
     if (runtime, toolkit) in edm_versions:
-        packages.add(toolkit)
+        commands.append(
+            f"edm install -y -e {environment} {toolkit}"
+        )
     elif toolkit == 'wx':
         if sys.platform != 'linux':
             commands.append("edm run -e {environment} -- pip install wxPython")
@@ -287,20 +289,14 @@ def install(runtime, toolkit, environment, editable, source):
                 "edm run -e {environment} -- pip install pyside6<6.2.2")
         else:
             commands.append('edm run -e {environment} -- pip install "pyside6<6.4.0"')
-    else:
+    elif toolkit != "null":
         commands.append(f"edm run -e {environment} -- pip install {toolkit}")
 
     commands.extend(
         [
-            "edm install -y -e {environment} " + " ".join(packages),
             "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
             "edm run -e {environment} -- python setup.py clean --all",
         ]
-    )
-
-    # Temporarily install "sphinx-copybutton" from PyPI
-    commands.append(
-        "edm run -e {environment} -- python -m pip install sphinx-copybutton"
     )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
