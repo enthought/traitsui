@@ -137,7 +137,6 @@ extra_dependencies = {
         'pygments',
     },
     'pyqt5': {
-        'pyqt5',
         'pygments',
     },
     'pyqt6': {
