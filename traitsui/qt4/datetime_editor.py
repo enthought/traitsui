@@ -24,10 +24,10 @@ class SimpleEditor(Editor):
     """Simple Traits UI time editor that wraps QDateTimeEdit."""
 
     #: the earliest datetime allowed by the editor
-    minimum_datetime = Datetime
+    minimum_datetime = Datetime(allow_none=True)
 
     #: the latest datetime allowed by the editor
-    maximum_datetime = Datetime
+    maximum_datetime = Datetime(allow_none=True)
 
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
