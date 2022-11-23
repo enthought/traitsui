@@ -107,6 +107,12 @@ class CustomEditor(Editor):
 
         self.control.clicked.connect(self.update_object)
 
+        if not self.factory.multi_select:
+            self.control.showSelectedDate()
+        elif self._selected:
+            first_date = min(self._selected)
+            self.control.setCurrentPage(first_date.year, first_date.month)
+
     def dispose(self):
         """Disposes of the contents of an editor."""
         if self.control is not None:
@@ -122,6 +128,7 @@ class CustomEditor(Editor):
             if not self.factory.multi_select:
                 q_date = QtCore.QDate(value.year, value.month, value.day)
                 self.control.setSelectedDate(q_date)
+                self.control.showSelectedDate()
             else:
                 self.apply_unselected_style_to_all()
                 for date in value:
