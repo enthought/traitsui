@@ -267,7 +267,7 @@ def install(runtime, toolkit, environment, editable, source):
 
     if (runtime, toolkit) in edm_versions:
         commands.append(
-            f"edm install -y -e {environment} {toolkit}"
+            "edm install -y -e {environment} {toolkit}"
         )
     elif toolkit == 'wx':
         if sys.platform != 'linux':
@@ -289,7 +289,7 @@ def install(runtime, toolkit, environment, editable, source):
         else:
             commands.append('edm run -e {environment} -- pip install "pyside6<6.4.0"')
     elif toolkit != "null":
-        commands.append(f"edm run -e {environment} -- pip install {toolkit}")
+        commands.append("edm run -e {environment} -- pip install {toolkit}")
 
     commands.extend(
         [
