@@ -262,7 +262,7 @@ def install(runtime, toolkit, environment, editable, source):
 
     # edm commands to setup the development environment
     commands = [
-        "edm environments create {environment} --force --version={runtime}"
+        "edm environments create {environment} --force --version={runtime}",
         "edm install -y -e {environment} " + " ".join(packages),
     ]
 
