@@ -30,7 +30,7 @@ from functools import partial
 from itertools import zip_longest
 import logging
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_qt5
 
 from pyface.api import ImageResource
 from pyface.ui_traits import convert_image
@@ -1551,7 +1551,11 @@ class _TreeWidget(QtGui.QTreeWidget):
         pm.fill(self.palette().base().color())
         painter = QtGui.QPainter(pm)
 
-        option = self.viewOptions()
+        if is_qt5:
+            option = self.viewOptions()
+        else:
+            option = QtGui.QStyleOptionViewItem()
+            self.initViewItemOption(option)
         option.state |= QtGui.QStyle.StateFlag.State_Selected
         option.rect = QtCore.QRect(
             nid_rect.topLeft() - rect.topLeft(), nid_rect.size()
