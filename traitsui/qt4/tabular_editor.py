@@ -403,6 +403,8 @@ class TabularEditor(Editor):
 
     def _update_changed(self):
         self.update_editor()
+        if self.factory.auto_resize:
+            self.control.resizeColumnsToContents()
 
     def _refresh_changed(self):
         self.refresh_editor()
