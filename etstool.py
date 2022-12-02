@@ -107,7 +107,7 @@ supported_combinations = {
 }
 
 # Default Python version to use in the comamnds below if none is specified.
-DEFAULT_RUNTIME = '3.8'
+DEFAULT_RUNTIME = '3.6'
 
 # Default toolkit to use if none specified.
 DEFAULT_TOOLKIT = 'null'
