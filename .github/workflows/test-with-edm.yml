@@ -49,10 +49,6 @@ jobs:
         uses: enthought/setup-edm-action@v1
         with:
           edm-version: ${{ env.INSTALL_EDM_VERSION }}
-      - name: Configure EDM Repos
-        run:  |
-          edm configure
-          edm configure repositories add enthought/lgpl
       - name: Install click to the default EDM environment
         run: edm install -y wheel click coverage
       - name: Install test environment
