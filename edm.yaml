@@ -1,0 +1,13 @@
+# This edm.yaml configuration file provides a standard EDM setup to be used by
+# the etstool.py script, particularly for CI
+
+store_url: "https://packages.enthought.com"
+
+# Packages' repositories
+repositories:
+  - enthought/free
+  - enthought/lgpl
+  - enthought/gpl
+
+# Directory to use to cache downloaded files.
+files_cache: "~/.cache/edm"
