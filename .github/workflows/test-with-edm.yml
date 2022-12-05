@@ -22,11 +22,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         toolkit: ['pyqt5', 'pyside2', 'pyside6']
-        python-version: ['3.6', '3.8']
         include:
           - os: ubuntu-latest
             toolkit: 'null'
-            python-version: '3.6'
         exclude:
           - os: windows-latest
             toolkit: pyside6
@@ -46,7 +44,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.cache
-          key: ${{ runner.os }}-${{matrix.python-version}}-${{ matrix.toolkit }}-${{ hashFiles('etstool.py') }}
+          key: ${{ runner.os }}-${{ matrix.toolkit }}-${{ hashFiles('etstool.py') }}
       - name: Setup EDM
         uses: enthought/setup-edm-action@v1
         with:
@@ -54,8 +52,8 @@ jobs:
       - name: Install click to the default EDM environment
         run: edm install -y wheel click coverage
       - name: Install test environment
-        run: edm run -- python etstool.py install --toolkit=${{ matrix.toolkit }} --runtime=${{matrix.python-version}}
+        run: edm run -- python etstool.py install --toolkit=${{ matrix.toolkit }}
       - name: Run tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }} --runtime=${{matrix.python-version}}
+          run: edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }}
