@@ -102,7 +102,10 @@ from tempfile import mkdtemp
 import click
 
 
-EDM_CONFIG_LOCATION = os.path.join(os.path.dirname(__file__), 'edm.yaml')
+EDM_CONFIG_LOCATION = os.path.abspath(os.path.join(
+    os.path.dirname(__file__),
+    'edm.yaml',
+))
 
 supported_combinations = {
     '3.6': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
