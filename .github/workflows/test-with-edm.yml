@@ -26,6 +26,7 @@ jobs:
         include:
           - os: ubuntu-latest
             toolkit: 'null'
+            python-version: '3.6'
         exclude:
           - os: windows-latest
             toolkit: pyside6
