@@ -28,6 +28,8 @@ jobs:
         exclude:
           - os: windows-latest
             toolkit: pyside6
+          - os: windows-latest
+            toolkit: pyside2
           - os: ubuntu-latest
             toolkit: pyside2
     runs-on: ${{ matrix.os }}
