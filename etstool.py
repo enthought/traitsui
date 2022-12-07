@@ -309,7 +309,7 @@ def install(runtime, toolkit, environment, editable, source):
 
     if source:
         cmd_fmt = (
-            "edm -c {config} plumbing remove-package --environment {environment} --force -c {config} "
+            "edm -c {config} plumbing remove-package --environment {environment} --force "
         )
         commands = [
             cmd_fmt + dependency for dependency in source_dependencies.keys()
