@@ -101,8 +101,15 @@ from tempfile import mkdtemp
 
 import click
 
+
+EDM_CONFIG_LOCATION = os.path.abspath(os.path.join(
+    os.path.dirname(__file__),
+    'edm.yaml',
+))
+
 supported_combinations = {
     '3.6': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
+    '3.8': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
@@ -136,7 +143,6 @@ extra_dependencies = {
         'pygments',
     },
     'pyqt5': {
-        'pyqt5',
         'pygments',
     },
     'pyqt6': {
@@ -154,18 +160,22 @@ extra_dependencies = {
         'h5py',
         'numpy',
         'pandas',
-        'pytables',
     },
     # Optional dependencies for some editors
     'editors': {
         'numpy',
         'pandas',
-        'pillow',
     },
     # Test dependencies also applied to installation from PYPI
     'test': {
         'packaging',
     },
+}
+
+# Extra runtime dependencies
+runtime_dependencies = {
+    "3.6": {"pillow", "pytables"},
+    "3.8": {"pillow_simd", "tables"},
 }
 
 # Dependencies for CI jobs using this file.
@@ -195,6 +205,14 @@ environment_vars = {
     'pyqt6': {"ETS_TOOLKIT": "qt", "QT_API": "pyqt6"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
+}
+
+# toolkit versions in EDM
+edm_versions = {
+    ('3.6', 'pyside2'),
+    ('3.6', 'pyqt5'),
+    ('3.8', 'pyside6'),
+    ('3.8', 'pyqt6'),
 }
 
 # Location of documentation files
@@ -243,28 +261,28 @@ def install(runtime, toolkit, environment, editable, source):
         | extra_dependencies["test"]
         | extra_dependencies["examples"]
         | extra_dependencies["editors"]
+        | runtime_dependencies[runtime]
         | ci_dependencies
     )
 
     # edm commands to setup the development environment
     commands = [
-        "edm environments create {environment} --force --version={runtime}"
+        "edm -c {config} environments create {environment} --force --version={runtime}",
+        "edm -c {config} install -y -e {environment} " + " ".join(packages),
     ]
 
-    commands.extend(
-        [
-            "edm install -y -e {environment} " + " ".join(packages),
-            "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
-            "edm run -e {environment} -- python setup.py clean --all",
-        ]
-    )
-
-    # pip install pyqt5, pyqt6, pyside2 and pyside6, because we don't have them
-    # in EDM yet
-    if toolkit == 'pyside2':
-        commands.append("edm run -e {environment} -- pip install pyside2")
-    elif toolkit == 'pyqt6':
-        commands.append("edm run -e {environment} -- pip install pyqt6")
+    if (runtime, toolkit) in edm_versions:
+        commands.append(
+            "edm -c {config} install -y -e {environment} {toolkit}"
+        )
+    elif toolkit == 'wx':
+        if sys.platform != 'linux':
+            commands.append("edm -c {config} run -e {environment} -- pip install wxPython")
+        else:
+            # XXX this is mainly for TravisCI workers; need a generic solution
+            commands.append(
+                "edm -c {config} run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04/ wxPython"
+            )
     elif toolkit == 'pyside6':
         # On Linux and macOS, some versions of PySide6 between 6.2.2 and 6.3.0
         # are unimportable on Python 3.6 and Python 3.7. See
@@ -273,21 +291,17 @@ def install(runtime, toolkit, environment, editable, source):
         # Also there are currently issues with PySide 6.4
         if sys.platform in {'darwin', 'linux'}:
             commands.append(
-                "edm run -e {environment} -- pip install pyside6<6.2.2")
+                "edm -c {config} run -e {environment} -- pip install pyside6<6.2.2")
         else:
             commands.append('edm run -e {environment} -- pip install "pyside6<6.4.0"')
-    elif toolkit == 'wx':
-        if sys.platform != 'linux':
-            commands.append("edm run -e {environment} -- pip install wxPython")
-        else:
-            # XXX this is mainly for TravisCI workers; need a generic solution
-            commands.append(
-                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04/ wxPython"
-            )
+    elif toolkit != "null":
+        commands.append("edm -c {config} run -e {environment} -- pip install {toolkit}")
 
-    # Temporarily install "sphinx-copybutton" from PyPI
-    commands.append(
-        "edm run -e {environment} -- python -m pip install sphinx-copybutton"
+    commands.extend(
+        [
+            "edm -c {config} run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
+            "edm -c {config} run -e {environment} -- python setup.py clean --all",
+        ]
     )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
@@ -295,7 +309,7 @@ def install(runtime, toolkit, environment, editable, source):
 
     if source:
         cmd_fmt = (
-            "edm plumbing remove-package --environment {environment} --force "
+            "edm -c {config} plumbing remove-package --environment {environment} --force "
         )
         commands = [
             cmd_fmt + dependency for dependency in source_dependencies.keys()
@@ -309,14 +323,14 @@ def install(runtime, toolkit, environment, editable, source):
             for pkg in source_pkgs
         ]
         commands = [
-            "edm run -e {environment} -- " + command for command in commands
+            "edm -c {config} run -e {environment} -- " + command for command in commands
         ]
         execute(commands, parameters)
 
     # Always install local source again with no dependencies
     # to mitigate risk of testing against a distributed release.
     install_traitsui = (
-        "edm run -e {environment} -- "
+        "edm -c {config} run -e {environment} -- "
         "pip install --force-reinstall  --no-dependencies "
     )
     if editable:
@@ -338,7 +352,7 @@ def shell(runtime, toolkit, environment):
     """
     parameters = get_parameters(runtime, toolkit, environment)
     commands = [
-        "edm shell -e {environment}",
+        "edm -c {config} shell -e {environment}",
     ]
     execute(commands, parameters)
 
@@ -355,11 +369,11 @@ def test(runtime, toolkit, environment):
 
     parameters["integrationtests"] = os.path.abspath("integrationtests")
     commands = [
-        "edm run -e {environment} -- python -X faulthandler -W default -m coverage run -p -m unittest discover -v traitsui",
+        "edm -c {config} run -e {environment} -- python -X faulthandler -W default -m coverage run -p -m unittest discover -v traitsui",
         # coverage run prevents local images to be loaded for demo examples
         # which are not defined in Python packages. Run with python directly
         # instead.
-        "edm run -e {environment} -- python -X faulthandler -W default -m unittest discover -v {integrationtests}",
+        "edm -c {config} run -e {environment} -- python -X faulthandler -W default -m unittest discover -v {integrationtests}",
     ]
 
     # We run in a tempdir to avoid accidentally picking up wrong traitsui
@@ -381,8 +395,8 @@ def cleanup(runtime, toolkit, environment):
     """Remove a development environment."""
     parameters = get_parameters(runtime, toolkit, environment)
     commands = [
-        "edm run -e {environment} -- python setup.py clean",
-        "edm environments remove {environment} --purge -y",
+        "edm -c {config} run -e {environment} -- python setup.py clean",
+        "edm -c {config} environments remove {environment} --purge -y",
     ]
     click.echo("Cleaning up environment '{environment}'".format(**parameters))
     execute(commands, parameters)
@@ -409,7 +423,7 @@ def test_clean(runtime, toolkit):
 def update(runtime, toolkit, environment):
     """Update/Reinstall package into environment."""
     parameters = get_parameters(runtime, toolkit, environment)
-    commands = ["edm run -e {environment} -- python setup.py install"]
+    commands = ["edm -c {config} run -e {environment} -- python setup.py install"]
     click.echo("Re-installing in  '{environment}'".format(**parameters))
     execute(commands, parameters)
     click.echo('Done update')
@@ -425,7 +439,7 @@ def docs(runtime, toolkit, environment):
     packages = ' '.join(doc_dependencies)
     ignore = " ".join(doc_ignore)
     commands = [
-        "edm install -y -e {environment} " + packages,
+        "edm -c {config} install -y -e {environment} " + packages,
     ]
     click.echo(
         "Installing documentation tools in  '{environment}'".format(
@@ -442,7 +456,7 @@ def docs(runtime, toolkit, environment):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     commands = [
-        "edm run -e {environment} -- sphinx-apidoc "
+        "edm -c {config} run -e {environment} -- sphinx-apidoc "
         "-e "
         "-M "
         "--no-toc "
@@ -453,7 +467,7 @@ def docs(runtime, toolkit, environment):
 
     os.chdir('docs')
     command = (
-        "edm run -e {environment} -- sphinx-build -b html "
+        "edm -c {config} run -e {environment} -- sphinx-build -b html "
         "-d build/doctrees "
         "source "
         "build/html"
@@ -504,7 +518,7 @@ def flake8(runtime, toolkit, environment, strict):
     if strict:
         config = "--config=flake8_strict.cfg "
     commands = [
-        "edm run -e {environment} -- python -m flake8 " + config,
+        "edm -c {config} run -e {environment} -- python -m flake8 " + config,
     ]
     execute(commands, parameters)
 
@@ -617,12 +631,13 @@ def build_changelog(ctx):
 # ----------------------------------------------------------------------------
 
 
-def get_parameters(runtime, toolkit, environment):
+def get_parameters(runtime, toolkit, environment, config=EDM_CONFIG_LOCATION):
     """Set up parameters dictionary for format() substitution"""
     parameters = {
         'runtime': runtime,
         'toolkit': toolkit,
         'environment': environment,
+        'config': config,
     }
     if toolkit not in supported_combinations[runtime]:
         msg = (
