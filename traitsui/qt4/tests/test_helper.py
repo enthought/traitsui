@@ -85,6 +85,7 @@ class TestWrapText(unittest.TestCase):
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
         # add two char slack as depends on OS, exact font, etc.
+        print([len(line) for line in lines])
         self.assertTrue(all(len(line) <= 22 for line in lines))
 
     def test_wrap_text_narrow_short(self):
@@ -100,6 +101,7 @@ class TestWrapText(unittest.TestCase):
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
         # add two char slack as depends on OS, exact font, etc.
+        print([len(line) for line in lines])
         self.assertTrue(all(len(line) <= 22 for line in lines))
         # different os elide the last line slightly differently,
         # just check end of last line shows elision.
