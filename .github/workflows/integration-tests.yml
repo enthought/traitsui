@@ -14,7 +14,7 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-20.04]
         toolkit: ['pyside2']
         python-version: [3.6, 3.8, 3.9]
     runs-on: ${{ matrix.os }}
@@ -45,7 +45,7 @@ jobs:
   notify-on-failure:
     needs: test
     if: failure()
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Notify Slack channel on failure
         uses: voxmedia/github-action-slack-notify-build@v1
@@ -59,7 +59,7 @@ jobs:
   notify-on-success:
     needs: test
     if: success()
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Notify Slack channel on success
         uses: voxmedia/github-action-slack-notify-build@v1
