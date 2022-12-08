@@ -26,6 +26,10 @@ jobs:
         include:
           - os: ubuntu-latest
             toolkit: 'null'
+            python-version: '3.6'
+          - os: ubuntu-latest
+            toolkit: 'null'
+            python-version: '3.8'
           - os: ubuntu-20.04
             toolkit: 'pyside6'
             python-version: '3.8'
