@@ -84,8 +84,8 @@ class TestWrapText(unittest.TestCase):
 
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
-        # add one char slack as depends on OS, exact font, etc.
-        self.assertTrue(all(len(line) <= 21 for line in lines))
+        # add two char slack as depends on OS, exact font, etc.
+        self.assertTrue(all(len(line) <= 22 for line in lines))
 
     def test_wrap_text_narrow_short(self):
         font = create_traitsfont("Courier")
@@ -99,8 +99,8 @@ class TestWrapText(unittest.TestCase):
 
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
-        # add one char slack as depends on OS, exact font, etc.
-        self.assertTrue(all(len(line) <= 21 for line in lines))
+        # add two char slack as depends on OS, exact font, etc.
+        self.assertTrue(all(len(line) <= 22 for line in lines))
         # different os elide the last line slightly differently,
         # just check end of last line shows elision.
         # In most systems elision is marked with ellipsis
