@@ -12,7 +12,7 @@ import textwrap
 import unittest
 
 from pyface.qt import is_pyqt, qt_api, QtCore, QtGui
-from traitsui.tests._tools import requires_toolkit, ToolkitName
+from traitsui.tests._tools import is_mac_os, requires_toolkit, ToolkitName
 from traitsui.qt4.helper import qobject_is_valid, wrap_text_with_elision
 from traitsui.qt4.font_trait import create_traitsfont
 
@@ -42,6 +42,7 @@ def get_expected_lines(text, width):
 
 @requires_toolkit([ToolkitName.qt])
 class TestWrapText(unittest.TestCase):
+
     def test_wrap_text_basic(self):
         font = create_traitsfont("Courier")
         font_metrics = QtGui.QFontMetrics(font)
@@ -125,6 +126,10 @@ class TestWrapText(unittest.TestCase):
         expected_lines = get_expected_lines(lorem_ipsum, 500)[:3]
         self.assertEqual(lines, expected_lines)
 
+    @unittest.skipIf(
+        is_mac_os and qt_api == "pyside6",
+        "causes next test to segfault on Mac OS/PySide6",
+    )
     def test_qobject_is_valid(self):
         qobject = QtCore.QObject()
 
