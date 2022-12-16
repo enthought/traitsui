@@ -11,9 +11,9 @@
 import textwrap
 import unittest
 
-from pyface.qt import QtGui
+from pyface.qt import is_pyqt, qt_api, QtCore, QtGui
 from traitsui.tests._tools import requires_toolkit, ToolkitName
-from traitsui.qt4.helper import wrap_text_with_elision
+from traitsui.qt4.helper import qobject_is_valid, wrap_text_with_elision
 from traitsui.qt4.font_trait import create_traitsfont
 
 
@@ -124,3 +124,26 @@ class TestWrapText(unittest.TestCase):
 
         expected_lines = get_expected_lines(lorem_ipsum, 500)[:3]
         self.assertEqual(lines, expected_lines)
+
+    def test_qobject_is_valid(self):
+        qobject = QtCore.QObject()
+
+        if is_pyqt:
+            from sip import delete
+        elif qt_api == "pyside2":
+            from shiboken2 import delete
+        elif qt_api == "pyside6":
+            from shiboken6 import delete
+        else:
+            with self.assertRaises(RuntimeError):
+                qobject_is_valid(qobject)
+            return
+
+        result = qobject_is_valid(qobject)
+
+        self.assertTrue(result)
+
+        delete(qobject)
+        result = qobject_is_valid(qobject)
+
+        self.assertFalse(result)
