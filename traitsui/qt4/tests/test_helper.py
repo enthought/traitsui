@@ -128,7 +128,7 @@ class TestWrapText(unittest.TestCase):
 
     @unittest.skipIf(
         is_mac_os and qt_api == "pyside6",
-        "causes next test to segfault on Mac OS/PySide6",
+        "causes next test to segfault on Mac OS/PySide6 (see #1974)",
     )
     def test_qobject_is_valid(self):
         qobject = QtCore.QObject()
