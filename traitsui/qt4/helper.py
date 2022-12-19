@@ -27,7 +27,7 @@
 import os.path
 
 from pyface.api import SystemMetrics
-from pyface.qt import QtCore, QtGui, is_qt5, is_pyqt
+from pyface.qt import QtCore, QtGui, is_qt5, is_pyqt, qt_api
 from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
@@ -259,3 +259,34 @@ def wrap_text_with_elision(text, font, width, height):
         )
 
     return lines
+
+
+# ------------------------------------------------------------------------
+# Object lifetime helpers
+# ------------------------------------------------------------------------
+
+def qobject_is_valid(qobject):
+    """Return whether the wrapped Qt object is still valid.
+
+    Parameters
+    ----------
+    qobject : QObject instance
+        The wrapped Qt QObject to inspect.
+
+    Returns
+    -------
+    valid : bool
+        Whether or not the underlying C++ object still exists.
+    """
+    if is_pyqt:
+        from sip import isdeleted
+        return not isdeleted(qobject)
+    elif qt_api == 'pyside2':
+        from shiboken2 import isValid
+        return isValid(qobject)
+    elif qt_api == 'pyside6':
+        from shiboken6 import isValid
+        return isValid(qobject)
+    else:
+        # unknown wrapper
+        raise RuntimeError("Unknown Qt API {qt_api}")
