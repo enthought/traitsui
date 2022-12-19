@@ -56,7 +56,7 @@ from traitsui.undo import ListUndoItem
 
 from .clipboard import clipboard, PyMimeData
 from .editor import Editor
-from .helper import pixmap_cache
+from .helper import pixmap_cache, qobject_is_valid
 from .tree_node_renderers import WordWrapRenderer
 
 
@@ -256,7 +256,11 @@ class SimpleEditor(Editor):
     def expand_levels(self, nid, levels, expand=True):
         """Expands from the specified node the specified number of sub-levels."""
         if levels > 0:
-            expanded, node, object = self._get_node_data(nid)
+            try:
+                expanded, node, object = self._get_node_data(nid)
+            except Exception:
+                # node is either not ready or has been deleted
+                return
             if self._has_children(node, object):
                 self._expand_node(nid)
                 if expand:
@@ -275,7 +279,11 @@ class SimpleEditor(Editor):
         iterator = QtGui.QTreeWidgetItemIterator(self._tree)
         while iterator.value():
             item = iterator.value()
-            expanded, node, object = self._get_node_data(item)
+            try:
+                expanded, node, object = self._get_node_data(item)
+            except Exception:
+                # node is either not ready or has been deleted
+                continue
             if self._has_children(node, object):
                 self._expand_node(item)
                 item.setExpanded(True)
@@ -387,7 +395,11 @@ class SimpleEditor(Editor):
         if col != 0:
             # these are handled by _set_column_labels
             return
-        expanded, node, object = self._get_node_data(nid)
+        try:
+            expanded, node, object = self._get_node_data(nid)
+        except Exception:
+            # node is either not ready or has been deleted
+            return
         renderer = node.get_renderer(object)
         handles_text = getattr(renderer, "handles_text", False)
         if self.factory.word_wrap or handles_text:
@@ -442,7 +454,7 @@ class SimpleEditor(Editor):
 
         try:
             expanded, node, object = self._get_node_data(nid)
-        except AttributeError:
+        except Exception:
             # The node has already been deleted.
             pass
         else:
@@ -472,7 +484,11 @@ class SimpleEditor(Editor):
 
     def _expand_node(self, nid):
         """Expands the contents of a specified node (if required)."""
-        expanded, node, object = self._get_node_data(nid)
+        try:
+            expanded, node, object = self._get_node_data(nid)
+        except Exception:
+            # The node has already been deleted.
+            return
 
         # Lazily populate the item's children:
         if not expanded:
@@ -504,7 +520,10 @@ class SimpleEditor(Editor):
 
         for i in range(pnid.childCount()):
             if pnid.child(i) is nid:
-                _, pnode, pobject = self._get_node_data(pnid)
+                try:
+                    _, pnode, pobject = self._get_node_data(pnid)
+                except Exception:
+                    continue
                 return (pnode, pobject, i)
         else:
             # doesn't match any node, so return None
@@ -623,7 +642,11 @@ class SimpleEditor(Editor):
         result = []
         for name2, nid in self._map[id(object)]:
             if name == name2:
-                expanded, node, ignore = self._get_node_data(nid)
+                try:
+                    expanded, node, object = self._get_node_data(nid)
+                except Exception:
+                    # The node has already been deleted.
+                    continue
                 result.append((expanded, node, nid))
 
         return result
@@ -692,7 +715,11 @@ class SimpleEditor(Editor):
 
     def _update_icon(self, nid):
         """Updates the icon for a specified node."""
-        expanded, node, object = self._get_node_data(nid)
+        try:
+            expanded, node, object = self._get_node_data(nid)
+        except Exception:
+            # The node has already been deleted.
+            return
         renderer = node.get_renderer(object)
         if renderer is None or not renderer.handles_icon:
             nid.setIcon(0, self._get_icon(node, object, expanded))
@@ -773,6 +800,8 @@ class SimpleEditor(Editor):
     @staticmethod
     def _get_node_data(nid):
         """Gets the node specific data."""
+        if not qobject_is_valid(nid):
+            raise RuntimeError(f"Qt object {nid} for node nolonger exists.")
         return nid._py_data
 
     @staticmethod
@@ -808,7 +837,11 @@ class SimpleEditor(Editor):
 
     def _on_item_expanded(self, nid):
         """Handles a tree node being expanded."""
-        expanded, node, object = self._get_node_data(nid)
+        try:
+            _, node, object = self._get_node_data(nid)
+        except Exception:
+            # The node has already been deleted.
+            return
 
         # If 'auto_close' requested for this node type, close all of the node's
         # siblings:
@@ -832,7 +865,11 @@ class SimpleEditor(Editor):
 
     def _on_item_clicked(self, nid, col):
         """Handles a tree item being clicked."""
-        _, node, object = self._get_node_data(nid)
+        try:
+            _, node, object = self._get_node_data(nid)
+        except Exception:
+            # The node has already been deleted.
+            return
 
         if node.click(object) is True and self.factory.on_click is not None:
             self.ui.evaluate(self.factory.on_click, object)
@@ -842,7 +879,11 @@ class SimpleEditor(Editor):
 
     def _on_item_dclicked(self, nid, col):
         """Handles a tree item being double-clicked."""
-        _, node, object = self._get_node_data(nid)
+        try:
+            _, node, object = self._get_node_data(nid)
+        except Exception:
+            # The node has already been deleted.
+            return
 
         if node.dclick(object) is True:
             if self.factory.on_dclick is not None:
@@ -856,7 +897,11 @@ class SimpleEditor(Editor):
 
     def _on_item_activated(self, nid, col):
         """Handles a tree item being activated."""
-        _, node, object = self._get_node_data(nid)
+        try:
+            _, node, object = self._get_node_data(nid)
+        except Exception:
+            # The node has already been deleted.
+            return
 
         if node.activated(object) is True:
             if self.factory.on_activated is not None:
@@ -875,20 +920,28 @@ class SimpleEditor(Editor):
 
         selected = []
         first = True
-        if len(nids) > 0:
-            selected = [self._get_node_data(nid)[2] for nid in nids]
-            for nid in nids:
-                # If there is a real selection, get the associated object:
+        for nid in nids:
+            try:
+                node = self._get_node_data(nid)[2]
+            except Exception:
+                continue
+            selected.append(node)
+        for nid in nids:
+            # If there is a real selection, get the associated object:
+            try:
                 expanded, sel_node, sel_object = self._get_node_data(nid)
+            except Exception:
+                continue
 
-                # Try to inform the node specific handler of the selection, if
-                # there are multiple selections, we only care about the first
-                if first:
-                    node = sel_node
-                    object = sel_object
-                    not_handled = node.select(sel_object)
-                    first = False
-        else:
+            # Try to inform the node specific handler of the selection, if
+            # there are multiple selections, we only care about the first
+            if first:
+                node = sel_node
+                object = sel_object
+                not_handled = node.select(sel_object)
+                first = False
+
+        if len(selected) == 0:
             nid = None
             object = None
             not_handled = True
@@ -954,7 +1007,10 @@ class SimpleEditor(Editor):
         if nid is None:
             return
 
-        _, node, object = self._get_node_data(nid)
+        try:
+            _, node, object = self._get_node_data(nid)
+        except Exception:
+            return
 
         self._data = (node, object, nid)
         self._context = {
@@ -1189,7 +1245,7 @@ class SimpleEditor(Editor):
                         "handler": handler,
                     },
                 )
-            except:
+            except Exception:
                 from traitsui.api import raise_to_debug
 
                 raise_to_debug()
@@ -1277,7 +1333,7 @@ class SimpleEditor(Editor):
         # it hasn't.
         try:
             _, node, object = self._get_node_data(nid)
-        except:
+        except Exception:
             return
 
         new_label = str(nid.text(col))
@@ -1407,8 +1463,12 @@ class SimpleEditor(Editor):
             nids = []
             for name2, nid in self._map[id(object)]:
                 if nid not in nids:
+                    try:
+                        node = self._get_node_data(nid)[1]
+                    except Exception:
+                        # node is either not ready or has been deleted
+                        continue
                     nids.append(nid)
-                    node = self._get_node_data(nid)[1]
                     self._set_label(nid, 0)
                     self._update_icon(nid)
         finally:
@@ -1422,8 +1482,12 @@ class SimpleEditor(Editor):
             nids = []
             for name2, nid in self._map[id(object)]:
                 if nid not in nids:
+                    try:
+                        node = self._get_node_data(nid)[1]
+                    except Exception:
+                        # node is either not ready or has been deleted
+                        continue
                     nids.append(nid)
-                    node = self._get_node_data(nid)[1]
                     self._set_column_labels(nid, node, object)
         finally:
             self._tree.blockSignals(blk)
