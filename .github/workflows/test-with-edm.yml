@@ -43,6 +43,8 @@ jobs:
       # 'pip install' raises an error while trying to compute
       # relative path between the site-packages and the source directory.
       EDM_ROOT_DIRECTORY: ${{ github.workspace }}/.edm
+      # set the font config path for linux
+      FONTCONFIG_PATH: /etc/fonts
     steps:
       - uses: actions/checkout@v2
       - name: Install Qt dependencies for Linux
