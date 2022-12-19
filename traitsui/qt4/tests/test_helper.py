@@ -101,12 +101,8 @@ class TestWrapText(unittest.TestCase):
 
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
-        if sys.platform == 'linux' and qt_api == "pyside6":
-            # handle issue with font selection on EDM builds (#1975)
-            self.assertTrue(all(len(line) <= 30 for line in lines))
-        else:
-            # add one char slack as depends on OS, exact font, etc.
-            self.assertTrue(all(len(line) <= 21 for line in lines))
+        # add one char slack as depends on OS, exact font, etc.
+        self.assertTrue(all(len(line) <= 21 for line in lines))
         # different os elide the last line slightly differently,
         # just check end of last line shows elision.
         # In most systems elision is marked with ellipsis
