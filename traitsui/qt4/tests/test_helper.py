@@ -8,6 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
+import sys
 import textwrap
 import unittest
 
@@ -85,9 +86,12 @@ class TestWrapText(unittest.TestCase):
 
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
-        # add two char slack as depends on OS, exact font, etc.
-        print([len(line) for line in lines])
-        self.assertTrue(all(len(line) <= 22 for line in lines))
+        if sys.platform == 'linux' and qt_api == "pyside6":
+            # handle issue with font selection on EDM builds (#1975)
+            self.assertTrue(all(len(line) <= 30 for line in lines))
+        else:
+            # add one char slack as depends on OS, exact font, etc.
+            self.assertTrue(all(len(line) <= 21 for line in lines))
 
     def test_wrap_text_narrow_short(self):
         font = create_traitsfont("Courier")
@@ -101,9 +105,12 @@ class TestWrapText(unittest.TestCase):
 
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
-        # add two char slack as depends on OS, exact font, etc.
-        print([len(line) for line in lines])
-        self.assertTrue(all(len(line) <= 22 for line in lines))
+        if sys.platform == 'linux' and qt_api == "pyside6":
+            # handle issue with font selection on EDM builds (#1975)
+            self.assertTrue(all(len(line) <= 30 for line in lines))
+        else:
+            # add one char slack as depends on OS, exact font, etc.
+            self.assertTrue(all(len(line) <= 21 for line in lines))
         # different os elide the last line slightly differently,
         # just check end of last line shows elision.
         # In most systems elision is marked with ellipsis
