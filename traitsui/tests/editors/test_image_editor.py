@@ -22,6 +22,7 @@ from traitsui.tests._tools import (
     BaseTestMixin,
     create_ui,
     is_qt,
+    is_mac_os,
     requires_toolkit,
     ToolkitName,
 )
@@ -104,6 +105,7 @@ class TestImageEditor(BaseTestMixin, unittest.TestCase):
         with create_ui(obj1, dict(view=view)) as ui:
             obj1.image = ArrayImage(data=gradient2)
 
+    @unittest.skipIf(is_mac_os, "Segfault on MacOS")
     def test_image_editor_pillow(self):
         try:
             import PIL.Image
