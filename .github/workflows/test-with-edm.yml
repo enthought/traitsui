@@ -22,6 +22,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         toolkit: ['pyqt5', 'pyside2', 'pyside6']
+        python-version: ['3.6', '3.8']
         include:
           - os: ubuntu-latest
             toolkit: 'null'
@@ -29,19 +30,15 @@ jobs:
           - os: ubuntu-latest
             toolkit: 'null'
             python-version: '3.8'
-          - os: ubuntu-latest
-            toolkit: 'pyqt5'
-            python-version: '3.6'
-          - os: ubuntu-latest
-            toolkit: 'pyside2'
-            python-version: '3.6'
-          - os: ubuntu-latest
-            toolkit: 'pyside6'
-            python-version: '3.8'
         exclude:
           - os: windows-latest
             toolkit: pyside6
+          - toolkit: 'pyqt5'
             python-version: '3.8'
+          - toolkit: 'pyside2'
+            python-version: '3.8'
+          - toolkit: 'pyside6'
+            python-version: '3.6'
     runs-on: ${{ matrix.os }}
     env:
       # Set root directory, mainly for Windows, so that the EDM Python
