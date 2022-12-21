@@ -8,6 +8,8 @@
 #
 # Thanks for using Enthought open source!
 
+from ast import literal_eval
+
 import wx
 
 from traits.api import Float, Any, Str, Union
@@ -131,7 +133,7 @@ class _BoundsEditor(Editor):
             event.Skip()
         try:
             try:
-                low = eval(str(self._label_lo.GetValue()).strip())
+                low = literal_eval(str(self._label_lo.GetValue()).strip())
                 if self.evaluate is not None:
                     low = self.evaluate(low)
             except Exception as ex:
@@ -155,7 +157,7 @@ class _BoundsEditor(Editor):
             event.Skip()
         try:
             try:
-                high = eval(str(self._label_hi.GetValue()).strip())
+                high = literal_eval(str(self._label_hi.GetValue()).strip())
                 if self.evaluate is not None:
                     high = self.evaluate(high)
             except:

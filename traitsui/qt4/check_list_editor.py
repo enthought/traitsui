@@ -26,6 +26,7 @@ user interface toolkit.
 
 
 import logging
+from ast import literal_eval
 
 from pyface.qt import QtCore, QtGui, is_pyside
 
@@ -266,7 +267,7 @@ class TextEditor(BaseTextEditor):
         """Handles the user changing the contents of the edit control."""
         try:
             value = str(self.control.text())
-            value = eval(value)
+            value = literal_eval(value)
         except:
             pass
         try:

@@ -14,6 +14,7 @@ wxPython user interface toolkit.
 
 
 import logging
+from ast import literal_eval
 
 import wx
 
@@ -240,7 +241,7 @@ class TextEditor(BaseTextEditor):
         """Handles the user changing the contents of the edit control."""
         try:
             value = self.control.GetValue()
-            value = eval(value)
+            value = literal_eval(value)
         except:
             pass
         try:

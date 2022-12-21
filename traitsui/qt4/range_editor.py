@@ -25,6 +25,7 @@ PyQt user interface toolkit.
 """
 
 
+from ast import literal_eval
 from math import log10
 
 from pyface.qt import QtCore, QtGui
@@ -187,7 +188,7 @@ class SimpleSliderEditor(BaseRangeEditor):
             return
 
         try:
-            value = eval(str(self.control.text.text()).strip())
+            value = literal_eval(str(self.control.text.text()).strip())
         except Exception as ex:
             # They entered something that didn't eval as a number, (e.g.,
             # 'foo') pretend it didn't happen
@@ -460,7 +461,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         if self.control is None:
             return
         try:
-            self.value = eval(str(self.control.text.text()).strip())
+            self.value = literal_eval(str(self.control.text.text()).strip())
         except TraitError as excp:
             pass
 
@@ -727,7 +728,7 @@ class RangeTextEditor(TextEditor):
     def update_object(self):
         """Handles the user entering input data in the edit control."""
         try:
-            value = eval(str(self.control.text()))
+            value = literal_eval(str(self.control.text()))
             if self.evaluate is not None:
                 value = self.evaluate(value)
 
