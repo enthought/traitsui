@@ -105,7 +105,7 @@ class TestImageEditor(BaseTestMixin, unittest.TestCase):
         with create_ui(obj1, dict(view=view)) as ui:
             obj1.image = ArrayImage(data=gradient2)
 
-    @unittest.skipIf(is_mac_os, "Segfault on MacOS")
+    @unittest.skipIf(is_mac_os, "Segfault on MacOS, see issue #1979")
     def test_image_editor_pillow(self):
         try:
             import PIL.Image
