@@ -16,7 +16,7 @@ jobs:
   test-etsdemo:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-20.04]
         toolkit: ['pyqt5', 'pyside2']
     runs-on: ${{ matrix.os }}
     steps:
