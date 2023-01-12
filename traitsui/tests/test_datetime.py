@@ -37,7 +37,7 @@ DATE = MAX_DATE - timedelta(days=5)
 
 class DatetimeInitDailog(HasTraits):
 
-    date = Datetime()
+    date = Datetime(allow_none=True)
 
     def _date_default(self):
         return DATE

@@ -34,7 +34,7 @@ from traitsui.api import View, Item, Group
 class DateEditorDemo(HasTraits):
     """Demo class to show Datetime editors."""
 
-    datetime = Datetime()
+    datetime = Datetime(allow_none=True)
     info_string = Str('The editors for Traits Datetime objects.')
 
     traits_view = View(
