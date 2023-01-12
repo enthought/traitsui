@@ -29,7 +29,7 @@ from traitsui.tests._tools import (
 class InstanceWithDatetime(HasTraits):
     """Demo class to show Datetime editors."""
 
-    date_time = Datetime()
+    date_time = Datetime(allow_none=True)
 
 
 def to_datetime(q_datetime):

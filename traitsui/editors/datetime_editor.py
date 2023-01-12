@@ -26,10 +26,10 @@ class DatetimeEditor(EditorFactory):
     # -------------------------------------------------------------------------
 
     #: The earliest datetime allowed by the editor
-    minimum_datetime = Datetime(datetime.datetime(100, 1, 1))
+    minimum_datetime = Datetime(datetime.datetime(100, 1, 1), allow_none=True)
 
     #: The latest datetime allowed by the editor
-    maximum_datetime = Datetime(datetime.datetime.max)
+    maximum_datetime = Datetime(datetime.datetime.max, allow_none=True)
 
     # -- ReadonlyEditor traits ------------------------------------------------
 
