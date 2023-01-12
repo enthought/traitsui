@@ -578,18 +578,14 @@ class TableEditor(Editor, BaseTableEditor):
         Returns a QMenu or None if no menu to display.
         """
         header_menu = QtGui.QMenu(self.table_view)
-        insertable = self.factory.row_factory is not None
-        editable = self.factory.editable
-        deletable = self.factory.deletable
-        reorderable = self.factory.reorderable
-        if editable:
-            if insertable:
+        if self.factory.editable:
+            if self.factory.row_factory is not None:
                 action = header_menu.addAction("Insert new item")
                 action.triggered.connect(self._on_context_insert)
-            if deletable:
+            if self.factory.deletable:
                 action = header_menu.addAction("Delete item")
                 action.triggered.connect(self._on_context_remove)
-        if reorderable:
+        if self.factory.reorderable:
             show_up = (self.header_row > 0)
             show_down = (self.header_row < self.model.rowCount() - 1)
             if not header_menu.isEmpty() and (show_up or show_down):
