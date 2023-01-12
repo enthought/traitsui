@@ -8,7 +8,7 @@ TraitsUI |version| User Manual
 
 :Authors: Lyn Pierce, Janet Swisher, and Enthought Developers
 :Version: Document Version 4
-:Copyright: 2005-2022 Enthought, Inc. All Rights Reserved.
+:Copyright: 2005-2023 Enthought, Inc. All Rights Reserved.
 
 Contents
 ========
