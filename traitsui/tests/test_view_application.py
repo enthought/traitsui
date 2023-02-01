@@ -14,7 +14,7 @@ from pyface.timer.api import CallbackTimer
 from traits.api import HasTraits, Instance, Int
 from traitsui.api import Handler, Item, UIInfo, View, toolkit
 
-from ._tools import (
+from traitsui.tests._tools import (
     BaseTestMixin,
     GuiTestAssistant,
     is_qt,
