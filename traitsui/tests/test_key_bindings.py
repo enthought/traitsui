@@ -14,7 +14,7 @@ from unittest.mock import Mock
 from traits.testing.api import UnittestTools
 
 
-from ..key_bindings import KeyBinding, KeyBindings, KeyBindingsHandler
+from traitsui.key_bindings import KeyBinding, KeyBindings, KeyBindingsHandler
 
 
 class Controller1:
