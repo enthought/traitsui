@@ -28,7 +28,7 @@ import re
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api import Any, HasPrivateTraits, Instance, Undefined
+from traits.api import Any, HasPrivateTraits, Instance, List, Undefined
 from traits.observation.api import match
 
 from traitsui.api import Group
@@ -289,8 +289,16 @@ def panel(ui):
     return panel
 
 
-def _fill_panel(panel, content, ui, item_handler=None):
-    """Fill a page based container panel with content."""
+def _fill_panel(
+    panel,
+    content,
+    ui,
+    item_handler=None,
+    _visible_when_groups=None,
+    _enabled_when_groups=None
+):
+    """Fill a page based container panel with content.
+    """
     active = 0
 
     for index, item in enumerate(content):
@@ -333,9 +341,14 @@ def _fill_panel(panel, content, ui, item_handler=None):
 
         # Add the content.
         if isinstance(panel, QtGui.QTabWidget):
-            panel.addTab(new, page_name)
+            idx = panel.addTab(new, page_name)
         else:
-            panel.addItem(new, page_name)
+            idx = panel.addItem(new, page_name)
+
+        if item.visible_when and (_visible_when_groups is not None):
+            _visible_when_groups.append((item.visible_when, idx, new, page_name))
+        if item.enabled_when and (_enabled_when_groups is not None):
+            _enabled_when_groups.append((item.enabled_when, idx, new, page_name))
 
     panel.setCurrentIndex(active)
 
@@ -571,8 +584,16 @@ class _GroupPanel(object):
             policy.setHorizontalStretch(50)
             policy.setVerticalStretch(50)
             sub.setSizePolicy(policy)
-
-            _fill_panel(sub, content, self.ui, self._add_page_item)
+            _visible_when_groups = []
+            _enabled_when_groups = []
+            _fill_panel(
+                sub,
+                content,
+                self.ui,
+                self._add_page_item,
+                _visible_when_groups,
+                _enabled_when_groups
+            )
 
             if outer is None:
                 outer = sub
@@ -580,7 +601,13 @@ class _GroupPanel(object):
                 inner.addWidget(sub)
 
             # Create an editor.
-            editor = TabbedFoldGroupEditor(container=sub, control=outer, ui=ui)
+            editor = TabbedFoldGroupEditor(
+                container=sub,
+                control=outer,
+                ui=ui,
+                _visible_when_groups=_visible_when_groups,
+                _enabled_when_groups=_enabled_when_groups
+            )
             self._setup_editor(group, editor)
 
         else:
@@ -1287,6 +1314,101 @@ class TabbedFoldGroupEditor(GroupEditor):
 
     #: The QTabWidget or QToolBox for the group
     container = Any()
+
+    _visible_when_groups = List()
+    _enabled_when_groups = List()
+
+    def __init__(self, **traits):
+        """ Initialise the object.
+        """
+        super().__init__(**traits)
+        num_enabled_or_visible_whens = (
+            len(self._visible_when_groups) + len(self._enabled_when_groups)
+        )
+        if num_enabled_or_visible_whens > 0:
+            for object in self.ui.context.values():
+                object.on_trait_change(
+                    lambda: self._when(), dispatch="ui"
+                )
+            self._when()
+
+    def _when(self):
+        """Set all tabs in the editor to be enabled/visible as
+        controlled by a 'visible_when' or 'enabled_when' expression.
+        """
+        self._evaluate_enabled_condition(self._enabled_when_groups)
+        self._evaluate_visible_condition(self._visible_when_groups)
+
+    def _evaluate_enabled_condition(self, conditions):
+        """Evaluates a list of (eval, widget) pairs and calls the
+        appropriate method on the widget to toggle whether it is
+        enabled as needed.
+        """
+        context = self.ui._get_context(self.ui.context)
+
+        if isinstance(self.container, QtGui.QTabWidget):
+            method_to_call_name = "setTabEnabled"
+        elif isinstance(self.container, QtGui.QToolBox):
+            method_to_call_name = "setItemEnabled"
+        else:
+            raise TypeError(
+                "container of a TabbedFoldGroupEditor must be either a "
+                "QTabWidget or a QToolBox"
+            )
+
+        for when, idx, widget, label in conditions:
+            method_to_call = getattr(self.container, method_to_call_name)
+            try:
+                cond_value = eval(when, globals(), context)
+                method_to_call(idx, cond_value)
+            except Exception:
+                # catch errors in the validate_when expression
+                from traitsui.api import raise_to_debug
+
+                raise_to_debug()
+
+    def _evaluate_visible_condition(self, conditions):
+        """Evaluates a list of (eval, widget) pairs and calls the
+        appropriate method on the tab widget to toggle whether it is
+        visible as needed.
+        """
+        context = self.ui._get_context(self.ui.context)
+
+        if isinstance(self.container, QtGui.QTabWidget):
+            tab_or_item = "Tab"
+        elif isinstance(self.container, QtGui.QToolBox):
+            tab_or_item = "Item"
+        else:
+            raise TypeError(
+                "container of a TabbedFoldGroupEditor must be either a "
+                "QTabWidget or a QToolBox"
+            )
+
+        for when, idx, widget, label in conditions:
+
+            try:
+                cond_value = eval(when, globals(), context)
+                if cond_value:
+                    method_to_call_name = "insert" + tab_or_item
+                    method_to_call = getattr(
+                        self.container, method_to_call_name
+                    )
+                    # check that the tab for this widget is not already showing
+                    if self.container.indexOf(widget) == -1:
+                        method_to_call(idx, widget, label)
+                else:
+                    method_to_call_name = "remove" + tab_or_item
+                    method_to_call = getattr(
+                        self.container, method_to_call_name
+                    )
+                    # check that the tab for this widget is already showing
+                    if self.container.indexOf(widget) != -1:
+                        method_to_call(idx)
+            except Exception:
+                # catch errors in the validate_when expression
+                from traitsui.api import raise_to_debug
+
+                raise_to_debug()
 
     # -- UI preference save/restore interface ---------------------------------
 
