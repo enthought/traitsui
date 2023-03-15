@@ -37,7 +37,7 @@ class SimpleEditor(SimpleFileEditor):
         """Creates the correct type of file dialog."""
         dlg = DirectoryDialog(
             parent=self.get_control_widget(),
-            default_path=self._file_name.text(),
+            default_path=self._file_name.GetValue(),
         )
         return dlg
 
