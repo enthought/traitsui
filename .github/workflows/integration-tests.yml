@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Qt dependencies for Linux
-        uses: ./.github/actions/apt-get-qt-deps
+        uses: ./.github/actions/install-qt-support
         if: startsWith(matrix.os, 'ubuntu')
       - name: Install Swig
         run: sudo apt-get install swig

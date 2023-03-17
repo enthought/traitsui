@@ -51,7 +51,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install Qt dependencies for Linux
-        uses: ./.github/actions/apt-get-qt-deps
+        uses: ./.github/actions/install-qt-support
         if: startsWith(matrix.os, 'ubuntu') && matrix.toolkit != 'wx' && matrix.toolkit != 'null'
       - name: Cache EDM packages
         uses: actions/cache@v2
