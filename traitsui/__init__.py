@@ -10,7 +10,9 @@
 
 __version__ = "8.0.0.dev0"
 
+
 # ============================= Test Loader ==================================
+
 def load_tests(loader, standard_tests, pattern):
     """Custom test loading function that enables test filtering using regex
     exclusion pattern.
