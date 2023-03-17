@@ -1,4 +1,4 @@
-# Install Qt dependencies on Ubuntu
+# Install Qt dependencies
 
 This action calls `apt-get` to install packages required for running Qt on Ubuntu.
 
@@ -19,11 +19,9 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        toolkit: ['pyqt5']
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Install Qt dependencies for Linux
-        uses: ./.github/actions/apt-get-qt-deps
-        if: startsWith(matrix.os, 'ubuntu')
+      - uses: actions/checkout@v3
+      - name: Install Qt dependencies
+        uses: ./.github/actions/install-qt-support
 ```

@@ -151,7 +151,7 @@ class TestDateEditorCustomQt(BaseTestMixin, unittest.TestCase):
             )
             self.assertEqual(
                 textformat.background().style(),
-                0,  # Qt.BrushStyle.NoBrush,
+                QtCore.Qt.BrushStyle.NoBrush,
                 "Expected brush to have been reset.",
             )
             self.check_date_bgcolor(editor, date, (0, 0, 0))
