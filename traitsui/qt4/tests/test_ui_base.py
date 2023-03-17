@@ -38,5 +38,5 @@ class TestStickyDialog(unittest.TestCase):
 
                 self.assertFalse(
                     ui2.control.windowState()
-                    & QtCore.Qt.WindowStates.WindowMaximized
+                    & QtCore.Qt.WindowState.WindowMaximized
                 )
