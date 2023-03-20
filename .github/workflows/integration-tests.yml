@@ -38,9 +38,7 @@ jobs:
           python -m pip install .[${{ matrix.toolkit }},test,editors]
           python -m pip install .[examples]
       - name: Run integration tests
-        run: xvfb-run -a python -X faulthandler -m unittest discover -v ${{ github.workspace }}/integrationtests
-        with:
-          working-directory: ${{ runner.temp }}
+        run: cd testdir &&  xvfb-run -a python -X faulthandler -m unittest discover -v ${{ github.workspace }}/integrationtests
 
   notify-on-failure:
     needs: test
