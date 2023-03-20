@@ -61,5 +61,9 @@ jobs:
         run: edm install -y wheel click coverage
       - name: Install test environment
         run: edm run -- python etstool.py install --toolkit=${{ matrix.toolkit }} --runtime=${{ matrix.python-version }}
-      - name: Run tests
+      - name: Run the test suite (Linux)
         run: xvfb-run -a edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }} --runtime=${{ matrix.python-version }}
+        if: matrix.os == 'ubuntu-latest'
+      - name: Run the test suite (Windows/macOS)
+        run: edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }} --runtime=${{ matrix.python-version }}
+        if: matrix.os != 'ubuntu-latest'
