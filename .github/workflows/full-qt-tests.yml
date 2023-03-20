@@ -1,5 +1,6 @@
 name: Run test suite for Qt across all supported versions and OS weekly
 
+on:
   schedule:
     - cron:  '0 3 * * 4'
   # Make it possible to manually trigger the workflow
