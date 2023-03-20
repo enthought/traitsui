@@ -16,10 +16,6 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ['3.11']
         qt-api: ['pyside6']
-        exclude:
-          - python-version: '3.8'
-            qt-api: 'pyside6'
-            os: macos-latest
       fail-fast: false
 
     env:

@@ -7,7 +7,10 @@
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 # Thanks for using Enthought open source!
+
+import os
 import unittest
+import sys
 
 try:
     import numpy as np  # noqa: F401
@@ -39,6 +42,10 @@ class MovieTheater(HasTraits):
 
 
 @unittest.skipIf(not is_qt5() and not is_qt6(), 'Requires Qt5 or 6')
+@unittest.skipIf(
+    sys.platform == 'darwin' and is_qt6 and os.environ.get('GITHUB_ACTIONS'),
+    "Mac Qt6 video editor requires Metal APIs, GitHub runners don't have them"
+)
 class TestVideoEditor(BaseTestMixin, unittest.TestCase):
     def setUp(self):
         BaseTestMixin.setUp(self)
