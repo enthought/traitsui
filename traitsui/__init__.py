@@ -8,7 +8,22 @@
 #
 # Thanks for using Enthought open source!
 
-__version__ = "8.0.0.dev0"
+def __getattr__(name):
+    """Handle deprecated attributes."""
+    if name == "__version__":
+        try:
+            from importlib.metadata import version
+        except ImportError:
+            from importlib_metadata import version
+        from warnings import warn
+
+        warn(
+            f"traitsui.{name} is deprecated, "
+            f"use impportlib.metadata.version('traitsui') ",
+            DeprecationWarning,
+        )
+        return version('traitsui')
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 # ============================= Test Loader ==================================

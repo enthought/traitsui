@@ -108,7 +108,6 @@ EDM_CONFIG_LOCATION = os.path.abspath(os.path.join(
 ))
 
 supported_combinations = {
-    '3.6': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
     '3.8': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
 }
 
@@ -123,6 +122,7 @@ dependencies = {
     # temporarily get pyface from pip until EDM release
     # "pyface>=7.4.1",
     "traits",
+    "setuptools",
 }
 
 # Dependencies we install from source for cron tests
@@ -174,7 +174,6 @@ extra_dependencies = {
 
 # Extra runtime dependencies
 runtime_dependencies = {
-    "3.6": {"pillow", "pytables"},
     "3.8": {"pillow_simd", "tables"},
 }
 
@@ -209,8 +208,6 @@ environment_vars = {
 
 # toolkit versions in EDM
 edm_versions = {
-    ('3.6', 'pyside2'),
-    ('3.6', 'pyqt5'),
     ('3.8', 'pyside6'),
     ('3.8', 'pyqt6'),
 }
@@ -284,16 +281,7 @@ def install(runtime, toolkit, environment, editable, source):
                 "edm -c {config} run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04/ wxPython"
             )
     elif toolkit == 'pyside6':
-        # On Linux and macOS, some versions of PySide6 between 6.2.2 and 6.3.0
-        # are unimportable on Python 3.6 and Python 3.7. See
-        # https://bugreports.qt.io/browse/PYSIDE-1797. It may be possible to
-        # remove this workaround once PySide6 6.3.1 or later is released.
-        # Also there are currently issues with PySide 6.4
-        if sys.platform in {'darwin', 'linux'}:
-            commands.append(
-                "edm -c {config} run -e {environment} -- pip install pyside6<6.2.2")
-        else:
-            commands.append('edm run -e {environment} -- pip install "pyside6<6.4.0"')
+        commands.append('edm run -e {environment} -- pip install "pyside6"')
     elif toolkit != "null":
         commands.append("edm -c {config} run -e {environment} -- pip install {toolkit}")
 

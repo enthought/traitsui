@@ -15,9 +15,10 @@ classifiers = [
 dependencies = [
     'traits>=6.2',
     'pyface>=7.4.1',
+    'importlib_metadata ; python < "3.8"',
 ]
 license = {file = "LICENSE.txt"}
-dynamic = ["version"]
+version = 8.0.0.dev0
 
 [project.entry-points.'traitsui.toolkits']
 qt = 'traitsui.qt4:toolkit'
@@ -61,9 +62,6 @@ order_by_type = false
 
 [tool.setuptools]
 packages = ['traitsui']
-
-[tool.setuptools.dynamic]
-version = {attr = "traitsui.__version__"}
 
 [tool.setuptools.package-data]
 traitsui = [

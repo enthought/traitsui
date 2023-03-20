@@ -16,21 +16,21 @@ jobs:
   test-etsdemo:
     strategy:
       matrix:
-        os: [ubuntu-20.04]
-        toolkit: ['pyqt5', 'pyside2']
+        os: [ubuntu-latest]
+        toolkit: ['pyside6']
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Qt dependencies for Linux
         uses: ./.github/actions/install-qt-support
         if: startsWith(matrix.os, 'ubuntu')
       - name: Cache EDM packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache
           key: ${{ runner.os }}-${{ matrix.toolkit }}-${{ hashFiles('ets-demo/etstool.py') }}
       - name: Setup EDM
-        uses: enthought/setup-edm-action@v1
+        uses: enthought/setup-edm-action@v2
         with:
           edm-version: ${{ env.INSTALL_EDM_VERSION }}
       - name: Install click to the default EDM environment
@@ -39,7 +39,5 @@ jobs:
         run: edm run -- python etstool.py install --toolkit=${{ matrix.toolkit }}
         working-directory: ets-demo
       - name: Run tests
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }}
-          working-directory: ets-demo
+        run: xvfb-run -a edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }}
+        working-directory: ets-demo

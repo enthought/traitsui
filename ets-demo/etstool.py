@@ -91,10 +91,11 @@ import click
 
 supported_combinations = {
     '3.6': {'pyside2', 'pyqt5', 'wx', 'null'},
+    '3.8': {'pyside6', 'pyqt6', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
-DEFAULT_RUNTIME = '3.6'
+DEFAULT_RUNTIME = '3.8'
 
 # Default toolkit to use if none specified.
 DEFAULT_TOOLKIT = 'null'
@@ -121,6 +122,10 @@ extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': {
         "pygments",
+    },
+    'pyside6': {
+        'pyside6',
+        'pygments',
     },
     'pyqt5': {
         'pyqt5',
@@ -157,6 +162,7 @@ BUNDLE_NAME = f"etsdemo-{APP_BUNDLE_VERSION}.bundle"
 
 environment_vars = {
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
+    'pyside6': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside6'},
     'pyqt5': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
@@ -204,14 +210,9 @@ def install(runtime, toolkit, environment, editable):
     install_here += "."
 
     # edm commands to setup the development environment
-    if sys.platform == 'linux':
-        commands = [
-            "edm environments create {environment} --platform=rh6-x86_64 --force --version={runtime}"
-        ]  # noqa: E501
-    else:
-        commands = [
-            "edm environments create {environment} --force --version={runtime}"
-        ]  # noqa: E501
+    commands = [
+        "edm environments create {environment} --force --version={runtime}"
+    ]  # noqa: E501
 
     commands.extend(
         [
@@ -245,7 +246,6 @@ def install(runtime, toolkit, environment, editable):
 def shell(runtime, toolkit, environment):
     """Create a shell into the EDM development environment
     (aka 'activate' it).
-
     """
     parameters = get_parameters(runtime, toolkit, environment)
     commands = [

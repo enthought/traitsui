@@ -10,11 +10,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ['3.8', '3.10', '3.11']
+        python-version: ['3.8', '3.11']
         qt-api: ['pyqt5', 'pyside2', 'pyside6']
         exclude:
           - python-version: '3.11'
             qt-api: 'pyside2'
+          - python-version: '3.8'
+            qt-api: 'pyside6'
+            os: macos-latest
       fail-fast: false
 
     env:
@@ -39,17 +42,19 @@ jobs:
       run: |
         mkdir testdir
     - name: Run the test suite (Linux)
-      run: cd testdir && xvfb-run -a python -X faulthandler -m unittest discover -v traitsui
+      run: xvfb-run -a python -X faulthandler -m unittest discover -v traitsui
+      working-directory: testdir
       if: matrix.os == 'ubuntu-latest'
     - name: Run the test suite (Windows/macOS)
-      run: cd testdir && python -X faulthandler -m unittest discover -v traitsui
+      run: python -X faulthandler -m unittest discover -v traitsui
+      working-directory: testdir
       if: matrix.os != 'ubuntu-latest'
 
   tests-wx:
     strategy:
       matrix:
         os: [windows-latest]
-        python-version: ['3.8', '3.10']
+        python-version: ['3.10']
       fail-fast: false
 
     env:
@@ -71,4 +76,5 @@ jobs:
       run: |
         mkdir testdir
     - name: Run the test suite (Windows/macOS)
-      run: cd testdir && python -X faulthandler -m unittest discover -v traitsui
+      run: python -X faulthandler -m unittest discover -v traitsui
+      working-directory: testdir
