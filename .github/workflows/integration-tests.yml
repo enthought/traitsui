@@ -37,6 +37,9 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install .[${{ matrix.toolkit }},test,editors]
           python -m pip install .[examples]
+      - name: Create clean test directory
+        run: |
+          mkdir testdir
       - name: Run integration tests
         run: cd testdir &&  xvfb-run -a python -X faulthandler -m unittest discover -v ${{ github.workspace }}/integrationtests
 

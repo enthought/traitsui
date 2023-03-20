@@ -27,7 +27,10 @@ interface toolkit, useful for tools such as debuggers.
 
 from pyface.qt import QtCore, QtGui
 
-from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
+try:
+    from pyface.ui.qt.code_editor.code_widget import AdvancedCodeWidget
+except ModuleNotFoundError:
+    from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
 from traits.api import (
     Str,
     List,
