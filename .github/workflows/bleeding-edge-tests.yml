@@ -1,10 +1,10 @@
 name: Run test suite for Qt on bleeding-edge dependencies weekly
 
 on:
-  schedule:
-    - cron:  '0 4 * * 4'
-  # Make it possible to manually trigger the workflow
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  schedule:
+    - cron:  '0 0 * * 4'
 
 env:
   PYTHONUNBUFFERED: 1
