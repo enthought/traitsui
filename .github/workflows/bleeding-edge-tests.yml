@@ -10,7 +10,7 @@ env:
   PYTHONUNBUFFERED: 1
 
 jobs:
-  weekly-qt:
+  test:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -59,7 +59,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
 
   notify-on-failure:
-    needs: weekly-qt
+    needs: test
     if: failure()
     runs-on: ubuntu-latest
     steps:
@@ -73,7 +73,7 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
 
   notify-on-success:
-    needs: weekly-qt
+    needs: test
     if: success()
     runs-on: ubuntu-latest
     steps:
