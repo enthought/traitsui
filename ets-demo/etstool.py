@@ -216,8 +216,11 @@ def install(runtime, toolkit, environment, editable):
 
     commands.extend(
         [
-            "edm install -y -e {environment} " + packages,
-            "edm run -e {environment} -- python setup.py clean --all",
+            (
+                "edm install -y -e {environment} "
+                "--add-repository enthought/lgpl --add-repository enthought/gpl "
+            )
+            + packages,
             install_here,
         ]
     )

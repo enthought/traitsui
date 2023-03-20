@@ -9,7 +9,7 @@ on:
 
 env:
   QT_MAC_WANTS_LAYER: 1
-  INSTALL_EDM_VERSION: 3.3.1
+  INSTALL_EDM_VERSION: 3.5.0
 
 jobs:
 
