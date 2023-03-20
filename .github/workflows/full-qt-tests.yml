@@ -50,11 +50,13 @@ jobs:
         mkdir testdir
     - name: Run the test suite (Linux)
       run: xvfb-run -a python -X faulthandler -m unittest discover -v traitsui
-      working-directory: testdir
+      with:
+          working-directory: testdir
       if: matrix.os == 'ubuntu-latest'
     - name: Run the test suite (Windows/macOS)
       run: python -X faulthandler -m unittest discover -v traitsui
-      working-directory: testdir
+      with:
+          working-directory: testdir
       if: matrix.os != 'ubuntu-latest'
 
   notify-on-failure:
