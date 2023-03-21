@@ -8,6 +8,8 @@
 #
 # Thanks for using Enthought open source!
 
+from ast import literal_eval
+
 from pyface.qt import QtGui, QtCore
 
 from traits.api import Float, Any, Str, Union
@@ -90,7 +92,7 @@ class _BoundsEditor(Editor):
     def update_low_on_enter(self):
         try:
             try:
-                low = eval(str(self._label_lo.text()).strip())
+                low = literal_eval(str(self._label_lo.text()).strip())
                 if self.evaluate is not None:
                     low = self.evaluate(low)
             except Exception as ex:
@@ -112,7 +114,7 @@ class _BoundsEditor(Editor):
     def update_high_on_enter(self):
         try:
             try:
-                high = eval(str(self._label_hi.text()).strip())
+                high = literal_eval(str(self._label_hi.text()).strip())
                 if self.evaluate is not None:
                     high = self.evaluate(high)
             except:
