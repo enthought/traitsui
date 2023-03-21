@@ -61,7 +61,7 @@ class Handler(HasPrivateTraits):
         """
         pass
 
-    def init(self, info):
+    def init(self, info: UIInfo) -> bool:
         """Initializes the controls of a user interface.
 
         This method is called after all user interface elements have been
