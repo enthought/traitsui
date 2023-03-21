@@ -1,6 +1,33 @@
 Traits UI Changelog
 ===================
 
+Release 7.4.3
+-------------
+
+This is a small bugfix release which resolves some bugs that have come to light
+as we get more experience with PySide 6, together with changes to run CI on
+more recent Python versions and current Github infrastructure.
+
+Thanks To
+---------
+
+* Mark Dickinson
+* Matt Reay
+* Corran Webster
+* John Wiggins
+
+Fixes
+-----
+* Fix rendering of dragged tree nodes on Qt6 (#1960)
+* Add explicit allow_none in Datetime traits (#1964)
+* Generate extra TableEditor menus dynamically (#1966)
+* Display the selected date in the DateEditor in custom style (#1967)
+* Guard Qt TreeEditor against destroyed QTreeViewItems (#1973)
+
+Test suite
+----------
+* Update CI for EDM Python 3.8 (#1972)
+
 Release 7.4.2
 -------------
 
