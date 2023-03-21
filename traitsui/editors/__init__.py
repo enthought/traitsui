@@ -12,9 +12,9 @@
 def __getattr__(name):
     # For backwards compatibility, continue to make the editors available for
     # import here, but warn it is deprecated.
-    from traitsui.editors import api
-    if name in api.__dict__:
-        obj = getattr(api, name)
+    import traitsui.editors.api
+    if name in traitsui.editors.api.__dict__:
+        obj = getattr(traitsui.editors.api, name)
         import warnings
         warnings.warn(
             "Using or importing Editor factories from 'traitsui.editors' "
