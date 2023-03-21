@@ -305,7 +305,7 @@ class TestHandler(BaseTestMixin, TestCase):
         object = SampleObject()
         handler = SampleHandler(init_return_value=None)
 
-        with self.assertWarns(DeprecationWarning):
+        with self.assertRaises(ValueError):
             ui = object.edit_traits(handler=handler)
 
         ui.dispose()
