@@ -28,7 +28,7 @@ interface toolkit, useful for tools such as debuggers.
 from pyface.qt import QtGui
 from pyface.key_pressed_event import KeyPressedEvent
 try:
-    from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
+    from pyface.ui.qt.code_editor.code_widget import AdvancedCodeWidget
 except ModuleNotFoundError:
     from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
 from traits.api import (
