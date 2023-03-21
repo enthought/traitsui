@@ -336,12 +336,6 @@ class UndoHistory(HasStrictTraits):
     #: The command stack for the history.
     stack = Instance(ICommandStack, allow_none=False)
 
-    #: List of accumulated undo changes.  Each item is a list of
-    #: AbstractUndoItems that should be done or undone as a group.
-    #: This trait should be considered private.
-    #: This trait is no longer used.
-    history = List()
-
     #: The current position in the list
     now = Property(Int, observe='stack._index')
 
