@@ -401,11 +401,9 @@ class UI(HasPrivateTraits):
         if started is False:
             raise TraitError("User interface creation aborted")
         elif not isinstance(started, bool):
-            warn(
+            raise ValueError(
                 "Handler.init() must return True or False, but instead "
-                f"returned {started}.  "
-                "This will become an error in a future release.",
-                DeprecationWarning,
+                f"returned {started}."
             )
 
         # For each Handler method whose name is of the form
