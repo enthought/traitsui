@@ -3,7 +3,6 @@ name: Run test suite for Qt on bleeding-edge dependencies weekly
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  pull_request:
   schedule:
     - cron:  '0 0 * * 4'
 
