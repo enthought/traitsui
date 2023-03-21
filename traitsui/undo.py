@@ -72,20 +72,6 @@ class AbstractUndoItem(AbstractCommand):
 
     def merge(self, other):
         """Merges two undo items if possible."""
-        import warnings
-
-        warnings.warn(
-            "'merge_undo' is deprecated and will be removed in TraitsUI 8, "
-            "use 'merge' instead",
-            DeprecationWarning,
-        )
-        return self.merge_undo(other)
-
-    def merge_undo(self, undo_item):
-        """Merges two undo items if possible.
-
-        This method is deprecated.
-        """
         return False
 
 
@@ -209,13 +195,6 @@ class UndoItem(AbstractUndoItem):
                     return True
         return False
 
-    def merge_undo(self, undo_item):
-        """Merges two undo items if possible.
-
-        This is deprecated.
-        """
-        return self.merge(undo_item)
-
     def __repr__(self):
         """Returns a "pretty print" form of the object."""
         n = self.name
@@ -298,13 +277,6 @@ class ListUndoItem(AbstractUndoItem):
                     else:
                         return True
         return False
-
-    def merge_undo(self, undo_item):
-        """Merges two undo items if possible.
-
-        This is deprecated.
-        """
-        return self.merge(undo_item)
 
     def __repr__(self):
         """Returns a 'pretty print' form of the object."""
