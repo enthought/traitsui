@@ -1,4 +1,4 @@
-# (C) Copyright 2009-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2009-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -141,16 +141,6 @@ class TableEditor(Editor, BaseTableEditor):
     #: The Traits UI associated with the table editor toolbar:
     toolbar_ui = Instance(UI)
 
-    #: The context menu associated with empty space in the table
-    empty_menu = Instance(QtGui.QMenu)
-
-    #: The context menu associated with the vertical header
-    header_menu = Instance(QtGui.QMenu)
-
-    #: The context menu actions for moving rows up and down
-    header_menu_up = Instance(QtGui.QAction)
-    header_menu_down = Instance(QtGui.QAction)
-
     #: The index of the row that was last right clicked on its vertical header
     header_row = Int()
 
@@ -192,31 +182,6 @@ class TableEditor(Editor, BaseTableEditor):
         self.model.setDynamicSortFilter(True)
         self.model.setSourceModel(self.source_model)
         self.table_view.setModel(self.model)
-
-        # Create the vertical header context menu and connect to its signals
-        self.header_menu = QtGui.QMenu(self.table_view)
-        insertable = factory.row_factory is not None
-        if factory.editable:
-            if insertable:
-                action = self.header_menu.addAction("Insert new item")
-                action.triggered.connect(self._on_context_insert)
-            if factory.deletable:
-                action = self.header_menu.addAction("Delete item")
-                action.triggered.connect(self._on_context_remove)
-        if factory.reorderable:
-            if factory.editable and (insertable or factory.deletable):
-                self.header_menu.addSeparator()
-            self.header_menu_up = self.header_menu.addAction("Move item up")
-            self.header_menu_up.triggered.connect(self._on_context_move_up)
-            self.header_menu_down = self.header_menu.addAction(
-                "Move item down"
-            )
-            self.header_menu_down.triggered.connect(self._on_context_move_down)
-
-        # Create the empty space context menu and connect its signals
-        self.empty_menu = QtGui.QMenu(self.table_view)
-        action = self.empty_menu.addAction("Add new item")
-        action.triggered.connect(self._on_context_append)
 
         # When sorting is enabled, the first column is initially displayed with
         # the triangle indicating it is the sort index, even though no sorting
@@ -593,6 +558,49 @@ class TableEditor(Editor, BaseTableEditor):
             return self._add_image(image)
 
         return self.images.get(image)
+
+    def _create_empty_menu(self):
+        """Create a QMenu to display in empty space below the rows.
+
+        Returns a QMenu or None if no menu to display.
+        """
+        if not self.factory.editable or self.factory.row_factory is None:
+            return None
+
+        empty_menu = QtGui.QMenu(self.table_view)
+        action = empty_menu.addAction("Add new item")
+        action.triggered.connect(self._on_context_append)
+        return empty_menu
+
+    def _create_header_menu(self):
+        """Create a QMenu to display in the vertical header.
+
+        Returns a QMenu or None if no menu to display.
+        """
+        header_menu = QtGui.QMenu(self.table_view)
+        if self.factory.editable:
+            if self.factory.row_factory is not None:
+                action = header_menu.addAction("Insert new item")
+                action.triggered.connect(self._on_context_insert)
+            if self.factory.deletable:
+                action = header_menu.addAction("Delete item")
+                action.triggered.connect(self._on_context_remove)
+        if self.factory.reorderable:
+            show_up = (self.header_row > 0)
+            show_down = (self.header_row < self.model.rowCount() - 1)
+            if not header_menu.isEmpty() and (show_up or show_down):
+                header_menu.addSeparator()
+            if show_up:
+                header_menu_up = header_menu.addAction("Move item up")
+                header_menu_up.triggered.connect(self._on_context_move_up)
+            if show_down:
+                header_menu_down = header_menu.addAction("Move item down")
+                header_menu_down.triggered.connect(self._on_context_move_down)
+
+        if header_menu.isEmpty():
+            return None
+        else:
+            return header_menu
 
     # -- Trait Property getters/setters ---------------------------------------
 
@@ -1003,10 +1011,10 @@ class TableView(QtGui.QTableView):
         # Show a context menu for empty space at bottom of table...
         editor = self._editor
         if row == -1:
-            factory = editor.factory
-            if factory.editable and factory.row_factory is not None:
+            empty_menu = editor._create_empty_menu()
+            if empty_menu is not None:
                 event.accept()
-                editor.empty_menu.exec_(position)
+                empty_menu.exec_(position)
 
         # ...or show a context menu for a cell.
         elif column != -1:
@@ -1031,21 +1039,20 @@ class TableView(QtGui.QTableView):
 
         vheader = self.verticalHeader()
         if obj is vheader and event.type() == QtCore.QEvent.Type.ContextMenu:
-            event.accept()
+            position = event.globalPos()
             editor = self._editor
             row = vheader.logicalIndexAt(event.pos().y())
             if row == -1:
-                factory = editor.factory
-                if factory.row_factory is not None:
-                    editor.empty_menu.exec_(event.globalPos())
+                empty_menu = editor._create_empty_menu()
+                if empty_menu is not None:
+                    event.accept()
+                    empty_menu.exec_(position)
             else:
                 editor.header_row = row
-                if editor.factory.reorderable:
-                    show_up = row > 0
-                    show_down = row < editor.model.rowCount() - 1
-                    editor.header_menu_up.setVisible(show_up)
-                    editor.header_menu_down.setVisible(show_down)
-                self._editor.header_menu.exec_(event.globalPos())
+                header_menu = editor._create_header_menu()
+                if header_menu is not None:
+                    event.accept()
+                    header_menu.exec_(position)
             return True
 
         else:

@@ -1,4 +1,4 @@
-# (C) Copyright 2009-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2009-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -33,7 +33,7 @@ from traits.observation.api import trait
 from traitsui.ui_traits import AView
 from traitsui.helper import user_name_for
 from traitsui.handler import Handler
-from traitsui.instance_choice import InstanceChoiceItem
+from traitsui.instance_choice import InstanceChoice, InstanceChoiceItem
 from .editor import Editor
 from .drop_editor import _DropEventFilter
 from .constants import DropColor
@@ -182,11 +182,12 @@ class CustomEditor(Editor):
                 value = adapter(object=value)
             # rebuild_items when an item's name changes so it is reflected by
             # combobox. This change was added to fix enthought/traitsui#1641
-            value.object.observe(
-                self.rebuild_items,
-                trait(value.name_trait, optional=True),
-                dispatch="ui",
-            )
+            if isinstance(value, InstanceChoice):
+                value.object.observe(
+                    self.rebuild_items,
+                    trait(value.name_trait, optional=True),
+                    dispatch="ui",
+                )
             items.append(value)
 
         self._items = items

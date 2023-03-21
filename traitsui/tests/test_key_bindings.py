@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -14,7 +14,7 @@ from unittest.mock import Mock
 from traits.testing.api import UnittestTools
 
 
-from ..key_bindings import KeyBinding, KeyBindings, KeyBindingsHandler
+from traitsui.key_bindings import KeyBinding, KeyBindings, KeyBindingsHandler
 
 
 class Controller1:

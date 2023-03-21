@@ -48,7 +48,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2022, Enthought'
+copyright = '2008-2023, Enthought'
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:

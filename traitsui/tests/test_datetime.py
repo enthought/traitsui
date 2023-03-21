@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -37,7 +37,7 @@ DATE = MAX_DATE - timedelta(days=5)
 
 class DatetimeInitDailog(HasTraits):
 
-    date = Datetime()
+    date = Datetime(allow_none=True)
 
     def _date_default(self):
         return DATE

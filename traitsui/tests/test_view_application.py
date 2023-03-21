@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -14,7 +14,7 @@ from pyface.timer.api import CallbackTimer
 from traits.api import HasTraits, Instance, Int
 from traitsui.api import Handler, Item, UIInfo, View, toolkit
 
-from ._tools import (
+from traitsui.tests._tools import (
     BaseTestMixin,
     GuiTestAssistant,
     is_qt,

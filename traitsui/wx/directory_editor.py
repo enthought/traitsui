@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -37,7 +37,7 @@ class SimpleEditor(SimpleFileEditor):
         """Creates the correct type of file dialog."""
         dlg = DirectoryDialog(
             parent=self.get_control_widget(),
-            default_path=self._file_name.text(),
+            default_path=self._file_name.GetValue(),
         )
         return dlg
 

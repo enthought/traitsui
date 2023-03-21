@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -29,7 +29,7 @@ from traitsui.tests._tools import (
 class InstanceWithDatetime(HasTraits):
     """Demo class to show Datetime editors."""
 
-    date_time = Datetime()
+    date_time = Datetime(allow_none=True)
 
 
 def to_datetime(q_datetime):

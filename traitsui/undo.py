@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -72,20 +72,6 @@ class AbstractUndoItem(AbstractCommand):
 
     def merge(self, other):
         """Merges two undo items if possible."""
-        import warnings
-
-        warnings.warn(
-            "'merge_undo' is deprecated and will be removed in TraitsUI 8, "
-            "use 'merge' instead",
-            DeprecationWarning,
-        )
-        return self.merge_undo(other)
-
-    def merge_undo(self, undo_item):
-        """Merges two undo items if possible.
-
-        This method is deprecated.
-        """
         return False
 
 
@@ -209,13 +195,6 @@ class UndoItem(AbstractUndoItem):
                     return True
         return False
 
-    def merge_undo(self, undo_item):
-        """Merges two undo items if possible.
-
-        This is deprecated.
-        """
-        return self.merge(undo_item)
-
     def __repr__(self):
         """Returns a "pretty print" form of the object."""
         n = self.name
@@ -299,13 +278,6 @@ class ListUndoItem(AbstractUndoItem):
                         return True
         return False
 
-    def merge_undo(self, undo_item):
-        """Merges two undo items if possible.
-
-        This is deprecated.
-        """
-        return self.merge(undo_item)
-
     def __repr__(self):
         """Returns a 'pretty print' form of the object."""
         return "undo( %s.%s[%d:%d] = %s )" % (
@@ -363,12 +335,6 @@ class UndoHistory(HasStrictTraits):
 
     #: The command stack for the history.
     stack = Instance(ICommandStack, allow_none=False)
-
-    #: List of accumulated undo changes.  Each item is a list of
-    #: AbstractUndoItems that should be done or undone as a group.
-    #: This trait should be considered private.
-    #: This trait is no longer used.
-    history = List()
 
     #: The current position in the list
     now = Property(Int, observe='stack._index')

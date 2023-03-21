@@ -1,4 +1,4 @@
-# (C) Copyright 2008-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2008-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD

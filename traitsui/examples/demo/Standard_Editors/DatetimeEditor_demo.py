@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -34,7 +34,7 @@ from traitsui.api import View, Item, Group
 class DateEditorDemo(HasTraits):
     """Demo class to show Datetime editors."""
 
-    datetime = Datetime()
+    datetime = Datetime(allow_none=True)
     info_string = Str('The editors for Traits Datetime objects.')
 
     traits_view = View(

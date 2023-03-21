@@ -1,0 +1,1 @@
+Display the selected date in the DateEditor in custom style (#1967)

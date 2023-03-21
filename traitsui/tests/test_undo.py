@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -59,20 +59,6 @@ class LegacyUndoItem(AbstractUndoItem):
 
     def redo(self):
         pass
-
-
-class TestAbstractUndoItem(UnittestTools, unittest.TestCase):
-    def test_merge_undo_deprecated(self):
-        undo_item = LegacyUndoItem()
-        other_item = LegacyUndoItem()
-
-        with catch_warnings(record=True) as w:
-            result = undo_item.merge(other_item)
-            self.assertEqual(len(w), 1)
-            self.assertTrue(issubclass(w[0].category, DeprecationWarning))
-            self.assertIn("merge_undo", str(w[0].message))
-
-        self.assertFalse(result)
 
 
 class TestUndoItem(UnittestTools, unittest.TestCase):

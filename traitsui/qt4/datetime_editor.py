@@ -1,4 +1,4 @@
-# (C) Copyright 2004-2022 Enthought, Inc., Austin, TX
+# (C) Copyright 2004-2023 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -24,10 +24,10 @@ class SimpleEditor(Editor):
     """Simple Traits UI time editor that wraps QDateTimeEdit."""
 
     #: the earliest datetime allowed by the editor
-    minimum_datetime = Datetime
+    minimum_datetime = Datetime(allow_none=True)
 
     #: the latest datetime allowed by the editor
-    maximum_datetime = Datetime
+    maximum_datetime = Datetime(allow_none=True)
 
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
