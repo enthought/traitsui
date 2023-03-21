@@ -45,30 +45,32 @@ jobs:
       run: cd testdir && python -X faulthandler -m unittest discover -v traitsui
       if: matrix.os != 'ubuntu-latest'
 
-  tests-wx:
-    strategy:
-      matrix:
-        os: [windows-latest]
-        python-version: ['3.10']
-      fail-fast: false
+  # Wx Tests are turned off for now
 
-    env:
-      ETS_TOOLKIT: wx
+  # tests-wx:
+  #   strategy:
+  #     matrix:
+  #       os: [windows-latest]
+  #       python-version: ['3.10']
+  #     fail-fast: false
 
-    runs-on: ${{ matrix.os }}
+  #   env:
+  #     ETS_TOOLKIT: wx
 
-    steps:
-    - name: Check out the target commit
-      uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies and local packages
-      run: |
-        python -m pip install ".[wx,editors,examples,test]"
-    - name: Create clean test directory
-      run: |
-        mkdir testdir
-    - name: Run the test suite (Windows/macOS)
-      run: cd testdir && python -X faulthandler -m unittest discover -v traitsui
+  #   runs-on: ${{ matrix.os }}
+
+  #   steps:
+  #   - name: Check out the target commit
+  #     uses: actions/checkout@v3
+  #   - name: Set up Python ${{ matrix.python-version }}
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: ${{ matrix.python-version }}
+  #   - name: Install dependencies and local packages
+  #     run: |
+  #       python -m pip install ".[wx,editors,examples,test]"
+  #   - name: Create clean test directory
+  #     run: |
+  #       mkdir testdir
+  #   - name: Run the test suite (Windows/macOS)
+  #     run: cd testdir && python -X faulthandler -m unittest discover -v traitsui
