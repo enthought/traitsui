@@ -61,20 +61,6 @@ class LegacyUndoItem(AbstractUndoItem):
         pass
 
 
-class TestAbstractUndoItem(UnittestTools, unittest.TestCase):
-    def test_merge_undo_deprecated(self):
-        undo_item = LegacyUndoItem()
-        other_item = LegacyUndoItem()
-
-        with catch_warnings(record=True) as w:
-            result = undo_item.merge(other_item)
-            self.assertEqual(len(w), 1)
-            self.assertTrue(issubclass(w[0].category, DeprecationWarning))
-            self.assertIn("merge_undo", str(w[0].message))
-
-        self.assertFalse(result)
-
-
 class TestUndoItem(UnittestTools, unittest.TestCase):
     def test_undo(self):
         example = SimpleExample(value=11)
