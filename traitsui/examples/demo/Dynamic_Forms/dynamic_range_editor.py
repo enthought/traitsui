@@ -77,7 +77,7 @@ class DynamicRangeEditor(HasPrivateTraits):
                 editor=RangeEditor(
                     low_name='low',
                     high_name='high',
-                    format='%.1f',
+                    format_str='%.1f',
                     label_width=28,
                     mode='auto',
                 ),
