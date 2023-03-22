@@ -99,7 +99,7 @@ class DynamicRangeEditor(HasPrivateTraits):
                 editor=RangeEditor(
                     low_name='low',
                     high_name='high',
-                    format='%.1f',
+                    format_str='%.1f',
                     label_width=28,
                     mode='xslider',
                 ),
@@ -123,7 +123,7 @@ class DynamicRangeEditor(HasPrivateTraits):
                     high=20,
                     low_name='int_low',
                     high_name='int_high',
-                    format='%d',
+                    format_str='%d',
                     is_float=False,
                     label_width=28,
                     mode='spinner',
