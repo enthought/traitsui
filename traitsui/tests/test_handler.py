@@ -306,6 +306,4 @@ class TestHandler(BaseTestMixin, TestCase):
         handler = SampleHandler(init_return_value=None)
 
         with self.assertRaises(ValueError):
-            ui = object.edit_traits(handler=handler)
-
-        ui.dispose()
+            object.edit_traits(handler=handler)
