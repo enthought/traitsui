@@ -1,1 +1,0 @@
-Fix issue with progress column rendering on Linux and Windows. (#1927)

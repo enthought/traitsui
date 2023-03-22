@@ -1,6 +1,81 @@
 Traits UI Changelog
 ===================
 
+Release 7.4.3
+-------------
+
+This is a small bugfix release which resolves some bugs that have come to light
+as we get more experience with PySide 6, together with changes to run CI on
+more recent Python versions and current Github infrastructure.
+
+Thanks To
+---------
+
+* Mark Dickinson
+* Matt Reay
+* Corran Webster
+* John Wiggins
+
+Fixes
+-----
+* Fix rendering of dragged tree nodes on Qt6 (#1960)
+* Add explicit allow_none in Datetime traits (#1964)
+* Generate extra TableEditor menus dynamically (#1966)
+* Display the selected date in the DateEditor in custom style (#1967)
+* Guard Qt TreeEditor against destroyed QTreeViewItems (#1973)
+
+Test suite
+----------
+* Update CI for EDM Python 3.8 (#1972)
+
+Release 7.4.2
+-------------
+
+This is a small bug fix release which resolves a couple of bugs in the
+RangeEditor and TreeEditor.  It also pins the PySide6 version to < 6.4.0 due
+to incompatibilities with the new enum system, which should improve the install
+experience.
+
+Thanks To
+---------
+
+* Aaron Ayres
+* hopeful0
+* Corran Webster
+
+Fixes
+-----
+
+* Fix RangeTextEditor handling of None for low/high (#1950)
+* Pin PySide6 to < 6.4 (#1951)
+* Fix issues with shared "New" context menu in TreeEditor (#1953)
+
+Release 7.4.1
+-------------
+
+This is a bug fix release which resolves an issue with RangeEditor not handling
+None for either the high or low value, as well as an issue with ProgressColumn
+rendering.
+
+Thanks To
+---------
+
+* Steve Allen
+* Chris Angell
+* Aaron Ayres
+* Maxwell Grady
+* Johannes Loibl
+* Rahul Poruri
+* Corran Webster
+* Hai Yan
+
+Fixes
+-----
+* Fix issue with progress column rendering on Linux and Windows. (#1937)
+* Fix typos in docstrings (#1935)
+* Fix range text editor bug (#1931)
+* Fix issue where file editor filters were not used in simple editor (#1930)
+
 Release 7.4.0
 -------------
 
