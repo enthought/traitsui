@@ -13,7 +13,7 @@ import unittest
 
 from pyface.constant import OK
 from pyface.toolkit import toolkit_object
-from traits.api import HasTraits, Float, Int, Range
+from traits.api import HasTraits, Float, Int, Range, TraitError
 from traits.testing.api import UnittestTools
 from traitsui.api import Item, RangeEditor, UItem, View
 from traitsui.testing.api import (
@@ -390,14 +390,24 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
 
     def test_editor_factory_format(self):
         """
+        format trait on RangeEditor editor factory has been removed in
+        favor of format_str.
+        """
+        model = RangeModel()
+        with self.assertRaises(TraitError):
+            view = View(
+                Item("float_value", editor=RangeEditor(format="%s ..."))
+            )
+
+    def test_editor_factory_format_str(self):
+        """
         format trait on RangeEditor editor factory has been deprecated in
         favor of format_str. However, behavior should be unchanged.
         """
         model = RangeModel()
-        with self.assertWarns(DeprecationWarning):
-            view = View(
-                Item("float_value", editor=RangeEditor(format="%s ..."))
-            )
+        view = View(
+            Item("float_value", editor=RangeEditor(format_str="%s ..."))
+        )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             float_value_field = tester.find_by_name(ui, "float_value")
@@ -406,25 +416,19 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
                 float_value_text.inspect(DisplayedText()), "0.1 ..."
             )
 
-    def test_editor_format(self):
+    def test_editor_format_str(self):
         """
-        The format trait on an Editor instance previously potentially
-        could override the factory. Now that is not the case.
+        The format trait on an Editor instance has been removed.
         """
         model = RangeModel()
-        with self.assertWarns(DeprecationWarning):
-            view = View(
-                Item("float_value", editor=RangeEditor(format="%s ..."))
-            )
+        view = View(
+            Item("float_value", editor=RangeEditor(format_str="%s ..."))
+        )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             float_value_field = tester.find_by_name(ui, "float_value")
-            float_value_field._target.format = "%s +++"
-            model.float_value = 0.2
-            float_value_text = float_value_field.locate(Textbox())
-            self.assertEqual(
-                float_value_text.inspect(DisplayedText()), "0.2 ..."
-            )
+            with self.assertRaises(TraitError):
+                float_value_field._target.format = "%s +++"
 
     # regression test for enthought/traitsui#737. Hangs with a popup
     # dialog on wx. (xref: enthought/traitsui#1901)
