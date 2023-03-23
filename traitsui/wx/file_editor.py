@@ -207,7 +207,7 @@ class SimpleEditor(SimpleTextEditor):
         dlg = FileDialog(
             parent=self.get_control_widget(),
             default_path=self._file_name.GetValue(),
-            action="save" if self.factory.dialog_style == "save as" else "open",
+            action="save as" if self.factory.dialog_style == "save" else "open",
             wildcard=wildcard,
         )
         return dlg
