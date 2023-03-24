@@ -50,13 +50,11 @@ build-backend = 'setuptools.build_meta'
 
 [tool.black]
 line-length = 79
-target-version = ['py38']
 
 [tool.isort]
 profile = 'black'
 sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'ENTHOUGHT', 'FIRSTPARTY', 'LOCALFOLDER']
-known_third_party = ['wx', 'PyQt5', 'PyQt6', 'PySide2', 'PySide6', 'PIL', 'pygments', 'numpy']
-known_enthought = ['apptools', 'pyface', 'traits']
+known_enthought = ['apptools', 'pyface', 'traits', 'traitsui']
 line_length = 79
 order_by_type = false
 
