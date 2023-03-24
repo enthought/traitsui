@@ -139,7 +139,7 @@ class SimpleEditor(SimpleTextEditor):
         else:
             self._file_name.SetValue(self.str_value)
 
-    def show_file_dialog(self, event):
+    def show_file_dialog(self, event=None):
         """Displays the pop-up file dialog."""
         if self.history is not None:
             self.popup = self._create_file_popup()

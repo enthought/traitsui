@@ -108,7 +108,6 @@ EDM_CONFIG_LOCATION = os.path.abspath(os.path.join(
 ))
 
 supported_combinations = {
-    '3.6': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
     '3.8': {'pyside2', 'pyside6', 'pyqt5', 'pyqt6', 'wx', 'null'},
 }
 
@@ -118,11 +117,12 @@ DEFAULT_RUNTIME = '3.6'
 # Default toolkit to use if none specified.
 DEFAULT_TOOLKIT = 'null'
 
-# Required runtime dependencies. Should match install_requires in setup.py
+# Required runtime dependencies. Should match pyproject.toml.
 dependencies = {
     # temporarily get pyface from pip until EDM release
     # "pyface>=7.4.1",
     "traits",
+    "setuptools",
 }
 
 # Dependencies we install from source for cron tests
@@ -133,7 +133,7 @@ source_dependencies = {
     "traits": "git+http://github.com/enthought/traits.git#egg=traits",
 }
 
-# The following should match extras_require in setup.py but with package
+# The following should match extras_require in pyproject.toml but with package
 # names compatible with EDM
 extra_dependencies = {
     'pyside2': {
@@ -174,7 +174,6 @@ extra_dependencies = {
 
 # Extra runtime dependencies
 runtime_dependencies = {
-    "3.6": {"pillow", "pytables"},
     "3.8": {"pillow_simd", "tables"},
 }
 
@@ -209,8 +208,6 @@ environment_vars = {
 
 # toolkit versions in EDM
 edm_versions = {
-    ('3.6', 'pyside2'),
-    ('3.6', 'pyqt5'),
     ('3.8', 'pyside6'),
     ('3.8', 'pyqt6'),
 }
@@ -284,23 +281,13 @@ def install(runtime, toolkit, environment, editable, source):
                 "edm -c {config} run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04/ wxPython"
             )
     elif toolkit == 'pyside6':
-        # On Linux and macOS, some versions of PySide6 between 6.2.2 and 6.3.0
-        # are unimportable on Python 3.6 and Python 3.7. See
-        # https://bugreports.qt.io/browse/PYSIDE-1797. It may be possible to
-        # remove this workaround once PySide6 6.3.1 or later is released.
-        # Also there are currently issues with PySide 6.4
-        if sys.platform in {'darwin', 'linux'}:
-            commands.append(
-                "edm -c {config} run -e {environment} -- pip install pyside6<6.2.2")
-        else:
-            commands.append('edm run -e {environment} -- pip install "pyside6<6.4.0"')
+        commands.append('edm run -e {environment} -- pip install "pyside6"')
     elif toolkit != "null":
         commands.append("edm -c {config} run -e {environment} -- pip install {toolkit}")
 
     commands.extend(
         [
             "edm -c {config} run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
-            "edm -c {config} run -e {environment} -- python setup.py clean --all",
         ]
     )
 
@@ -395,7 +382,6 @@ def cleanup(runtime, toolkit, environment):
     """Remove a development environment."""
     parameters = get_parameters(runtime, toolkit, environment)
     commands = [
-        "edm -c {config} run -e {environment} -- python setup.py clean",
         "edm -c {config} environments remove {environment} --purge -y",
     ]
     click.echo("Cleaning up environment '{environment}'".format(**parameters))
@@ -414,19 +400,6 @@ def test_clean(runtime, toolkit):
         test(args=args, standalone_mode=False)
     finally:
         cleanup(args=args, standalone_mode=False)
-
-
-@cli.command()
-@click.option('--runtime', default=DEFAULT_RUNTIME)
-@click.option('--toolkit', default=DEFAULT_TOOLKIT)
-@click.option('--environment', default=None)
-def update(runtime, toolkit, environment):
-    """Update/Reinstall package into environment."""
-    parameters = get_parameters(runtime, toolkit, environment)
-    commands = ["edm -c {config} run -e {environment} -- python setup.py install"]
-    click.echo("Re-installing in  '{environment}'".format(**parameters))
-    execute(commands, parameters)
-    click.echo('Done update')
 
 
 @cli.command()

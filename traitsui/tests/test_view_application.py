@@ -102,7 +102,10 @@ class TestViewApplication(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
     def click_button(self, text):
         if is_qt():
             from pyface.qt.QtGui import QPushButton
-            from pyface.ui.qt4.util.testing import find_qt_widget
+            try:
+                from pyface.ui.qt.util.testing import find_qt_widget
+            except ModuleNotFoundError:
+                from pyface.ui.qt4.util.testing import find_qt_widget
 
             button = find_qt_widget(
                 self.handler.info.ui.control,

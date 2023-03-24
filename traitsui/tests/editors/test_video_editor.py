@@ -7,7 +7,11 @@
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 # Thanks for using Enthought open source!
+
+import os
 import unittest
+import subprocess
+import sys
 
 try:
     import numpy as np  # noqa: F401
@@ -21,6 +25,18 @@ from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
 from traitsui.tests._tools import BaseTestMixin, create_ui, is_qt5, is_qt6
 
 filename = pkg_resources.resource_filename('traitsui.testing', 'data/test.mp4')
+
+
+# Is a MacOS machine lacking the standard Metal APIs?
+metal_api_missing = False
+if sys.platform == 'darwin' and is_qt6:
+    # TODO: would be nice to detect if Qt build _uses_ Metal
+    result = subprocess.run(
+        ["system_profiler", "SPDisplaysDataType"],
+        capture_output=True,
+        check=True,
+    )
+    metal_api_missing = (b'Metal Family: Supported' not in result.stdout)
 
 
 class MovieTheater(HasTraits):
@@ -39,6 +55,7 @@ class MovieTheater(HasTraits):
 
 
 @unittest.skipIf(not is_qt5() and not is_qt6(), 'Requires Qt5 or 6')
+@unittest.skipIf(metal_api_missing, "Mac Qt6 video editor requires Metal API")
 class TestVideoEditor(BaseTestMixin, unittest.TestCase):
     def setUp(self):
         BaseTestMixin.setUp(self)

@@ -42,7 +42,8 @@ class TestExceptionHandling(unittest.TestCase):
             with reraise_exceptions():
                 gui.invoke_later(raise_error_1)
                 gui.invoke_later(raise_error_2)
-                gui.process_events()
+                gui.invoke_after(100, gui.stop_event_loop)
+                gui.start_event_loop()
 
         error_msg = str(exception_context.exception)
         self.assertIn("ZeroDivisionError", error_msg)
