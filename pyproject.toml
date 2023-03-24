@@ -54,7 +54,7 @@ line-length = 79
 [tool.isort]
 profile = 'black'
 sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'ENTHOUGHT', 'FIRSTPARTY', 'LOCALFOLDER']
-known_enthought = ['apptools', 'pyface', 'traits', 'traitsui']
+known_enthought = ['apptools', 'pyface', 'traits']
 line_length = 79
 order_by_type = false
 
