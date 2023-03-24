@@ -494,19 +494,19 @@ class TabularEditor(Editor):
         if row is None:
             visible = bottom
             if visible >= 0 and visible < control.GetItemCount():
-                control.EnsureVisible(visible)
+                control.ScrollHint.EnsureVisible(visible)
             return
 
         if 0 <= (row - top) < pn:
-            control.EnsureVisible(
+            control.ScrollHint.EnsureVisible(
                 min(top + pn - 2, control.GetItemCount() - 1)
             )
         elif row < top:
-            control.EnsureVisible(
+            control.ScrollHint.EnsureVisible(
                 min(row + pn - 1, control.GetItemCount() - 1)
             )
         else:
-            control.EnsureVisible(row)
+            control.ScrollHint.EnsureVisible(row)
 
         control.SetItemState(
             row,

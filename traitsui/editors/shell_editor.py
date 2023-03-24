@@ -50,6 +50,7 @@ class _ShellEditor(Editor):
         if self.factory.share and isinstance(value, dict):
             locals = value
         self._shell = shell = PythonShell(parent)
+        shell.create()
         self.control = shell.control
         if locals:
             for item in locals.items():

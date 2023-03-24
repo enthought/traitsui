@@ -48,6 +48,7 @@ class CodeView(ModelView):
 
 
 class TestCodeEditor(BaseTestMixin, unittest.TestCase):
+
     def setUp(self):
         BaseTestMixin.setUp(self)
 

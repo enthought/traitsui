@@ -11,7 +11,7 @@ name: Test with EDM
 on: [pull_request, workflow_dispatch]
 
 env:
-  INSTALL_EDM_VERSION: 3.3.1
+  INSTALL_EDM_VERSION: 3.5.0
   QT_MAC_WANTS_LAYER: 1
 
 jobs:
@@ -22,11 +22,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         toolkit: ['pyqt5', 'pyside2', 'pyside6']
-        python-version: ['3.6', '3.8']
+        python-version: ['3.8']
         include:
-          - os: ubuntu-latest
-            toolkit: 'null'
-            python-version: '3.6'
           - os: ubuntu-latest
             toolkit: 'null'
             python-version: '3.8'
@@ -37,8 +34,6 @@ jobs:
             python-version: '3.8'
           - toolkit: 'pyside2'
             python-version: '3.8'
-          - toolkit: 'pyside6'
-            python-version: '3.6'
     runs-on: ${{ matrix.os }}
     env:
       # Set root directory, mainly for Windows, so that the EDM Python
@@ -49,24 +44,26 @@ jobs:
       # set the font config path for linux
       FONTCONFIG_PATH: /etc/fonts
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Qt dependencies for Linux
-        uses: ./.github/actions/apt-get-qt-deps
+        uses: ./.github/actions/install-qt-support
         if: startsWith(matrix.os, 'ubuntu') && matrix.toolkit != 'wx' && matrix.toolkit != 'null'
       - name: Cache EDM packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache
           key: ${{ runner.os }}-${{ matrix.python-version }}-${{ matrix.toolkit }}-${{ hashFiles('etstool.py') }}
       - name: Setup EDM
-        uses: enthought/setup-edm-action@v1
+        uses: enthought/setup-edm-action@v2
         with:
           edm-version: ${{ env.INSTALL_EDM_VERSION }}
       - name: Install click to the default EDM environment
         run: edm install -y wheel click coverage
       - name: Install test environment
         run: edm run -- python etstool.py install --toolkit=${{ matrix.toolkit }} --runtime=${{ matrix.python-version }}
-      - name: Run tests
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }} --runtime=${{ matrix.python-version }}
+      - name: Run the test suite (Linux)
+        run: xvfb-run -a edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }} --runtime=${{ matrix.python-version }}
+        if: matrix.os == 'ubuntu-latest'
+      - name: Run the test suite (Windows/macOS)
+        run: edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }} --runtime=${{ matrix.python-version }}
+        if: matrix.os != 'ubuntu-latest'

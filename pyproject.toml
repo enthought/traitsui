@@ -1,4 +1,75 @@
+[project]
+name = 'traitsui'
+description = 'Traits-capable user interfaces'
+readme = 'README.rst'
+requires-python = '>=3.7'
+authors = [{name='Enthought', email='info@enthought.com'}]
+keywords = ['gui', 'traits', 'traitsui', 'pyqt', 'pyside', 'wxpython']
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: BSD License',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3',
+]
+dependencies = [
+    'traits>=6.2',
+    'pyface>=7.4.1',
+    'importlib-metadata>=3.6; python_version<"3.8"',
+]
+license = {file = "LICENSE.txt"}
+version = "8.0.0.dev0"
+
+[project.entry-points.'traitsui.toolkits']
+qt = 'traitsui.qt4:toolkit'
+qt4 = 'traitsui.qt4:toolkit'
+wx = 'traitsui.wx:toolkit'
+null = 'traitsui.null:toolkit'
+
+[project.entry-points.'etsdemo_data']
+demo = 'traitsui.extras._demo_info:info'
+
+[project.optional-dependencies]
+docs = ['enthought-sphinx-theme', 'sphinx', 'sphinx-copybutton']
+editors = ['numpy', 'pandas']
+examples = ['apptools', 'h5py', 'numpy', 'pandas', 'pillow', 'tables']
+pyqt5 = ['pyqt5', 'pygments']
+pyqt6 = ['pyqt6', 'pygments']
+pyside2 = ['pyside2', 'pygments']
+pyside6 = ['pyside6', 'pygments']
+test = ['packaging', 'numpy']
+wx = ['wxPython>=4', 'numpy']
+
+[project.urls]
+source = 'https://github.com/enthought/traitsui'
+docs = 'https://docs.enthought.com/traitsui'
+
+[build-system]
+requires = ['setuptools>=61', 'wheel']
+build-backend = 'setuptools.build_meta'
+
 [tool.black]
 line-length = 79
-target-version = ['py36', 'py37', 'py38']
-skip-string-normalization = true
+
+[tool.isort]
+profile = 'black'
+sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'ENTHOUGHT', 'FIRSTPARTY', 'LOCALFOLDER']
+known_enthought = ['apptools', 'pyface', 'traits']
+line_length = 79
+order_by_type = false
+
+[tool.setuptools]
+packages = ['traitsui']
+
+[tool.setuptools.package-data]
+traitsui = [
+    'examples/demo/*',
+    'examples/demo/*/*',
+    'examples/demo/*/*/*',
+    'extras/images/*',
+    'image/library/*.zip',
+    'images/*',
+    'wx/images/*',
+    'qt4/images/*',
+    'testing/data/*',
+]

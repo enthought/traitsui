@@ -25,7 +25,10 @@ using pickle.
 """
 
 from pyface.qt import QtGui
-from pyface.ui.qt4.mimedata import PyMimeData, str2bytes
+try:
+    from pyface.ui.qt.mimedata import PyMimeData, str2bytes
+except ModuleNotFoundError:
+    from pyface.ui.qt4.mimedata import PyMimeData, str2bytes
 from traits.api import HasTraits, Instance, Property
 
 
