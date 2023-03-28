@@ -27,7 +27,23 @@ except ImportError:
 from traits.etsconfig.api import ETSConfig
 
 
-if any(
+if ShadowedModuleFinder is None:
+    # Either pyface is old, or we are in the future when ShadowedModuleFinder
+    # has been retired.  Try to import pyface.ui.qt as a test; if it imports
+    # everything is good.
+    try:
+        import pyface.ui.qt  # noqa: F401
+    except ImportError:
+        raise RuntimeError(
+            """TraitsUI is running with an outdated version of Pyface
+
+The traitsui.qt4.* modules have moved to traitsui.qt.* and the older versions
+of Pyface will not be aware of their new location.  Update the version of
+Pyface to at least 8.0.""",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+elif any(
     (
         isinstance(finder, ShadowedModuleFinder)
         and finder.package == "traitsui.qt4."
@@ -50,6 +66,9 @@ elif (
     or os.environ.get('ETS_TOOLKIT', None) == "qt4"  # environment says old qt4
     or ETSConfig.toolkit == "qt4"  # the ETSConfig toolkit says old qt4
 ):
+    # make sure that pyface.ui.qt4 loads before we do anything
+    import pyface.ui.qt4
+
     # Register our loader.  This is messing with global state that we do not own
     # so we only do it when we have other global state telling us to.
 
@@ -92,4 +111,3 @@ Applications which require backwards compatibility can either:
         FutureWarning,
         stacklevel=2,
     )
-

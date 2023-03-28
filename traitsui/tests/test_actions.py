@@ -149,10 +149,7 @@ class TestActions(BaseTestMixin, unittest.TestCase):
         # Bug: in the Qt4 backend, a
         # TypeError: perform() takes exactly 2 arguments (1 given) was raised
         # instead
-        try:
-            from pyface.ui.qt.action.tool_bar_manager import _ToolBar
-        except ModuleNotFoundError:
-            from pyface.ui.qt4.action.tool_bar_manager import _ToolBar
+        from pyface.ui.qt.action.tool_bar_manager import _ToolBar
 
         qt_trigger_toolbar_action = partial(_qt_trigger_action, _ToolBar)
 
@@ -166,10 +163,7 @@ class TestActions(BaseTestMixin, unittest.TestCase):
         # Bug: in the Qt4 backend, a
         # TypeError: perform() takes exactly 2 arguments (1 given) was raised
         # instead
-        try:
-            from pyface.ui.qt.action.menu_manager import _Menu
-        except ModuleNotFoundError:
-            from pyface.ui.qt4.action.menu_manager import _Menu
+        from pyface.ui.qt.action.menu_manager import _Menu
 
         qt_trigger_menu_action = partial(
             _qt_trigger_action, _Menu
@@ -276,10 +270,7 @@ class TestActionSchemas(BaseTestMixin, unittest.TestCase):
         # Bug: in the Qt4 backend, a
         # TypeError: perform() takes exactly 2 arguments (1 given) was raised
         # instead
-        try:
-            from pyface.ui.qt.action.tool_bar_manager import _ToolBar
-        except ModuleNotFoundError:
-            from pyface.ui.qt4.action.tool_bar_manager import _ToolBar
+        from pyface.ui.qt.action.tool_bar_manager import _ToolBar
 
         qt_trigger_toolbar_action = partial(_qt_trigger_action, _ToolBar)
 
@@ -293,10 +284,7 @@ class TestActionSchemas(BaseTestMixin, unittest.TestCase):
         # Bug: in the Qt4 backend, a
         # TypeError: perform() takes exactly 2 arguments (1 given) was raised
         # instead
-        try:
-            from pyface.ui.qt.action.menu_manager import _Menu
-        except ModuleNotFoundError:
-            from pyface.ui.qt4.action.menu_manager import _Menu
+        from pyface.ui.qt.action.menu_manager import _Menu
 
         qt_trigger_menu_action = partial(_qt_trigger_action, _Menu)
 

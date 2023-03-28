@@ -13,10 +13,7 @@ import time
 from pyface.qt import QtGui, QtCore
 
 from traits.api import Instance, Int, Str
-try:
-    from pyface.ui.qt.progress_dialog import ProgressDialog
-except ModuleNotFoundError:
-    from pyface.ui.qt4.progress_dialog import ProgressDialog
+from pyface.ui.qt.progress_dialog import ProgressDialog
 from traitsui.qt.editor import Editor
 
 
