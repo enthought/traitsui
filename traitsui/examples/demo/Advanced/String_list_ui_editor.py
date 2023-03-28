@@ -41,7 +41,7 @@ from traitsui.api import (
 if ETSConfig.toolkit == 'wx':
     from traitsui.wx.ui_editor import UIEditor
 else:
-    from traitsui.qt4.ui_editor import UIEditor
+    from traitsui.qt.ui_editor import UIEditor
 
 
 # -- Define the reusable StringListEditor class and its helper classes --------

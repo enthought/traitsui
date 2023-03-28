@@ -94,13 +94,13 @@ for name, rgba in color_table.items():
 # -------------------------------------------------------------------------
 
 ### FIXME: We have declared the 'editor' to be a function instead of  the
-# traitsui.qt4.color_editor.ToolkitEditorFactory class, since the
+# traitsui.qt.color_editor.ToolkitEditorFactory class, since the
 # latter is leading to too many circular imports. In the future, try to see if
 # there is a better way to do this.
 
 
 def get_color_editor(*args, **traits):
-    from traitsui.qt4.color_editor import ToolkitEditorFactory
+    from traitsui.qt.color_editor import ToolkitEditorFactory
 
     return ToolkitEditorFactory(*args, **traits)
 

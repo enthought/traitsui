@@ -8,7 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
-from traitsui.qt4.range_editor import (
+from traitsui.qt.range_editor import (
     LargeRangeSliderEditor,
     LogRangeSliderEditor,
     RangeTextEditor,
@@ -17,7 +17,7 @@ from traitsui.qt4.range_editor import (
 
 from traitsui.testing.tester.command import KeyClick
 from traitsui.testing.tester.locator import Slider, Textbox
-from traitsui.testing.tester._ui_tester_registry.qt4 import (
+from traitsui.testing.tester._ui_tester_registry.qt import (
     _interaction_helpers,
     _registry_helper,
 )

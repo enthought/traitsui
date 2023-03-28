@@ -63,7 +63,7 @@ PointSizes = [
 # ---------------------------------------------------------------------------
 #  The PyQtToolkitEditorFactory class.
 # ---------------------------------------------------------------------------
-## We need to add qt4-specific methods to the editor factory, and so we create
+## We need to add qt-specific methods to the editor factory, and so we create
 ## a subclass of the BaseToolkitEditorFactory.
 
 

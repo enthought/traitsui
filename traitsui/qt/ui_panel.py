@@ -603,7 +603,7 @@ class _GroupPanel(object):
             if group.visible_when != "" or group.enabled_when != "":
                 # Make sure that outer is a widget and inner is a layout.
                 # Hiding a layout is not properly supported by Qt (the
-                # workaround in ``traitsui.qt4.editor._visible_changed_helper``
+                # workaround in ``traitsui.qt.editor._visible_changed_helper``
                 # often leaves undesirable blank space).
                 if outer is None:
                     outer = inner = QtGui.QBoxLayout(self.direction)

@@ -13,8 +13,8 @@ from pyface.qt import QtGui, QtCore
 from traits.api import Float, Any, Str, Union
 
 from traitsui.editors.api import RangeEditor
-from traitsui.qt4.editor import Editor
-from traitsui.qt4.extra.range_slider import RangeSlider
+from traitsui.qt.editor import Editor
+from traitsui.qt.extra.range_slider import RangeSlider
 
 
 class _BoundsEditor(Editor):

@@ -47,7 +47,7 @@ class DateRangeEditorDemo(HasTraits):
 
 
 if __name__ == "__main__":
-    if ETSConfig.toolkit == "qt4":
+    if ETSConfig.toolkit in {"qt", "qt4"}:
         # DateRangeEditor is currently only available for qt backend.
         demo = DateRangeEditorDemo()
         demo.configure_traits()

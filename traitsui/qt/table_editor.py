@@ -1328,7 +1328,7 @@ class TableFilterEditor(HasTraits):
             layout="split",
             orientation="horizontal",
         ),
-        id="traitsui.qt4.table_editor.TableFilterEditor",
+        id="traitsui.qt.table_editor.TableFilterEditor",
         buttons=["OK", "Cancel"],
         kind="livemodal",
         resizable=True,

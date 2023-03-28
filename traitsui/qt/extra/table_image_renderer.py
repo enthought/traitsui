@@ -17,7 +17,7 @@ from pyface.qt import QtCore, QtGui
 
 # ETS imports
 from traits.api import Bool
-from traitsui.qt4.table_editor import TableDelegate
+from traitsui.qt.table_editor import TableDelegate
 
 
 class TableImageRenderer(TableDelegate):

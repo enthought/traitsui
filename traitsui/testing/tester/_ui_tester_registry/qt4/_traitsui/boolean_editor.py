@@ -10,10 +10,10 @@
 
 from traitsui.testing.tester.command import MouseClick
 from traitsui.testing.tester.query import DisplayedText, IsChecked
-from traitsui.testing.tester._ui_tester_registry.qt4 import (
+from traitsui.testing.tester._ui_tester_registry.qt import (
     _interaction_helpers,
 )
-from traitsui.qt4.boolean_editor import ReadonlyEditor, SimpleEditor
+from traitsui.qt.boolean_editor import ReadonlyEditor, SimpleEditor
 
 
 def register(registry):

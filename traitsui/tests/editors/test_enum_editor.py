@@ -290,7 +290,7 @@ class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(enum_edit.value, "two")
 
     def test_simple_editor_resizable(self):
-        # Smoke test for `qt4.enum_editor.SimpleEditor.set_size_policy`
+        # Smoke test for `qt.enum_editor.SimpleEditor.set_size_policy`
         enum_edit = EnumModel()
         resizable_view = View(UItem("value", style="simple", resizable=True))
 

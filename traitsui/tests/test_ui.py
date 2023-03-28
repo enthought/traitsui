@@ -103,7 +103,7 @@ class TestUI(BaseTestMixin, unittest.TestCase):
             # decorate children's `deleteLater` function to check that it is
             # called on `reset`. check only with the editor parts (only widgets
             # are scheduled.
-            # See traitsui.qt4.toolkit.GUIToolkit.destroy_children)
+            # See traitsui.qt.toolkit.GUIToolkit.destroy_children)
             for c in ui.control.children():
                 c.deleteLater = count_calls(c.deleteLater)
 
@@ -159,7 +159,7 @@ class TestUI(BaseTestMixin, unittest.TestCase):
 
             self.assertEqual(len(ui._editors), 2)
             self.assertIsInstance(
-                ui._editors[0], traitsui.qt4.text_editor.SimpleEditor
+                ui._editors[0], traitsui.qt.text_editor.SimpleEditor
             )
             self.assertIsInstance(ui._editors[0].control, qt.QtGui.QLineEdit)
 
@@ -167,7 +167,7 @@ class TestUI(BaseTestMixin, unittest.TestCase):
 
             self.assertEqual(len(ui._editors), 2)
             self.assertIsInstance(
-                ui._editors[0], traitsui.qt4.text_editor.SimpleEditor
+                ui._editors[0], traitsui.qt.text_editor.SimpleEditor
             )
             self.assertIsNone(ui._editors[0].control)
 

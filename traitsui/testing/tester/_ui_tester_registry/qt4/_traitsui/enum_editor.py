@@ -8,7 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
-from traitsui.qt4.enum_editor import (
+from traitsui.qt.enum_editor import (
     ListEditor,
     RadioEditor,
     SimpleEditor,
@@ -23,7 +23,7 @@ from traitsui.testing.tester.query import DisplayedText, SelectedText
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     BaseSourceWithLocation,
 )
-from traitsui.testing.tester._ui_tester_registry.qt4 import (
+from traitsui.testing.tester._ui_tester_registry.qt import (
     _interaction_helpers,
 )
 from traitsui.testing.tester._ui_tester_registry._layout import (

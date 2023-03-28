@@ -105,7 +105,7 @@ class DialogWithSchema(HasTraits):
     )
 
 
-# ----- qt4 helper functions
+# ----- qt helper functions
 
 
 def _qt_trigger_action(container_class, ui):
@@ -125,7 +125,7 @@ def _qt_click_button(ui):
 class TestActions(BaseTestMixin, unittest.TestCase):
 
     def _test_actions(self, trigger_action_func):
-        """Template test for wx, qt4, menu, and toolbar testing."""
+        """Template test for wx, qt, menu, and toolbar testing."""
         # Behavior: when clicking on a menu or toolbar action,
         # the corresponding function should be executed
 

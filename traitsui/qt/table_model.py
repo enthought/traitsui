@@ -36,14 +36,14 @@ from .clipboard import PyMimeData
 logger = logging.getLogger(__name__)
 
 
-# Mapping for trait alignment values to qt4 horizontal alignment constants
+# Mapping for trait alignment values to qt horizontal alignment constants
 h_alignment_map = {
     "left": QtCore.Qt.AlignmentFlag.AlignLeft,
     "center": QtCore.Qt.AlignmentFlag.AlignHCenter,
     "right": QtCore.Qt.AlignmentFlag.AlignRight,
 }
 
-# Mapping for trait alignment values to qt4 vertical alignment constants
+# Mapping for trait alignment values to qt vertical alignment constants
 v_alignment_map = {
     "top": QtCore.Qt.AlignmentFlag.AlignTop,
     "center": QtCore.Qt.AlignmentFlag.AlignVCenter,

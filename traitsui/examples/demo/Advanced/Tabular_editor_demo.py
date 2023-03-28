@@ -195,7 +195,7 @@ tabular_editor = TabularEditor(
     adapter=ReportAdapter(),
     operations=['move', 'edit'],
     # Row titles are not supported in WX:
-    show_row_titles=ETSConfig.toolkit == 'qt4',
+    show_row_titles=(ETSConfig.toolkit toolkit in {"qt", "qt4"}),
 )
 
 

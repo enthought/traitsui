@@ -192,7 +192,7 @@ doc_dependencies = {
 
 #: Paths to ignore in Sphinx-apidoc
 doc_ignore = {
-    "traitsui/qt4/*",
+    "traitsui/qt/*",
     "traitsui/wx/*",
     "*/tests",
 }

@@ -9,10 +9,10 @@
 # Thanks for using Enthought open source!
 
 from traitsui.testing.tester.query import DisplayedText
-from traitsui.testing.tester._ui_tester_registry.qt4._registry_helper import (
+from traitsui.testing.tester._ui_tester_registry.qt._registry_helper import (
     register_editable_textbox_handlers,
 )
-from traitsui.qt4.editor_factory import ReadonlyEditor, TextEditor
+from traitsui.qt.editor_factory import ReadonlyEditor, TextEditor
 
 
 def register(registry):

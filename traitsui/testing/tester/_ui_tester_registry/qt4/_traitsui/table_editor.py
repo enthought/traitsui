@@ -8,7 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
-from traitsui.qt4.table_editor import SimpleEditor
+from traitsui.qt.table_editor import SimpleEditor
 
 from traitsui.testing.tester.command import (
     MouseClick,
@@ -25,7 +25,7 @@ from traitsui.testing.tester.query import (
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     BaseSourceWithLocation
 )
-from traitsui.testing.tester._ui_tester_registry.qt4 import (
+from traitsui.testing.tester._ui_tester_registry.qt import (
     _interaction_helpers
 )
 

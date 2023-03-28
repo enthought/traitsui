@@ -9,7 +9,7 @@
 # Thanks for using Enthought open source!
 
 from pyface.qt import QtGui
-from traitsui.qt4.editor import Editor
+from traitsui.qt.editor import Editor
 from traitsui.basic_editor_factory import BasicEditorFactory
 from traits.api import Any, Undefined
 

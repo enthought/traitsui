@@ -8,7 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
-from traitsui.qt4.check_list_editor import CustomEditor
+from traitsui.qt.check_list_editor import CustomEditor
 from traitsui.testing.tester.command import MouseClick
 from traitsui.testing.tester.locator import Index
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
@@ -17,7 +17,7 @@ from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
 from traitsui.testing.tester._ui_tester_registry._layout import (
     column_major_to_row_major,
 )
-from traitsui.testing.tester._ui_tester_registry.qt4 import (
+from traitsui.testing.tester._ui_tester_registry.qt import (
     _interaction_helpers,
 )
 

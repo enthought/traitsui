@@ -9,7 +9,7 @@
 # Thanks for using Enthought open source!
 
 """ The organization in this package should more or less mirror that of
-the ``traitsui.qt4`` package and contains the corresponding logic for testing.
+the ``traitsui.qt`` package and contains the corresponding logic for testing.
 
 Note that once new implementations are added, they may need to be exposed
 via the ``default_registry`` module (one level up from this package).

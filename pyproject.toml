@@ -21,8 +21,8 @@ license = {file = "LICENSE.txt"}
 version = "8.0.0.dev0"
 
 [project.entry-points.'traitsui.toolkits']
-qt = 'traitsui.qt4:toolkit'
-qt4 = 'traitsui.qt4:toolkit'
+qt = 'traitsui.qt:toolkit'
+qt4 = 'traitsui.qt:toolkit'
 wx = 'traitsui.wx:toolkit'
 null = 'traitsui.null:toolkit'
 
@@ -70,6 +70,6 @@ traitsui = [
     'image/library/*.zip',
     'images/*',
     'wx/images/*',
-    'qt4/images/*',
+    'qt/images/*',
     'testing/data/*',
 ]

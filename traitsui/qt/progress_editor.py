@@ -17,7 +17,7 @@ try:
     from pyface.ui.qt.progress_dialog import ProgressDialog
 except ModuleNotFoundError:
     from pyface.ui.qt4.progress_dialog import ProgressDialog
-from traitsui.qt4.editor import Editor
+from traitsui.qt.editor import Editor
 
 
 class _ProgressDialog(ProgressDialog):

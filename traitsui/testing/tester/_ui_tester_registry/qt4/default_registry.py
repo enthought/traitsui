@@ -9,7 +9,7 @@
 # Thanks for using Enthought open source!
 
 from traitsui.testing.tester.target_registry import TargetRegistry
-from traitsui.testing.tester._ui_tester_registry.qt4._traitsui import (
+from traitsui.testing.tester._ui_tester_registry.qt._traitsui import (
     boolean_editor,
     button_editor,
     check_list_editor,

@@ -14,14 +14,14 @@ from traitsui.testing.tester.query import SelectedText
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     BaseSourceWithLocation,
 )
-from traitsui.testing.tester._ui_tester_registry.qt4._interaction_helpers import (  # noqa
+from traitsui.testing.tester._ui_tester_registry.qt._interaction_helpers import (  # noqa
     mouse_click_combobox,
     mouse_click_qwidget,
 )
 from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
     register_traitsui_ui_solvers,
 )
-from traitsui.qt4.instance_editor import CustomEditor, SimpleEditor
+from traitsui.qt.instance_editor import CustomEditor, SimpleEditor
 
 
 def _get_nested_ui_simple(target):

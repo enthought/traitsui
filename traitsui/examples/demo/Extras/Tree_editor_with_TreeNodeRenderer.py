@@ -26,7 +26,7 @@ from traits.api import Array, Float, HasTraits, Instance, Int, List, Str
 
 from traitsui.api import TreeEditor, TreeNode, UItem, View, RGBColor
 from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
-from traitsui.qt4.tree_editor import WordWrapRenderer
+from traitsui.qt.tree_editor import WordWrapRenderer
 
 
 class MyDataElement(HasTraits):

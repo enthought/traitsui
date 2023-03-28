@@ -14,7 +14,7 @@ from pyface.qt import QtGui
 from pyface.color import Color as PyfaceColor
 from traits.api import HasStrictTraits, TraitError
 
-from traitsui.qt4.color_trait import PyQtColor
+from traitsui.qt.color_trait import PyQtColor
 
 
 class ObjectWithColor(HasStrictTraits):

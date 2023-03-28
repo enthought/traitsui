@@ -46,7 +46,7 @@ color_samples = []
 #  The PyQt ToolkitEditorFactory class.
 # ---------------------------------------------------------------------------
 
-## We need to add qt4-specific methods to the editor factory (since all editors
+## We need to add qt-specific methods to the editor factory (since all editors
 ## will be accessing these functions. Making these functions global functions
 ## in this file does not work quite well, since we want custom editors to
 ## override these methods easily.

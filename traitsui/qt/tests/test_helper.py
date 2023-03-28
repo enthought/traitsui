@@ -13,8 +13,8 @@ import unittest
 
 from pyface.qt import is_pyqt, qt_api, QtCore, QtGui
 from traitsui.tests._tools import is_mac_os, requires_toolkit, ToolkitName
-from traitsui.qt4.helper import qobject_is_valid, wrap_text_with_elision
-from traitsui.qt4.font_trait import create_traitsfont
+from traitsui.qt.helper import qobject_is_valid, wrap_text_with_elision
+from traitsui.qt.font_trait import create_traitsfont
 
 
 lorem_ipsum = (

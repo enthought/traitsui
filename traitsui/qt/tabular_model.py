@@ -20,7 +20,7 @@ from traitsui.ui_traits import SequenceTypes
 from .clipboard import PyMimeData
 
 
-# Mapping for trait alignment values to qt4 alignment values:
+# Mapping for trait alignment values to qt alignment values:
 alignment_map = {
     "left": QtCore.Qt.AlignmentFlag.AlignLeft,
     "right": QtCore.Qt.AlignmentFlag.AlignRight,

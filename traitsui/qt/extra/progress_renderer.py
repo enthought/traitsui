@@ -15,7 +15,7 @@ import sys
 from pyface.qt import QtCore, QtGui
 
 # ETS imports
-from traitsui.qt4.table_editor import TableDelegate
+from traitsui.qt.table_editor import TableDelegate
 
 
 class ProgressRenderer(TableDelegate):

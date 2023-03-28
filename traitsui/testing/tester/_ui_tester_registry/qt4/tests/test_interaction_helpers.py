@@ -18,7 +18,7 @@ from traitsui.tests._tools import (
 )
 from traitsui.testing.tester import command
 from traitsui.testing.tester.exceptions import Disabled
-from traitsui.testing.tester._ui_tester_registry.qt4 import (
+from traitsui.testing.tester._ui_tester_registry.qt import (
     _interaction_helpers,
 )
 

@@ -8,10 +8,10 @@
 #
 # Thanks for using Enthought open source!
 
-from traitsui.testing.tester._ui_tester_registry.qt4._registry_helper import (
+from traitsui.testing.tester._ui_tester_registry.qt._registry_helper import (
     register_editable_textbox_handlers,
 )
-from traitsui.qt4.directory_editor import SimpleEditor
+from traitsui.qt.directory_editor import SimpleEditor
 
 
 def register(registry):

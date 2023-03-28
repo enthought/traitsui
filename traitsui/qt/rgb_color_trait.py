@@ -17,7 +17,7 @@
 from traits.api import Trait, TraitError
 from traits.trait_base import SequenceTypes
 
-from traitsui.qt4.color_trait import standard_colors
+from traitsui.qt.color_trait import standard_colors
 
 # -------------------------------------------------------------------------
 #  Convert a number into an RGB tuple:

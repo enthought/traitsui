@@ -29,7 +29,7 @@ except ImportError:
     if is_qt():
         raise
 else:
-    from traitsui.testing.tester._ui_tester_registry.qt4._control_widget_registry import (  # noqa: E501
+    from traitsui.testing.tester._ui_tester_registry.qt._control_widget_registry import (  # noqa: E501
         get_widget_registry,
     )
 
