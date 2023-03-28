@@ -44,7 +44,7 @@ from .color_editor import ToolkitEditorFactory as BaseColorToolkitEditorFactory
 class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
     """PyQt editor factory for color editors."""
 
-    def to_qt4_color(self, editor):
+    def to_qt_color(self, editor):
         """Gets the PyQt color equivalent of the object trait."""
         try:
             color = getattr(editor.object, editor.name + "_")
@@ -56,7 +56,7 @@ class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
 
         return c
 
-    def from_qt4_color(self, color):
+    def from_qt_color(self, color):
         """Gets the application equivalent of a PyQt value."""
         return (color.redF(), color.greenF(), color.blueF())
 

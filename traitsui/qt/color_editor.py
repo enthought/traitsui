@@ -55,14 +55,14 @@ color_samples = []
 class ToolkitEditorFactory(BaseToolkitEditorFactory):
     """PyQt editor factory for color editors."""
 
-    def to_qt4_color(self, editor):
+    def to_qt_color(self, editor):
         """Gets the PyQt color equivalent of the object trait."""
         if self.mapped:
             return getattr(editor.object, editor.name + "_")
 
         return getattr(editor.object, editor.name)
 
-    def from_qt4_color(self, color):
+    def from_qt_color(self, color):
         """Gets the application equivalent of a PyQt value."""
         return color
 
@@ -95,7 +95,7 @@ class SimpleColorEditor(BaseSimpleEditor):
 
     def popup_editor(self):
         """Invokes the pop-up editor for an object trait."""
-        color = self.factory.to_qt4_color(self)
+        color = self.factory.to_qt_color(self)
         options = QtGui.QColorDialog.ColorDialogOption.ShowAlphaChannel
         if not self.factory.use_native_dialog:
             options |= QtGui.QColorDialog.ColorDialogOption.DontUseNativeDialog
@@ -104,7 +104,7 @@ class SimpleColorEditor(BaseSimpleEditor):
         )
 
         if color.isValid():
-            self.value = self.factory.from_qt4_color(color)
+            self.value = self.factory.from_qt_color(color)
             self.update_editor()
 
     def update_editor(self):
@@ -144,7 +144,7 @@ class CustomColorEditor(Editor):
     def update_object_from_swatch(self, color_text):
         """Updates the object trait when a color swatch is clicked."""
         color = QtGui.QColor(*[int(part) for part in color_text.split(",")])
-        self.value = self.factory.from_qt4_color(color)
+        self.value = self.factory.from_qt_color(color)
         self.update_editor()
 
     def string_value(self, color):
@@ -205,7 +205,7 @@ class ReadonlyColorEditor(BaseReadonlyEditor):
 
 def set_color(editor):
     """Sets the color of the specified color control."""
-    color = editor.factory.to_qt4_color(editor)
+    color = editor.factory.to_qt_color(editor)
     pal = QtGui.QPalette(editor.control.palette())
 
     pal.setColor(QtGui.QPalette.ColorRole.Base, color)

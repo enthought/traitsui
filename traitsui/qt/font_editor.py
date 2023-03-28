@@ -70,13 +70,13 @@ PointSizes = [
 class ToolkitEditorFactory(BaseToolkitEditorFactory):
     """PyQt editor factory for font editors."""
 
-    def to_qt4_font(self, editor):
+    def to_qt_font(self, editor):
         """Returns a QFont object corresponding to a specified object's font
         trait.
         """
         return QtGui.QFont(editor.value)
 
-    def from_qt4_font(self, font):
+    def from_qt_font(self, font):
         """Gets the application equivalent of a QFont value."""
         return font
 
@@ -106,11 +106,11 @@ class SimpleFontEditor(BaseSimpleEditor):
     def popup_editor(self):
         """Invokes the pop-up editor for an object trait."""
         fnt, ok = QtGui.QFontDialog.getFont(
-            self.factory.to_qt4_font(self), self.control
+            self.factory.to_qt_font(self), self.control
         )
 
         if ok:
-            self.value = self.factory.from_qt4_font(fnt)
+            self.value = self.factory.from_qt_font(fnt)
             self.update_editor()
 
     def update_editor(self):
@@ -168,7 +168,7 @@ class CustomFontEditor(Editor):
     def update_object(self):
         """Handles the user changing the contents of the font text control."""
         self.value = str(self._font.text())
-        self._set_font(self.factory.to_qt4_font(self))
+        self._set_font(self.factory.to_qt_font(self))
         self.update_editor()
 
     def update_object_parts(self):
@@ -181,7 +181,7 @@ class CustomFontEditor(Editor):
         psz = int(self._point_size.currentText())
         fnt.setPointSize(psz)
 
-        self.value = self.factory.from_qt4_font(fnt)
+        self.value = self.factory.from_qt_font(fnt)
 
         self._font.setText(self.str_value)
         self._set_font(fnt)
@@ -190,7 +190,7 @@ class CustomFontEditor(Editor):
         """Updates the editor when the object trait changes externally to the
         editor.
         """
-        font = self.factory.to_qt4_font(self)
+        font = self.factory.to_qt_font(self)
 
         self._bold = font.bold()
         self._italic = font.italic()
@@ -267,7 +267,7 @@ class ReadonlyFontEditor(BaseReadonlyEditor):
 
 def set_font(editor):
     """Sets the editor control's font to match a specified font."""
-    editor.control.setFont(editor.factory.to_qt4_font(editor))
+    editor.control.setFont(editor.factory.to_qt_font(editor))
 
 
 # Define the names SimpleEditor, CustomEditor, TextEditor and ReadonlyEditor

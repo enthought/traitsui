@@ -60,7 +60,7 @@ class SimpleEditor(Editor):
         drop_event_filter = _DropEventFilter(self.control)
         self.control.installEventFilter(drop_event_filter)
 
-        self.control._qt4_editor = self
+        self.control._qt_editor = self
 
     def dispose(self):
         """Disposes of the content of an editor."""
@@ -92,7 +92,7 @@ class _DropEventFilter(QtCore.QObject):
 
     def dropEvent(self, e):
         """Handles a Python object being dropped on the tree."""
-        editor = self.parent()._qt4_editor
+        editor = self.parent()._qt_editor
 
         klass = editor.factory.klass
 
@@ -119,7 +119,7 @@ class _DropEventFilter(QtCore.QObject):
 
     def dragEnterEvent(self, e):
         """Handles a Python object being dragged over the tree."""
-        editor = self.parent()._qt4_editor
+        editor = self.parent()._qt_editor
 
         if editor.factory.binding:
             data = getattr(clipboard, "node", None)

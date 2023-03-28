@@ -137,7 +137,7 @@ class ScrollableGroupVisibleWhen(HasTraits):
 
 @requires_toolkit([ToolkitName.qt])
 class TestUIPanel(unittest.TestCase):
-    def setup_qt4_dock_window(self):
+    def setup_qt_dock_window(self):
         from pyface.qt import QtGui
 
         # set up the dock window for qt
@@ -148,10 +148,10 @@ class TestUIPanel(unittest.TestCase):
         dock.setWidget(QtGui.QMainWindow())
         return main_window, dock
 
-    def test_panel_has_toolbar_buttons_qt4(self):
+    def test_panel_has_toolbar_buttons_qt(self):
         from pyface.qt import QtGui
 
-        _, dock = self.setup_qt4_dock_window()
+        _, dock = self.setup_qt_dock_window()
 
         # add panel
         panel = FooPanel()
@@ -166,10 +166,10 @@ class TestUIPanel(unittest.TestCase):
             # popping up and closing the panel
             self.assertIsNotNone(ui.control.findChild(QtGui.QPushButton))
 
-    def test_subpanel_has_toolbar_no_buttons_qt4(self):
+    def test_subpanel_has_toolbar_no_buttons_qt(self):
         from pyface.qt import QtGui
 
-        _, dock = self.setup_qt4_dock_window()
+        _, dock = self.setup_qt_dock_window()
 
         # add panel
         panel = FooPanel()
