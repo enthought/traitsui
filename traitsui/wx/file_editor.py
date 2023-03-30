@@ -138,6 +138,7 @@ class SimpleEditor(SimpleTextEditor):
             self._no_update = False
         else:
             self._file_name.SetValue(self.str_value)
+        self._reset_error()
 
     def show_file_dialog(self, event=None):
         """Displays the pop-up file dialog."""
@@ -157,6 +158,13 @@ class SimpleEditor(SimpleTextEditor):
     def get_error_control(self):
         """Returns the editor's control for indicating error status."""
         return self._file_name
+
+    def _reset_error(self):
+        """Resets the error state of the editor."""
+        if self._error is not None:
+            self._error = None
+            self.ui.errors -= 1
+            self.set_error_state(False)
 
     # -- Traits Event Handlers ------------------------------------------------
 
@@ -228,6 +236,7 @@ class SimpleEditor(SimpleTextEditor):
                 file_name = splitext(file_name)[0]
 
             self.value = file_name
+            self._reset_error()
         except TraitError as excp:
             pass
 
