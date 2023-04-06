@@ -34,5 +34,5 @@
 .. |UIWrapper.perform| replace:: :func:`~traitsui.testing.tester.ui_wrapper.UIWrapper.perform`
 .. |UIWrapper._target| replace:: :attr:`~traitsui.testing.tester.ui_wrapper.UIWrapper._target`
 
-.. |ModalDialogTester| replace:: :class:`~pyface.ui.qt4.util.modal_dialog_tester.ModalDialogTester`
-.. |GuiTestAssistant| replace:: :class:`~pyface.ui.qt4.util.gui_test_assistant.GuiTestAssistant`
+.. |ModalDialogTester| replace:: :class:`~pyface.ui.qt.util.modal_dialog_tester.ModalDialogTester`
+.. |GuiTestAssistant| replace:: :class:`~pyface.ui.qt.util.gui_test_assistant.GuiTestAssistant`

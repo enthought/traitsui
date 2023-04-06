@@ -8,57 +8,26 @@
 #
 # Thanks for using Enthought open source!
 
+def __getattr__(name):
+    """Handle deprecated attributes."""
+    if name == "__version__":
+        try:
+            from importlib.metadata import version
+        except ImportError:
+            from importlib_metadata import version
+        from warnings import warn
 
-try:
-    from traitsui._version import full_version as __version__
-except ImportError:
-    __version__ = "not-built"
-
-__requires__ = ["traits>=6.2.0", "pyface>=7.4.1"]
-__extras_require__ = {
-    "wx": ["wxpython>=4", "numpy"],
-    "pyqt": ["pyqt>=4.10", "pygments"],
-    "pyqt5": ["pyqt5", "pygments"],
-    "pyside2": ["pyside2", "pygments"],
-    "pyside6": [
-        # Avoid https://bugreports.qt.io/browse/PYSIDE-1797, which causes
-        # some versions of PySide6 to be unimportable on Python 3.6 and 3.7.
-        # Also avoid PySide 6.4 until enum issue is resolved.
-        "pyside6!=6.2.2,!=6.2.2.1,!=6.2.3,!=6.2.4,!=6.3.0,<6.4.0; python_version<'3.8'",
-        "pyside6<6.4.0; python_version>='3.8'",
-        "pygments",
-    ],
-    "docs": ["enthought-sphinx-theme", "sphinx", "sphinx-copybutton"],
-    "demo": [
-        # to be deprecated, see enthought/traitsui#950
-        "configobj",
-        "docutils",
-    ],
-    "examples": [
-        # Dependencies for examples
-        "apptools",
-        "h5py",
-        "numpy",
-        "pandas",
-        "pillow",
-        "tables",
-    ],
-    "editors": [
-        # Optional dependencies for certain editors which may not be needed by
-        # projects. If they are absent, ``traitsui.api``` should still be
-        # importable and the relevant tests should be skipped.
-        "numpy",  # For ArrayEditor and DataFrameEditor
-        "pandas",  # For DataFrameEditor
-    ],
-    "test": [
-        # Dependencies for running test suites.
-        "packaging",
-        "numpy",
-    ],
-}
+        warn(
+            f"traitsui.{name} is deprecated, "
+            f"use impportlib.metadata.version('traitsui') ",
+            DeprecationWarning,
+        )
+        return version('traitsui')
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 # ============================= Test Loader ==================================
+
 def load_tests(loader, standard_tests, pattern):
     """Custom test loading function that enables test filtering using regex
     exclusion pattern.

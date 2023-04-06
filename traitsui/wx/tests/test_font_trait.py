@@ -27,7 +27,7 @@ class FontExample(HasTraits):
     font = WxFont()
 
 
-class TestPyQtFont(unittest.TestCase):
+class TestWxFont(unittest.TestCase):
 
     def test_create_traitsfont(self):
         expected_outcomes = {}
@@ -75,11 +75,11 @@ class TestPyQtFont(unittest.TestCase):
 
                 # test we get expected font
                 self.assertIsInstance(result, TraitsFont)
-                self.assert_qfont_equal(result, expected)
+                self.assert_wxfont_equal(result, expected)
 
                 # round-trip trhough font_to_str
                 result_2 = create_traitsfont(font_to_str(result))
-                self.assert_qfont_equal(result, result_2)
+                self.assert_wxfont_equal(result, result_2)
 
     def test_create_traitsfont_wx_font(self):
         font = wx.Font(
@@ -88,14 +88,14 @@ class TestPyQtFont(unittest.TestCase):
         traits_font = create_traitsfont(font)
 
         self.assertIsInstance(traits_font, TraitsFont)
-        self.assert_qfont_equal(traits_font, font)
+        self.assert_wxfont_equal(traits_font, font)
 
     def test_create_traitsfont_system_default(self):
         font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         traits_font = create_traitsfont(font)
 
         self.assertIsInstance(traits_font, TraitsFont)
-        self.assert_qfont_equal(traits_font, font)
+        self.assert_wxfont_equal(traits_font, font)
 
     def test_create_traitsfont_pyface_font(self):
         args = simple_parser("18 pt Bold Oblique Underline Courier")
@@ -103,13 +103,13 @@ class TestPyQtFont(unittest.TestCase):
         traits_font = create_traitsfont(font)
 
         self.assertIsInstance(traits_font, TraitsFont)
-        self.assert_qfont_equal(traits_font, font.to_toolkit())
+        self.assert_wxfont_equal(traits_font, font.to_toolkit())
 
     def test_font_trait_default(self):
         obj = FontExample()
 
         self.assertIsInstance(obj.font, TraitsFont)
-        self.assert_qfont_equal(obj.font, wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
+        self.assert_wxfont_equal(obj.font, wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
 
     def test_font_trait_str(self):
         obj = FontExample(font="18 pt Bold Oblique Underline Comic Sans script")
@@ -118,7 +118,7 @@ class TestPyQtFont(unittest.TestCase):
         )
 
         self.assertIsInstance(obj.font, TraitsFont)
-        self.assert_qfont_equal(obj.font, wx_font)
+        self.assert_wxfont_equal(obj.font, wx_font)
 
     def test_font_trait_wx_font(self):
         wx_font = TraitsFont(
@@ -127,7 +127,7 @@ class TestPyQtFont(unittest.TestCase):
         obj = FontExample(font=wx_font)
 
         self.assertIsInstance(obj.font, TraitsFont)
-        self.assert_qfont_equal(obj.font, wx_font)
+        self.assert_wxfont_equal(obj.font, wx_font)
 
     def test_font_trait_pyface_font(self):
         args = simple_parser("18 pt Bold Oblique Underline Courier typewriter")
@@ -135,7 +135,7 @@ class TestPyQtFont(unittest.TestCase):
         obj = FontExample(font=font)
 
         self.assertIsInstance(obj.font, TraitsFont)
-        self.assert_qfont_equal(obj.font, font.to_toolkit())
+        self.assert_wxfont_equal(obj.font, font.to_toolkit())
 
     def test_font_trait_none(self):
         obj = FontExample(font=None)

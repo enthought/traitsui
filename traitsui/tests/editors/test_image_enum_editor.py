@@ -32,9 +32,9 @@ if is_wx():
 
     cache_to_patch = "traitsui.wx.image_enum_editor.bitmap_cache"
 elif is_qt():
-    from traitsui.qt4.helper import pixmap_cache as image_cache
+    from traitsui.qt.helper import pixmap_cache as image_cache
 
-    cache_to_patch = "traitsui.qt4.image_enum_editor.pixmap_cache"
+    cache_to_patch = "traitsui.qt.image_enum_editor.pixmap_cache"
 
 is_linux = sys.platform == 'linux'
 

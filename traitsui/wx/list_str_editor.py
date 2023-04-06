@@ -317,7 +317,7 @@ class _ListStrEditor(Editor):
         if index is None:
             visible = top + pn - 2
             if visible >= 0 and visible < control.GetItemCount():
-                control.EnsureVisible(visible)
+                control.ScrollHint.EnsureVisible(visible)
             if self.factory.multi_select:
                 for index in self.multi_selected_indices:
                     if 0 <= index < n:
@@ -336,15 +336,15 @@ class _ListStrEditor(Editor):
             return
 
         if 0 <= (index - top) < pn:
-            control.EnsureVisible(
+            control.ScrollHint.EnsureVisible(
                 min(top + pn - 2, control.GetItemCount() - 1)
             )
         elif index < top:
-            control.EnsureVisible(
+            control.ScrollHint.EnsureVisible(
                 min(index + pn - 1, control.GetItemCount() - 1)
             )
         else:
-            control.EnsureVisible(index)
+            control.ScrollHint.EnsureVisible(index)
 
         control.SetItemState(
             index,
