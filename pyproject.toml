@@ -14,7 +14,7 @@ classifiers = [
 ]
 dependencies = [
     'traits>=6.2',
-    'pyface@git+https://github.com/enthought/pyface',
+    'pyface',
     'importlib-metadata>=3.6; python_version<"3.8"',
 ]
 license = {file = "LICENSE.txt"}
