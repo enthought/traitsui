@@ -119,8 +119,7 @@ DEFAULT_TOOLKIT = 'null'
 
 # Required runtime dependencies. Should match pyproject.toml.
 dependencies = {
-    # temporarily get pyface from pip until EDM release
-    # "pyface>=7.4.1",
+    "pyface>=8.0",
     "traits",
     "setuptools",
 }
