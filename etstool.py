@@ -119,8 +119,7 @@ DEFAULT_TOOLKIT = 'null'
 
 # Required runtime dependencies. Should match pyproject.toml.
 dependencies = {
-    # temporarily get pyface from pip until EDM release
-    # "pyface>=7.4.1",
+    "pyface>=8.0",
     "traits",
     "setuptools",
 }
@@ -192,16 +191,16 @@ doc_dependencies = {
 
 #: Paths to ignore in Sphinx-apidoc
 doc_ignore = {
-    "traitsui/qt4/*",
+    "traitsui/qt/*",
     "traitsui/wx/*",
     "*/tests",
 }
 
 environment_vars = {
-    'pyside2': {'ETS_TOOLKIT': 'qt', 'QT_API': 'pyside2'},
-    'pyside6': {'ETS_TOOLKIT': 'qt', 'QT_API': 'pyside6'},
-    'pyqt5': {"ETS_TOOLKIT": "qt", "QT_API": "pyqt5"},
-    'pyqt6': {"ETS_TOOLKIT": "qt", "QT_API": "pyqt6"},
+    'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
+    'pyside6': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside6'},
+    'pyqt5': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
+    'pyqt6': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt6"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
 }

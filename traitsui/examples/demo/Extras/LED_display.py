@@ -26,7 +26,7 @@ from traits.etsconfig.api import ETSConfig
 if ETSConfig.toolkit == 'wx':
     from traitsui.wx.extra.led_editor import LEDEditor
 else:
-    from traitsui.qt4.extra.led_editor import LEDEditor
+    from traitsui.qt.extra.led_editor import LEDEditor
 
 # Handler class for the LEDDemo class view:
 

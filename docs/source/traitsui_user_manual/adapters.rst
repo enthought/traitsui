@@ -252,7 +252,7 @@ The Qt backend allows users to completely override the rendering of cells in
 a TreeEditor.  To do this, the TreeNode should override the
 :py:meth:`TreeNode.get_renderer` method to return an instance of a
 subclass of :py:class:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer`.
-A :py:class:`~traitsui.qt4.tree_node_renderers.WordWrapRenderer` is available
+A :py:class:`~traitsui.qt.tree_node_renderers.WordWrapRenderer` is available
 to provide basic word-wrapped layout in a cell, but user-defined subclasses
 can do any rendering that they want by implementing their own
 :py:class:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer` subclass.

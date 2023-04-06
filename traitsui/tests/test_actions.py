@@ -105,7 +105,7 @@ class DialogWithSchema(HasTraits):
     )
 
 
-# ----- qt4 helper functions
+# ----- qt helper functions
 
 
 def _qt_trigger_action(container_class, ui):
@@ -125,7 +125,7 @@ def _qt_click_button(ui):
 class TestActions(BaseTestMixin, unittest.TestCase):
 
     def _test_actions(self, trigger_action_func):
-        """Template test for wx, qt4, menu, and toolbar testing."""
+        """Template test for wx, qt, menu, and toolbar testing."""
         # Behavior: when clicking on a menu or toolbar action,
         # the corresponding function should be executed
 
@@ -149,10 +149,7 @@ class TestActions(BaseTestMixin, unittest.TestCase):
         # Bug: in the Qt4 backend, a
         # TypeError: perform() takes exactly 2 arguments (1 given) was raised
         # instead
-        try:
-            from pyface.ui.qt.action.tool_bar_manager import _ToolBar
-        except ModuleNotFoundError:
-            from pyface.ui.qt4.action.tool_bar_manager import _ToolBar
+        from pyface.ui.qt.action.tool_bar_manager import _ToolBar
 
         qt_trigger_toolbar_action = partial(_qt_trigger_action, _ToolBar)
 
@@ -166,10 +163,7 @@ class TestActions(BaseTestMixin, unittest.TestCase):
         # Bug: in the Qt4 backend, a
         # TypeError: perform() takes exactly 2 arguments (1 given) was raised
         # instead
-        try:
-            from pyface.ui.qt.action.menu_manager import _Menu
-        except ModuleNotFoundError:
-            from pyface.ui.qt4.action.menu_manager import _Menu
+        from pyface.ui.qt.action.menu_manager import _Menu
 
         qt_trigger_menu_action = partial(
             _qt_trigger_action, _Menu
@@ -276,10 +270,7 @@ class TestActionSchemas(BaseTestMixin, unittest.TestCase):
         # Bug: in the Qt4 backend, a
         # TypeError: perform() takes exactly 2 arguments (1 given) was raised
         # instead
-        try:
-            from pyface.ui.qt.action.tool_bar_manager import _ToolBar
-        except ModuleNotFoundError:
-            from pyface.ui.qt4.action.tool_bar_manager import _ToolBar
+        from pyface.ui.qt.action.tool_bar_manager import _ToolBar
 
         qt_trigger_toolbar_action = partial(_qt_trigger_action, _ToolBar)
 
@@ -293,10 +284,7 @@ class TestActionSchemas(BaseTestMixin, unittest.TestCase):
         # Bug: in the Qt4 backend, a
         # TypeError: perform() takes exactly 2 arguments (1 given) was raised
         # instead
-        try:
-            from pyface.ui.qt.action.menu_manager import _Menu
-        except ModuleNotFoundError:
-            from pyface.ui.qt4.action.menu_manager import _Menu
+        from pyface.ui.qt.action.menu_manager import _Menu
 
         qt_trigger_menu_action = partial(_qt_trigger_action, _Menu)
 

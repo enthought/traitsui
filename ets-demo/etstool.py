@@ -161,9 +161,9 @@ APP_BUNDLE_VERSION = "1.0.0-1"
 BUNDLE_NAME = f"etsdemo-{APP_BUNDLE_VERSION}.bundle"
 
 environment_vars = {
-    'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
-    'pyside6': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside6'},
-    'pyqt5': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
+    'pyside2': {'ETS_TOOLKIT': 'qt', 'QT_API': 'pyside2'},
+    'pyside6': {'ETS_TOOLKIT': 'qt', 'QT_API': 'pyside6'},
+    'pyqt5': {"ETS_TOOLKIT": "qt", "QT_API": "pyqt5"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
 }

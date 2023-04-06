@@ -202,7 +202,7 @@ def qt_target_registry():
     -------
     target_registry : TargetRegistry
     """
-    from traitsui.qt4.html_editor import SimpleEditor
+    from traitsui.qt.html_editor import SimpleEditor
 
     registry = TargetRegistry()
     registry.register_interaction(

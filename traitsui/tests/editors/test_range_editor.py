@@ -53,10 +53,10 @@ def _register_simple_spin(registry):
     registry : TargetRegistry
         The registry being registered to.
     """
-    from traitsui.testing.tester._ui_tester_registry.qt4 import (
+    from traitsui.testing.tester._ui_tester_registry.qt import (
         _registry_helper,
     )
-    from traitsui.qt4.range_editor import SimpleSpinEditor
+    from traitsui.qt.range_editor import SimpleSpinEditor
 
     _registry_helper.register_editable_textbox_handlers(
         registry=registry,
