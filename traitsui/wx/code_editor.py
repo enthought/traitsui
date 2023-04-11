@@ -96,6 +96,7 @@ class SourceEditor(Editor):
         self._editor = editor = PythonEditor(
             parent, show_line_numbers=factory.show_line_numbers
         )
+        editor.create()
         self.control = control = editor.control
 
         # There are a number of events which aren't well documented that look
