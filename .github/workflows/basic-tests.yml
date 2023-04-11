@@ -1,0 +1,46 @@
+name: Run test suite for Qt and wxPython
+
+on: [pull_request, workflow_dispatch]
+
+env:
+  PYTHONUNBUFFERED: 1
+
+jobs:
+  tests-qt:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.8', '3.11']
+        qt-api: ['pyqt5', 'pyside2', 'pyside6']
+        exclude:
+          - python-version: '3.11'
+            qt-api: 'pyside2'
+      fail-fast: false
+
+    env:
+      ETS_TOOLKIT: qt
+
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20  # should be plenty, it's usually < 5
+
+    steps:
+    - name: Check out the target commit
+      uses: actions/checkout@v3
+    - name: Install Qt dependencies
+      uses: ./.github/actions/install-qt-support
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies and local packages
+      run: |
+        python -m pip install ".[${{ matrix.qt-api }},editors,examples,test]"
+    - name: Create clean test directory
+      run: |
+        mkdir testdir
+    - name: Run the test suite (Linux)
+      run: cd testdir && xvfb-run -a python -X faulthandler -m unittest discover -v traitsui
+      if: matrix.os == 'ubuntu-latest'
+    - name: Run the test suite (Windows/macOS)
+      run: cd testdir && python -X faulthandler -m unittest discover -v traitsui
+      if: matrix.os != 'ubuntu-latest'

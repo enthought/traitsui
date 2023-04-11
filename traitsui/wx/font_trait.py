@@ -49,12 +49,12 @@ font_noise = ["pt", "point", "family"]
 def font_to_str(font):
     """Converts a wx.Font into a string description of itself."""
     family = {
-        wx.FONTFAMILY_DECORATIVE: "decorative family",
-        wx.FONTFAMILY_ROMAN: "roman family",
-        wx.FONTFAMILY_SCRIPT: "script family",
-        wx.FONTFAMILY_SWISS: "swiss family",
-        wx.FONTFAMILY_MODERN: "modern family",
-        wx.FONTFAMILY_TELETYPE: "typewriter family",
+        wx.FONTFAMILY_DECORATIVE: "decorative ",
+        wx.FONTFAMILY_ROMAN: "roman ",
+        wx.FONTFAMILY_SCRIPT: "script ",
+        wx.FONTFAMILY_SWISS: "swiss ",
+        wx.FONTFAMILY_MODERN: "modern ",
+        wx.FONTFAMILY_TELETYPE: "typewriter ",
     }.get(font.GetFamily(), "")
     weight = {wx.FONTWEIGHT_LIGHT: " Light", wx.FONTWEIGHT_BOLD: " Bold"}.get(
         font.GetWeight(), ""

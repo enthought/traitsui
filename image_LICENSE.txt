@@ -29,7 +29,7 @@ traitsui/extras/images:
                          reload.png | Nuvola
                             run.png | Nuvola
 
-traitsui/qt4/images:
+traitsui/qt/images:
                        closetab.png | Qt
                            next.png | Qt
                        previous.png | Qt

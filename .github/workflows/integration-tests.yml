@@ -15,19 +15,19 @@ jobs:
     if: github.repository == 'enthought/traitsui'
     strategy:
       matrix:
-        os: [ubuntu-20.04]
-        toolkit: ['pyside2']
-        python-version: [3.6, 3.8, 3.9]
+        os: [ubuntu-latest]
+        toolkit: ['pyside6']
+        python-version: [3.8, 3.11]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Qt dependencies for Linux
-        uses: ./.github/actions/apt-get-qt-deps
+        uses: ./.github/actions/install-qt-support
         if: startsWith(matrix.os, 'ubuntu')
       - name: Install Swig
         run: sudo apt-get install swig
@@ -37,16 +37,16 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install .[${{ matrix.toolkit }},test,editors]
           python -m pip install .[examples]
+      - name: Create clean test directory
+        run: |
+          mkdir testdir
       - name: Run integration tests
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: python -m unittest discover -v ${{ github.workspace }}/integrationtests
-          working-directory: ${{ runner.temp }}
+        run: cd testdir &&  xvfb-run -a python -X faulthandler -m unittest discover -v ${{ github.workspace }}/integrationtests
 
   notify-on-failure:
     needs: test
     if: failure()
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Notify Slack channel on failure
         uses: voxmedia/github-action-slack-notify-build@v1
@@ -60,7 +60,7 @@ jobs:
   notify-on-success:
     needs: test
     if: success()
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Notify Slack channel on success
         uses: voxmedia/github-action-slack-notify-build@v1

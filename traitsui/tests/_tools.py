@@ -152,7 +152,7 @@ def create_ui(object, ui_kwargs=None):
     return UITester().create_ui(object=object, ui_kwargs=ui_kwargs)
 
 
-# ######### Utility tools to test on both qt4 and wx
+# ######### Utility tools to test on both qt and wx
 
 
 def get_children(node):

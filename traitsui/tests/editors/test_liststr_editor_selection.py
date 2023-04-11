@@ -744,7 +744,7 @@ class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
     def test_selection_listener_disconnected(self):
         """Check that selection listeners get correctly disconnected"""
         from pyface.qt.QtGui import QApplication, QItemSelectionModel
-        from pyface.ui.qt4.util.testing import event_loop
+        from pyface.ui.qt.util.testing import event_loop
 
         obj = ListStrEditorWithSelectedIndex(values=["value1", "value2"])
 
