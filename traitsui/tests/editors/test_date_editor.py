@@ -74,7 +74,7 @@ class TestDateEditorCustomQt(BaseTestMixin, unittest.TestCase):
     def tearDown(self):
         BaseTestMixin.tearDown(self)
 
-    def test_single_select_qt4(self):
+    def test_single_select_qt(self):
         with self.launch_editor(single_select_custom_view) as (foo, editor):
             date = datetime.date(2018, 2, 3)
             self.click_date_on_editor(editor, date)
@@ -93,7 +93,7 @@ class TestDateEditorCustomQt(BaseTestMixin, unittest.TestCase):
 
             self.assertEqual(foo.dates, sorted(dates))
 
-    def test_multi_select_qt4_styles_reset(self):
+    def test_multi_select_qt_styles_reset(self):
         with self.launch_editor(multi_select_custom_view) as (foo, editor):
             date = datetime.date(2018, 2, 1)
             self.click_date_on_editor(editor, date)
@@ -102,7 +102,7 @@ class TestDateEditorCustomQt(BaseTestMixin, unittest.TestCase):
             self.click_date_on_editor(editor, date)
             self.check_select_status(editor=editor, date=date, selected=False)
 
-    def test_multi_select_qt4_set_model_dates(self):
+    def test_multi_select_qt_set_model_dates(self):
         # Test setting the dates from the model object.
         with self.launch_editor(multi_select_custom_view) as (foo, editor):
             foo.dates = [datetime.date(2010, 1, 2), datetime.date(2010, 2, 1)]

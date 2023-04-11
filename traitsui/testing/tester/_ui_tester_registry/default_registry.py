@@ -34,7 +34,7 @@ def get_default_registries():
     if ETSConfig.toolkit == "null":
         registries = []
     else:
-        toolkit = {'wx': 'wx', 'qt4': 'qt4', 'qt': 'qt4'}[ETSConfig.toolkit]
+        toolkit = {'wx': 'wx', 'qt4': 'qt', 'qt': 'qt'}[ETSConfig.toolkit]
         this_package, _ = __name__.rsplit(".", 1)
         module = importlib.import_module(
             ".default_registry", this_package + '.' + toolkit

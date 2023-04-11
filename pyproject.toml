@@ -14,15 +14,15 @@ classifiers = [
 ]
 dependencies = [
     'traits>=6.2',
-    'pyface>=7.4.1',
+    'pyface>=8.0',
     'importlib-metadata>=3.6; python_version<"3.8"',
 ]
 license = {file = "LICENSE.txt"}
 version = "8.0.0.dev0"
 
 [project.entry-points.'traitsui.toolkits']
-qt = 'traitsui.qt4:toolkit'
-qt4 = 'traitsui.qt4:toolkit'
+qt = 'traitsui.qt:toolkit'
+qt4 = 'traitsui.qt:toolkit'
 wx = 'traitsui.wx:toolkit'
 null = 'traitsui.null:toolkit'
 
@@ -70,6 +70,6 @@ traitsui = [
     'image/library/*.zip',
     'images/*',
     'wx/images/*',
-    'qt4/images/*',
+    'qt/images/*',
     'testing/data/*',
 ]
