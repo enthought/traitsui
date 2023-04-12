@@ -8,56 +8,21 @@
 #
 # Thanks for using Enthought open source!
 
-# Adding this statement for backwards compatibility (since editors.py was a
-# file prior to version 3.0.3).
 
+def __getattr__(name):
+    # For backwards compatibility, continue to make the editors available for
+    # import here, but warn it is deprecated.
+    import traitsui.editors.api
+    if name in traitsui.editors.api.__dict__:
+        obj = getattr(traitsui.editors.api, name)
+        import warnings
+        warnings.warn(
+            "Using or importing Editor factories from 'traitsui.editors' "
+            "instead of from 'traitsui.editors.api' is deprecated and will "
+            "stop working in TraitsUI 9.0",
+            DeprecationWarning, stacklevel=2,
+        )
+        globals()[name] = obj
+        return obj
 
-try:
-    from .api import ArrayEditor
-except ImportError:
-    pass
-
-from .api import (
-    toolkit,
-    BooleanEditor,
-    ButtonEditor,
-    CheckListEditor,
-    CodeEditor,
-    ColorEditor,
-    CompoundEditor,
-    CustomEditor,
-    DateEditor,
-    DatetimeEditor,
-    DefaultOverride,
-    DirectoryEditor,
-    DNDEditor,
-    DropEditor,
-    EnumEditor,
-    FileEditor,
-    FontEditor,
-    KeyBindingEditor,
-    ImageEditor,
-    ImageEnumEditor,
-    InstanceEditor,
-    ListEditor,
-    ListStrEditor,
-    NullEditor,
-    RangeEditor,
-    RGBColorEditor,
-    SetEditor,
-    TextEditor,
-    TableEditor,
-    TimeEditor,
-    TitleEditor,
-    TreeEditor,
-    TupleEditor,
-    HistoryEditor,
-    HTMLEditor,
-    PopupEditor,
-    ValueEditor,
-    ShellEditor,
-    ScrubberEditor,
-    TabularEditor,
-    ProgressEditor,
-    SearchEditor,
-)
+    raise AttributeError(f'module {__name__!r} has no attribute {name!r}')
