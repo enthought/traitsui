@@ -42,7 +42,7 @@ class _BoundsEditor(Editor):
         self.max = factory.max
         self.min = factory.min
 
-        self.format = factory.format
+        self.format_str = factory.format
 
         self.evaluate = factory.evaluate
         self.sync_value(factory.evaluate_name, "evaluate", "from")
@@ -57,7 +57,7 @@ class _BoundsEditor(Editor):
         self._label_lo = wx.TextCtrl(
             panel,
             -1,
-            self.format % self.low,
+            self.format_str % self.low,
             size=wx.Size(56, 20),
             style=wx.TE_PROCESS_ENTER,
         )
@@ -104,7 +104,7 @@ class _BoundsEditor(Editor):
         self._label_hi = wx.TextCtrl(
             panel,
             -1,
-            self.format % self.high,
+            self.format_str % self.high,
             size=wx.Size(56, 20),
             style=wx.TE_PROCESS_ENTER,
         )
@@ -136,14 +136,14 @@ class _BoundsEditor(Editor):
                     low = self.evaluate(low)
             except Exception as ex:
                 low = self.low
-                self._label_lo.SetValue(self.format % self.low)
+                self._label_lo.SetValue(self.format_str % self.low)
 
             if not self.factory.is_float:
                 low = int(low)
 
             if low > self.high:
                 low = self.high - self._step_size()
-                self._label_lo.SetValue(self.format % low)
+                self._label_lo.SetValue(self.format_str % low)
 
             self.control.lslider.SetValue(self._convert_to_slider(low))
             self.low = low
@@ -160,14 +160,14 @@ class _BoundsEditor(Editor):
                     high = self.evaluate(high)
             except:
                 high = self.high
-                self._label_hi.SetValue(self.format % self.high)
+                self._label_hi.SetValue(self.format_str % self.high)
 
             if not self.factory.is_float:
                 high = int(high)
 
             if high < self.low:
                 high = self.low + self._step_size()
-                self._label_hi.SetValue(self.format % high)
+                self._label_hi.SetValue(self.format_str % high)
 
             self.control.rslider.SetValue(self._convert_to_slider(high))
             self.high = high
@@ -229,7 +229,7 @@ class _BoundsEditor(Editor):
         if self.control is None:
             return
         if self._label_lo is not None:
-            self._label_lo.SetValue(self.format % low)
+            self._label_lo.SetValue(self.format_str % low)
 
         self.control.lslider.SetValue(self._convert_to_slider(low))
 
@@ -237,7 +237,7 @@ class _BoundsEditor(Editor):
         if self.control is None:
             return
         if self._label_hi is not None:
-            self._label_hi.SetValue(self.format % high)
+            self._label_hi.SetValue(self.format_str % high)
 
         self.control.rslider.SetValue(self._convert_to_slider(self.high))
 

@@ -74,9 +74,6 @@ class SimpleSliderEditor(BaseRangeEditor):
     #: High value for the slider range
     high = Any()
 
-    #: Deprecated: This trait is no longer used. See enthought/traitsui#1704
-    format = Str()
-
     #: Flag indicating that the UI is in the process of being updated
     ui_changing = Bool(False)
 

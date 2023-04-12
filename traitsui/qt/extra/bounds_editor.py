@@ -41,8 +41,6 @@ class _BoundsEditor(Editor):
         self.max = factory.max
         self.min = factory.min
 
-        self.format = factory.format
-
         self.evaluate = factory.evaluate
         self.sync_value(factory.evaluate_name, "evaluate", "from")
 
@@ -53,7 +51,7 @@ class _BoundsEditor(Editor):
         panel = QtGui.QHBoxLayout(self.control)
         panel.setContentsMargins(0, 0, 0, 0)
 
-        self._label_lo = QtGui.QLineEdit(self.format % self.low)
+        self._label_lo = QtGui.QLineEdit(self.format_str % self.low)
         self._label_lo.editingFinished.connect(self.update_low_on_enter)
         panel.addWidget(self._label_lo)
 
@@ -74,7 +72,7 @@ class _BoundsEditor(Editor):
         slider.sliderMoved.connect(self.update_object_on_scroll)
         panel.addWidget(slider)
 
-        self._label_hi = QtGui.QLineEdit(self.format % self.high)
+        self._label_hi = QtGui.QLineEdit(self.format_str % self.high)
         self._label_hi.editingFinished.connect(self.update_high_on_enter)
         panel.addWidget(self._label_hi)
 
@@ -95,14 +93,14 @@ class _BoundsEditor(Editor):
                     low = self.evaluate(low)
             except Exception as ex:
                 low = self.low
-                self._label_lo.setText(self.format % self.low)
+                self._label_lo.setText(self.format_str % self.low)
 
             if not self.factory.is_float:
                 low = int(low)
 
             if low > self.high:
                 low = self.high - self._step_size()
-                self._label_lo.setText(self.format % low)
+                self._label_lo.setText(self.format_str % low)
 
             self.control.slider.setLow(self._convert_to_slider(low))
             self.low = low
@@ -117,14 +115,14 @@ class _BoundsEditor(Editor):
                     high = self.evaluate(high)
             except:
                 high = self.high
-                self._label_hi.setText(self.format % self.high)
+                self._label_hi.setText(self.format_str % self.high)
 
             if not self.factory.is_float:
                 high = int(high)
 
             if high < self.low:
                 high = self.low + self._step_size()
-                self._label_hi.setText(self.format % high)
+                self._label_hi.setText(self.format_str % high)
 
             self.control.slider.setHigh(self._convert_to_slider(high))
             self.high = high
@@ -180,7 +178,7 @@ class _BoundsEditor(Editor):
         if self.control is None:
             return
         if self._label_lo is not None:
-            self._label_lo.setText(self.format % low)
+            self._label_lo.setText(self.format_str % low)
 
         self.control.slider.setLow(self._convert_to_slider(low))
 
@@ -188,7 +186,7 @@ class _BoundsEditor(Editor):
         if self.control is None:
             return
         if self._label_hi is not None:
-            self._label_hi.setText(self.format % high)
+            self._label_hi.setText(self.format_str % high)
 
         self.control.slider.setHigh(self._convert_to_slider(self.high))
 
