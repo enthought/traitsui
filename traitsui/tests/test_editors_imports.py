@@ -14,6 +14,6 @@ import unittest
 class TestEditorsImports(unittest.TestCase):
 
     def test_editors_import_warns(self):
-        # Importing from pyface.editors is deprecated
+        # Importing from traitsui.editors is deprecated
         with self.assertWarns(DeprecationWarning):
             from traitsui.editors import BooleanEditor
