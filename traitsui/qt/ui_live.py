@@ -236,6 +236,10 @@ class _LiveWindow(BaseDialog):
 
         self.undo = self.redo = self.revert = None
 
+    def close_popup(self, rc=True):
+        """Close the popup window and set the given return code."""
+        super().close(rc)
+
     def _on_finished(self, result):
         """Handles the user finishing with the dialog."""
         accept = bool(result)

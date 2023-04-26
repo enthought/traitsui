@@ -167,6 +167,14 @@ class GUIToolkit(Toolkit):
 
         ui_live.ui_live(ui, parent)
 
+    def ui_popup(self, ui, parent):
+        """Creates a GUI-toolkit-specific temporary "live update" popup dialog
+        user interface using information from the specified UI object.
+        """
+        from . import ui_live
+
+        ui_live.ui_popup(ui, parent)
+
     def ui_modal(self, ui, parent):
         """Creates a PyQt modal dialog user interface using information
         from the specified UI object.
