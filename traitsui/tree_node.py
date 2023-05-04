@@ -250,7 +250,7 @@ class TreeNode(HasPrivateTraits):
         specified object.
         """
         object.on_trait_change(
-            listener, self.children, remove=remove, dispatch="fast_ui"
+            listener, self.children, remove=remove, dispatch="ui"
         )
 
     def when_children_changed(self, object, listener, remove):
@@ -261,7 +261,7 @@ class TreeNode(HasPrivateTraits):
             listener,
             self.children + "_items",
             remove=remove,
-            dispatch="fast_ui",
+            dispatch="ui",
         )
 
     def get_label(self, object):
@@ -1356,7 +1356,7 @@ class TreeNodeObject(HasPrivateTraits):
         specified object.
         """
         self.on_trait_change(
-            listener, node.children, remove=remove, dispatch="fast_ui"
+            listener, node.children, remove=remove, dispatch="ui"
         )
 
     def tno_when_children_changed(self, node, listener, remove):
@@ -1367,7 +1367,7 @@ class TreeNodeObject(HasPrivateTraits):
             listener,
             node.children + "_items",
             remove=remove,
-            dispatch="fast_ui",
+            dispatch="ui",
         )
 
     def tno_get_label(self, node):
