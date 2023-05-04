@@ -98,6 +98,10 @@ In this example, several of the variations described above are shown:
 
 For comparison purposes, the example also shows the same traits displayed using
 their default editors.
+
+Notes:
+
+- This demo only works on the wx backend.
 """
 
 # -- Imports --------------------------------------------------------------
