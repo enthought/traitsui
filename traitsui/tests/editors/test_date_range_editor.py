@@ -30,7 +30,7 @@ from traitsui.tests._tools import (
 
 class Foo(HasTraits):
 
-    date_range = Tuple(Date, Date)
+    date_range = Tuple(Date(allow_none=True), Date(allow_none=True))
 
 
 def default_custom_view():
