@@ -17,6 +17,10 @@ playing
 The value associated with **AnimatedGIFEditor** should be the name of the
 animated GIF image file to be displayed. No user editing of the value is
 provided by this editor, it is display only.
+
+Notes:
+
+- This demo only works on the wx backend.
 """
 
 # --[Imports]--------------------------------------------------------------
