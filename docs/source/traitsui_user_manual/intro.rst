@@ -119,9 +119,9 @@ are:
 
 .. index:: wxPython toolkit, Qt toolkit, null toolkit
 
-* 'qt4' or 'qt': `PyQt <http://riverbankcomputing.co.uk/pyqt/>`_ or
-  `Qt for Python/PySide2 <https://doc.qt.io/qtforpython/>`_, which provides Python
-  bindings for the `Qt <https://www.qt.io/>`_ framework version 4 or 5.
+* 'qt' or 'qt4': `PyQt5 <http://riverbankcomputing.co.uk/pyqt/>`_,
+  `PySide2 or PySide6 <https://doc.qt.io/qtforpython/>`_, which provides Python
+  bindings for the `Qt <https://www.qt.io/>`_ framework version 5 or 6.
 * 'wx': `wxPython <http://www.wxpython.org>`_, which provides Python bindings
   for the `wxWidgets <http://wxwidgets.org>`_ toolkit.
 * 'null': A do-nothing toolkit, for situations where neither of the other
@@ -143,6 +143,37 @@ order of precedence:
        ETSConfig.toolkit = 'wx'
 
 #. The user can define a value for the ETS_TOOLKIT environment variable.
+
+Toolkit selection is largely carried out in Pyface rather than TraitsUI, where
+further details can be found.
+
+The "qt4" Toolkit
+`````````````````
+
+The "qt4" toolkit is the same as the "qt" toolkit in almost all respects:
+in older versions of TraitsUI it was the standard name for all the Qt-based
+toolkits whether or not they were actually using Qt4.
+
+However it does trigger some backwards-compatibility code that may be useful
+for legacy applications. In particular it installs import hooks that makes the
+``traitsui.qt4.*`` package namespace an alias for ``traitsui.qt.*`` modules.
+
+This backwards-compatibility code can also be invoked by setting the
+``ETS_QT4_IMPORTS`` environment variable to any non-empty value, or adding
+an instance of the :py:class:`pyface.ui.ShadowedModuleFinder` module finder
+to :py:attr:`sys.meta_path` list.
+
+..  warning::
+
+    Library code which imports from ``traitsui.qt4.*`` should not use this
+    compatibility code.  Instead it should be updated to import from
+    ``traitsui.qt.*`` as soon as practical.  Backwards-compatibility can be
+    achieved fairly easily by using :py:attr:`traitsui.toolkit.toolkit` to
+    access objects rather than direct imports.
+
+This backwards-compatibility code will be removed in TraitsUI 9, and
+applications which rely on the particulars of the implementation are encouraged
+to migrate to the newer import locations as soon as practical.
 
 .. _structure-of-this-guide:
 

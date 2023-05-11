@@ -1,6 +1,58 @@
 Traits UI Changelog
 ===================
 
+Release 8.0.0
+-------------
+
+This is a major release that provides support for PySide 6.4 and 6.5 as well
+as Python 3.11.  It includes a number of backwards-incompatible changes
+following the example of Pyface 8.0.0, most notable is moving the
+`traitsui.qt4.*` modules to `traitsui.qt.*`.  As with Pyface 8.0 we include
+a backwards-compatibility mode which allows importing from the 'qt4' namespace
+via:
+
+- setting the ETS toolkit to `"qt4"`
+- setting the ETS_QT4_IMPORTS environment variable
+- manually adding appropriate finders to sys.meta_path
+
+This release also removes a number of features deprecated since TraitsUI 7.0.
+
+Thanks To
+---------
+
+* David Baddeley
+* Mark Dickinson
+* Dominik Gresch
+* hopeful0
+* Chengyu Liu
+* Orion Poplawski
+* Corran Webster
+
+Features
+--------
+
+* Be strict about 'handler.init()' return values (#2008)
+* Move 'traitsui.qt4.*' to 'traitsui.qt.*' (#2004)
+* Remove deprecated 'format' trait (#2002)
+* Deprecate imports from traitsui.editors (use traitsui.editors.api) (#2000)
+* Remove backwards-compatibility mode in undo/redo code (#1999)
+* Support for Python 3.11 and PySide 6.4+ (#1994)
+
+Fixes
+-----
+
+* Fix uses of None in date range editor (#2019)
+* Add comments for Wx-only examples (#2011, #2020)
+* Replace uses of "fast_ui" dispatch with "ui" dispatch (#2009)
+* Fix FileDialog selection actions (#2003)
+* Fix regression in Wx version of FileEditor (#1993)
+* Fix missing attribute of InstanceFactoryChocie (#1989)
+
+Test suite
+----------
+
+* Replace some relative imports in tests (#1985)
+
 Release 7.4.3
 -------------
 
