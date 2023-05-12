@@ -20,5 +20,5 @@ jobs:
         sphinx-apidoc -e -M --no-toc -o docs/source/api traitsui traitsui/qt4/* traitsui/qt/* traitsui/wx/* */tests
     - name: Build HTML documentation with Sphinx
       run: |
-        python -m sphinx -b html -W source build
+        sphinx-build -b html -d build/doctrees source build/html
       working-directory: docs

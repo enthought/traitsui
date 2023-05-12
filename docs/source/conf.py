@@ -228,7 +228,7 @@ latex_logo = "e-logo-rev.png"
 # latex_use_modindex = True
 
 # Autodoc options
-autodoc_mock_imports = ["wx", "PySide2", "PyQt5", "PySide6", "PyQt6", "pyface.qt"]
+#autodoc_mock_imports = ["wx", "PySide2", "PyQt5", "PySide6", "PyQt6"]#, "pyface"]
 
 # Intersphinx configuration
 intersphinx_mapping = {
