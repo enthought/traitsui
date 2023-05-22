@@ -77,7 +77,7 @@ NumPy and Pandas for some editors.
 
 TraitsUI along with all dependencies can be installed in a straightforward way
 using the `Enthought Deployment Manager <http://docs.enthought.com/edm/>`__,
-``pip`` or other .
+``pip`` or other package managers.
 
 .. end_of_long_description
 

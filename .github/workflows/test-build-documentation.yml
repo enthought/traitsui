@@ -1,0 +1,30 @@
+name: Test documentation build
+
+on:
+  pull_request
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Install dependencies and local packages
+      run: python -m pip install .[docs]
+    - name: Autogenerate API documentation
+      run: |
+        sphinx-apidoc -e -M --no-toc -o docs/source/api traitsui traitsui/qt4/* traitsui/qt/* traitsui/wx/* */tests
+    - name: Build HTML documentation with Sphinx
+      run: |
+        sphinx-build -b html -d build/doctrees source build/html
+      working-directory: docs
+    - name: Archive HTML documentation
+      uses: actions/upload-artifact@v3
+      with:
+        name: docs-html
+        path: docs/build/html
+        retention-days: 5
