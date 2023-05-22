@@ -22,3 +22,9 @@ jobs:
       run: |
         sphinx-build -b html -d build/doctrees source build/html
       working-directory: docs
+    - name: Archive HTML documentation
+      uses: actions/upload-artifact@v3
+      with:
+        name: docs-html
+        path: docs/build/html
+        retention-days: 5
