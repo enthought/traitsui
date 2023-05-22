@@ -1,0 +1,441 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Developing The Testing Package &mdash; TraitsUI 8 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+    <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.png">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../index.html" >
+    <link rel="up" title="TraitsUI 8.0.0 Developer Guide" href="index.html" >
+    <link rel="next" title="TraitsUI 8.0.0 API Reference" href="../api/index.html" >
+    <link rel="prev" title="TraitsUI 8.0.0 Developer Guide" href="index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 8 Documentation</a></li>
+	
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 8.0.0 Developer Guide</a></li>
+  
+    <li><a href="#">Developing The Testing Package</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="../api/index.html" title="TraitsUI 8.0.0 API Reference"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="index.html" title="TraitsUI 8.0.0 Developer Guide"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <section id="developing-the-testing-package">
+<span id="testing-internals"></span><h1>Developing The Testing Package<a class="headerlink" href="#developing-the-testing-package" title="Permalink to this heading">¶</a></h1>
+<p>This document describes the context and design decisions surrounding the
+development of the <a class="reference internal" href="../api/traitsui.testing.html#module-traitsui.testing" title="traitsui.testing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">testing</span></code></a> package. Readers are assumed to be
+familiar with the content of the <a class="reference internal" href="../traitsui_user_manual/testing.html#testing-traitsui-applications"><span class="std std-ref">Testing TraitsUI Applications</span></a> Section.</p>
+<section id="background-motivation">
+<h2>Background Motivation<a class="headerlink" href="#background-motivation" title="Permalink to this heading">¶</a></h2>
+<p>There had been proposals for introducing a public API to make it easier and
+safer to write self-checking tests for TraitsUI applications. At the same time,
+we noticed that a lot of what TraitsUI needs for testing are common in
+downstream projects as well:</p>
+<ul class="simple">
+<li><p>test needs to modify a trait and then checks the GUI state has changed.</p></li>
+<li><p>test needs to modify the GUI state and then checks a trait has changed.</p></li>
+<li><p>test needs to create a UI and makes sure it is disposed of properly at
+the end of the test.</p></li>
+<li><p>test needs to ensure uncaught exceptions that occur in the GUI event
+loop cause the test to fail.</p></li>
+</ul>
+<p>The step that is the least trivial to get right or the most often-overlooked
+is the need to process pending events on the GUI event loop.</p>
+<p>Pyface (a dependency of TraitsUI) has provided a base class called
+GuiTestAssistant which helps running the GUI event loops in tests. However,
+test code manipulating a TraitsUI editor will still need to know which methods
+on the editor it should call and what to call it with. These methods don’t have
+a common interface, and their signatures vary from toolkit to toolkit, editor
+to editor. Often one needs to read the source code in order to call them
+correctly.</p>
+<p>For example, in order to update the date trait edited by a DateEditor, in Qt,
+one needs to call the Qt DateEditor like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">editor</span><span class="o">.</span><span class="n">update_object</span><span class="p">(</span><span class="n">QDate</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In Wx, one will need to create an wx event with the date value following wx
+API, and then call a method only wx DateEditor has:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">event</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">adv</span><span class="o">.</span><span class="n">DateEvent</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">event</span><span class="o">.</span><span class="n">SetDate</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">editor</span><span class="o">.</span><span class="n">day_selected</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In addition to the lack of a common interface, this approach also has the
+following drawbacks:</p>
+<ul class="simple">
+<li><p>The test code is toolkit specific.</p></li>
+<li><p>Advanced technical knowledge on the low level toolkit control is required to
+write these tests.</p></li>
+<li><p>The test provides less confidence as it bypasses GUI event hooking logic
+(aka signals and slots).</p></li>
+<li><p>There is a strong coupling between the test code and TraitsUI ‘s internal
+implementation details.</p></li>
+</ul>
+<p>The last point is important for both TraitsUI and downstream projects. Strong
+coupling between the application code structure and test code means any small
+refactoring or internal changes could cause a lot of test code to fail. This
+would make changing TraitsUI more difficult. Downstream projects realizing the
+fragility of such tests may decide not to write the tests that would otherwise
+be written.</p>
+<p>In fact, TraitsUI ‘s test suite already makes use of a number of internal
+helper functions for testing its own UI editors. Therefore we noticed that
+there was an opportunity to wrap these helper functions and re-expose them
+in a simpler public API for testing.</p>
+<p>By implementing a testing API motivated and tested by TraitsUI ‘s own test
+code, the API is likely to be more useful and has fewer bugs.</p>
+</section>
+<section id="goals">
+<h2>Goals<a class="headerlink" href="#goals" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The API should be simple, intuitive to use and to understand.</p></li>
+<li><p>The API should be toolkit agnostic.</p></li>
+<li><p>Test code using the API should not need to depend on implementation details
+of a UI editor.</p></li>
+<li><p>Easy-to-forget logic such as processing GUI events should be provided by
+default.</p></li>
+<li><p>Despite the rich and varying features supported by TraitsUI editors, the API
+should still be self-explanatory and self-documenting so that it is easy to
+find what is supported.</p></li>
+<li><p>The testing helper can be used in collaboration with Pyface’s
+ModalDialogTester and GuiTestAssistant.</p></li>
+<li><p>Unexpected exceptions from the GUI event loop should cause a test to fail.</p></li>
+<li><p>Functionalities provided should be immediately useful for TraitsUI’s own
+tests.</p></li>
+<li><p>The API should be extensible so that projects can add their own test logic
+and TraitsUI test code can optionally defer publishing less mature test logic
+to the public API.</p></li>
+</ul>
+</section>
+<section id="non-goals">
+<h2>Non-Goals<a class="headerlink" href="#non-goals" title="Permalink to this heading">¶</a></h2>
+<p>The API does NOT aim to:</p>
+<ul class="simple">
+<li><p>Replace Pyface’s ModalDialogTester and GuiTestAssistant.</p></li>
+<li><p>Reproduce the full visual experience compared to manual testing, as long
+as the test objective is fulfilled.</p></li>
+</ul>
+</section>
+<section id="system-context">
+<h2>System Context<a class="headerlink" href="#system-context" title="Permalink to this heading">¶</a></h2>
+<p>In a software system, tests are the most isolated system component, which are
+not necessary for production use. Since the testing library supports tests,
+it should only be used by tests and nothing else in a software system.</p>
+<p>The fact that tests and production use require different exception handling
+further justifies disallowing the testing library to be used in a production
+environment.</p>
+</section>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this heading">¶</a></h2>
+<p>As mentioned in <a class="reference internal" href="../traitsui_user_manual/testing.html#testing-traitsui-applications"><span class="std std-ref">Testing TraitsUI Applications</span></a>, there are broadly
+speaking three types of actions when one manipulates a GUI in test:</p>
+<ul class="simple">
+<li><p>Locate a GUI target.</p></li>
+<li><p>Perform an action that mutates GUI state like a user would.</p></li>
+<li><p>Inspect a GUI state like a user would.</p></li>
+</ul>
+<p>(Terminologies are defined in <a class="reference internal" href="../traitsui_user_manual/testing/discussions/target_interaction_location.html#testing-target-interaction-location"><span class="std std-ref">Understanding Target, Interaction and Location</span></a>).
+Each of these three types of actions should have a public method in the API.</p>
+<p>Technically speaking, the behavior of “inspect” is very similar to “perform”,
+they only differ in their intent, and therefore whether they should have a
+returned value. They are separate so that test code using these methods will
+read more naturally, and communicate intent more clearly.</p>
+<p>Likewise, “locate” is similar to “inspect”; both are making
+queries about GUI states. However, “locate” is likely used in conjunction with
+“perform” and “inspect”, whereas “perform” and “inspect” could also occur as a
+standalone command.</p>
+<p>In summary, test code should read something like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">perform</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">inspect</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">locate</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">locate</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">locate</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Each of these functions provides the natural place for GUI event processing to
+occur automatically so that users do not have to worry about that any more.</p>
+<p>Different types of interactions and locations should be supported based on
+the GUI target type. For example, if the current GUI target being handled
+is a button, then “perform” should support an interaction type “MouseClick”.</p>
+</section>
+<section id="public-api-objects">
+<h2>Public API objects<a class="headerlink" href="#public-api-objects" title="Permalink to this heading">¶</a></h2>
+<p>All objects exposed in the <code class="docutils literal notranslate"><span class="pre">traitsui.testing.api</span></code> are part of the public API.
+Objects accessible via publicly named attributes through this API are also
+part of the public API.</p>
+<p>The less obvious part of the public API are the supported interactions and
+locations exposed via the registry pattern.</p>
+</section>
+<section id="separating-uitester-from-uiwrapper">
+<h2>Separating <a class="reference internal" href="../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a> from <a class="reference internal" href="../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper" title="traitsui.testing.tester.ui_wrapper.UIWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIWrapper</span></code></a><a class="headerlink" href="#separating-uitester-from-uiwrapper" title="Permalink to this heading">¶</a></h2>
+<p><a class="reference internal" href="../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a> is designed to be a top-level object to provide the first point of
+use for developers testing a TraitsUI application.</p>
+<p>It puts together two other types of objects:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper" title="traitsui.testing.tester.ui_wrapper.UIWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIWrapper</span></code></a></p></li>
+<li><p><a class="reference internal" href="../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry" title="traitsui.testing.tester.target_registry.TargetRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetRegistry</span></code></a></p></li>
+</ul>
+<p><a class="reference internal" href="../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a> is specific to TraitsUI, whereas <a class="reference internal" href="../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper" title="traitsui.testing.tester.ui_wrapper.UIWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIWrapper</span></code></a> and <a class="reference internal" href="../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry" title="traitsui.testing.tester.target_registry.TargetRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetRegistry</span></code></a>
+are more generic and can be used for testing any types of objects.</p>
+<p><a class="reference internal" href="../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry" title="traitsui.testing.tester.target_registry.TargetRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetRegistry</span></code></a> collects the information required for resolving an interaction
+and/or a location for a given GUI target. <a class="reference internal" href="../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper" title="traitsui.testing.tester.ui_wrapper.UIWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIWrapper</span></code></a> depends on one
+or many registries. If the <a class="reference internal" href="../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry" title="traitsui.testing.tester.target_registry.TargetRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetRegistry</span></code></a> is empty, the <a class="reference internal" href="../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper" title="traitsui.testing.tester.ui_wrapper.UIWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIWrapper</span></code></a> would not
+be very useful at all. The <a class="reference internal" href="../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a> supports testing of TraitsUI objects by
+providing an instance of <a class="reference internal" href="../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry" title="traitsui.testing.tester.target_registry.TargetRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetRegistry</span></code></a> that knows how to locate, inspect
+and perform actions on TraitsUI objects.</p>
+<p>This abstraction covers the existing use cases and it also allows TraitsUI
+to extend the API in its internal GUI tests without necessarily exposing the
+logic to the public. Likewise, external projects can extend testing support for
+their custom UI editors.</p>
+</section>
+<section id="registry-vs-inheritance-registry-wins">
+<h2>Registry VS Inheritance: Registry wins<a class="headerlink" href="#registry-vs-inheritance-registry-wins" title="Permalink to this heading">¶</a></h2>
+<p>The types of locations and interactions that should be supported depends on
+the type of TraitsUI editor being used. e.g. A TextEditor that only wraps
+a text box does not need to support further location logic, and it should
+support modifying the text via key events. However a CheckListEditor will
+require support for locating an item in the list, but not support for modifying
+the item by key events.</p>
+<p>Since there are more than one axis of variables, class inheritance is not
+enough to achieve polymorphism. If we had used subclasses, we will end up with
+an API where there are a lot of optional methods that are not implemented by
+a subclass, making it difficult for users to find what can be used.</p>
+<p>At the end, the registry pattern wins, and that becomes <a class="reference internal" href="../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry" title="traitsui.testing.tester.target_registry.TargetRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetRegistry</span></code></a>.</p>
+</section>
+<section id="rejected-design-default-location">
+<h2>Rejected design: Default location<a class="headerlink" href="#rejected-design-default-location" title="Permalink to this heading">¶</a></h2>
+<p>Early in the development there was a proposal to support a special location
+type called the “DefaultTarget”. The idea was that if an interaction is not
+supported by a given GUI target, the “default target” is tried. This was
+motivated by the use case of testing simple UI editors such as TextEditor
+where there is one obvious toolkit widget to interact with. With this design,
+one would register interaction handlers with the low level toolkit specific
+object as the target type, allowing those handlers to be reused in other
+contexts.</p>
+<p>The pseudo-code for this patterns looked like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">perform</span><span class="p">(</span><span class="n">interaction</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_perform</span><span class="p">(</span><span class="n">interaction</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">except</span> <span class="n">InteractionNotSupported</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">default_target</span> <span class="o">=</span> <span class="n">locate</span><span class="p">(</span><span class="n">DefaultTarget</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">LocationNotSupported</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InteractionNotSupported</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_perform</span><span class="p">(</span><span class="n">interaction</span><span class="p">,</span> <span class="n">default_target</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default target for a TextEditor can be resolved using this function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">resolve_default_target</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="n">TextEditor</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">target</span><span class="o">.</span><span class="n">control</span>   <span class="c1"># would be a QLineEdit for simple editor in Qt.</span>
+</pre></div>
+</div>
+<p>And one would have registered an interaction (e.g. KeySequence) on a low level
+toolkit widget type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">registry</span><span class="o">.</span><span class="n">register_interaction</span><span class="p">(</span>
+  <span class="n">target_type</span><span class="o">=</span><span class="n">QLineEdit</span><span class="p">,</span>
+  <span class="n">interaction_type</span><span class="o">=</span><span class="n">KeySequence</span><span class="p">,</span>
+  <span class="n">handler</span><span class="o">=...</span><span class="p">,</span>  <span class="c1"># some callable</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The design was rejected for two reasons:</p>
+<ol class="arabic simple">
+<li><p>The control flow resulting from trying to resolve an interaction
+or location on the default target adds complexity to the code.</p></li>
+<li><p>The resulting code is obscure because it is hard to see which UI editors
+are using the registered interaction handlers. This makes it difficult to
+perform impact analysis when one needs to change the code.</p></li>
+</ol>
+<p>At the end we simply register the interaction types on those simple UI editors
+directly but we refactor the registration logic so that it is easy to reuse.</p>
+</section>
+<section id="where-are-the-tests">
+<h2>Where are the tests?<a class="headerlink" href="#where-are-the-tests" title="Permalink to this heading">¶</a></h2>
+<p>When a functionality is added to support testing TraitsUI editors, the
+functionality should be used in TraitsUI ‘s own tests for the editor.
+e.g. The MouseClick support for ButtonEditor is tested in the tests for
+ButtonEditor, in <code class="docutils literal notranslate"><span class="pre">traitsui.editors.tests.test_button_editor</span></code>.</p>
+<p>By dog-fooding the implementations back to TraitsUI ‘s own tests with the goal
+of writing toolkit independent test code, this allows us to capture
+inconsistencies among different toolkits early and to make sure the new
+functionality is indeed useful.</p>
+<p>Tests for functionality provided by the tester API can be found in the
+<code class="docutils literal notranslate"><span class="pre">testing</span></code> package (or subpackages). e.g. API of <a class="reference internal" href="../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a> is tested in
+<code class="docutils literal notranslate"><span class="pre">traitsui.testing.tester.tests</span></code>.</p>
+</section>
+<section id="package-structures">
+<h2>Package structures<a class="headerlink" href="#package-structures" title="Permalink to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">traitsui.testing</span></code> package adopts a naming convention that is in fact
+not new: Preceding underscores in names are used to indicate an object is
+intended to be used within the namespace it is defined in.</p>
+<p>If a module has a name with a preceding underscore, this means it is intended
+to be used by objects that live in the same package (including subpackages),
+but not objects that are defined in a package outside of that package.
+If a module is intended to be used by objects defined outside of the package,
+the module should have a “public” name.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">traitsui.testing.tester._ui_tester.default_registry</span></code> can be
+imported by <code class="docutils literal notranslate"><span class="pre">traitsui.testing.tester.something</span></code> but should not be imported
+by <code class="docutils literal notranslate"><span class="pre">traitsui.testing.api</span></code> or anything outside of <code class="docutils literal notranslate"><span class="pre">traitsui.testing.tester</span></code>.</p>
+</section>
+</section>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Developing The Testing Package</a><ul>
+<li><a class="reference internal" href="#background-motivation">Background Motivation</a></li>
+<li><a class="reference internal" href="#goals">Goals</a></li>
+<li><a class="reference internal" href="#non-goals">Non-Goals</a></li>
+<li><a class="reference internal" href="#system-context">System Context</a></li>
+<li><a class="reference internal" href="#api">API</a></li>
+<li><a class="reference internal" href="#public-api-objects">Public API objects</a></li>
+<li><a class="reference internal" href="#separating-uitester-from-uiwrapper">Separating <code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code> from <code class="xref py py-class docutils literal notranslate"><span class="pre">UIWrapper</span></code></a></li>
+<li><a class="reference internal" href="#registry-vs-inheritance-registry-wins">Registry VS Inheritance: Registry wins</a></li>
+<li><a class="reference internal" href="#rejected-design-default-location">Rejected design: Default location</a></li>
+<li><a class="reference internal" href="#where-are-the-tests">Where are the tests?</a></li>
+<li><a class="reference internal" href="#package-structures">Package structures</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">TraitsUI 8.0.0 Developer Guide</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../api/index.html"
+                          title="next chapter">TraitsUI 8.0.0 API Reference</a></p>
+  </div>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/traitsui_dev_guide/testing.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2023, Enthought
+      </li>
+      <li>
+      Last updated on May 22, 2023.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

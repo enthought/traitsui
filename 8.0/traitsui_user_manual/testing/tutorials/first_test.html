@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>First simple test &mdash; TraitsUI 8 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sphinx_highlight.js"></script>
+    <script type="text/javascript" src="../../../_static/clipboard.min.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.png">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../../../index.html" >
+    <link rel="up" title="Testing TraitsUI Applications" href="../../testing.html" >
+    <link rel="next" title="Testing with nested objects" href="test_with_nested_object.html" >
+    <link rel="prev" title="Testing TraitsUI Applications" href="../../testing.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 8 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" >TraitsUI 8.0.0 User Manual</a></li>
+          <li class="active"><a href="../../testing.html" accesskey="U">Testing TraitsUI Applications</a></li>
+  
+    <li><a href="#">First simple test</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="test_with_nested_object.html" title="Testing with nested objects"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../testing.html" title="Testing TraitsUI Applications"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <section id="first-simple-test">
+<span id="testing-tutorial-first-test"></span><h1>First simple test<a class="headerlink" href="#first-simple-test" title="Permalink to this heading">¶</a></h1>
+<p>Suppose we have a TraitsUI GUI application like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">observe</span><span class="p">,</span> <span class="n">Str</span>
+<span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">TextEditor</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">View</span>
+
+
+<span class="k">class</span> <span class="nc">Form</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">full_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="nd">@observe</span><span class="p">(</span><span class="s2">&quot;first_name&quot;</span><span class="p">)</span>
+    <span class="nd">@observe</span><span class="p">(</span><span class="s2">&quot;last_name&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_full_name_updated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">full_name</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="p">])</span>
+
+    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;first_name&quot;</span><span class="p">),</span>
+        <span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;last_name&quot;</span><span class="p">),</span>
+        <span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;full_name&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;readonly&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">Form</span><span class="p">()</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>    <span class="c1"># GUI appears</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../../../_images/init-app.png" src="../../../_images/init-app.png" />
+</figure>
+<figure class="align-default">
+<img alt="../../../_images/modified-fields.png" src="../../../_images/modified-fields.png" />
+</figure>
+<p>As a user types in the first two text boxes, the last read only text field will
+be updated. A test that demonstrates this behavior will need to do the
+following things:</p>
+<ol class="arabic simple">
+<li><p>Open the GUI</p></li>
+<li><p>Find the text boxes and the read only display field</p></li>
+<li><p>Simulate the user typing in the text boxes</p></li>
+<li><p>Inspect and assert the content in the read only field</p></li>
+</ol>
+<section id="step-1-creating-a-gui">
+<h2>Step 1: Creating a GUI<a class="headerlink" href="#step-1-creating-a-gui" title="Permalink to this heading">¶</a></h2>
+<p>Test code can open and close the GUI using <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester.create_ui" title="traitsui.testing.tester.ui_tester.UITester.create_ui"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_ui()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traitsui.testing.api</span> <span class="kn">import</span> <span class="n">UITester</span>
+
+<span class="n">form</span> <span class="o">=</span> <span class="n">Form</span><span class="p">()</span>
+<span class="n">tester</span> <span class="o">=</span> <span class="n">UITester</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">tester</span><span class="o">.</span><span class="n">create_ui</span><span class="p">(</span><span class="n">form</span><span class="p">)</span> <span class="k">as</span> <span class="n">ui</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Running this test, you should see the GUI being opened and closed immediately.
+We will use the <code class="docutils literal notranslate"><span class="pre">ui</span></code> (an instance of <a class="reference internal" href="../../../api/traitsui.ui.html#traitsui.ui.UI" title="traitsui.ui.UI"><code class="xref py py-class docutils literal notranslate"><span class="pre">UI</span></code></a>) in the next step.</p>
+</section>
+<section id="step-2-locating-a-ui-editor">
+<h2>Step 2: Locating a UI editor<a class="headerlink" href="#step-2-locating-a-ui-editor" title="Permalink to this heading">¶</a></h2>
+<p>We need to find the text boxes in order to modify them. <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester.find_by_name" title="traitsui.testing.tester.ui_tester.UITester.find_by_name"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_by_name()</span></code></a>
+can be used to find the editors in the UI by names. The names are simply the
+names used in defining <a class="reference internal" href="../../../api/traitsui.item.html#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">Item</span></code></a> in the view:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traitsui.testing.api</span> <span class="kn">import</span> <span class="n">UITester</span>
+
+<span class="n">form</span> <span class="o">=</span> <span class="n">Form</span><span class="p">()</span>
+<span class="n">tester</span> <span class="o">=</span> <span class="n">UITester</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">tester</span><span class="o">.</span><span class="n">create_ui</span><span class="p">(</span><span class="n">form</span><span class="p">)</span> <span class="k">as</span> <span class="n">ui</span><span class="p">:</span>
+    <span class="n">first_name_field</span> <span class="o">=</span> <span class="n">tester</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="s2">&quot;first_name&quot;</span><span class="p">)</span>
+    <span class="n">last_name_field</span> <span class="o">=</span> <span class="n">tester</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="s2">&quot;last_name&quot;</span><span class="p">)</span>
+    <span class="n">full_name_field</span> <span class="o">=</span> <span class="n">tester</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="s2">&quot;full_name&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">first_name_field</span></code>, <code class="docutils literal notranslate"><span class="pre">last_name_field</span></code> and <code class="docutils literal notranslate"><span class="pre">full_name_field</span></code> are
+objects we can use to interact with in the test.</p>
+</section>
+<section id="step-3-perform-a-user-interaction-to-modify-gui-state">
+<h2>Step 3: Perform a user interaction to modify GUI state<a class="headerlink" href="#step-3-perform-a-user-interaction-to-modify-gui-state" title="Permalink to this heading">¶</a></h2>
+<p>We can find the interactions supported by <code class="docutils literal notranslate"><span class="pre">first_name_field</span></code> using
+<a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.help" title="traitsui.testing.tester.ui_wrapper.UIWrapper.help"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">full_name_field</span><span class="o">.</span><span class="n">help</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>will print something like this (abbreviated for the purpose of this section):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Interactions
+------------
+&lt;class &#39;traitsui.testing.tester.command.KeyClick&#39;&gt;
+    An object representing the user clicking a key on the keyboard.
+    ...
+
+&lt;class &#39;traitsui.testing.tester.command.KeySequence&#39;&gt;
+    An object representing the user typing a sequence of keys.
+    ...
+
+&lt;class &#39;traitsui.testing.tester.command.MouseClick&#39;&gt;
+    An object representing the user clicking a mouse button.
+    ...
+
+&lt;class &#39;traitsui.testing.tester.query.DisplayedText&#39;&gt;
+    An object representing an interaction to obtain the displayed
+    (echoed) plain text.
+    ...
+
+Locations
+---------
+No locations are supported.
+</pre></div>
+</div>
+<p>Objects in the “Interactions” section can be used with <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.perform" title="traitsui.testing.tester.ui_wrapper.UIWrapper.perform"><code class="xref py py-func docutils literal notranslate"><span class="pre">perform()</span></code></a>
+and <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.inspect" title="traitsui.testing.tester.ui_wrapper.UIWrapper.inspect"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect()</span></code></a>. To simulate the text boxes being edited, we want to
+<a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.perform" title="traitsui.testing.tester.ui_wrapper.UIWrapper.perform"><code class="xref py py-func docutils literal notranslate"><span class="pre">perform()</span></code></a> an action that represents the user typing a sequence of
+keys. <a class="reference internal" href="../../../api/traitsui.testing.tester.command.html#traitsui.testing.tester.command.KeySequence" title="traitsui.testing.tester.command.KeySequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">KeySequence</span></code></a> is exactly what we need:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traitsui.testing.api</span> <span class="kn">import</span> <span class="n">KeySequence</span>
+
+<span class="c1"># ...</span>
+    <span class="n">first_name_field</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">KeySequence</span><span class="p">(</span><span class="s2">&quot;Leia&quot;</span><span class="p">))</span>
+    <span class="n">last_name_field</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">KeySequence</span><span class="p">(</span><span class="s2">&quot;Skywalker&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Adding this to the existing test, this is what we have:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traitsui.testing.api</span> <span class="kn">import</span> <span class="n">KeySequence</span><span class="p">,</span> <span class="n">UITester</span>
+
+<span class="n">form</span> <span class="o">=</span> <span class="n">Form</span><span class="p">()</span>
+<span class="n">tester</span> <span class="o">=</span> <span class="n">UITester</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">tester</span><span class="o">.</span><span class="n">create_ui</span><span class="p">(</span><span class="n">form</span><span class="p">)</span> <span class="k">as</span> <span class="n">ui</span><span class="p">:</span>
+    <span class="n">first_name_field</span> <span class="o">=</span> <span class="n">tester</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="s2">&quot;first_name&quot;</span><span class="p">)</span>
+    <span class="n">first_name_field</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">KeySequence</span><span class="p">(</span><span class="s2">&quot;Leia&quot;</span><span class="p">))</span>
+
+    <span class="n">last_name_field</span> <span class="o">=</span> <span class="n">tester</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="s2">&quot;last_name&quot;</span><span class="p">)</span>
+    <span class="n">last_name_field</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">KeySequence</span><span class="p">(</span><span class="s2">&quot;Skywalker&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>We can confirm this behavior visually by setting the <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester.delay" title="traitsui.testing.tester.ui_tester.UITester.delay"><code class="xref py py-attr docutils literal notranslate"><span class="pre">delay</span></code></a> parameter
+and run the test again:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tester</span> <span class="o">=</span> <span class="n">UITester</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>    <span class="c1"># delay in milliseconds</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-inspect-the-gui-states-as-the-user-sees-it">
+<h2>Step 4: Inspect the GUI states as the user sees it<a class="headerlink" href="#step-4-inspect-the-gui-states-as-the-user-sees-it" title="Permalink to this heading">¶</a></h2>
+<p>To extract the displayed text in the read only field, we can use
+<a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.inspect" title="traitsui.testing.tester.ui_wrapper.UIWrapper.inspect"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect()</span></code></a> with the <a class="reference internal" href="../../../api/traitsui.testing.tester.query.html#traitsui.testing.tester.query.DisplayedText" title="traitsui.testing.tester.query.DisplayedText"><code class="xref py py-class docutils literal notranslate"><span class="pre">DisplayedText</span></code></a> object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traitsui.testing.api</span> <span class="kn">import</span> <span class="n">DisplayedText</span>
+<span class="c1"># ...</span>
+    <span class="n">displayed</span> <span class="o">=</span> <span class="n">full_name_field</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">DisplayedText</span><span class="p">())</span>
+    <span class="k">assert</span> <span class="n">displayed</span> <span class="o">==</span> <span class="s2">&quot;Leia Skywalker&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="our-final-test">
+<h2>Our final test<a class="headerlink" href="#our-final-test" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traitsui.testing.api</span> <span class="kn">import</span> <span class="n">DisplayedText</span><span class="p">,</span> <span class="n">KeySequence</span><span class="p">,</span> <span class="n">UITester</span>
+
+<span class="n">form</span> <span class="o">=</span> <span class="n">Form</span><span class="p">()</span>
+<span class="n">tester</span> <span class="o">=</span> <span class="n">UITester</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">tester</span><span class="o">.</span><span class="n">create_ui</span><span class="p">(</span><span class="n">form</span><span class="p">)</span> <span class="k">as</span> <span class="n">ui</span><span class="p">:</span>
+    <span class="n">first_name_field</span> <span class="o">=</span> <span class="n">tester</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="s2">&quot;first_name&quot;</span><span class="p">)</span>
+    <span class="n">first_name_field</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">KeySequence</span><span class="p">(</span><span class="s2">&quot;Leia&quot;</span><span class="p">))</span>
+
+    <span class="n">last_name_field</span> <span class="o">=</span> <span class="n">tester</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="s2">&quot;last_name&quot;</span><span class="p">)</span>
+    <span class="n">last_name_field</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">KeySequence</span><span class="p">(</span><span class="s2">&quot;Skywalker&quot;</span><span class="p">))</span>
+
+    <span class="n">full_name_field</span> <span class="o">=</span> <span class="n">tester</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="s2">&quot;full_name&quot;</span><span class="p">)</span>
+    <span class="n">displayed</span> <span class="o">=</span> <span class="n">full_name_field</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">DisplayedText</span><span class="p">())</span>
+    <span class="k">assert</span> <span class="n">displayed</span> <span class="o">==</span> <span class="s2">&quot;Leia Skywalker&quot;</span>
+</pre></div>
+</div>
+<p>If the application is written correctly, the test should pass.</p>
+</section>
+<section id="see-the-test-capturing-a-bug">
+<h2>See the test capturing a bug<a class="headerlink" href="#see-the-test-capturing-a-bug" title="Permalink to this heading">¶</a></h2>
+<p>If we forgot to add the <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.observe" title="(in traits v6.4)"><code class="xref py py-func docutils literal notranslate"><span class="pre">observe()</span></code></a> decorators:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Form</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">full_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1"># Let&#39;s suppose we left these out:</span>
+    <span class="c1"># @observe(&quot;first_name&quot;)</span>
+    <span class="c1"># @observe(&quot;last_name&quot;)</span>
+    <span class="k">def</span> <span class="nf">_full_name_updated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">full_name</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="p">])</span>
+
+    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;first_name&quot;</span><span class="p">),</span>
+        <span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;last_name&quot;</span><span class="p">),</span>
+        <span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;full_name&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;readonly&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">full_name</span></code> field won’t be updated in the GUI, which would be a bug.
+If we run the test again, we will get an assertion error:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Traceback<span class="w"> </span><span class="o">(</span>most<span class="w"> </span>recent<span class="w"> </span>call<span class="w"> </span>last<span class="o">)</span>:
+File<span class="w"> </span><span class="s2">&quot;first-test.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">35</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>&lt;module&gt;
+<span class="w">    </span>assert<span class="w"> </span><span class="nv">displayed</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;Leia Skywalker&quot;</span>
+AssertionError
+</pre></div>
+</div>
+<p>(If the test was written with a testing framework, more failure information on
+the actual value will be available.)</p>
+</section>
+<section id="what-did-we-learn">
+<h2>What did we learn?<a class="headerlink" href="#what-did-we-learn" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester.create_ui" title="traitsui.testing.tester.ui_tester.UITester.create_ui"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_ui()</span></code></a> makes it easy to create and dispose a <a class="reference internal" href="../../../api/traitsui.ui.html#traitsui.ui.UI" title="traitsui.ui.UI"><code class="xref py py-class docutils literal notranslate"><span class="pre">UI</span></code></a>. Such a
+minimal test makes sure the view can be initialized without errors.</p></li>
+<li><p><a class="reference internal" href="../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester.find_by_name" title="traitsui.testing.tester.ui_tester.UITester.find_by_name"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_by_name()</span></code></a> can be used to find the TraitsUI editor inside a UI
+for further interactions.</p></li>
+<li><p><a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.perform" title="traitsui.testing.tester.ui_wrapper.UIWrapper.perform"><code class="xref py py-func docutils literal notranslate"><span class="pre">perform()</span></code></a> can be used to mutate GUI states.</p></li>
+<li><p><a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.inspect" title="traitsui.testing.tester.ui_wrapper.UIWrapper.inspect"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect()</span></code></a> can be used to inspect GUI states.</p></li>
+<li><p>From the output of <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.help" title="traitsui.testing.tester.ui_wrapper.UIWrapper.help"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a>, objects listed in the “Interactions”
+section can be used with <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.perform" title="traitsui.testing.tester.ui_wrapper.UIWrapper.perform"><code class="xref py py-func docutils literal notranslate"><span class="pre">perform()</span></code></a> and <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.inspect" title="traitsui.testing.tester.ui_wrapper.UIWrapper.inspect"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect()</span></code></a>.</p></li>
+<li><p>The <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester.delay" title="traitsui.testing.tester.ui_tester.UITester.delay"><code class="xref py py-attr docutils literal notranslate"><span class="pre">delay</span></code></a> parameter can be set to a nonzero value to help with
+visual confirmation.</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">First simple test</a><ul>
+<li><a class="reference internal" href="#step-1-creating-a-gui">Step 1: Creating a GUI</a></li>
+<li><a class="reference internal" href="#step-2-locating-a-ui-editor">Step 2: Locating a UI editor</a></li>
+<li><a class="reference internal" href="#step-3-perform-a-user-interaction-to-modify-gui-state">Step 3: Perform a user interaction to modify GUI state</a></li>
+<li><a class="reference internal" href="#step-4-inspect-the-gui-states-as-the-user-sees-it">Step 4: Inspect the GUI states as the user sees it</a></li>
+<li><a class="reference internal" href="#our-final-test">Our final test</a></li>
+<li><a class="reference internal" href="#see-the-test-capturing-a-bug">See the test capturing a bug</a></li>
+<li><a class="reference internal" href="#what-did-we-learn">What did we learn?</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../../testing.html"
+                          title="previous chapter">Testing TraitsUI Applications</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="test_with_nested_object.html"
+                          title="next chapter">Testing with nested objects</a></p>
+  </div>
+  <h3>This Page</h3>
+  <div>
+    <a href="../../../_sources/traitsui_user_manual/testing/tutorials/first_test.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2023, Enthought
+      </li>
+      <li>
+      Last updated on May 22, 2023.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

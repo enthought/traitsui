@@ -1,0 +1,7 @@
+traitsui.testing.tester.tests.test\_registry module
+===================================================
+
+.. automodule:: traitsui.testing.tester.tests.test_registry
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+traitsui.testing.tests.test\_exception\_handling module
+=======================================================
+
+.. automodule:: traitsui.testing.tests.test_exception_handling
+   :members:
+   :undoc-members:
+   :show-inheritance:
