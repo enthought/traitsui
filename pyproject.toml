@@ -18,7 +18,7 @@ dependencies = [
     'importlib-metadata>=3.6; python_version<"3.8"',
 ]
 license = {file = "LICENSE.txt"}
-version = "8.0.0.dev0"
+version = "8.0.0"
 
 [project.entry-points.'traitsui.toolkits']
 qt = 'traitsui.qt:toolkit'
