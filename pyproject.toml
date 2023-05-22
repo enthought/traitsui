@@ -30,7 +30,7 @@ null = 'traitsui.null:toolkit'
 demo = 'traitsui.extras._demo_info:info'
 
 [project.optional-dependencies]
-docs = ['enthought-sphinx-theme', 'sphinx<7.0', 'sphinx-copybutton', 'configobj']
+docs = ['enthought-sphinx-theme', 'sphinx', 'sphinx-copybutton', 'configobj']
 editors = ['numpy', 'pandas']
 examples = ['apptools', 'h5py', 'numpy', 'pandas', 'pillow', 'tables']
 pyqt5 = ['pyqt5', 'pygments']
