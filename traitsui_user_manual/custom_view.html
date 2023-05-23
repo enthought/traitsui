@@ -4,13 +4,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    
-    <title>Customizing a View &mdash; TraitsUI 7 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Customizing a View &mdash; TraitsUI 8 Documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" >
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,9 +26,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/clipboard.min.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
@@ -33,8 +36,8 @@
     <link rel="shortcut icon" href="../_static/img/favicon.png">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 7 Documentation" href="../index.html" >
-    <link rel="up" title="TraitsUI 7.4.0 User Manual" href="index.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../index.html" >
+    <link rel="up" title="TraitsUI 8.0.0 User Manual" href="index.html" >
     <link rel="next" title="Advanced View Concepts" href="advanced_view.html" >
     <link rel="prev" title="The View and Its Building Blocks" href="view.html" > 
   </head>
@@ -53,9 +56,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 7 Documentation</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 8 Documentation</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.4.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 8.0.0 User Manual</a></li>
   
     <li><a href="#">Customizing a View</a></li>
   
@@ -93,8 +96,8 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body" role="main">
             
-  <div class="section" id="customizing-a-view">
-<span id="index-0"></span><span id="id1"></span><h1>Customizing a View<a class="headerlink" href="#customizing-a-view" title="Permalink to this headline">¶</a></h1>
+  <section id="customizing-a-view">
+<span id="index-0"></span><span id="id1"></span><h1>Customizing a View<a class="headerlink" href="#customizing-a-view" title="Permalink to this heading">¶</a></h1>
 <p>As shown in the preceding two chapters, it is possible to specify a window in
 TraitsUI simply by creating a View object with the appropriate contents. In
 designing real-life applications, however, you usually need to be able to
@@ -103,8 +106,8 @@ content. This chapter covers a variety of options for tailoring the appearance
 of a window that is created using a View, including the type of window that a
 View appears in, the <a class="reference internal" href="glossary.html#term-command-button"><span class="xref std std-term">command button</span></a>s that appear in the window, and
 the physical properties of the window.</p>
-<div class="section" id="specifying-window-type-the-kind-attribute">
-<span id="index-1"></span><span id="id2"></span><h2>Specifying Window Type: the <strong>kind</strong> Attribute<a class="headerlink" href="#specifying-window-type-the-kind-attribute" title="Permalink to this headline">¶</a></h2>
+<section id="specifying-window-type-the-kind-attribute">
+<span id="index-1"></span><span id="id2"></span><h2>Specifying Window Type: the <strong>kind</strong> Attribute<a class="headerlink" href="#specifying-window-type-the-kind-attribute" title="Permalink to this heading">¶</a></h2>
 <p>Many types of windows can be used to display the same data content. A form can
 appear in a window, a wizard, or an embedded panel; windows can be <em>modal</em>
 (i.e., stop all other program processing until the box is dismissed) or not, and
@@ -122,8 +125,8 @@ attribute. There are seven possible values of <strong>kind</strong>:</p>
 </ul>
 <p>These alternatives are described below. If the <strong>kind</strong> attribute of a View
 object is not specified, the default value is ‘modal’.</p>
-<div class="section" id="stand-alone-windows">
-<span id="index-5"></span><span id="id3"></span><h3>Stand-alone Windows<a class="headerlink" href="#stand-alone-windows" title="Permalink to this headline">¶</a></h3>
+<section id="stand-alone-windows">
+<span id="index-5"></span><span id="id3"></span><h3>Stand-alone Windows<a class="headerlink" href="#stand-alone-windows" title="Permalink to this heading">¶</a></h3>
 <p>The behavior of a stand-alone TraitsUI window can vary over two significant
 degrees of freedom. First, it can be <a class="reference internal" href="glossary.html#term-modal"><span class="xref std std-term">modal</span></a>, meaning that when the window
 appears, all other GUI interaction is suspended until the window is closed; if
@@ -138,11 +141,6 @@ these behaviors correspond to four of the possible values of the ‘kind ‘
 attribute of the View object, as shown in the following table.</p>
 <p class="rubric" id="matrix-of-traits-ui-windows-table">Matrix of TraitsUI windows</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 28%" />
-<col style="width: 35%" />
-<col style="width: 37%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"></th>
 <th class="head"><p>not modal</p></th>
@@ -164,9 +162,9 @@ attribute of the View object, as shown in the following table.</p>
 the <strong>buttons</strong> attribute, which is described in
 <a class="reference internal" href="#command-buttons-the-buttons-attribute"><span class="std std-ref">Command Buttons: the buttons Attribute</span></a>. Usually, a window with command
 buttons is called a <a class="reference internal" href="glossary.html#term-dialog-box"><span class="xref std std-term">dialog box</span></a>.</p>
-</div>
-<div class="section" id="wizards">
-<span id="index-6"></span><span id="id4"></span><h3>Wizards<a class="headerlink" href="#wizards" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="wizards">
+<span id="index-6"></span><span id="id4"></span><h3>Wizards<a class="headerlink" href="#wizards" title="Permalink to this heading">¶</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Wizard views are only supported with the WX backend!</p>
@@ -211,19 +209,19 @@ pages that a user must navigate sequentially.
 </pre></div>
 </div>
 <p>leads to the following 2 modal dialogs:</p>
-<div class="figure align-default">
+<figure class="align-default">
 <img alt="First dialog from wizard view." src="../_images/wizard_dialog_1.png" />
-</div>
-<div class="figure align-default">
+</figure>
+<figure class="align-default">
 <img alt="Second dialog from wizard view." src="../_images/wizard_dialog_2.png" />
-</div>
+</figure>
 <p>TraitsUI Wizards are always modal and live. They always display a standard
 wizard button set; i.e., they ignore the <strong>buttons</strong> View attribute. In short,
 wizards are considerably less flexible than windows, and are primarily suitable
 for highly controlled user interactions such as software installation.</p>
-</div>
-<div class="section" id="panels-and-subpanels">
-<span id="index-7"></span><span id="id5"></span><h3>Panels and Subpanels<a class="headerlink" href="#panels-and-subpanels" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="panels-and-subpanels">
+<span id="index-7"></span><span id="id5"></span><h3>Panels and Subpanels<a class="headerlink" href="#panels-and-subpanels" title="Permalink to this heading">¶</a></h3>
 <p>Both dialog boxes and wizards are secondary windows that appear separately from
 the main program display, if any. Often, however, you might need to create a
 window element that is embedded in a larger display. For such cases, the
@@ -236,17 +234,17 @@ live and nonmodal.</p>
 <p>A <a class="reference internal" href="glossary.html#term-subpanel"><span class="xref std std-term">subpanel</span></a> is almost identical to a panel. The only difference is that
 subpanels do not display <a class="reference internal" href="glossary.html#term-command-button"><span class="xref std std-term">command button</span></a>s even if the View specifies
 them.</p>
-</div>
-</div>
-<div class="section" id="command-buttons-the-buttons-attribute">
-<span id="index-8"></span><span id="id6"></span><h2>Command Buttons: the <strong>buttons</strong> Attribute<a class="headerlink" href="#command-buttons-the-buttons-attribute" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="command-buttons-the-buttons-attribute">
+<span id="index-8"></span><span id="id6"></span><h2>Command Buttons: the <strong>buttons</strong> Attribute<a class="headerlink" href="#command-buttons-the-buttons-attribute" title="Permalink to this heading">¶</a></h2>
 <p>A common feature of many windows is a row of command buttons along the bottom of
 the frame. These buttons have a fixed position outside any scrolled panels in
 the window, and are thus always visible while the window is displayed. They are
 usually used for window-level commands such as committing or cancelling the
 changes made to the form data, or displaying a help window.</p>
 <p>In TraitsUI, these command buttons are specified by means of the View object’s
-<strong>buttons</strong> attribute, whose value is a list of buttons to display. <a class="footnote-reference brackets" href="#id9" id="id7">6</a>
+<strong>buttons</strong> attribute, whose value is a list of buttons to display. <a class="footnote-reference brackets" href="#id9" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a>
 Consider the following variation on Example 3:</p>
 <p class="rubric" id="example-4-using-a-view-object-with-buttons"><span id="index-9"></span>Example 4: Using a View object with buttons</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># configure_traits_view_buttons.py -- Sample code to demonstrate</span>
@@ -278,19 +276,17 @@ Consider the following variation on Example 3:</p>
 </div>
 <p>The resulting window has the same content as before, but now two buttons are
 displayed at the bottom: <span class="guilabel">OK</span> and <span class="guilabel">Cancel</span>:</p>
-<div class="figure align-default" id="id10">
+<figure class="align-default" id="id10">
 <img alt="Dialog box with three fields and OK and Cancel buttons." src="../_images/ui_for_ex4.jpg" />
-<p class="caption"><span class="caption-text">Figure 4: User interface for Example 4</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text">Figure 4: User interface for Example 4</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
 <p>There are six standard buttons defined by TraitsUI. Each of the standard
 buttons has matching a string alias. You can either import and use the button
 names, or simply use their aliases:</p>
 <span class="target" id="index-10"></span><p class="rubric" id="command-button-aliases-table"><span id="index-11"></span>Command button aliases</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 34%" />
-<col style="width: 66%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Button Name</p></th>
 <th class="head"><p>Button Alias</p></th>
@@ -337,9 +333,9 @@ be useful for overriding an explicit value for <strong>buttons</strong>. You can
 to an empty list has the same effect as not defining it at all.</p>
 <p>It is also possible to define custom buttons and add them to the <strong>buttons</strong>
 list; see <a class="reference internal" href="handler.html#custom-command-buttons"><span class="std std-ref">Custom Command Buttons</span></a> for details.</p>
-</div>
-<div class="section" id="other-view-attributes">
-<span id="index-14"></span><span id="id8"></span><h2>Other View Attributes<a class="headerlink" href="#other-view-attributes" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="other-view-attributes">
+<span id="index-14"></span><span id="id8"></span><h2>Other View Attributes<a class="headerlink" href="#other-view-attributes" title="Permalink to this heading">¶</a></h2>
 <span class="target" id="index-15"></span><span class="target" id="index-16"></span><span class="target" id="index-17"></span><p class="rubric" id="attributes-of-view-by-category-table"><span id="index-18"></span>Attributes of View, by category</p>
 <dl>
 <dt>Window display</dt><dd><p>These attributes control the visual properties of the window itself,
@@ -397,7 +393,7 @@ negative for bottom/right, either pixels or proportions)</p>
 </dd>
 </dl>
 <span class="target" id="index-19"></span><span class="target" id="index-20"></span><span class="target" id="index-21"></span><span class="target" id="index-22"></span><span class="target" id="index-23"></span><span class="target" id="index-24"></span><span class="target" id="index-25"></span><span class="target" id="index-26"></span><span class="target" id="index-27"></span></dd>
-<dt id="index-28">Command</dt><dd><p>TraitsUI menus and toolbars are generally implemented in conjunction with
+<dt>Command</dt><dd><p>TraitsUI menus and toolbars are generally implemented in conjunction with
 custom <a class="reference internal" href="glossary.html#term-Handler"><span class="xref std std-term">Handler</span></a>s; see <a class="reference internal" href="handler.html#menus-and-menu-bars"><span class="std std-ref">Menus and Menu Bars</span></a> for details.</p>
 <dl class="simple">
 <dt>buttons:</dt><dd><p>List of button actions to add to the view. The <strong>traitsui.menu</strong>
@@ -432,7 +428,7 @@ of the keys recognized by the KeyBindings object.</p>
 </dd>
 </dl>
 <span class="target" id="index-29"></span><span class="target" id="index-30"></span></dd>
-<dt id="index-31">Content</dt><dd><p>The <strong>imports</strong> and <strong>drop_class</strong> attributes control what objects can be
+<dt>Content</dt><dd><p>The <strong>imports</strong> and <strong>drop_class</strong> attributes control what objects can be
 dragged and dropped on the view.</p>
 <dl class="simple">
 <dt>content:</dt><dd><p>The top-level Group object for the view.</p>
@@ -447,7 +443,7 @@ dragged and dropped on the view.</p>
 </dd>
 </dl>
 <span class="target" id="index-32"></span></dd>
-<dt id="index-33">User help</dt><dd><dl class="simple">
+<dt>User help</dt><dd><dl class="simple">
 <dt>help: (deprecated)</dt><dd><p>The <strong>help</strong> attribute is a deprecated way to specify that the
 View has a Help button. Use the buttons attribute instead (see
 <a class="reference internal" href="#command-buttons-the-buttons-attribute"><span class="std std-ref">Command Buttons: the buttons Attribute</span></a> for details).</p>
@@ -457,7 +453,7 @@ custom help handler.</p>
 </dd>
 </dl>
 </dd>
-<dt id="index-34">Unique</dt><dd><dl class="simple">
+<dt>Unique</dt><dd><dl class="simple">
 <dt>id:</dt><dd><p>The <strong>id</strong> attribute is used as a key to save user preferences about a
 view, such as customized size and position, so that they are restored
 the next time the view is opened. The value of <strong>id</strong> must be unique
@@ -468,15 +464,16 @@ specified, no user preferences are saved for the view.</p>
 </dd>
 </dl>
 <p class="rubric">Footnotes</p>
-<dl class="footnote brackets">
-<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id7">6</a></span></dt>
-<dd><p>Actually, the value of the <strong>buttons</strong> attribute is really a list of
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id9" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">6</a><span class="fn-bracket">]</span></span>
+<p>Actually, the value of the <strong>buttons</strong> attribute is really a list of
 Action objects, from which GUI buttons are generated by TraitsUI. The
 Action class is described in <a class="reference internal" href="handler.html#actions"><span class="std std-ref">Actions</span></a>.</p>
-</dd>
-</dl>
-</div>
-</div>
+</aside>
+</aside>
+</section>
+</section>
 
 
           </div>
@@ -487,8 +484,9 @@ Action class is described in <a class="reference internal" href="handler.html#ac
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Customizing a View</a><ul>
 <li><a class="reference internal" href="#specifying-window-type-the-kind-attribute">Specifying Window Type: the <strong>kind</strong> Attribute</a><ul>
 <li><a class="reference internal" href="#stand-alone-windows">Stand-alone Windows</a></li>
@@ -502,12 +500,17 @@ Action class is described in <a class="reference internal" href="handler.html#ac
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="view.html"
-                        title="previous chapter">The View and Its Building Blocks</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="advanced_view.html"
-                        title="next chapter">Advanced View Concepts</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="view.html"
+                          title="previous chapter">The View and Its Building Blocks</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="advanced_view.html"
+                          title="next chapter">Advanced View Concepts</a></p>
+  </div>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/traitsui_user_manual/custom_view.rst.txt"
@@ -517,12 +520,12 @@ Action class is described in <a class="reference internal" href="handler.html#ac
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
         </div>
@@ -539,13 +542,13 @@ Action class is described in <a class="reference internal" href="handler.html#ac
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2022, Enthought
+        &copy; Copyright 2008-2023, Enthought
       </li>
       <li>
-      Last updated on Jun 29, 2022.
+      Last updated on May 22, 2023.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.5.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
       </li>
     </ul>
     </div>

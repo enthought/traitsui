@@ -4,13 +4,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    
-    <title>Advanced Editor Adapters &mdash; TraitsUI 7 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Advanced Editor Adapters &mdash; TraitsUI 8 Documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" >
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,9 +26,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/clipboard.min.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
@@ -33,8 +36,8 @@
     <link rel="shortcut icon" href="../_static/img/favicon.png">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 7 Documentation" href="../index.html" >
-    <link rel="up" title="TraitsUI 7.4.0 User Manual" href="index.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../index.html" >
+    <link rel="up" title="TraitsUI 8.0.0 User Manual" href="index.html" >
     <link rel="next" title="Testing TraitsUI Applications" href="testing.html" >
     <link rel="prev" title="Advanced Trait Editors" href="factories_advanced_extra.html" > 
   </head>
@@ -53,9 +56,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 7 Documentation</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 8 Documentation</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.4.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 8.0.0 User Manual</a></li>
   
     <li><a href="#">Advanced Editor Adapters</a></li>
   
@@ -93,16 +96,16 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body" role="main">
             
-  <div class="section" id="advanced-editor-adapters">
-<span id="id1"></span><h1>Advanced Editor Adapters<a class="headerlink" href="#advanced-editor-adapters" title="Permalink to this headline">¶</a></h1>
+  <section id="advanced-editor-adapters">
+<span id="id1"></span><h1>Advanced Editor Adapters<a class="headerlink" href="#advanced-editor-adapters" title="Permalink to this heading">¶</a></h1>
 <p>A number of trait editors provide a way for code to adapt objects to the
 expected API for the editor, and this can be used by Traits UI code to provide
 strongly customized views of the data.  The editors which provide this facility
 are the ListStrEditor, the TabularEditor and the TreeEditor.  In this section
 we will look more closely at each of these and discuss how they can be
 customized as needed.</p>
-<div class="section" id="the-treeeditor-and-treenodes">
-<span id="advanced-tree-node"></span><h2>The TreeEditor and TreeNodes<a class="headerlink" href="#the-treeeditor-and-treenodes" title="Permalink to this headline">¶</a></h2>
+<section id="the-treeeditor-and-treenodes">
+<span id="advanced-tree-node"></span><h2>The TreeEditor and TreeNodes<a class="headerlink" href="#the-treeeditor-and-treenodes" title="Permalink to this heading">¶</a></h2>
 <p id="tree-nodes">The <a class="reference internal" href="../api/traitsui.editors.tree_editor.html#traitsui.editors.tree_editor.TreeEditor" title="traitsui.editors.tree_editor.TreeEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeEditor</span></code></a> internally associates
 with each node in the tree a pair consisting of the object that is associated
 with the node and something that to adheres to the <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a>
@@ -136,8 +139,8 @@ displayed node (and most likely two additional instances) vs. a tuple.  On the
 other hand, because <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.ITreeNode" title="traitsui.tree_node.ITreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITreeNode</span></code></a> uses Traits adaptation, you can
 extend the set of classes that are supported by adding more
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.ITreeNode" title="traitsui.tree_node.ITreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITreeNode</span></code></a> adapters, for example via Envisage extension points.</p>
-<div class="section" id="specializing-treenode-behaviour">
-<h3>Specializing TreeNode Behaviour<a class="headerlink" href="#specializing-treenode-behaviour" title="Permalink to this headline">¶</a></h3>
+<section id="specializing-treenode-behaviour">
+<h3>Specializing TreeNode Behaviour<a class="headerlink" href="#specializing-treenode-behaviour" title="Permalink to this heading">¶</a></h3>
 <p>In general using <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a> s works well when you have a hierarchy of
 <code class="xref py py-class docutils literal notranslate"><span class="pre">HasTraits</span></code> objects, which is probably the most common
 situation.  And while the <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a> is fairly generic, there are
@@ -198,9 +201,9 @@ subclassing, taking particular care to avoid things like trying to set traits
 listeners on non-<code class="xref py py-class docutils literal notranslate"><span class="pre">HasTraits</span></code> objects or adapting the
 object to a desired interface before using it.  But in these cases it may be
 better to use a different approach.</p>
-</div>
-<div class="section" id="itreenodes-and-itreenodeadapters">
-<h3>ITreeNodes and ITreeNodeAdapters<a class="headerlink" href="#itreenodes-and-itreenodeadapters" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="itreenodes-and-itreenodeadapters">
+<h3>ITreeNodes and ITreeNodeAdapters<a class="headerlink" href="#itreenodes-and-itreenodeadapters" title="Permalink to this heading">¶</a></h3>
 <p>These are most useful for situations where you don’t know the full set of
 classes that may be displayed in a tree.  This is a common situation when
 writing complex applications using libraries like Envisage that allow new
@@ -236,9 +239,9 @@ work around this somewhat by having the trait being edited and/or the
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.ITreeNodeAdapter.get_children" title="traitsui.tree_node.ITreeNodeAdapter.get_children"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_children()</span></code></a> method return pre-adapted objects,
 rather than relying on traits adaptation machinery to find and adapt the
 object.</p>
-</div>
-<div class="section" id="objecttreenodes-and-treenodeobjects">
-<h3>ObjectTreeNodes and TreeNodeObjects<a class="headerlink" href="#objecttreenodes-and-treenodeobjects" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="objecttreenodes-and-treenodeobjects">
+<h3>ObjectTreeNodes and TreeNodeObjects<a class="headerlink" href="#objecttreenodes-and-treenodeobjects" title="Permalink to this heading">¶</a></h3>
 <p>Another approach to adapting objects, particularly non-<code class="xref py py-class docutils literal notranslate"><span class="pre">HasTraits</span></code>
 objects is used by the <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueEditor</span></code>, but is available for general
 tree editors to use as well.  In this approach you write one or more
@@ -310,9 +313,9 @@ has to be a <code class="xref py py-class docutils literal notranslate"><span cl
 property that wraps the raw tree structure in a <code class="xref py py-class docutils literal notranslate"><span class="pre">DictNode</span></code> to get
 started: unlike the <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.ITreeNodeAdapter" title="traitsui.tree_node.ITreeNodeAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITreeNodeAdapter</span></code></a> approaches this wrapping not
 automatically provided for you.</p>
-</div>
-<div class="section" id="custom-renderers">
-<h3>Custom Renderers<a class="headerlink" href="#custom-renderers" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="custom-renderers">
+<h3>Custom Renderers<a class="headerlink" href="#custom-renderers" title="Permalink to this heading">¶</a></h3>
 <p>The Qt backend allows users to completely override the rendering of cells in
 a TreeEditor.  To do this, the TreeNode should override the
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.get_renderer" title="traitsui.tree_node.TreeNode.get_renderer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TreeNode.get_renderer()</span></code></a> method to return an instance of a
@@ -352,21 +355,21 @@ traits appropriately.</p>
 <a class="reference internal" href="../api/traitsui.tree_node_renderer.html#traitsui.tree_node_renderer.AbstractTreeNodeRenderer.get_label" title="traitsui.tree_node_renderer.AbstractTreeNodeRenderer.get_label"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_label()</span></code></a> that
 gets the label text given the tree node, the underlying object, and the column,
 smoothing over the TreeNode columns label API.</p>
-</div>
-<div class="section" id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h3>
 <p>There are a number of examples of use of the
 <a class="reference internal" href="../api/traitsui.editors.tree_editor.html#traitsui.editors.tree_editor.TreeEditor" title="traitsui.editors.tree_editor.TreeEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeEditor</span></code></a> in the TraitsUI demos:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/7.4.0/traitsui/examples/demo/Standard_Editors/TreeEditor_demo.py">TreeEditor</a></p></li>
-<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/7.4.0/traitsui/examples/demo/Advanced/Adapted_tree_editor_demo.py">Adapted TreeEditor</a></p></li>
-<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/7.4.0/traitsui/examples/demo/Advanced/HDF5_tree_demo.py">HDF5 Tree</a></p></li>
-<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/7.4.0/traitsui/examples/demo/Extras/Tree_editor_with_TreeNodeRenderer.py">Tree Editor with Renderer</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/8.0.0/traitsui/examples/demo/Standard_Editors/TreeEditor_demo.py">TreeEditor</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/8.0.0/traitsui/examples/demo/Advanced/Adapted_tree_editor_demo.py">Adapted TreeEditor</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/8.0.0/traitsui/examples/demo/Advanced/HDF5_tree_demo.py">HDF5 Tree</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/8.0.0/traitsui/examples/demo/Extras/Tree_editor_with_TreeNodeRenderer.py">Tree Editor with Renderer</a></p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="the-tabularadapter-class">
-<span id="advanced-tabular-adapter"></span><h2>The TabularAdapter Class<a class="headerlink" href="#the-tabularadapter-class" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="the-tabularadapter-class">
+<span id="advanced-tabular-adapter"></span><h2>The TabularAdapter Class<a class="headerlink" href="#the-tabularadapter-class" title="Permalink to this heading">¶</a></h2>
 <p>The power and flexibility of the tabular editor is mostly a result of the
 <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> class, which is the base class from which all
 tabular editor adapters must be derived.</p>
@@ -377,8 +380,8 @@ the editor and your data.</p>
 <p>The design of the <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> base class is such that it tries
 to make simple cases simple and complex cases possible. How it accomplishes
 this is what we’ll be discussing in the following sections.</p>
-<div class="section" id="the-tabularadapter-columns-trait">
-<h3>The TabularAdapter <em>columns</em> Trait<a class="headerlink" href="#the-tabularadapter-columns-trait" title="Permalink to this headline">¶</a></h3>
+<section id="the-tabularadapter-columns-trait">
+<h3>The TabularAdapter <em>columns</em> Trait<a class="headerlink" href="#the-tabularadapter-columns-trait" title="Permalink to this heading">¶</a></h3>
 <p>First up is the <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> <code class="xref py py-attr docutils literal notranslate"><span class="pre">columns</span></code> trait, which is a
 list of values which define, in presentation order, the set of columns to be
 displayed by the associated
@@ -421,9 +424,9 @@ in each column.</p>
 <a class="reference internal" href="../api/traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularEditor</span></code></a> is active. The
 <a class="reference internal" href="../api/traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularEditor</span></code></a> will automatically
 modify the table to show the new set of defined columns.</p>
-</div>
-<div class="section" id="the-core-tabularadapter-interface">
-<h3>The Core TabularAdapter Interface<a class="headerlink" href="#the-core-tabularadapter-interface" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="the-core-tabularadapter-interface">
+<h3>The Core TabularAdapter Interface<a class="headerlink" href="#the-core-tabularadapter-interface" title="Permalink to this heading">¶</a></h3>
 <p>In this section, we’ll describe the core interface to the
 <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> class. This is the actual interface used by the
 <a class="reference internal" href="../api/traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularEditor</span></code></a> to access your data
@@ -613,9 +616,9 @@ should be a new instance of whatever underlying representation is being
 used for table items.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="creating-a-custom-tabularadapter">
-<h3>Creating a Custom TabularAdapter<a class="headerlink" href="#creating-a-custom-tabularadapter" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="creating-a-custom-tabularadapter">
+<h3>Creating a Custom TabularAdapter<a class="headerlink" href="#creating-a-custom-tabularadapter" title="Permalink to this heading">¶</a></h3>
 <p>Having just taken a look at the core <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> interface, you
 might now be thinking that there are an awful lot of methods that need to be
 specified to get an adapter up and running. But as we mentioned earlier
@@ -813,20 +816,20 @@ a mutable sequence and attempts to perform an
 <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_value" title="traitsui.tabular_adapter.TabularAdapter.default_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_value</span></code></a> trait.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="id2">
-<h3>Examples<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id2">
+<h3>Examples<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
 <p>There are a number of examples of use of the <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> in the
 TraitsUI demos:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/7.4.0/traitsui/examples/demo/Advanced/Tabular_editor_demo.py">TabularEditor</a></p></li>
-<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/7.4.0/traitsui/examples/demo/Advanced/Auto_update_TabularEditor_demo.py">TabularEditor (auto-update)</a></p></li>
-<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/7.4.0/traitsui/examples/demo/Advanced/NumPy_array_tabular_editor_demo.py">NumPy array TabularEditor</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/8.0.0/traitsui/examples/demo/Advanced/Tabular_editor_demo.py">TabularEditor</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/8.0.0/traitsui/examples/demo/Advanced/Auto_update_TabularEditor_demo.py">TabularEditor (auto-update)</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/8.0.0/traitsui/examples/demo/Advanced/NumPy_array_tabular_editor_demo.py">NumPy array TabularEditor</a></p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="the-liststradapter-class">
-<h2>The ListStrAdapter Class<a class="headerlink" href="#the-liststradapter-class" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="the-liststradapter-class">
+<h2>The ListStrAdapter Class<a class="headerlink" href="#the-liststradapter-class" title="Permalink to this heading">¶</a></h2>
 <p>Although the <a class="reference internal" href="../api/traitsui.editors.list_str_editor.html#traitsui.editors.list_str_editor.ListStrEditor" title="traitsui.editors.list_str_editor.ListStrEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListStrEditor</span></code></a> editor
 is frequently used, as might be expected, with lists of strings, it also
 provides facilities to edit lists of other object types that can be adapted
@@ -839,8 +842,8 @@ intents of the various methods and traits are the same as the
 <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a>, and so the approaches
 discussed in the previous section work for the <a class="reference internal" href="../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter" title="traitsui.list_str_adapter.ListStrAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListStrAdapter</span></code></a> as
 well.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -851,8 +854,9 @@ well.</p>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Advanced Editor Adapters</a><ul>
 <li><a class="reference internal" href="#the-treeeditor-and-treenodes">The TreeEditor and TreeNodes</a><ul>
 <li><a class="reference internal" href="#specializing-treenode-behaviour">Specializing TreeNode Behaviour</a></li>
@@ -874,12 +878,17 @@ well.</p>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="factories_advanced_extra.html"
-                        title="previous chapter">Advanced Trait Editors</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="testing.html"
-                        title="next chapter">Testing TraitsUI Applications</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="factories_advanced_extra.html"
+                          title="previous chapter">Advanced Trait Editors</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="testing.html"
+                          title="next chapter">Testing TraitsUI Applications</a></p>
+  </div>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/traitsui_user_manual/adapters.rst.txt"
@@ -889,12 +898,12 @@ well.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
         </div>
@@ -911,13 +920,13 @@ well.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2022, Enthought
+        &copy; Copyright 2008-2023, Enthought
       </li>
       <li>
-      Last updated on Jun 29, 2022.
+      Last updated on May 22, 2023.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.5.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
       </li>
     </ul>
     </div>

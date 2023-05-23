@@ -4,13 +4,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    
-    <title>Developing The Testing Package &mdash; TraitsUI 7 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Developing The Testing Package &mdash; TraitsUI 8 Documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" >
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,9 +26,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/clipboard.min.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
@@ -33,10 +36,10 @@
     <link rel="shortcut icon" href="../_static/img/favicon.png">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 7 Documentation" href="../index.html" >
-    <link rel="up" title="TraitsUI 7.4.0 Developer Guide" href="index.html" >
-    <link rel="next" title="TraitsUI 7.4.0 API Reference" href="../api/index.html" >
-    <link rel="prev" title="TraitsUI 7.4.0 Developer Guide" href="index.html" > 
+    <link rel="top" title="TraitsUI 8 Documentation" href="../index.html" >
+    <link rel="up" title="TraitsUI 8.0.0 Developer Guide" href="index.html" >
+    <link rel="next" title="TraitsUI 8.0.0 API Reference" href="../api/index.html" >
+    <link rel="prev" title="TraitsUI 8.0.0 Developer Guide" href="index.html" > 
   </head>
   <body>
   <div class="container">
@@ -53,9 +56,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 7 Documentation</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 8 Documentation</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.4.0 Developer Guide</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 8.0.0 Developer Guide</a></li>
   
     <li><a href="#">Developing The Testing Package</a></li>
   
@@ -73,11 +76,11 @@
            >modules</a>
       </li>
       <li class="active">
-        <a href="../api/index.html" title="TraitsUI 7.4.0 API Reference"
+        <a href="../api/index.html" title="TraitsUI 8.0.0 API Reference"
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="index.html" title="TraitsUI 7.4.0 Developer Guide"
+        <a href="index.html" title="TraitsUI 8.0.0 Developer Guide"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -93,13 +96,13 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body" role="main">
             
-  <div class="section" id="developing-the-testing-package">
-<span id="testing-internals"></span><h1>Developing The Testing Package<a class="headerlink" href="#developing-the-testing-package" title="Permalink to this headline">¶</a></h1>
+  <section id="developing-the-testing-package">
+<span id="testing-internals"></span><h1>Developing The Testing Package<a class="headerlink" href="#developing-the-testing-package" title="Permalink to this heading">¶</a></h1>
 <p>This document describes the context and design decisions surrounding the
 development of the <a class="reference internal" href="../api/traitsui.testing.html#module-traitsui.testing" title="traitsui.testing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">testing</span></code></a> package. Readers are assumed to be
 familiar with the content of the <a class="reference internal" href="../traitsui_user_manual/testing.html#testing-traitsui-applications"><span class="std std-ref">Testing TraitsUI Applications</span></a> Section.</p>
-<div class="section" id="background-motivation">
-<h2>Background Motivation<a class="headerlink" href="#background-motivation" title="Permalink to this headline">¶</a></h2>
+<section id="background-motivation">
+<h2>Background Motivation<a class="headerlink" href="#background-motivation" title="Permalink to this heading">¶</a></h2>
 <p>There had been proposals for introducing a public API to make it easier and
 safer to write self-checking tests for TraitsUI applications. At the same time,
 we noticed that a lot of what TraitsUI needs for testing are common in
@@ -156,9 +159,9 @@ there was an opportunity to wrap these helper functions and re-expose them
 in a simpler public API for testing.</p>
 <p>By implementing a testing API motivated and tested by TraitsUI ‘s own test
 code, the API is likely to be more useful and has fewer bugs.</p>
-</div>
-<div class="section" id="goals">
-<h2>Goals<a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="goals">
+<h2>Goals<a class="headerlink" href="#goals" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>The API should be simple, intuitive to use and to understand.</p></li>
 <li><p>The API should be toolkit agnostic.</p></li>
@@ -178,27 +181,27 @@ tests.</p></li>
 and TraitsUI test code can optionally defer publishing less mature test logic
 to the public API.</p></li>
 </ul>
-</div>
-<div class="section" id="non-goals">
-<h2>Non-Goals<a class="headerlink" href="#non-goals" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="non-goals">
+<h2>Non-Goals<a class="headerlink" href="#non-goals" title="Permalink to this heading">¶</a></h2>
 <p>The API does NOT aim to:</p>
 <ul class="simple">
 <li><p>Replace Pyface’s ModalDialogTester and GuiTestAssistant.</p></li>
 <li><p>Reproduce the full visual experience compared to manual testing, as long
 as the test objective is fulfilled.</p></li>
 </ul>
-</div>
-<div class="section" id="system-context">
-<h2>System Context<a class="headerlink" href="#system-context" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="system-context">
+<h2>System Context<a class="headerlink" href="#system-context" title="Permalink to this heading">¶</a></h2>
 <p>In a software system, tests are the most isolated system component, which are
 not necessary for production use. Since the testing library supports tests,
 it should only be used by tests and nothing else in a software system.</p>
 <p>The fact that tests and production use require different exception handling
 further justifies disallowing the testing library to be used in a production
 environment.</p>
-</div>
-<div class="section" id="api">
-<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this heading">¶</a></h2>
 <p>As mentioned in <a class="reference internal" href="../traitsui_user_manual/testing.html#testing-traitsui-applications"><span class="std std-ref">Testing TraitsUI Applications</span></a>, there are broadly
 speaking three types of actions when one manipulates a GUI in test:</p>
 <ul class="simple">
@@ -229,17 +232,17 @@ occur automatically so that users do not have to worry about that any more.</p>
 <p>Different types of interactions and locations should be supported based on
 the GUI target type. For example, if the current GUI target being handled
 is a button, then “perform” should support an interaction type “MouseClick”.</p>
-</div>
-<div class="section" id="public-api-objects">
-<h2>Public API objects<a class="headerlink" href="#public-api-objects" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="public-api-objects">
+<h2>Public API objects<a class="headerlink" href="#public-api-objects" title="Permalink to this heading">¶</a></h2>
 <p>All objects exposed in the <code class="docutils literal notranslate"><span class="pre">traitsui.testing.api</span></code> are part of the public API.
 Objects accessible via publicly named attributes through this API are also
 part of the public API.</p>
 <p>The less obvious part of the public API are the supported interactions and
 locations exposed via the registry pattern.</p>
-</div>
-<div class="section" id="separating-uitester-from-uiwrapper">
-<h2>Separating <a class="reference internal" href="../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a> from <a class="reference internal" href="../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper" title="traitsui.testing.tester.ui_wrapper.UIWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIWrapper</span></code></a><a class="headerlink" href="#separating-uitester-from-uiwrapper" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="separating-uitester-from-uiwrapper">
+<h2>Separating <a class="reference internal" href="../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a> from <a class="reference internal" href="../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper" title="traitsui.testing.tester.ui_wrapper.UIWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIWrapper</span></code></a><a class="headerlink" href="#separating-uitester-from-uiwrapper" title="Permalink to this heading">¶</a></h2>
 <p><a class="reference internal" href="../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a> is designed to be a top-level object to provide the first point of
 use for developers testing a TraitsUI application.</p>
 <p>It puts together two other types of objects:</p>
@@ -259,9 +262,9 @@ and perform actions on TraitsUI objects.</p>
 to extend the API in its internal GUI tests without necessarily exposing the
 logic to the public. Likewise, external projects can extend testing support for
 their custom UI editors.</p>
-</div>
-<div class="section" id="registry-vs-inheritance-registry-wins">
-<h2>Registry VS Inheritance: Registry wins<a class="headerlink" href="#registry-vs-inheritance-registry-wins" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="registry-vs-inheritance-registry-wins">
+<h2>Registry VS Inheritance: Registry wins<a class="headerlink" href="#registry-vs-inheritance-registry-wins" title="Permalink to this heading">¶</a></h2>
 <p>The types of locations and interactions that should be supported depends on
 the type of TraitsUI editor being used. e.g. A TextEditor that only wraps
 a text box does not need to support further location logic, and it should
@@ -273,9 +276,9 @@ enough to achieve polymorphism. If we had used subclasses, we will end up with
 an API where there are a lot of optional methods that are not implemented by
 a subclass, making it difficult for users to find what can be used.</p>
 <p>At the end, the registry pattern wins, and that becomes <a class="reference internal" href="../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry" title="traitsui.testing.tester.target_registry.TargetRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetRegistry</span></code></a>.</p>
-</div>
-<div class="section" id="rejected-design-default-location">
-<h2>Rejected design: Default location<a class="headerlink" href="#rejected-design-default-location" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="rejected-design-default-location">
+<h2>Rejected design: Default location<a class="headerlink" href="#rejected-design-default-location" title="Permalink to this heading">¶</a></h2>
 <p>Early in the development there was a proposal to support a special location
 type called the “DefaultTarget”. The idea was that if an interaction is not
 supported by a given GUI target, the “default target” is tried. This was
@@ -321,9 +324,9 @@ perform impact analysis when one needs to change the code.</p></li>
 </ol>
 <p>At the end we simply register the interaction types on those simple UI editors
 directly but we refactor the registration logic so that it is easy to reuse.</p>
-</div>
-<div class="section" id="where-are-the-tests">
-<h2>Where are the tests?<a class="headerlink" href="#where-are-the-tests" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="where-are-the-tests">
+<h2>Where are the tests?<a class="headerlink" href="#where-are-the-tests" title="Permalink to this heading">¶</a></h2>
 <p>When a functionality is added to support testing TraitsUI editors, the
 functionality should be used in TraitsUI ‘s own tests for the editor.
 e.g. The MouseClick support for ButtonEditor is tested in the tests for
@@ -335,9 +338,9 @@ functionality is indeed useful.</p>
 <p>Tests for functionality provided by the tester API can be found in the
 <code class="docutils literal notranslate"><span class="pre">testing</span></code> package (or subpackages). e.g. API of <a class="reference internal" href="../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a> is tested in
 <code class="docutils literal notranslate"><span class="pre">traitsui.testing.tester.tests</span></code>.</p>
-</div>
-<div class="section" id="package-structures">
-<h2>Package structures<a class="headerlink" href="#package-structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="package-structures">
+<h2>Package structures<a class="headerlink" href="#package-structures" title="Permalink to this heading">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">traitsui.testing</span></code> package adopts a naming convention that is in fact
 not new: Preceding underscores in names are used to indicate an object is
 intended to be used within the namespace it is defined in.</p>
@@ -349,8 +352,8 @@ the module should have a “public” name.</p>
 <p>For example, <code class="docutils literal notranslate"><span class="pre">traitsui.testing.tester._ui_tester.default_registry</span></code> can be
 imported by <code class="docutils literal notranslate"><span class="pre">traitsui.testing.tester.something</span></code> but should not be imported
 by <code class="docutils literal notranslate"><span class="pre">traitsui.testing.api</span></code> or anything outside of <code class="docutils literal notranslate"><span class="pre">traitsui.testing.tester</span></code>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -361,8 +364,9 @@ by <code class="docutils literal notranslate"><span class="pre">traitsui.testing
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Developing The Testing Package</a><ul>
 <li><a class="reference internal" href="#background-motivation">Background Motivation</a></li>
 <li><a class="reference internal" href="#goals">Goals</a></li>
@@ -379,12 +383,17 @@ by <code class="docutils literal notranslate"><span class="pre">traitsui.testing
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">TraitsUI 7.4.0 Developer Guide</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../api/index.html"
-                        title="next chapter">TraitsUI 7.4.0 API Reference</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">TraitsUI 8.0.0 Developer Guide</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../api/index.html"
+                          title="next chapter">TraitsUI 8.0.0 API Reference</a></p>
+  </div>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/traitsui_dev_guide/testing.rst.txt"
@@ -394,12 +403,12 @@ by <code class="docutils literal notranslate"><span class="pre">traitsui.testing
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
         </div>
@@ -416,13 +425,13 @@ by <code class="docutils literal notranslate"><span class="pre">traitsui.testing
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2022, Enthought
+        &copy; Copyright 2008-2023, Enthought
       </li>
       <li>
-      Last updated on Jun 29, 2022.
+      Last updated on May 22, 2023.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.5.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
       </li>
     </ul>
     </div>

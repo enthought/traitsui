@@ -4,13 +4,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    
-    <title>Controlling the Interface: the Handler &mdash; TraitsUI 7 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Controlling the Interface: the Handler &mdash; TraitsUI 8 Documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" >
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,9 +26,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/clipboard.min.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
@@ -33,8 +36,8 @@
     <link rel="shortcut icon" href="../_static/img/favicon.png">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 7 Documentation" href="../index.html" >
-    <link rel="up" title="TraitsUI 7.4.0 User Manual" href="index.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../index.html" >
+    <link rel="up" title="TraitsUI 8.0.0 User Manual" href="index.html" >
     <link rel="next" title="Introduction to Trait Editor Factories" href="factory_intro.html" >
     <link rel="prev" title="Advanced View Concepts" href="advanced_view.html" > 
   </head>
@@ -53,9 +56,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 7 Documentation</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 8 Documentation</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.4.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 8.0.0 User Manual</a></li>
   
     <li><a href="#">Controlling the Interface: the Handler</a></li>
   
@@ -93,13 +96,13 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body" role="main">
             
-  <div class="section" id="controlling-the-interface-the-handler">
-<span id="id1"></span><h1>Controlling the Interface: the Handler<a class="headerlink" href="#controlling-the-interface-the-handler" title="Permalink to this headline">¶</a></h1>
+  <section id="controlling-the-interface-the-handler">
+<span id="id1"></span><h1>Controlling the Interface: the Handler<a class="headerlink" href="#controlling-the-interface-the-handler" title="Permalink to this heading">¶</a></h1>
 <p>Most of the material in the preceding chapters is concerned with the
 relationship between the model and view aspects of the <a class="reference internal" href="glossary.html#term-MVC"><span class="xref std std-term">MVC</span></a> design
 pattern as supported by TraitsUI. This chapter examines the third aspect: the
 <a class="reference internal" href="glossary.html#term-controller"><span class="xref std std-term">controller</span></a>, implemented in TraitsUI as an <a class="reference internal" href="glossary.html#term-instance"><span class="xref std std-term">instance</span></a> of the
-<a class="reference internal" href="glossary.html#term-Handler"><span class="xref std std-term">Handler</span></a> class. <a class="footnote-reference brackets" href="#id20" id="id2">11</a></p>
+<a class="reference internal" href="glossary.html#term-Handler"><span class="xref std std-term">Handler</span></a> class. <a class="footnote-reference brackets" href="#id20" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a></p>
 <p>A controller for an MVC-based application is essentially an event handler for
 GUI events, i.e., for events that are generated through or by the program
 interface. Such events can require changes to one or more model objects (e.g.,
@@ -116,8 +119,8 @@ implement custom GUI behaviors by building and instantiating custom subclasses
 of the Handler class. The final section of the chapter describes several
 techniques for linking a custom Handler to the window or windows it is designed
 to control.</p>
-<div class="section" id="backstage-introducing-the-uiinfo-object">
-<span id="id3"></span><h2>Backstage: Introducing the UIInfo Object<a class="headerlink" href="#backstage-introducing-the-uiinfo-object" title="Permalink to this headline">¶</a></h2>
+<section id="backstage-introducing-the-uiinfo-object">
+<span id="id3"></span><h2>Backstage: Introducing the UIInfo Object<a class="headerlink" href="#backstage-introducing-the-uiinfo-object" title="Permalink to this heading">¶</a></h2>
 <p>TraitsUI supports the MVC design pattern by maintaining the model, view, and
 controller as separate entities. A single View object can be used to construct
 windows for multiple model objects; likewise a single Handler can handle GUI
@@ -160,12 +163,12 @@ some values are only used at editor creation time; however all editors support
 dynamically changing the <strong>enabled</strong>, <strong>visible</strong> and <strong>invalid</strong> traits.  This
 feature can sometimes allow developers to avoid having to create a custom Handler
 subclass.</p>
-<p>See the <a class="reference external" href="https://github.com/enthought/traitsui/tree/7.4.0/traitsui/examples/demo/Advanced/Invalid_state_handling.py">Invalid state handling</a>
+<p>See the <a class="reference external" href="https://github.com/enthought/traitsui/tree/8.0.0/traitsui/examples/demo/Advanced/Invalid_state_handling.py">Invalid state handling</a>
 example which demonstrates how to use this mechanism to control the invalid state
 of a dialog based on the value of multiple editors.</p>
-</div>
-<div class="section" id="backstage-the-ui-object">
-<span id="id4"></span><h2>Backstage: The UI Object<a class="headerlink" href="#backstage-the-ui-object" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="backstage-the-ui-object">
+<span id="id4"></span><h2>Backstage: The UI Object<a class="headerlink" href="#backstage-the-ui-object" title="Permalink to this heading">¶</a></h2>
 <p>As opposed to the very dynamic UIInfo object, the UI class provides an object
 which ties together the various objects that are involved in a TraitsUI GUI:
 the View, the context, the Handler, the underlying toolkit controls and the
@@ -224,10 +227,6 @@ permanent error states.</p>
 </dl>
 <p class="rubric">Useful UI methods</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 35%" />
-<col style="width: 65%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>Purpose</p></th>
@@ -243,9 +242,9 @@ TraitsUI dialog programatically from a handler.</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="assigning-handlers-to-views">
-<span id="id5"></span><h2>Assigning Handlers to Views<a class="headerlink" href="#assigning-handlers-to-views" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="assigning-handlers-to-views">
+<span id="id5"></span><h2>Assigning Handlers to Views<a class="headerlink" href="#assigning-handlers-to-views" title="Permalink to this heading">¶</a></h2>
 <p>In accordance with the MVC design pattern, Handlers and Views are separate
 entities belonging to distinct classes. In order for a custom Handler to provide
 the control logic for a window, it must be explicitly associated with the View
@@ -255,17 +254,17 @@ for that window. The TraitsUI package provides three ways to accomplish this:</p
 <li><p>Provide the Handler as an argument to a display method such as edit_traits().</p></li>
 <li><p>Define the View as part of the Handler.</p></li>
 </ul>
-<div class="section" id="binding-a-singleton-handler-to-a-view">
-<span id="id6"></span><h3>Binding a Singleton Handler to a View<a class="headerlink" href="#binding-a-singleton-handler-to-a-view" title="Permalink to this headline">¶</a></h3>
+<section id="binding-a-singleton-handler-to-a-view">
+<span id="id6"></span><h3>Binding a Singleton Handler to a View<a class="headerlink" href="#binding-a-singleton-handler-to-a-view" title="Permalink to this heading">¶</a></h3>
 <p>To associate a given custom Handler with all windows produced from a given View,
 assign an instance of the custom Handler class to the View’s <strong>handler</strong>
 attribute. The result of this technique, as shown in
 <a class="reference internal" href="#example-9-using-a-handler-that-reacts-to-trait-changes"><span class="std std-ref">Example 9</span></a>, is
 that the window created by the View object is automatically controlled by the
 specified handler instance.</p>
-</div>
-<div class="section" id="linking-handler-and-view-at-edit-time">
-<span id="id7"></span><h3>Linking Handler and View at Edit Time<a class="headerlink" href="#linking-handler-and-view-at-edit-time" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="linking-handler-and-view-at-edit-time">
+<span id="id7"></span><h3>Linking Handler and View at Edit Time<a class="headerlink" href="#linking-handler-and-view-at-edit-time" title="Permalink to this heading">¶</a></h3>
 <p>It is also possible to associate a custom Handler with a specific window without
 assigning it permanently to the View. Each of the three TraitsUI
 window-building methods (the configure_traits() and edit_traits() methods of the
@@ -273,9 +272,9 @@ HasTraits class and the ui() method of the View class) has a <em>handler</em> ke
 argument. Assigning an instance of Handler to this argument gives that handler
 instance control <em>only of the specific window being created by the method call</em>.
 This assignment overrides the View’s <strong>handler</strong> attribute.</p>
-</div>
-<div class="section" id="creating-a-default-view-within-a-handler">
-<span id="id8"></span><h3>Creating a Default View Within a Handler<a class="headerlink" href="#creating-a-default-view-within-a-handler" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="creating-a-default-view-within-a-handler">
+<span id="id8"></span><h3>Creating a Default View Within a Handler<a class="headerlink" href="#creating-a-default-view-within-a-handler" title="Permalink to this heading">¶</a></h3>
 <p>You seldom need to associate a single custom Handler with several different
 Views or vice versa, although you can in theory and there are cases where it is
 useful to be able to do so. In most real-life scenarios, a custom Handler is
@@ -289,10 +288,10 @@ identical to the originals except that the Handler object on which they are
 called becomes the default Handler for the resulting windows. Note that for
 these versions of the display methods, the <em>context</em> keyword parameter is not
 optional.</p>
-</div>
-</div>
-<div class="section" id="handler-subclasses">
-<span id="id9"></span><h2>Handler Subclasses<a class="headerlink" href="#handler-subclasses" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="handler-subclasses">
+<span id="id9"></span><h2>Handler Subclasses<a class="headerlink" href="#handler-subclasses" title="Permalink to this heading">¶</a></h2>
 <p>TraitsUI provides two Handler subclasses: ModelView and Controller.  Both of
 these classes are designed to simplify the process of creating an MVC-based
 application.</p>
@@ -314,20 +313,20 @@ created.</p>
 <p>Both classes’ constructors accept an optional <em>model</em> parameter, which is the
 model object. They also can accept metadata as keyword parameters.</p>
 <dl class="py class">
-<dt id="ModelView">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ModelView</span></code><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">model</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">**metadata</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ModelView" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="ModelView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModelView</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">model</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**metadata</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ModelView" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
-<dt id="Controller">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Controller</span></code><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">model</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">**metadata</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Controller" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="Controller">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Controller</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">model</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**metadata</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Controller" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>The difference between the ModelView and Controller classes lies in the context
 dictionary that each one passes to its associated user interface, as described
 in the following sections.</p>
-<div class="section" id="controller-class">
-<span id="id10"></span><h3>Controller Class<a class="headerlink" href="#controller-class" title="Permalink to this headline">¶</a></h3>
+<section id="controller-class">
+<span id="id10"></span><h3>Controller Class<a class="headerlink" href="#controller-class" title="Permalink to this heading">¶</a></h3>
 <p>The Controller class is normally used when implementing a standard MVC-based
 design, and plays the “controller” role in the MVC design pattern. The “model”
 role is played by the object referenced by the Controller’s <strong>model</strong> attribute;
@@ -343,9 +342,9 @@ contains the following entries:</p>
 most, if not all, of the data to be viewed. Therefore, the model object is used
 for the object key in the context dictionary, so that its attributes can be
 easily referenced with unqualified names (such as Item(‘name’)).</p>
-</div>
-<div class="section" id="modelview-class">
-<span id="id11"></span><h3>ModelView Class<a class="headerlink" href="#modelview-class" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="modelview-class">
+<span id="id11"></span><h3>ModelView Class<a class="headerlink" href="#modelview-class" title="Permalink to this heading">¶</a></h3>
 <p>The ModelView class is useful when creating a variant of the standard MVC
 design pattern. In this variant, the ModelView subclass reformulates a number
 of trait attributes on its model object as properties on the ModelView, usually
@@ -362,15 +361,15 @@ relation to the View object, serving both the “controller” role and the “m
 role (as a set of properties wrapped around the original model). Because the
 ModelView object is passed as the context’s object, its attributes can be
 referenced by unqualified names in the View definition.</p>
-</div>
-</div>
-<div class="section" id="writing-handler-methods">
-<span id="id12"></span><h2>Writing Handler Methods<a class="headerlink" href="#writing-handler-methods" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="writing-handler-methods">
+<span id="id12"></span><h2>Writing Handler Methods<a class="headerlink" href="#writing-handler-methods" title="Permalink to this heading">¶</a></h2>
 <p>If you create a custom Handler subclass, depending on the behavior you want to
 implement, you might override the standard methods of Handler, or you might
 create methods that respond to changes to specific trait attributes.</p>
-<div class="section" id="overriding-standard-methods">
-<span id="id13"></span><h3>Overriding Standard Methods<a class="headerlink" href="#overriding-standard-methods" title="Permalink to this headline">¶</a></h3>
+<section id="overriding-standard-methods">
+<span id="id13"></span><h3>Overriding Standard Methods<a class="headerlink" href="#overriding-standard-methods" title="Permalink to this heading">¶</a></h3>
 <p>The Handler class provides methods that are automatically executed at certain
 points in the lifespan of the window controlled by a given Handler. By
 overriding these methods, you can implement a variety of custom window
@@ -392,11 +391,6 @@ of the window (if setting the x and y attributes of the View is insufficient).</
 </ol>
 <p class="rubric" id="when-handler-methods-are-called-and-when-to-override-them-table">When Handler methods are called, and when to override them</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 36%" />
-<col style="width: 34%" />
-<col style="width: 30%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>Called When</p></th>
@@ -475,9 +469,9 @@ to a method.</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="reacting-to-trait-changes">
-<span id="id14"></span><h3>Reacting to Trait Changes<a class="headerlink" href="#reacting-to-trait-changes" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="reacting-to-trait-changes">
+<span id="id14"></span><h3>Reacting to Trait Changes<a class="headerlink" href="#reacting-to-trait-changes" title="Permalink to this heading">¶</a></h3>
 <p>The setattr() method described above is called whenever any trait value is
 changed in the UI. However, TraitsUI also provides a mechanism for calling
 methods that are automatically executed whenever the user edits a <em>particular</em>
@@ -488,8 +482,8 @@ should not be implemented in the “model” part of the code. In keeping with t
 pattern, TraitsUI supports “user interface notification” methods, which must
 have a signature with the following format:</p>
 <dl class="py method">
-<dt id="extended_traitname_changed">
-<code class="sig-name descname"><span class="pre">extended_traitname_changed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#extended_traitname_changed" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="extended_traitname_changed">
+<span class="sig-name descname"><span class="pre">extended_traitname_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#extended_traitname_changed" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>This method is called whenever a change is made to the attribute specified by
@@ -566,17 +560,19 @@ overridden setattr() method and user interface notification method.</p>
 </pre></div>
 </div>
 <img alt="Dialog box with empty checkboxes and a title of &quot;Alter Title&quot;" src="../_images/alter_title_before.png" />
-<div class="figure align-default" id="id21">
+<figure class="align-default" id="id21">
 <img alt="Dialog box with one filled checkbox and a title of &quot;Alter Title*&quot;" src="../_images/alter_title_after.png" />
-<p class="caption"><span class="caption-text">Figure 7: Before and after views of Example 9</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
-</div>
-</div>
-<div class="section" id="implementing-custom-window-commands">
-<span id="id15"></span><h3>Implementing Custom Window Commands<a class="headerlink" href="#implementing-custom-window-commands" title="Permalink to this headline">¶</a></h3>
+<figcaption>
+<p><span class="caption-text">Figure 7: Before and after views of Example 9</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="implementing-custom-window-commands">
+<span id="id15"></span><h3>Implementing Custom Window Commands<a class="headerlink" href="#implementing-custom-window-commands" title="Permalink to this heading">¶</a></h3>
 <p>Another use of a Handler is to define custom window
 actions, which can be presented as buttons, menu items, or toolbar buttons.</p>
-<div class="section" id="actions">
-<span id="id16"></span><h4>Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h4>
+<section id="actions">
+<span id="id16"></span><h4>Actions<a class="headerlink" href="#actions" title="Permalink to this heading">¶</a></h4>
 <p>In TraitsUI, window commands are implemented as instances of the Action class.
 Actions can be used in <a class="reference internal" href="glossary.html#term-command-button"><span class="xref std std-term">command button</span></a>s, menus, and toolbars.</p>
 <p>Suppose you want to build a window with a custom <strong>Recalculate</strong> action. Suppose
@@ -592,9 +588,9 @@ UIInfo object.</p></li>
 </div>
 </li>
 </ol>
-</div>
-<div class="section" id="custom-command-buttons">
-<span id="id17"></span><h4>Custom Command Buttons<a class="headerlink" href="#custom-command-buttons" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="custom-command-buttons">
+<span id="id17"></span><h4>Custom Command Buttons<a class="headerlink" href="#custom-command-buttons" title="Permalink to this heading">¶</a></h4>
 <p>The simplest way to turn an Action into a window command is to add it to the
 <strong>buttons</strong> attribute for the View. It appears in the button area of the window,
 along with any standard buttons you specify.</p>
@@ -610,9 +606,9 @@ along with any standard buttons you specify.</p>
 </div>
 </li>
 </ol>
-</div>
-<div class="section" id="menus-and-menu-bars">
-<span id="id18"></span><h4>Menus and Menu Bars<a class="headerlink" href="#menus-and-menu-bars" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="menus-and-menu-bars">
+<span id="id18"></span><h4>Menus and Menu Bars<a class="headerlink" href="#menus-and-menu-bars" title="Permalink to this heading">¶</a></h4>
 <p>Another way to install an Action such as <strong>recalc</strong> as a window command is to
 make it into a menu option.</p>
 <ol class="arabic simple">
@@ -634,9 +630,9 @@ following code:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="toolbars">
-<span id="id19"></span><h4>Toolbars<a class="headerlink" href="#toolbars" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="toolbars">
+<span id="id19"></span><h4>Toolbars<a class="headerlink" href="#toolbars" title="Permalink to this heading">¶</a></h4>
 <p>A third way to add an action to a Traits View is to make it a button on a
 toolbar. Adding a toolbar to a Traits View is similar to adding a menu bar,
 except that toolbars do not contain menus; they directly contain actions.</p>
@@ -670,20 +666,20 @@ created, as in the following code:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="schemas">
-<h4>Schemas<a class="headerlink" href="#schemas" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="schemas">
+<h4>Schemas<a class="headerlink" href="#schemas" title="Permalink to this heading">¶</a></h4>
 <p>Pyface also provides action Schemas as a way to specify MenuBars, Toolbars and
 their components without instantiating them.  These are particularly used in
 the Tasks framework.  TraitsUI supports their use in Views, permitting better
 interoperability.  The primary advantage of Schemas is that the deferred
 instantiation makes it less likely to have unintentionally shared state between
 declarative Views.</p>
-</div>
-</div>
-</div>
-<div class="section" id="undo-and-redo">
-<span id="undo-redo"></span><h2>Undo and Redo<a class="headerlink" href="#undo-and-redo" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+</section>
+<section id="undo-and-redo">
+<span id="undo-redo"></span><h2>Undo and Redo<a class="headerlink" href="#undo-and-redo" title="Permalink to this heading">¶</a></h2>
 <p>TraitsUI provides basic undo/redo functionality via the <a class="reference internal" href="../api/traitsui.ui.html#traitsui.ui.UI" title="traitsui.ui.UI"><code class="xref py py-class docutils literal notranslate"><span class="pre">UI</span></code></a> object’s history
 trait.  This is created automatically for <a class="reference internal" href="../api/traitsui.view.html#traitsui.view.View" title="traitsui.view.View"><code class="xref py py-class docutils literal notranslate"><span class="pre">View</span></code></a> objects other than subpanels
 whenever the <a class="reference internal" href="../api/traitsui.view.html#traitsui.view.View" title="traitsui.view.View"><code class="xref py py-class docutils literal notranslate"><span class="pre">View</span></code></a> has a menubar or an “Undo” or “Revert” button.  This
@@ -701,14 +697,15 @@ complex dependencies.</p>
 set or when any <a class="reference internal" href="../api/traitsui.menu.html#traitsui.menu.Action" title="traitsui.menu.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code></a> is performed, including actions associated with
 complex editors that provide context menus.</p>
 <p class="rubric">Footnotes</p>
-<dl class="footnote brackets">
-<dt class="label" id="id20"><span class="brackets"><a class="fn-backref" href="#id2">11</a></span></dt>
-<dd><p>Except those implemented via the <strong>enabled_when</strong>, <strong>visible_when</strong>,
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id20" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">11</a><span class="fn-bracket">]</span></span>
+<p>Except those implemented via the <strong>enabled_when</strong>, <strong>visible_when</strong>,
 and <strong>defined_when</strong> attributes of Items and Groups.</p>
-</dd>
-</dl>
-</div>
-</div>
+</aside>
+</aside>
+</section>
+</section>
 
 
           </div>
@@ -719,8 +716,9 @@ and <strong>defined_when</strong> attributes of Items and Groups.</p>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Controlling the Interface: the Handler</a><ul>
 <li><a class="reference internal" href="#backstage-introducing-the-uiinfo-object">Backstage: Introducing the UIInfo Object</a></li>
 <li><a class="reference internal" href="#backstage-the-ui-object">Backstage: The UI Object</a></li>
@@ -731,13 +729,18 @@ and <strong>defined_when</strong> attributes of Items and Groups.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#handler-subclasses">Handler Subclasses</a><ul>
+<li><a class="reference internal" href="#ModelView"><code class="docutils literal notranslate"><span class="pre">ModelView</span></code></a></li>
+<li><a class="reference internal" href="#Controller"><code class="docutils literal notranslate"><span class="pre">Controller</span></code></a></li>
 <li><a class="reference internal" href="#controller-class">Controller Class</a></li>
 <li><a class="reference internal" href="#modelview-class">ModelView Class</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#writing-handler-methods">Writing Handler Methods</a><ul>
 <li><a class="reference internal" href="#overriding-standard-methods">Overriding Standard Methods</a></li>
-<li><a class="reference internal" href="#reacting-to-trait-changes">Reacting to Trait Changes</a></li>
+<li><a class="reference internal" href="#reacting-to-trait-changes">Reacting to Trait Changes</a><ul>
+<li><a class="reference internal" href="#extended_traitname_changed"><code class="docutils literal notranslate"><span class="pre">extended_traitname_changed()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#implementing-custom-window-commands">Implementing Custom Window Commands</a><ul>
 <li><a class="reference internal" href="#actions">Actions</a></li>
 <li><a class="reference internal" href="#custom-command-buttons">Custom Command Buttons</a></li>
@@ -753,12 +756,17 @@ and <strong>defined_when</strong> attributes of Items and Groups.</p>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="advanced_view.html"
-                        title="previous chapter">Advanced View Concepts</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="factory_intro.html"
-                        title="next chapter">Introduction to Trait Editor Factories</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="advanced_view.html"
+                          title="previous chapter">Advanced View Concepts</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="factory_intro.html"
+                          title="next chapter">Introduction to Trait Editor Factories</a></p>
+  </div>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/traitsui_user_manual/handler.rst.txt"
@@ -768,12 +776,12 @@ and <strong>defined_when</strong> attributes of Items and Groups.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
         </div>
@@ -790,13 +798,13 @@ and <strong>defined_when</strong> attributes of Items and Groups.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2022, Enthought
+        &copy; Copyright 2008-2023, Enthought
       </li>
       <li>
-      Last updated on Jun 29, 2022.
+      Last updated on May 22, 2023.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.5.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
       </li>
     </ul>
     </div>

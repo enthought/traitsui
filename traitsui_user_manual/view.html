@@ -4,13 +4,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    
-    <title>The View and Its Building Blocks &mdash; TraitsUI 7 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The View and Its Building Blocks &mdash; TraitsUI 8 Documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" >
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,9 +26,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/clipboard.min.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
@@ -33,8 +36,8 @@
     <link rel="shortcut icon" href="../_static/img/favicon.png">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 7 Documentation" href="../index.html" >
-    <link rel="up" title="TraitsUI 7.4.0 User Manual" href="index.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../index.html" >
+    <link rel="up" title="TraitsUI 8.0.0 User Manual" href="index.html" >
     <link rel="next" title="Customizing a View" href="custom_view.html" >
     <link rel="prev" title="Introduction" href="intro.html" > 
   </head>
@@ -53,9 +56,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 7 Documentation</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 8 Documentation</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.4.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 8.0.0 User Manual</a></li>
   
     <li><a href="#">The View and Its Building Blocks</a></li>
   
@@ -93,13 +96,13 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body" role="main">
             
-  <div class="section" id="the-view-and-its-building-blocks">
-<span id="id1"></span><h1>The View and Its Building Blocks<a class="headerlink" href="#the-view-and-its-building-blocks" title="Permalink to this headline">¶</a></h1>
+  <section id="the-view-and-its-building-blocks">
+<span id="id1"></span><h1>The View and Its Building Blocks<a class="headerlink" href="#the-view-and-its-building-blocks" title="Permalink to this heading">¶</a></h1>
 <p>A simple way to edit (or simply observe) the attribute values of a
 <a class="reference internal" href="glossary.html#term-HasTraits"><span class="xref std std-term">HasTraits</span></a> object in a GUI window is to call the object’s
-configure_traits() <a class="footnote-reference brackets" href="#id13" id="id2">3</a> method. This method constructs and displays a window
+configure_traits() <a class="footnote-reference brackets" href="#id13" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> method. This method constructs and displays a window
 containing editable fields for each of the object’s <a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a>s.
-For example, the following sample code <a class="footnote-reference brackets" href="#id14" id="id3">4</a> defines the SimpleEmployee class,
+For example, the following sample code <a class="footnote-reference brackets" href="#id14" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> defines the SimpleEmployee class,
 creates an object of that class, and constructs and displays a GUI for the
 object:</p>
 <p class="rubric" id="example-1-using-configure-traits"><span id="index-0"></span>Example 1: Using configure_traits()</p>
@@ -123,12 +126,14 @@ object:</p>
 <p>Unfortunately, the resulting form simply displays the attributes of the object
 <strong>sam</strong> in alphabetical order with little formatting, which is seldom what is
 wanted:</p>
-<div class="figure align-default" id="id16">
+<figure class="align-default" id="id16">
 <img alt="Dialog box showing all attributes of SimpleEmployee in alphabetical order" src="../_images/ui_for_ex1.jpg" />
-<p class="caption"><span class="caption-text">Figure 1: User interface for Example 1</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
-</div>
-<div class="section" id="the-view-object">
-<span id="index-1"></span><span id="id4"></span><h2>The View Object<a class="headerlink" href="#the-view-object" title="Permalink to this headline">¶</a></h2>
+<figcaption>
+<p><span class="caption-text">Figure 1: User interface for Example 1</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="the-view-object">
+<span id="index-1"></span><span id="id4"></span><h2>The View Object<a class="headerlink" href="#the-view-object" title="Permalink to this heading">¶</a></h2>
 <p>In order to control the layout of the interface, it is necessary to define a
 View object. A View object is a template for a GUI window or panel. In other
 words, a View specifies the content and appearance of a TraitsUI window or
@@ -164,10 +169,12 @@ View object and passing it to the configure_traits() method:</p>
 </pre></div>
 </div>
 <p>The resulting window has the desired appearance:</p>
-<div class="figure align-default" id="id17">
+<figure class="align-default" id="id17">
 <img alt="User interface showing only First name, Last name, and Department" src="../_images/ui_for_ex2.jpg" />
-<p class="caption"><span class="caption-text">Figure 2: User interface for Example 2</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text">Figure 2: User interface for Example 2</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
 <p>A View object can have a variety of attributes, which are set in the View
 definition, following any Group or Item objects.</p>
 <p>The sections on <a class="reference internal" href="#contents-of-a-view"><span class="std std-ref">Contents of a View</span></a> through <a class="reference internal" href="advanced_view.html#advanced-view-concepts"><span class="std std-ref">Advanced View Concepts</span></a>
@@ -176,9 +183,9 @@ the <em>Traits API Reference</em> for details of the View class.</p>
 <p>Except as noted, all example code uses the configure_traits() method; a detailed
 description of this and other techniques for creating GUI displays from Views
 can be found in <a class="reference internal" href="advanced_view.html#displaying-a-view"><span class="std std-ref">Displaying a View</span></a>.</p>
-</div>
-<div class="section" id="contents-of-a-view">
-<span id="index-3"></span><span id="id5"></span><h2>Contents of a View<a class="headerlink" href="#contents-of-a-view" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="contents-of-a-view">
+<span id="index-3"></span><span id="id5"></span><h2>Contents of a View<a class="headerlink" href="#contents-of-a-view" title="Permalink to this heading">¶</a></h2>
 <p>The contents of a View are specified primarily in terms of two basic building
 blocks: Item objects (which, as suggested by Example 2, correspond roughly to
 individual trait attributes), and Group objects. A given View definition can
@@ -186,8 +193,8 @@ contain one or more objects of either of these types, which are specified as
 arguments to the View constructor, as in the case of the three Items in Example
 2.</p>
 <p>The remainder of this chapter describes the Item and Group classes.</p>
-<div class="section" id="the-item-object">
-<span id="index-4"></span><span id="id6"></span><h3>The Item Object<a class="headerlink" href="#the-item-object" title="Permalink to this headline">¶</a></h3>
+<section id="the-item-object">
+<span id="index-4"></span><span id="id6"></span><h3>The Item Object<a class="headerlink" href="#the-item-object" title="Permalink to this heading">¶</a></h3>
 <p>The simplest building block of a View is the <a class="reference internal" href="glossary.html#term-Item"><span class="xref std std-term">Item</span></a> object. An Item
 specifies a single interface <a class="reference internal" href="glossary.html#term-widget"><span class="xref std std-term">widget</span></a>, usually the display for a single
 trait attribute of a HasTraits object. The content, appearance, and behavior of
@@ -312,20 +319,15 @@ not specified, the value of the <strong>name</strong> attribute is used.</p>
 </dl>
 </dd>
 </dl>
-</div>
-<div class="section" id="subclasses-of-item">
-<span id="index-15"></span><span id="id7"></span><h3>Subclasses of Item<a class="headerlink" href="#subclasses-of-item" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="subclasses-of-item">
+<span id="index-15"></span><span id="id7"></span><h3>Subclasses of Item<a class="headerlink" href="#subclasses-of-item" title="Permalink to this heading">¶</a></h3>
 <p>The TraitsUI package defines the following subclasses of Item, which are helpful
 shorthands for defining certain types of items. Label, Heading and Spring are
 intended to help with the layout of a TraitsUI View, and need not have a trait
 attribute associated with them. For example, <code class="docutils literal notranslate"><span class="pre">Spring()</span></code> and
 <code class="docutils literal notranslate"><span class="pre">Label(&quot;This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">label&quot;)</span></code> are valid code.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 13%" />
-<col style="width: 37%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subclass</p></th>
 <th class="head"><p>Description</p></th>
@@ -376,9 +378,9 @@ label</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="the-group-object">
-<span id="id8"></span><h3>The Group Object<a class="headerlink" href="#the-group-object" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="the-group-object">
+<span id="id8"></span><h3>The Group Object<a class="headerlink" href="#the-group-object" title="Permalink to this heading">¶</a></h3>
 <p>The preceding sections have shown how to construct windows that display a simple
 vertical sequence of widgets using instances of the View and Item classes. For
 more sophisticated interfaces, though, it is often desirable to treat a group of
@@ -420,20 +422,22 @@ TraitsUI, such grouping is accomplished by means of the <a class="reference inte
 </div>
 <p>The resulting window shows the same widgets as before, but they are now enclosed
 in a visible border with a text label:</p>
-<div class="figure align-default" id="id18">
+<figure class="align-default" id="id18">
 <img alt="User interface showing three fields enclosed in a border" src="../_images/ui_for_ex3.jpg" />
-<p class="caption"><span class="caption-text">Figure 3: User interface for Example 3</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
-</div>
-<div class="section" id="content-of-a-group">
-<span id="id9"></span><h4>Content of a Group<a class="headerlink" href="#content-of-a-group" title="Permalink to this headline">¶</a></h4>
+<figcaption>
+<p><span class="caption-text">Figure 3: User interface for Example 3</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="content-of-a-group">
+<span id="id9"></span><h4>Content of a Group<a class="headerlink" href="#content-of-a-group" title="Permalink to this heading">¶</a></h4>
 <p>The content of a Group object is specified exactly like that of a View object.
 In other words, one or more Item or Group objects are given as arguments to the
-Group constructor, e.g., the three Items in Example 3. <a class="footnote-reference brackets" href="#id15" id="id10">5</a> The objects
+Group constructor, e.g., the three Items in Example 3. <a class="footnote-reference brackets" href="#id15" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> The objects
 contained in a Group are called the <em>elements</em> of that Group. Groups can be
 nested to any level.</p>
-</div>
-<div class="section" id="group-attributes">
-<span id="index-17"></span><span id="id11"></span><h4>Group Attributes<a class="headerlink" href="#group-attributes" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="group-attributes">
+<span id="index-17"></span><span id="id11"></span><h4>Group Attributes<a class="headerlink" href="#group-attributes" title="Permalink to this heading">¶</a></h4>
 <p>The following table lists the attributes of the Group class, organized by
 functional categories. As with Item attributes, many of these attributes can
 be left unspecified for any given Group, as the default values usually lead to
@@ -499,7 +503,7 @@ default spacing.</p>
 </dd>
 </dl>
 <span class="target" id="index-25"></span><span class="target" id="index-26"></span><span class="target" id="index-27"></span><span class="target" id="index-28"></span><span class="target" id="index-29"></span></dd>
-<dt id="index-30">Visibility and status</dt><dd><p>These attributes work similarly to the attributes of the same names on the Item class.</p>
+<dt>Visibility and status</dt><dd><p>These attributes work similarly to the attributes of the same names on the Item class.</p>
 <dl class="simple">
 <dt>enabled_when: str</dt><dd><p>Python expression that determines whether the group can be edited.
 The expression will be evaluated any time a trait on an object in the
@@ -546,20 +550,15 @@ of the group are concatenated and used as the group identifier.</p>
 </dl>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="subclasses-of-group">
-<span id="index-31"></span><span id="id12"></span><h3>Subclasses of Group<a class="headerlink" href="#subclasses-of-group" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="subclasses-of-group">
+<span id="index-31"></span><span id="id12"></span><h3>Subclasses of Group<a class="headerlink" href="#subclasses-of-group" title="Permalink to this heading">¶</a></h3>
 <p>The TraitsUI package defines the following subclasses of Group, which are
 helpful shorthands for defining certain types of groups. Refer to the <em>Traits
 API Reference</em> for details.</p>
 <p class="rubric" id="subclasses-of-group-table"><span id="index-32"></span>Subclasses of Group</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 13%" />
-<col style="width: 37%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subclass</p></th>
 <th class="head"><p>Description</p></th>
@@ -628,27 +627,30 @@ groups.</p></td>
 </tbody>
 </table>
 <p class="rubric">Footnotes</p>
-<dl class="footnote brackets">
-<dt class="label" id="id13"><span class="brackets"><a class="fn-backref" href="#id2">3</a></span></dt>
-<dd><p>If the code is being run from a program that already has a GUI defined,
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id13" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">3</a><span class="fn-bracket">]</span></span>
+<p>If the code is being run from a program that already has a GUI defined,
 then use edit_traits() instead of configure_traits(). These methods are
 discussed in more detail in <a class="reference internal" href="advanced_view.html#displaying-a-view"><span class="std std-ref">Displaying a View</span></a>.</p>
-</dd>
-<dt class="label" id="id14"><span class="brackets"><a class="fn-backref" href="#id3">4</a></span></dt>
-<dd><p>All code examples in this guide that include a file name are also
+</aside>
+<aside class="footnote brackets" id="id14" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">4</a><span class="fn-bracket">]</span></span>
+<p>All code examples in this guide that include a file name are also
 available as examples in the <code class="file docutils literal notranslate"><span class="pre">tutorials/doc_examples/examples</span></code>
 subdirectory of the Traits docs directory. You can run them individually,
 or view them in a tutorial program by running:
 <strong class="program">python</strong> <code class="file docutils literal notranslate"><em><span class="pre">Traits_dir</span></em><span class="pre">/tutorials/tutor.py</span></code> <code class="file docutils literal notranslate"><em><span class="pre">Traits_dir</span></em><span class="pre">/docs/tutorials/doc_examples</span></code></p>
-</dd>
-<dt class="label" id="id15"><span class="brackets"><a class="fn-backref" href="#id10">5</a></span></dt>
-<dd><p>As with Views, it is possible for a Group to contain objects of more than
+</aside>
+<aside class="footnote brackets" id="id15" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id10">5</a><span class="fn-bracket">]</span></span>
+<p>As with Views, it is possible for a Group to contain objects of more than
 one type, but it is not recommended.</p>
-</dd>
-</dl>
-</div>
-</div>
-</div>
+</aside>
+</aside>
+</section>
+</section>
+</section>
 
 
           </div>
@@ -659,8 +661,9 @@ one type, but it is not recommended.</p>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">The View and Its Building Blocks</a><ul>
 <li><a class="reference internal" href="#the-view-object">The View Object</a></li>
 <li><a class="reference internal" href="#contents-of-a-view">Contents of a View</a><ul>
@@ -678,12 +681,17 @@ one type, but it is not recommended.</p>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="intro.html"
-                        title="previous chapter">Introduction</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="custom_view.html"
-                        title="next chapter">Customizing a View</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="intro.html"
+                          title="previous chapter">Introduction</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="custom_view.html"
+                          title="next chapter">Customizing a View</a></p>
+  </div>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/traitsui_user_manual/view.rst.txt"
@@ -693,12 +701,12 @@ one type, but it is not recommended.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
         </div>
@@ -715,13 +723,13 @@ one type, but it is not recommended.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2022, Enthought
+        &copy; Copyright 2008-2023, Enthought
       </li>
       <li>
-      Last updated on Jun 29, 2022.
+      Last updated on May 22, 2023.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.5.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
       </li>
     </ul>
     </div>

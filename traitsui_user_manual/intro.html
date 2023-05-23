@@ -4,13 +4,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    
-    <title>Introduction &mdash; TraitsUI 7 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction &mdash; TraitsUI 8 Documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" >
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,9 +26,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/clipboard.min.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
@@ -33,10 +36,10 @@
     <link rel="shortcut icon" href="../_static/img/favicon.png">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 7 Documentation" href="../index.html" >
-    <link rel="up" title="TraitsUI 7.4.0 User Manual" href="index.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../index.html" >
+    <link rel="up" title="TraitsUI 8.0.0 User Manual" href="index.html" >
     <link rel="next" title="The View and Its Building Blocks" href="view.html" >
-    <link rel="prev" title="TraitsUI 7.4.0 User Manual" href="index.html" > 
+    <link rel="prev" title="TraitsUI 8.0.0 User Manual" href="index.html" > 
   </head>
   <body>
   <div class="container">
@@ -53,9 +56,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 7 Documentation</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 8 Documentation</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.4.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 8.0.0 User Manual</a></li>
   
     <li><a href="#">Introduction</a></li>
   
@@ -77,7 +80,7 @@
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="index.html" title="TraitsUI 7.4.0 User Manual"
+        <a href="index.html" title="TraitsUI 8.0.0 User Manual"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -93,8 +96,8 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body" role="main">
             
-  <div class="section" id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
 <p>This guide is designed to act as a conceptual guide to <a class="reference internal" href="glossary.html#term-TraitsUI"><span class="xref std std-term">TraitsUI</span></a>, an
 open-source package built and maintained by Enthought, Inc. The TraitsUI
 package is a set of GUI (Graphical User Interface) tools designed to complement
@@ -105,8 +108,8 @@ may wish to refer to the <a class="reference external" href="http://docs.enthoug
 for an introduction. This guide discusses many but not all features of
 TraitsUI. For complete details of the TraitsUI API, refer to the
 <a class="reference internal" href="../api/index.html"><span class="doc">TraitsUI API Reference</span></a>.</p>
-<div class="section" id="the-model-view-controller-mvc-design-pattern">
-<span id="index-0"></span><span id="id1"></span><h2>The Model-View-Controller (MVC) Design Pattern<a class="headerlink" href="#the-model-view-controller-mvc-design-pattern" title="Permalink to this headline">¶</a></h2>
+<section id="the-model-view-controller-mvc-design-pattern">
+<span id="index-0"></span><span id="id1"></span><h2>The Model-View-Controller (MVC) Design Pattern<a class="headerlink" href="#the-model-view-controller-mvc-design-pattern" title="Permalink to this heading">¶</a></h2>
 <p>A common and well-tested approach to building end-user applications is the
 <a class="reference internal" href="glossary.html#term-MVC"><span class="xref std std-term">MVC</span></a> (“Model-View-Controller”) design pattern. In essence, the MVC
 pattern the idea that an application should consist of three separate entities:
@@ -126,31 +129,31 @@ Traits and TraitsUI packages.</p>
 <li><p>Controller: <a class="reference internal" href="glossary.html#term-Handler"><span class="xref std std-term">Handler</span></a> class (TraitsUI package)</p></li>
 </ul>
 <p>The remainder of this section gives an overview of these relationships.</p>
-<div class="section" id="the-model-hastraits-subclasses-and-objects">
-<span id="index-1"></span><span id="id2"></span><h3>The Model: HasTraits Subclasses and Objects<a class="headerlink" href="#the-model-hastraits-subclasses-and-objects" title="Permalink to this headline">¶</a></h3>
+<section id="the-model-hastraits-subclasses-and-objects">
+<span id="index-1"></span><span id="id2"></span><h3>The Model: HasTraits Subclasses and Objects<a class="headerlink" href="#the-model-hastraits-subclasses-and-objects" title="Permalink to this heading">¶</a></h3>
 <p>In the context of Traits, a model consists primarily of one or more subclasses
 or <a class="reference internal" href="glossary.html#term-instance"><span class="xref std std-term">instance</span></a>s of the HasTraits class, whose <a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a>s
 (typed attributes as defined in Traits) represent the model data. The specifics
 of building such a model are outside the scope of this manual; please see the
 <a class="reference external" href="http://docs.enthought.com/traits/index.html">Traits User Manual</a> for further information.</p>
-</div>
-<div class="section" id="the-view-view-objects">
-<span id="index-2"></span><span id="id4"></span><h3>The View: View Objects<a class="headerlink" href="#the-view-view-objects" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="the-view-view-objects">
+<span id="index-2"></span><span id="id4"></span><h3>The View: View Objects<a class="headerlink" href="#the-view-view-objects" title="Permalink to this heading">¶</a></h3>
 <p>A view for a Traits-based application is an instance of a class called,
 conveniently enough, View. A View object is essentially a display specification
 for a GUI window or <a class="reference internal" href="glossary.html#term-panel"><span class="xref std std-term">panel</span></a>. Its contents are defined in terms of
-instances of two other classes: <a class="reference internal" href="glossary.html#term-Item"><span class="xref std std-term">Item</span></a> and <a class="reference internal" href="glossary.html#term-Group"><span class="xref std std-term">Group</span></a>. <a class="footnote-reference brackets" href="#id9" id="id5">1</a> These three
+instances of two other classes: <a class="reference internal" href="glossary.html#term-Item"><span class="xref std std-term">Item</span></a> and <a class="reference internal" href="glossary.html#term-Group"><span class="xref std std-term">Group</span></a>. <a class="footnote-reference brackets" href="#id9" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> These three
 classes are described in detail in <a class="reference internal" href="view.html#the-view-and-its-building-blocks"><span class="std std-ref">The View and Its Building Blocks</span></a>; for
 the moment, it is important to note that they are all defined independently of
 the model they are used to display.</p>
 <p>Note that the terms <a class="reference internal" href="glossary.html#term-view"><span class="xref std std-term">view</span></a> and <a class="reference internal" href="glossary.html#term-View"><span class="xref std std-term">View</span></a> are distinct for the purposes
 of this document. The former refers to the component of the MVC design pattern;
 the latter is a TraitsUI construct.</p>
-</div>
-<div class="section" id="the-controller-handler-subclasses-and-objects">
-<span id="index-3"></span><span id="id6"></span><h3>The Controller: Handler Subclasses and Objects<a class="headerlink" href="#the-controller-handler-subclasses-and-objects" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="the-controller-handler-subclasses-and-objects">
+<span id="index-3"></span><span id="id6"></span><h3>The Controller: Handler Subclasses and Objects<a class="headerlink" href="#the-controller-handler-subclasses-and-objects" title="Permalink to this heading">¶</a></h3>
 <p>The controller for a Traits-based application is defined in terms of the
-<a class="reference internal" href="glossary.html#term-Handler"><span class="xref std std-term">Handler</span></a> class. <a class="footnote-reference brackets" href="#id10" id="id7">2</a> Specifically, the relationship between any given
+<a class="reference internal" href="glossary.html#term-Handler"><span class="xref std std-term">Handler</span></a> class. <a class="footnote-reference brackets" href="#id10" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> Specifically, the relationship between any given
 View instance and the underlying model is managed by an instance of the Handler
 class. For simple interfaces, the Handler can be implicit. For example, none of
 the examples in the first four chapters includes or requires any specific
@@ -160,10 +163,10 @@ window closing. Thus, a programmer new to TraitsUI need not be concerned with
 Handlers at all. Nonetheless, custom handlers can be a powerful tool for
 building sophisticated application interfaces, as discussed in
 <a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span class="std std-ref">Controlling the Interface: the Handler</span></a>.</p>
-</div>
-</div>
-<div class="section" id="toolkit-selection">
-<span id="index-4"></span><span id="id8"></span><h2>Toolkit Selection<a class="headerlink" href="#toolkit-selection" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="toolkit-selection">
+<span id="index-4"></span><span id="id8"></span><h2>Toolkit Selection<a class="headerlink" href="#toolkit-selection" title="Permalink to this heading">¶</a></h2>
 <p>The TraitsUI package is designed to be toolkit-independent. Programs that use
 TraitsUI do not need to explicitly import or call any particular GUI toolkit
 code unless they need some capability of the toolkit that is not provided by
@@ -175,12 +178,12 @@ GUI capabilities, so that all such packages “agree” on a single GUI toolkit 
 application. The etsconfig package contains a singleton object, <strong>ETSConfig</strong>
 (importable from <cite>traits.etsconfig.api</cite>), which has a string attribute,
 <strong>toolkit</strong>, that signifies the GUI toolkit.</p>
-<p id="index-5">The values of <strong>ETSConfig.toolkit</strong> that are supported by TraitsUI version 7.4.0
+<p id="index-5">The values of <strong>ETSConfig.toolkit</strong> that are supported by TraitsUI version 8.0.0
 are:</p>
 <ul class="simple" id="index-6">
-<li><p>‘qt4’ or ‘qt’: <a class="reference external" href="http://riverbankcomputing.co.uk/pyqt/">PyQt</a> or
-<a class="reference external" href="https://doc.qt.io/qtforpython/">Qt for Python/PySide2</a>, which provides Python
-bindings for the <a class="reference external" href="https://www.qt.io/">Qt</a> framework version 4 or 5.</p></li>
+<li><p>‘qt’ or ‘qt4’: <a class="reference external" href="http://riverbankcomputing.co.uk/pyqt/">PyQt5</a>,
+<a class="reference external" href="https://doc.qt.io/qtforpython/">PySide2 or PySide6</a>, which provides Python
+bindings for the <a class="reference external" href="https://www.qt.io/">Qt</a> framework version 5 or 6.</p></li>
 <li><p>‘wx’: <a class="reference external" href="http://www.wxpython.org">wxPython</a>, which provides Python bindings
 for the <a class="reference external" href="http://wxwidgets.org">wxWidgets</a> toolkit.</p></li>
 <li><p>‘null’: A do-nothing toolkit, for situations where neither of the other
@@ -201,9 +204,35 @@ traits.  For example, at the beginning of a program:</p>
 </li>
 <li><p>The user can define a value for the ETS_TOOLKIT environment variable.</p></li>
 </ol>
+<p>Toolkit selection is largely carried out in Pyface rather than TraitsUI, where
+further details can be found.</p>
+<section id="the-qt4-toolkit">
+<h3>The “qt4” Toolkit<a class="headerlink" href="#the-qt4-toolkit" title="Permalink to this heading">¶</a></h3>
+<p>The “qt4” toolkit is the same as the “qt” toolkit in almost all respects:
+in older versions of TraitsUI it was the standard name for all the Qt-based
+toolkits whether or not they were actually using Qt4.</p>
+<p>However it does trigger some backwards-compatibility code that may be useful
+for legacy applications. In particular it installs import hooks that makes the
+<code class="docutils literal notranslate"><span class="pre">traitsui.qt4.*</span></code> package namespace an alias for <code class="docutils literal notranslate"><span class="pre">traitsui.qt.*</span></code> modules.</p>
+<p>This backwards-compatibility code can also be invoked by setting the
+<code class="docutils literal notranslate"><span class="pre">ETS_QT4_IMPORTS</span></code> environment variable to any non-empty value, or adding
+an instance of the <a class="reference external" href="https://docs.enthought.com/pyface/api/pyface.ui.html#pyface.ui.ShadowedModuleFinder" title="(in pyface v8.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyface.ui.ShadowedModuleFinder</span></code></a> module finder
+to <code class="xref py py-attr docutils literal notranslate"><span class="pre">sys.meta_path</span></code> list.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Library code which imports from <code class="docutils literal notranslate"><span class="pre">traitsui.qt4.*</span></code> should not use this
+compatibility code.  Instead it should be updated to import from
+<code class="docutils literal notranslate"><span class="pre">traitsui.qt.*</span></code> as soon as practical.  Backwards-compatibility can be
+achieved fairly easily by using <a class="reference internal" href="../api/traitsui.toolkit.html#traitsui.toolkit.toolkit" title="traitsui.toolkit.toolkit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">traitsui.toolkit.toolkit</span></code></a> to
+access objects rather than direct imports.</p>
 </div>
-<div class="section" id="structure-of-this-manual">
-<span id="structure-of-this-guide"></span><h2>Structure of this Manual<a class="headerlink" href="#structure-of-this-manual" title="Permalink to this headline">¶</a></h2>
+<p>This backwards-compatibility code will be removed in TraitsUI 9, and
+applications which rely on the particulars of the implementation are encouraged
+to migrate to the newer import locations as soon as practical.</p>
+</section>
+</section>
+<section id="structure-of-this-manual">
+<span id="structure-of-this-guide"></span><h2>Structure of this Manual<a class="headerlink" href="#structure-of-this-manual" title="Permalink to this heading">¶</a></h2>
 <p>The intent of this guide is to present the capabilities of the TraitsUI package
 in usable increments, so that you can create and display gradually more
 sophisticated interfaces from one chapter to the next.</p>
@@ -223,18 +252,20 @@ summary for the TraitsUI classes covered in this Manual, are located in the
 Appendices.</p></li>
 </ul>
 <p class="rubric">Footnotes</p>
-<dl class="footnote brackets">
-<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id5">1</a></span></dt>
-<dd><p>A third type of content object, Include, is discussed briefly in
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id9" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">1</a><span class="fn-bracket">]</span></span>
+<p>A third type of content object, Include, is discussed briefly in
 <a class="reference internal" href="advanced_view.html#include-objects"><span class="std std-ref">Include Objects</span></a>, but presently is not commonly used.</p>
-</dd>
-<dt class="label" id="id10"><span class="brackets"><a class="fn-backref" href="#id7">2</a></span></dt>
-<dd><p>Not to be confused with the TraitHandler class of the Traits package,
+</aside>
+<aside class="footnote brackets" id="id10" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">2</a><span class="fn-bracket">]</span></span>
+<p>Not to be confused with the TraitHandler class of the Traits package,
 which enforces type validation.</p>
-</dd>
-</dl>
-</div>
-</div>
+</aside>
+</aside>
+</section>
+</section>
 
 
           </div>
@@ -245,8 +276,9 @@ which enforces type validation.</p>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Introduction</a><ul>
 <li><a class="reference internal" href="#the-model-view-controller-mvc-design-pattern">The Model-View-Controller (MVC) Design Pattern</a><ul>
 <li><a class="reference internal" href="#the-model-hastraits-subclasses-and-objects">The Model: HasTraits Subclasses and Objects</a></li>
@@ -254,18 +286,26 @@ which enforces type validation.</p>
 <li><a class="reference internal" href="#the-controller-handler-subclasses-and-objects">The Controller: Handler Subclasses and Objects</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#toolkit-selection">Toolkit Selection</a></li>
+<li><a class="reference internal" href="#toolkit-selection">Toolkit Selection</a><ul>
+<li><a class="reference internal" href="#the-qt4-toolkit">The “qt4” Toolkit</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#structure-of-this-manual">Structure of this Manual</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">TraitsUI 7.4.0 User Manual</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="view.html"
-                        title="next chapter">The View and Its Building Blocks</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">TraitsUI 8.0.0 User Manual</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="view.html"
+                          title="next chapter">The View and Its Building Blocks</a></p>
+  </div>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/traitsui_user_manual/intro.rst.txt"
@@ -275,12 +315,12 @@ which enforces type validation.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
         </div>
@@ -297,13 +337,13 @@ which enforces type validation.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2022, Enthought
+        &copy; Copyright 2008-2023, Enthought
       </li>
       <li>
-      Last updated on Jun 29, 2022.
+      Last updated on May 22, 2023.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.5.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
       </li>
     </ul>
     </div>

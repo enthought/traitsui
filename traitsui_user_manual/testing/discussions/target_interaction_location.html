@@ -4,13 +4,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    
-    <title>Understanding Target, Interaction and Location &mdash; TraitsUI 7 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Understanding Target, Interaction and Location &mdash; TraitsUI 8 Documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" >
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,9 +26,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../../../_static/clipboard.min.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
@@ -33,7 +36,7 @@
     <link rel="shortcut icon" href="../../../_static/img/favicon.png">
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="search" title="Search" href="../../../search.html" >
-    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../../../index.html" >
     <link rel="up" title="Testing TraitsUI Applications" href="../../testing.html" >
     <link rel="next" title="How extension works" href="working_of_extensions.html" >
     <link rel="prev" title="GUI event processing and exception handling" href="event_loop_and_exceptions.html" > 
@@ -53,9 +56,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+        <li class="active"><a href="../../../index.html">TraitsUI 8 Documentation</a></li>
 	
-          <li class="active"><a href="../../index.html" >TraitsUI 7.4.0 User Manual</a></li>
+          <li class="active"><a href="../../index.html" >TraitsUI 8.0.0 User Manual</a></li>
           <li class="active"><a href="../../testing.html" accesskey="U">Testing TraitsUI Applications</a></li>
   
     <li><a href="#">Understanding Target, Interaction and Location</a></li>
@@ -94,8 +97,8 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body" role="main">
             
-  <div class="section" id="understanding-target-interaction-and-location">
-<span id="testing-target-interaction-location"></span><h1>Understanding Target, Interaction and Location<a class="headerlink" href="#understanding-target-interaction-and-location" title="Permalink to this headline">¶</a></h1>
+  <section id="understanding-target-interaction-and-location">
+<span id="testing-target-interaction-location"></span><h1>Understanding Target, Interaction and Location<a class="headerlink" href="#understanding-target-interaction-and-location" title="Permalink to this heading">¶</a></h1>
 <p>When one writes a test using <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a>, three categories of objects are
 involved.</p>
 <ul>
@@ -131,8 +134,8 @@ specific target if needed.</p>
 </dl>
 </li>
 </ul>
-<div class="section" id="why-is-target-protected">
-<span id="testing-target-is-protected"></span><h2>Why is Target protected?<a class="headerlink" href="#why-is-target-protected" title="Permalink to this headline">¶</a></h2>
+<section id="why-is-target-protected">
+<span id="testing-target-is-protected"></span><h2>Why is Target protected?<a class="headerlink" href="#why-is-target-protected" title="Permalink to this heading">¶</a></h2>
 <p>The <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper._target" title="traitsui.testing.tester.ui_wrapper.UIWrapper._target"><code class="xref py py-attr docutils literal notranslate"><span class="pre">_target</span></code></a> attribute is protected because it often exposes
 implementation details of the GUI component being tested (e.g. it may refer to
 the Qt specific implementation of a ButtonEditor). Since it is best for tests
@@ -144,8 +147,8 @@ components. If the implementation details and the testing support code are not
 maintained together, tests may be subject to breakages caused by changes to
 implementation details that do not affect the overall behavior. Developers
 should evaluate based on context whether they should proceed.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -156,20 +159,26 @@ should evaluate based on context whether they should proceed.</p>
             <p class="logo"><a href="../../../index.html">
               <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../../../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Understanding Target, Interaction and Location</a><ul>
 <li><a class="reference internal" href="#why-is-target-protected">Why is Target protected?</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="event_loop_and_exceptions.html"
-                        title="previous chapter">GUI event processing and exception handling</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="working_of_extensions.html"
-                        title="next chapter">How extension works</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="event_loop_and_exceptions.html"
+                          title="previous chapter">GUI event processing and exception handling</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="working_of_extensions.html"
+                          title="next chapter">How extension works</a></p>
+  </div>
   <h3>This Page</h3>
   <div>
     <a href="../../../_sources/traitsui_user_manual/testing/discussions/target_interaction_location.rst.txt"
@@ -179,12 +188,12 @@ should evaluate based on context whether they should proceed.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
         </div>
@@ -201,13 +210,13 @@ should evaluate based on context whether they should proceed.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2022, Enthought
+        &copy; Copyright 2008-2023, Enthought
       </li>
       <li>
-      Last updated on Jun 29, 2022.
+      Last updated on May 22, 2023.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.5.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
       </li>
     </ul>
     </div>

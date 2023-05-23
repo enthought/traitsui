@@ -4,13 +4,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    
-    <title>GUI event processing and exception handling &mdash; TraitsUI 7 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>GUI event processing and exception handling &mdash; TraitsUI 8 Documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" >
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,9 +26,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../../../_static/clipboard.min.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
@@ -33,7 +36,7 @@
     <link rel="shortcut icon" href="../../../_static/img/favicon.png">
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="search" title="Search" href="../../../search.html" >
-    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../../../index.html" >
     <link rel="up" title="Testing TraitsUI Applications" href="../../testing.html" >
     <link rel="next" title="Understanding Target, Interaction and Location" href="target_interaction_location.html" >
     <link rel="prev" title="Compatibility with Pyface test utilities" href="compatibility_pyface_testing.html" > 
@@ -53,9 +56,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+        <li class="active"><a href="../../../index.html">TraitsUI 8 Documentation</a></li>
 	
-          <li class="active"><a href="../../index.html" >TraitsUI 7.4.0 User Manual</a></li>
+          <li class="active"><a href="../../index.html" >TraitsUI 8.0.0 User Manual</a></li>
           <li class="active"><a href="../../testing.html" accesskey="U">Testing TraitsUI Applications</a></li>
   
     <li><a href="#">GUI event processing and exception handling</a></li>
@@ -94,8 +97,8 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body" role="main">
             
-  <div class="section" id="gui-event-processing-and-exception-handling">
-<h1>GUI event processing and exception handling<a class="headerlink" href="#gui-event-processing-and-exception-handling" title="Permalink to this headline">¶</a></h1>
+  <section id="gui-event-processing-and-exception-handling">
+<h1>GUI event processing and exception handling<a class="headerlink" href="#gui-event-processing-and-exception-handling" title="Permalink to this heading">¶</a></h1>
 <p>The testing API is designed such that GUI event processing is requested
 automatically wherever there may be pending GUI events. While events are being
 processed, the global exception handling is overridden temporarily in order to
@@ -106,8 +109,8 @@ all request pending events to be processed before and/or after interacting
 with GUI states. This automatic behavior is enabled by default, but it can be
 disabled via the <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester.auto_process_events" title="traitsui.testing.tester.ui_tester.UITester.auto_process_events"><code class="xref py py-attr docutils literal notranslate"><span class="pre">auto_process_events</span></code></a> flag (see
 <a class="reference internal" href="compatibility_pyface_testing.html#testing-with-modal-dialogs"><span class="std std-ref">Testing with modal dialogs</span></a> for example).</p>
-<div class="section" id="motivation">
-<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h2>
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading">¶</a></h2>
 <p>In production environments, the GUI event loop typically blocks as it waits
 and processes new GUI events continuously, until the last window is closed.
 In tests, the GUI event loop needs to be run programmatically for a limited
@@ -119,8 +122,8 @@ runtime to abort abnormally. Neither of these conditions are desirable in
 tests. Unhandled exceptions typically indicate bugs and should cause a test to
 error. Abortion of the Python runtime prevents running and collecting
 results from multiple tests in a test suite.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -131,20 +134,26 @@ results from multiple tests in a test suite.</p>
             <p class="logo"><a href="../../../index.html">
               <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../../../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">GUI event processing and exception handling</a><ul>
 <li><a class="reference internal" href="#motivation">Motivation</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="compatibility_pyface_testing.html"
-                        title="previous chapter">Compatibility with Pyface test utilities</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="target_interaction_location.html"
-                        title="next chapter">Understanding Target, Interaction and Location</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="compatibility_pyface_testing.html"
+                          title="previous chapter">Compatibility with Pyface test utilities</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="target_interaction_location.html"
+                          title="next chapter">Understanding Target, Interaction and Location</a></p>
+  </div>
   <h3>This Page</h3>
   <div>
     <a href="../../../_sources/traitsui_user_manual/testing/discussions/event_loop_and_exceptions.rst.txt"
@@ -154,12 +163,12 @@ results from multiple tests in a test suite.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
         </div>
@@ -176,13 +185,13 @@ results from multiple tests in a test suite.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2022, Enthought
+        &copy; Copyright 2008-2023, Enthought
       </li>
       <li>
-      Last updated on Jun 29, 2022.
+      Last updated on May 22, 2023.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.5.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
       </li>
     </ul>
     </div>

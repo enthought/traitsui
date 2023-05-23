@@ -4,13 +4,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    
-    <title>Tips, Tricks and Gotchas &mdash; TraitsUI 7 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tips, Tricks and Gotchas &mdash; TraitsUI 8 Documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" >
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,9 +26,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/clipboard.min.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
@@ -33,8 +36,8 @@
     <link rel="shortcut icon" href="../_static/img/favicon.png">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 7 Documentation" href="../index.html" >
-    <link rel="up" title="TraitsUI 7.4.0 User Manual" href="index.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../index.html" >
+    <link rel="up" title="TraitsUI 8.0.0 User Manual" href="index.html" >
     <link rel="next" title="Appendix I: Glossary of Terms" href="glossary.html" >
     <link rel="prev" title="traitsui.testing.api module" href="../api/traitsui.testing.api.html" > 
   </head>
@@ -53,9 +56,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 7 Documentation</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 8 Documentation</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.4.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 8.0.0 User Manual</a></li>
   
     <li><a href="#">Tips, Tricks and Gotchas</a></li>
   
@@ -93,15 +96,15 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body" role="main">
             
-  <div class="section" id="tips-tricks-and-gotchas">
-<span id="id1"></span><h1>Tips, Tricks and Gotchas<a class="headerlink" href="#tips-tricks-and-gotchas" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="getting-and-setting-model-view-elements">
-<h2>Getting and Setting Model View Elements<a class="headerlink" href="#getting-and-setting-model-view-elements" title="Permalink to this headline">¶</a></h2>
+  <section id="tips-tricks-and-gotchas">
+<span id="id1"></span><h1>Tips, Tricks and Gotchas<a class="headerlink" href="#tips-tricks-and-gotchas" title="Permalink to this heading">¶</a></h1>
+<section id="getting-and-setting-model-view-elements">
+<h2>Getting and Setting Model View Elements<a class="headerlink" href="#getting-and-setting-model-view-elements" title="Permalink to this heading">¶</a></h2>
 <p>For some applications, it can be necessary to retrieve or manipulate the View
 objects associated with a given model object. The HasTraits class defines two
 methods for this purpose: trait_views() and trait_view().</p>
-<div class="section" id="trait-views">
-<span id="id2"></span><h3>trait_views()<a class="headerlink" href="#trait-views" title="Permalink to this headline">¶</a></h3>
+<section id="trait-views">
+<span id="id2"></span><h3>trait_views()<a class="headerlink" href="#trait-views" title="Permalink to this heading">¶</a></h3>
 <p>The trait_views() method, when called without arguments, returns a list
 containing the names of all Views defined in the object’s class. For example, if
 <strong>sam</strong> is an object of type SimpleEmployee3 (from
@@ -126,9 +129,9 @@ both of the Views defined in SimpleEmployee contain Groups. This is because only
 View are both subclasses of ViewElement. Thus, a call to
 <code class="docutils literal notranslate"><span class="pre">trait_views(ViewSubElement)</span></code> returns a list of named Items and Groups, while
 <code class="docutils literal notranslate"><span class="pre">trait_views(ViewElement)</span></code> returns a list of named Items, Groups and Views.</p>
-</div>
-<div class="section" id="trait-view">
-<h3>trait_view()<a class="headerlink" href="#trait-view" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="trait-view">
+<h3>trait_view()<a class="headerlink" href="#trait-view" title="Permalink to this heading">¶</a></h3>
 <p>The trait_view() method is used for three distinct purposes:</p>
 <ul class="simple">
 <li><p>To retrieve the default View associated with an object</p></li>
@@ -149,9 +152,9 @@ View itself, not its name.</p></li>
 <code class="docutils literal notranslate"><span class="pre">traits_view(Group)</span></code>. This is because <code class="docutils literal notranslate"><span class="pre">my_group</span></code> is associated with
 <em>obj</em> itself, rather than with its class.</p></li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
           </div>
@@ -162,8 +165,9 @@ View itself, not its name.</p></li>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Tips, Tricks and Gotchas</a><ul>
 <li><a class="reference internal" href="#getting-and-setting-model-view-elements">Getting and Setting Model View Elements</a><ul>
 <li><a class="reference internal" href="#trait-views">trait_views()</a></li>
@@ -174,12 +178,17 @@ View itself, not its name.</p></li>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../api/traitsui.testing.api.html"
-                        title="previous chapter">traitsui.testing.api module</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="glossary.html"
-                        title="next chapter">Appendix I: Glossary of Terms</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../api/traitsui.testing.api.html"
+                          title="previous chapter">traitsui.testing.api module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="glossary.html"
+                          title="next chapter">Appendix I: Glossary of Terms</a></p>
+  </div>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/traitsui_user_manual/tips.rst.txt"
@@ -189,12 +198,12 @@ View itself, not its name.</p></li>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
         </div>
@@ -211,13 +220,13 @@ View itself, not its name.</p></li>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2022, Enthought
+        &copy; Copyright 2008-2023, Enthought
       </li>
       <li>
-      Last updated on Jun 29, 2022.
+      Last updated on May 22, 2023.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.5.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
       </li>
     </ul>
     </div>

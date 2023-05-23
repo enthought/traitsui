@@ -4,13 +4,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    
-    <title>TraitsUI 7.4.0 User Manual &mdash; TraitsUI 7 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TraitsUI 8.0.0 User Manual &mdash; TraitsUI 8 Documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" >
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,9 +26,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/clipboard.min.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
@@ -33,7 +36,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.png">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 7 Documentation" href="../index.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../index.html" >
     <link rel="next" title="Introduction" href="intro.html" >
     <link rel="prev" title="TraitsUI Documentation" href="../index.html" > 
   </head>
@@ -52,10 +55,10 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 7 Documentation</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 8 Documentation</a></li>
 	
   
-    <li><a href="#">TraitsUI 7.4.0 User Manual</a></li>
+    <li><a href="#">TraitsUI 8.0.0 User Manual</a></li>
   
 
     </ul>
@@ -91,21 +94,21 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body" role="main">
             
-  <div class="section" id="traitsui-version-user-manual">
-<h1>TraitsUI 7.4.0 User Manual<a class="headerlink" href="#traitsui-version-user-manual" title="Permalink to this headline">¶</a></h1>
+  <section id="traitsui-version-user-manual">
+<h1>TraitsUI 8.0.0 User Manual<a class="headerlink" href="#traitsui-version-user-manual" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Authors</dt>
+<dt class="field-odd">Authors<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Lyn Pierce, Janet Swisher, and Enthought Developers</p>
 </dd>
-<dt class="field-even">Version</dt>
+<dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>Document Version 4</p>
 </dd>
-<dt class="field-odd">Copyright</dt>
-<dd class="field-odd"><p>2005-2022 Enthought, Inc. All Rights Reserved.</p>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2005-2023 Enthought, Inc. All Rights Reserved.</p>
 </dd>
 </dl>
-<div class="section" id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a><ul>
@@ -115,7 +118,10 @@
 <li class="toctree-l3"><a class="reference internal" href="intro.html#the-controller-handler-subclasses-and-objects">The Controller: Handler Subclasses and Objects</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#toolkit-selection">Toolkit Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#toolkit-selection">Toolkit Selection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="intro.html#the-qt4-toolkit">The “qt4” Toolkit</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="intro.html#structure-of-this-manual">Structure of this Manual</a></li>
 </ul>
 </li>
@@ -171,6 +177,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="handler.html#handler-subclasses">Handler Subclasses</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="handler.html#ModelView"><code class="docutils literal notranslate"><span class="pre">ModelView</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="handler.html#Controller"><code class="docutils literal notranslate"><span class="pre">Controller</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="handler.html#controller-class">Controller Class</a></li>
 <li class="toctree-l3"><a class="reference internal" href="handler.html#modelview-class">ModelView Class</a></li>
 </ul>
@@ -332,9 +340,9 @@
 <li class="toctree-l1"><a class="reference internal" href="predefined_traits.html">Appendix II: Editor Factories for Predefined Traits</a></li>
 </ul>
 </div>
-</div>
-<div class="section" id="license">
-<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading">¶</a></h2>
 <p>Redistribution and use of this document in source and derived forms, with or
 without modification, are permitted provided that the following conditions are
 met:</p>
@@ -367,8 +375,8 @@ owners.</p>
 <div class="line"><a class="reference external" href="http://www.enthought.com">http://www.enthought.com</a></div>
 <div class="line"><a class="reference external" href="mailto:info&#37;&#52;&#48;enthought&#46;com">info<span>&#64;</span>enthought<span>&#46;</span>com</a></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -379,21 +387,27 @@ owners.</p>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">TraitsUI 7.4.0 User Manual</a><ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">TraitsUI 8.0.0 User Manual</a><ul>
 <li><a class="reference internal" href="#contents">Contents</a></li>
 <li><a class="reference internal" href="#license">License</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../index.html"
-                        title="previous chapter">TraitsUI Documentation</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="intro.html"
-                        title="next chapter">Introduction</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../index.html"
+                          title="previous chapter">TraitsUI Documentation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="intro.html"
+                          title="next chapter">Introduction</a></p>
+  </div>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/traitsui_user_manual/index.rst.txt"
@@ -403,12 +417,12 @@ owners.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
         </div>
@@ -425,13 +439,13 @@ owners.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2022, Enthought
+        &copy; Copyright 2008-2023, Enthought
       </li>
       <li>
-      Last updated on Jun 29, 2022.
+      Last updated on May 22, 2023.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.5.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
       </li>
     </ul>
     </div>
