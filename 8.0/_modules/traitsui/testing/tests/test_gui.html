@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.testing.tests.test_gui &mdash; TraitsUI 8 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../../_static/copybutton.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/sphinx_highlight.js"></script>
+    <script type="text/javascript" src="../../../../_static/clipboard.min.js"></script>
+    <script type="text/javascript" src="../../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/img/favicon.png">
+    <link rel="index" title="Index" href="../../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../../search.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../../../../index.html" >
+    <link rel="up" title="Module code" href="../../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../../index.html">TraitsUI 8 Documentation</a></li>
+	
+          <li class="active"><a href="../../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.testing.tests.test_gui</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.testing.tests.test_gui</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2023 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Tests for traitsui.testing._gui &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="kn">from</span> <span class="nn">pyface.api</span> <span class="kn">import</span> <span class="n">GUI</span>
+
+<span class="kn">from</span> <span class="nn">traitsui.tests._tools</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">is_qt</span><span class="p">,</span>
+    <span class="n">is_wx</span><span class="p">,</span>
+    <span class="n">is_mac_os</span><span class="p">,</span>
+    <span class="n">process_cascade_events</span><span class="p">,</span>
+    <span class="n">requires_toolkit</span><span class="p">,</span>
+    <span class="n">ToolkitName</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">is_qt</span><span class="p">():</span>
+
+    <span class="c1"># Create a QObject that will emit a new event to itself as long as</span>
+    <span class="c1"># it has not received enough.</span>
+
+    <span class="kn">from</span> <span class="nn">pyface.qt</span> <span class="kn">import</span> <span class="n">QtCore</span>
+
+    <span class="k">class</span> <span class="nc">DummyQObject</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QObject</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_n_events</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_n_events</span> <span class="o">=</span> <span class="n">max_n_events</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_events</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">def</span> <span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">()</span> <span class="o">!=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QEvent</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">User</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_events</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_events</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_n_events</span><span class="p">:</span>
+                <span class="n">new_event</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QEvent</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QEvent</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">User</span><span class="p">)</span>
+                <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">postEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_event</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">if</span> <span class="n">is_wx</span><span class="p">():</span>
+
+    <span class="c1"># Create a wx.EvtHandler that will emit a new event to itself as long as</span>
+    <span class="c1"># it has not received enough.</span>
+
+    <span class="kn">import</span> <span class="nn">wx</span>
+    <span class="kn">import</span> <span class="nn">wx.lib.newevent</span>
+
+    <span class="n">NewEvent</span><span class="p">,</span> <span class="n">EVT_SOME_NEW_EVENT</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">newevent</span><span class="o">.</span><span class="n">NewEvent</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">DummyWxHandler</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EvtHandler</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_n_events</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_n_events</span> <span class="o">=</span> <span class="n">max_n_events</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_events</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">def</span> <span class="nf">TryBefore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_events</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_events</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_n_events</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">post_event</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">def</span> <span class="nf">post_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">NewEvent</span><span class="p">()</span>
+            <span class="n">wx</span><span class="o">.</span><span class="n">PostEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="TestProcessEventsRepeated"><a class="viewcode-back" href="../../../../api/traitsui.testing.tests.test_gui.html#traitsui.testing.tests.test_gui.TestProcessEventsRepeated">[docs]</a><span class="k">class</span> <span class="nc">TestProcessEventsRepeated</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test process_events actually processes all events, including the events</span>
+<span class="sd">    posted by the processed events.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestProcessEventsRepeated.test_qt_process_events_process_all"><a class="viewcode-back" href="../../../../api/traitsui.testing.tests.test_gui.html#traitsui.testing.tests.test_gui.TestProcessEventsRepeated.test_qt_process_events_process_all">[docs]</a>    <span class="nd">@requires_toolkit</span><span class="p">([</span><span class="n">ToolkitName</span><span class="o">.</span><span class="n">qt</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_qt_process_events_process_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyface.qt</span> <span class="kn">import</span> <span class="n">QtCore</span>
+
+        <span class="k">if</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">__version_info__</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_mac_os</span><span class="p">:</span>
+            <span class="c1"># On Qt4 and OSX, Qt QEventLoop.processEvents says nothing was &quot;</span>
+            <span class="c1"># processed even when there are events processed, causing the &quot;</span>
+            <span class="c1"># loop to break too soon. (See enthought/traitsui#951)&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span>
+                <span class="s2">&quot;process_cascade_events is not reliable on Qt4 + OSX&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">is_appveyor</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;APPVEYOR&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">__version_info__</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_appveyor</span><span class="p">:</span>
+            <span class="c1"># With Qt + Appveyor, process_cascade_events may</span>
+            <span class="c1"># _occasionally_ break out of its loop too early. This is only</span>
+            <span class="c1"># seen on Appveyor but has not been reproducible on other Windows</span>
+            <span class="c1"># machines (See enthought/traitsui#951)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span>
+                <span class="s2">&quot;process_cascade_events is not reliable on Qt + Appveyor&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="n">q_object</span><span class="p">):</span>
+            <span class="n">q_object</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+            <span class="c1"># If the test fails, run process events at least the same</span>
+            <span class="c1"># number of times as max_n_events</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">q_object</span><span class="o">.</span><span class="n">max_n_events</span><span class="p">):</span>
+                <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">(</span>
+                    <span class="n">QtCore</span><span class="o">.</span><span class="n">QEventLoop</span><span class="o">.</span><span class="n">ProcessEventsFlag</span><span class="o">.</span><span class="n">AllEvents</span>
+                <span class="p">)</span>
+
+        <span class="n">max_n_events</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">q_object</span> <span class="o">=</span> <span class="n">DummyQObject</span><span class="p">(</span><span class="n">max_n_events</span><span class="o">=</span><span class="n">max_n_events</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addCleanup</span><span class="p">(</span><span class="n">cleanup</span><span class="p">,</span> <span class="n">q_object</span><span class="p">)</span>
+
+        <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">postEvent</span><span class="p">(</span>
+            <span class="n">q_object</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QEvent</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QEvent</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">User</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># sanity check calling processEvents does not process</span>
+        <span class="c1"># cascade of events.</span>
+        <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QEventLoop</span><span class="o">.</span><span class="n">ProcessEventsFlag</span><span class="o">.</span><span class="n">AllEvents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q_object</span><span class="o">.</span><span class="n">n_events</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># when</span>
+        <span class="n">process_cascade_events</span><span class="p">()</span>
+
+        <span class="c1"># then</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">q_object</span><span class="o">.</span><span class="n">n_events</span>
+
+        <span class="c1"># If process_cascade_events did not do what it promises, then there</span>
+        <span class="c1"># are still pending tasks left. Run process events at least the same</span>
+        <span class="c1"># number of times as max_n_events to verify</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_n_events</span><span class="p">):</span>
+            <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QEventLoop</span><span class="o">.</span><span class="n">ProcessEventsFlag</span><span class="o">.</span><span class="n">AllEvents</span><span class="p">)</span>
+
+        <span class="n">n_left_behind_events</span> <span class="o">=</span> <span class="n">q_object</span><span class="o">.</span><span class="n">n_events</span> <span class="o">-</span> <span class="n">actual</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Expected </span><span class="si">{max_n_events}</span><span class="s2"> events processed on the objects and zero &quot;</span>
+            <span class="s2">&quot;events left on the queue after running process_cascade_events. &quot;</span>
+            <span class="s2">&quot;Found </span><span class="si">{actual}</span><span class="s2"> processed with </span><span class="si">{n_left_behind_events}</span><span class="s2"> left &quot;</span>
+            <span class="s2">&quot;behind.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">max_n_events</span><span class="o">=</span><span class="n">max_n_events</span><span class="p">,</span>
+                <span class="n">actual</span><span class="o">=</span><span class="n">actual</span><span class="p">,</span>
+                <span class="n">n_left_behind_events</span><span class="o">=</span><span class="n">n_left_behind_events</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">n_left_behind_events</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># If the previous assertion passes but this one fails, that means some</span>
+        <span class="c1"># events have gone missing, and that would likely be a problem for the</span>
+        <span class="c1"># test setup, not for the process_cascade_events.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">max_n_events</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestProcessEventsRepeated.test_wx_process_events_process_all"><a class="viewcode-back" href="../../../../api/traitsui.testing.tests.test_gui.html#traitsui.testing.tests.test_gui.TestProcessEventsRepeated.test_wx_process_events_process_all">[docs]</a>    <span class="nd">@requires_toolkit</span><span class="p">([</span><span class="n">ToolkitName</span><span class="o">.</span><span class="n">wx</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_wx_process_events_process_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="n">wx_handler</span><span class="p">):</span>
+            <span class="c1"># In case of test failure, always flush the GUI event queue.</span>
+            <span class="n">GUI</span><span class="o">.</span><span class="n">process_events</span><span class="p">()</span>
+            <span class="n">wx_handler</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span>
+
+        <span class="n">max_n_events</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">wx_handler</span> <span class="o">=</span> <span class="n">DummyWxHandler</span><span class="p">(</span><span class="n">max_n_events</span><span class="o">=</span><span class="n">max_n_events</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addCleanup</span><span class="p">(</span><span class="n">cleanup</span><span class="p">,</span> <span class="n">wx_handler</span><span class="p">)</span>
+
+        <span class="n">wx_handler</span><span class="o">.</span><span class="n">post_event</span><span class="p">()</span>
+
+        <span class="c1"># when</span>
+        <span class="n">process_cascade_events</span><span class="p">()</span>
+
+        <span class="c1"># then</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">wx_handler</span><span class="o">.</span><span class="n">n_events</span><span class="p">,</span> <span class="n">max_n_events</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2023, Enthought
+      </li>
+      <li>
+      Last updated on May 22, 2023.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

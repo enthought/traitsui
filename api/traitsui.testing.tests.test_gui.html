@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>traitsui.testing.tests.test_gui module &mdash; TraitsUI 8 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+    <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.png">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 8 Documentation" href="../index.html" >
+    <link rel="up" title="traitsui.testing.tests package" href="traitsui.testing.tests.html" >
+    <link rel="next" title="traitsui.testing.api module" href="traitsui.testing.api.html" >
+    <link rel="prev" title="traitsui.testing.tests.test_exception_handling module" href="traitsui.testing.tests.test_exception_handling.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 8 Documentation</a></li>
+	
+          <li class="active"><a href="../traitsui_user_manual/index.html" >TraitsUI 8.0.0 User Manual</a></li>
+          <li class="active"><a href="../traitsui_user_manual/testing.html" >Testing TraitsUI Applications</a></li>
+          <li class="active"><a href="traitsui.testing.html" >traitsui.testing package</a></li>
+          <li class="active"><a href="traitsui.testing.tests.html" accesskey="U">traitsui.testing.tests package</a></li>
+  
+    <li><a href="#">traitsui.testing.tests.test_gui module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.testing.api.html" title="traitsui.testing.api module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.testing.tests.test_exception_handling.html" title="traitsui.testing.tests.test_exception_handling module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <section id="module-traitsui.testing.tests.test_gui">
+<span id="traitsui-testing-tests-test-gui-module"></span><h1>traitsui.testing.tests.test_gui module<a class="headerlink" href="#module-traitsui.testing.tests.test_gui" title="Permalink to this heading">¶</a></h1>
+<p>Tests for traitsui.testing._gui</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="traitsui.testing.tests.test_gui.TestProcessEventsRepeated">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">traitsui.testing.tests.test_gui.</span></span><span class="sig-name descname"><span class="pre">TestProcessEventsRepeated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/traitsui/testing/tests/test_gui.html#TestProcessEventsRepeated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#traitsui.testing.tests.test_gui.TestProcessEventsRepeated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<p>Test process_events actually processes all events, including the events
+posted by the processed events.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="traitsui.testing.tests.test_gui.TestProcessEventsRepeated.test_qt_process_events_process_all">
+<span class="sig-name descname"><span class="pre">test_qt_process_events_process_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/traitsui/testing/tests/test_gui.html#TestProcessEventsRepeated.test_qt_process_events_process_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#traitsui.testing.tests.test_gui.TestProcessEventsRepeated.test_qt_process_events_process_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="traitsui.testing.tests.test_gui.TestProcessEventsRepeated.test_wx_process_events_process_all">
+<span class="sig-name descname"><span class="pre">test_wx_process_events_process_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/traitsui/testing/tests/test_gui.html#TestProcessEventsRepeated.test_wx_process_events_process_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#traitsui.testing.tests.test_gui.TestProcessEventsRepeated.test_wx_process_events_process_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">traitsui.testing.tests.test_gui module</a><ul>
+<li><a class="reference internal" href="#traitsui.testing.tests.test_gui.TestProcessEventsRepeated"><code class="docutils literal notranslate"><span class="pre">TestProcessEventsRepeated</span></code></a><ul>
+<li><a class="reference internal" href="#traitsui.testing.tests.test_gui.TestProcessEventsRepeated.test_qt_process_events_process_all"><code class="docutils literal notranslate"><span class="pre">TestProcessEventsRepeated.test_qt_process_events_process_all()</span></code></a></li>
+<li><a class="reference internal" href="#traitsui.testing.tests.test_gui.TestProcessEventsRepeated.test_wx_process_events_process_all"><code class="docutils literal notranslate"><span class="pre">TestProcessEventsRepeated.test_wx_process_events_process_all()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="traitsui.testing.tests.test_exception_handling.html"
+                          title="previous chapter">traitsui.testing.tests.test_exception_handling module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="traitsui.testing.api.html"
+                          title="next chapter">traitsui.testing.api module</a></p>
+  </div>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.testing.tests.test_gui.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2023, Enthought
+      </li>
+      <li>
+      Last updated on May 22, 2023.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 7.0.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

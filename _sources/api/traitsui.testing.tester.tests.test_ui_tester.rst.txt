@@ -1,0 +1,7 @@
+traitsui.testing.tester.tests.test\_ui\_tester module
+=====================================================
+
+.. automodule:: traitsui.testing.tester.tests.test_ui_tester
+   :members:
+   :undoc-members:
+   :show-inheritance:

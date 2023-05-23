@@ -1,0 +1,17 @@
+traitsui.testing.tests package
+==============================
+
+.. automodule:: traitsui.testing.tests
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   traitsui.testing.tests.test_api
+   traitsui.testing.tests.test_exception_handling
+   traitsui.testing.tests.test_gui

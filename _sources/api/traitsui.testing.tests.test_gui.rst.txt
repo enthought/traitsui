@@ -1,0 +1,7 @@
+traitsui.testing.tests.test\_gui module
+=======================================
+
+.. automodule:: traitsui.testing.tests.test_gui
+   :members:
+   :undoc-members:
+   :show-inheritance:
