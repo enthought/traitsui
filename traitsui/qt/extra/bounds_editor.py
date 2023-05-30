@@ -25,7 +25,7 @@ class _BoundsEditor(Editor):
     max = Any()
     low = Any()
     high = Any()
-    format = Str()
+    format_str = Str()
 
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
@@ -40,6 +40,8 @@ class _BoundsEditor(Editor):
 
         self.max = factory.max
         self.min = factory.min
+
+        self.format_str = factory.format_str
 
         self.evaluate = factory.evaluate
         self.sync_value(factory.evaluate_name, "evaluate", "from")
