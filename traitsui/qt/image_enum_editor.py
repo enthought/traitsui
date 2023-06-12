@@ -196,7 +196,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
         arrow = self.style().subControlRect(
             QtGui.QStyle.ComplexControl.CC_ComboBox,
             option,
-            QtGui.QStyle.SC_ComboBoxArrow,
+            QtGui.QStyle.SubControl.SC_ComboBoxArrow,
             None,
         )
         option.rect.setWidth(int(option.rect.width() - arrow.width()))
