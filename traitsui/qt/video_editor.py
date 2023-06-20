@@ -278,6 +278,8 @@ class VideoEditor(Editor):
     def dispose(self):
         self._disconnect_signals()
         if self.media_player is not None:
+            if not is_qt5:
+                self.media_player.setSource("")
             # Avoid a segfault if the media player is currently playing
             self.media_player.setVideoOutput(None)
             if not is_qt5:
