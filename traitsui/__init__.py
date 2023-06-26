@@ -19,7 +19,7 @@ def __getattr__(name):
 
         warn(
             f"traitsui.{name} is deprecated, "
-            f"use impportlib.metadata.version('traitsui') ",
+            f"use importlib.metadata.version('traitsui') ",
             DeprecationWarning,
         )
         return version('traitsui')
