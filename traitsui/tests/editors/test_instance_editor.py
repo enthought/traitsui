@@ -313,7 +313,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(obj.inst.value, "Hello")
 
     # A regression test for issue enthought/traitsui#1501
-    @unittest.skipIf(_is_pyside_661(), "See issue enthought/traitsui#2308")
+    @unittest.skipIf(_is_pyside_661(), "See issue enthought/traitsui#2038")
     def test_propagate_errors(self):
         obj = ObjectWithValidatedInstance()
         ui_tester = UITester()
@@ -335,7 +335,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(instance_editor_ui.errors, ui.errors)
             self.assertFalse(ok_button.inspect(IsEnabled()))
 
-    @unittest.skipIf(_is_pyside_661(), "See issue enthought/traitsui#2308")
+    @unittest.skipIf(_is_pyside_661(), "See issue enthought/traitsui#2038")
     def test_propagate_errors_switch_selection(self):
         obj = ObjectWithValidatedList()
         ui_tester = UITester()
