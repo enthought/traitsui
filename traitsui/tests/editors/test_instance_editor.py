@@ -12,13 +12,8 @@ import unittest
 
 from pyface.toolkit import toolkit_object
 from traits.api import Button, HasTraits, Instance, List, observe, Str, String
-from traitsui.api import InstanceEditor, Item, View
-from traitsui.tests._tools import (
-    BaseTestMixin,
-    requires_toolkit,
-    ToolkitName,
-)
 
+from traitsui.api import InstanceEditor, Item, View
 from traitsui.testing.api import (
     DisplayedText,
     Index,
@@ -30,11 +25,27 @@ from traitsui.testing.api import (
     TargetByName,
     UITester,
 )
+from traitsui.tests._tools import (
+    BaseTestMixin,
+    is_qt6,
+    requires_toolkit,
+    ToolkitName,
+)
 
 ModalDialogTester = toolkit_object(
     "util.modal_dialog_tester:ModalDialogTester"
 )
 no_modal_dialog_tester = ModalDialogTester.__name__ == "Unimplemented"
+
+
+def _is_pyside_661():
+    if is_qt6():
+        from pyface.qt import is_pyside
+
+        if is_pyside:
+            import PySide6
+
+            return PySide6.__version__ == "6.6.1"
 
 
 class EditedInstance(HasTraits):
@@ -61,36 +72,36 @@ class ObjectWithList(HasTraits):
     def _inst_list_default(self):
         return [
             NamedInstance(name=value, value=value)
-            for value in ['one', 'two', 'three']
+            for value in ["one", "two", "three"]
         ]
 
-    @observe('reset_to_none')
+    @observe("reset_to_none")
     def _reset_inst_to_none(self, event):
         self.inst = None
 
-    @observe('change_options')
+    @observe("change_options")
     def _modify_inst_list(self, event):
-        self.inst_list = [NamedInstance(name='one', value='one')]
+        self.inst_list = [NamedInstance(name="one", value="one")]
 
 
 simple_view = View(Item("inst"), buttons=["OK"])
-custom_view = View(Item("inst", style='custom'), buttons=["OK"])
+custom_view = View(Item("inst", style="custom"), buttons=["OK"])
 selection_view = View(
     Item(
         "inst",
-        editor=InstanceEditor(name='inst_list'),
-        style='custom',
+        editor=InstanceEditor(name="inst_list"),
+        style="custom",
     ),
     buttons=["OK"],
 )
 none_view = View(
     Item(
         "inst",
-        editor=InstanceEditor(name='inst_list'),
-        style='custom',
+        editor=InstanceEditor(name="inst_list"),
+        style="custom",
     ),
-    Item('reset_to_none'),
-    Item('change_options'),
+    Item("reset_to_none"),
+    Item("change_options"),
     buttons=["OK"],
 )
 non_editable_droppable_view = View(
@@ -100,7 +111,7 @@ non_editable_droppable_view = View(
             editable=False,
             droppable=True,
         ),
-        style='custom',
+        style="custom",
     ),
     buttons=["OK"],
 )
@@ -108,11 +119,11 @@ non_editable_droppable_selectable_view = View(
     Item(
         "inst",
         editor=InstanceEditor(
-            name='inst_list',
+            name="inst_list",
             editable=False,
             droppable=True,
         ),
-        style='custom',
+        style="custom",
     ),
     buttons=["OK"],
 )
@@ -124,14 +135,14 @@ modal_view = View(
 class ValidatedEditedInstance(HasTraits):
     some_string = String("A", maxlen=3)
 
-    traits_view = View(Item('some_string'))
+    traits_view = View(Item("some_string"))
 
 
 class ObjectWithValidatedInstance(HasTraits):
     something = Instance(ValidatedEditedInstance, args=())
 
     traits_view = View(
-        Item('something', editor=InstanceEditor(), style='custom'),
+        Item("something", editor=InstanceEditor(), style="custom"),
         buttons=["OK", "Cancel"],
     )
 
@@ -143,7 +154,7 @@ class ObjectWithValidatedList(HasTraits):
     def _inst_list_default(self):
         return [
             ValidatedEditedInstance(some_string=value)
-            for value in ['a', 'b', 'c']
+            for value in ["a", "b", "c"]
         ]
 
 
@@ -158,7 +169,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_editor(self):
         obj = ObjectWithInstance()
         tester = UITester()
-        with tester.create_ui(obj, {'view': simple_view}) as ui:
+        with tester.create_ui(obj, {"view": simple_view}) as ui:
             instance = tester.find_by_name(ui, "inst")
             instance.perform(MouseClick())
             value_txt = instance.find_by_name("value")
@@ -168,7 +179,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
     def test_custom_editor(self):
         obj = ObjectWithInstance()
         tester = UITester()
-        with tester.create_ui(obj, {'view': custom_view}) as ui:
+        with tester.create_ui(obj, {"view": custom_view}) as ui:
             value_txt = tester.find_by_name(ui, "inst").find_by_name("value")
             value_txt.perform(KeySequence("abc"))
             self.assertEqual(obj.inst.value, "abc")
@@ -176,14 +187,14 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
     def test_custom_editor_with_selection(self):
         obj = ObjectWithList()
         tester = UITester()
-        with tester.create_ui(obj, {'view': selection_view}) as ui:
+        with tester.create_ui(obj, {"view": selection_view}) as ui:
             # test that the current object is None
             self.assertIsNone(obj.inst)
 
             # test that the displayed text is empty
             instance = tester.find_by_name(ui, "inst")
             text = instance.inspect(SelectedText())
-            self.assertEqual(text, '')
+            self.assertEqual(text, "")
 
             # test that changing selection works
             instance.locate(Index(1)).perform(MouseClick())
@@ -202,7 +213,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
         obj = ObjectWithList()
         obj.inst = obj.inst_list[1]
         tester = UITester()
-        with tester.create_ui(obj, {'view': selection_view}) as ui:
+        with tester.create_ui(obj, {"view": selection_view}) as ui:
             # test that the current object is the correct one
             self.assertIs(obj.inst, obj.inst_list[1])
 
@@ -215,7 +226,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
     def test_custom_editor_with_selection_change_option_name(self):
         obj = ObjectWithList()
         tester = UITester()
-        with tester.create_ui(obj, {'view': selection_view}) as ui:
+        with tester.create_ui(obj, {"view": selection_view}) as ui:
             # test that the current object is None
             self.assertIsNone(obj.inst)
 
@@ -234,10 +245,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual("Something New", obj.inst_list[0].name)
 
     def test_custom_editor_resynch_editor(self):
-        edited_inst = EditedInstance(value='hello')
+        edited_inst = EditedInstance(value="hello")
         obj = ObjectWithInstance(inst=edited_inst)
         tester = UITester()
-        with tester.create_ui(obj, {'view': custom_view}) as ui:
+        with tester.create_ui(obj, {"view": custom_view}) as ui:
             value_txt = tester.find_by_name(ui, "inst").find_by_name("value")
             displayed = value_txt.inspect(DisplayedText())
             self.assertEqual(displayed, "hello")
@@ -246,10 +257,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(displayed, "bye")
 
     def test_simple_editor_resynch_editor(self):
-        edited_inst = EditedInstance(value='hello')
+        edited_inst = EditedInstance(value="hello")
         obj = ObjectWithInstance(inst=edited_inst)
         tester = UITester()
-        with tester.create_ui(obj, {'view': simple_view}) as ui:
+        with tester.create_ui(obj, {"view": simple_view}) as ui:
             instance = tester.find_by_name(ui, "inst")
             instance.perform(MouseClick())
 
@@ -263,7 +274,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_editor_parent_closed(self):
         obj = ObjectWithInstance()
         tester = UITester()
-        with tester.create_ui(obj, {'view': simple_view}) as ui:
+        with tester.create_ui(obj, {"view": simple_view}) as ui:
             instance = tester.find_by_name(ui, "inst")
             instance.perform(MouseClick())
 
@@ -302,13 +313,14 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(obj.inst.value, "Hello")
 
     # A regression test for issue enthought/traitsui#1501
+    @unittest.skipIf(_is_pyside_661(), "See issue enthought/traitsui#2038")
     def test_propagate_errors(self):
         obj = ObjectWithValidatedInstance()
         ui_tester = UITester()
         with ui_tester.create_ui(obj) as ui:
             something_ui = ui_tester.find_by_name(ui, "something")
             some_string_field = something_ui.locate(
-                TargetByName('some_string')
+                TargetByName("some_string")
             )
             some_string_field.perform(KeySequence("abcd"))
             some_string_field.perform(KeyClick("Enter"))
@@ -323,16 +335,17 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(instance_editor_ui.errors, ui.errors)
             self.assertFalse(ok_button.inspect(IsEnabled()))
 
+    @unittest.skipIf(_is_pyside_661(), "See issue enthought/traitsui#2038")
     def test_propagate_errors_switch_selection(self):
         obj = ObjectWithValidatedList()
         ui_tester = UITester()
-        with ui_tester.create_ui(obj, {'view': selection_view}) as ui:
+        with ui_tester.create_ui(obj, {"view": selection_view}) as ui:
             something_ui = ui_tester.find_by_name(ui, "inst")
 
             something_ui.locate(Index(0)).perform(MouseClick())
 
             some_string_field = something_ui.locate(
-                TargetByName('some_string')
+                TargetByName("some_string")
             )
             some_string_field.perform(KeySequence("bcde"))
             some_string_field.perform(KeyClick("Enter"))
@@ -356,14 +369,14 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
     def test_none_selected(self):
         obj = ObjectWithList()
         tester = UITester()
-        with tester.create_ui(obj, {'view': none_view}) as ui:
+        with tester.create_ui(obj, {"view": none_view}) as ui:
             # test that the current object is None
             self.assertIsNone(obj.inst)
 
             # test that the displayed text is empty to start
             instance = tester.find_by_name(ui, "inst")
             text = instance.inspect(SelectedText())
-            self.assertEqual(text, '')
+            self.assertEqual(text, "")
 
             # test that changing selection works and displayed text is correct
             instance.locate(Index(1)).perform(MouseClick())
@@ -376,7 +389,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             reset_to_none_button.perform(MouseClick())
             self.assertIsNone(obj.inst)
             text = instance.inspect(SelectedText())
-            self.assertEqual(text, '')
+            self.assertEqual(text, "")
 
             # change selection again
             instance.locate(Index(1)).perform(MouseClick())
@@ -390,7 +403,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             change_options_button.perform(MouseClick())
             self.assertIsNone(obj.inst)
             text = instance.inspect(SelectedText())
-            self.assertEqual(text, '')
+            self.assertEqual(text, "")
 
     # regression test for enthought/traitsui#1478
     def test_droppable(self):
@@ -398,10 +411,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
         obj_with_list = ObjectWithList()
         tester = UITester()
 
-        with tester.create_ui(obj, {'view': non_editable_droppable_view}):
+        with tester.create_ui(obj, {"view": non_editable_droppable_view}):
             pass
 
         with tester.create_ui(
-            obj_with_list, {'view': non_editable_droppable_selectable_view}
+            obj_with_list, {"view": non_editable_droppable_selectable_view}
         ):
             pass
