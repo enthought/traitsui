@@ -282,8 +282,8 @@ class TableEditor(Editor, BaseTableEditor):
 
         # Set up the required externally synchronized traits
         is_list = mode in ("rows", "columns", "cells")
-        self.sync_value(factory.click, "click", "to")
-        self.sync_value(factory.dclick, "dclick", "to")
+        self.sync_value(factory.click, "click", "to", is_event=True)
+        self.sync_value(factory.dclick, "dclick", "to", is_event=True)
         self.sync_value(factory.columns_name, "columns", is_list=True)
         self.sync_value(factory.selected, "selected", is_list=is_list)
         self.sync_value(
@@ -291,7 +291,7 @@ class TableEditor(Editor, BaseTableEditor):
         )
         self.sync_value(factory.filter_name, "filter", "from")
         self.sync_value(factory.filtered_indices, "filtered_indices", "to")
-        self.sync_value(factory.update_filter_name, "update_filter", "from")
+        self.sync_value(factory.update_filter_name, "update_filter", "from", is_event=True)
 
         self.auto_size = self.factory.auto_size
 
