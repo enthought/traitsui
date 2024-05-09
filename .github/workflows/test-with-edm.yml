@@ -54,7 +54,7 @@ jobs:
           path: ~/.cache
           key: ${{ runner.os }}-${{ matrix.python-version }}-${{ matrix.toolkit }}-${{ hashFiles('etstool.py') }}
       - name: Setup EDM
-        uses: enthought/setup-edm-action@v2
+        uses: enthought/setup-edm-action@v3
         with:
           edm-version: ${{ env.INSTALL_EDM_VERSION }}
       - name: Install click to the default EDM environment
