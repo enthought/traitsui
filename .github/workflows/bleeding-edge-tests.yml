@@ -26,7 +26,7 @@ jobs:
 
     steps:
     - name: Check out the target commit
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Install Qt dependencies
       uses: ./.github/actions/install-qt-support
     - name: Set up Python ${{ matrix.python-version }}
