@@ -44,7 +44,7 @@ jobs:
       # set the font config path for linux
       FONTCONFIG_PATH: /etc/fonts
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Qt dependencies for Linux
         uses: ./.github/actions/install-qt-support
         if: startsWith(matrix.os, 'ubuntu') && matrix.toolkit != 'wx' && matrix.toolkit != 'null'
