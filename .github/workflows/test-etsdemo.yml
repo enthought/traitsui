@@ -25,7 +25,7 @@ jobs:
         uses: ./.github/actions/install-qt-support
         if: startsWith(matrix.os, 'ubuntu')
       - name: Cache EDM packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache
           key: ${{ runner.os }}-${{ matrix.toolkit }}-${{ hashFiles('ets-demo/etstool.py') }}
