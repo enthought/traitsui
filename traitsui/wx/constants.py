@@ -20,37 +20,50 @@ from pyface.api import SystemMetrics
 
 #: Define platform and wx version constants:
 is_mac = sys.platform == "darwin"
+is_dark = wx.SystemSettings.GetAppearance().IsDark()
 
 #: Default dialog title
 DefaultTitle = "Edit properties"
 
 #: Color of valid input
-OKColor = wx.WHITE
+OKColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
 
 #: Color to highlight input errors
-ErrorColor = wx.Colour(255, 192, 192)
+if is_dark:
+    ErrorColor = wx.Colour(0xcf, 0x66, 0x79)
+else:
+    ErrorColor = wx.Colour(255, 192, 192)
+
 
 #: Color for background of read-only fields
-ReadonlyColor = wx.Colour(244, 243, 238)
+if is_dark:
+    ReadonlyColor = wx.Colour(22, 22, 24)
+else:
+    ReadonlyColor = wx.Colour(244, 243, 238)
 
 #: Color for background of fields where objects can be dropped
-DropColor = wx.Colour(215, 242, 255)
+if is_dark:
+    DropColor = wx.Colour(94, 131, 167)
+else:
+    DropColor = wx.Colour(215, 242, 255)
 
 #: Color for an editable field
-EditableColor = wx.WHITE
+EditableColor = OKColor
 
 #: Color for background of windows (like dialog background color)
 if is_mac:
-    WindowColor = wx.Colour(232, 232, 232)
-    BorderedGroupColor = wx.Colour(224, 224, 224)
+    WindowColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
 else:
     WindowColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
 
 #: Default colour for table foreground
-TableCellColor = wx.BLACK
+if is_dark:
+    TableCellColor = wx.WHITE
+else:
+    TableCellColor = wx.BLACK
 
 #: Default colour for table background
-TableCellBackgroundColor = wx.WHITE
+TableCellBackgroundColor = OKColor
 
 #: Default colour for table background
 TableReadOnlyBackgroundColor = ReadonlyColor
@@ -64,8 +77,8 @@ TableLabelBackgroundColor = WindowColor
 #: Default foreground colour for table selection
 TableSelectionTextColor = TableCellColor
 
-#: Default background colour for table selection (light blue)
-TableSelectionBackgroundColor = wx.Colour(173, 216, 230)
+#: Default background colour for table selection
+TableSelectionBackgroundColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
 
 #: Standard width of an image bitmap
 standard_bitmap_width = 120
