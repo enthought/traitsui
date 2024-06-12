@@ -72,6 +72,9 @@ class ArrayStructure(HasTraits):
         if object.dtype.kind == "i":
             trait = Int()
 
+        if object.dtype.kind == "b":
+            trait = Bool()
+
         if len(object.shape) == 1:
             self.view = self._one_dim_view(object, style, width, trait)
         elif len(object.shape) == 2:
