@@ -9,7 +9,7 @@ on:
 
 env:
   QT_MAC_WANTS_LAYER: 1
-  INSTALL_EDM_VERSION: 3.5.0
+  INSTALL_EDM_VERSION: 4.1.7
 
 jobs:
 
@@ -30,7 +30,7 @@ jobs:
           path: ~/.cache
           key: ${{ runner.os }}-${{ matrix.toolkit }}-${{ hashFiles('ets-demo/etstool.py') }}
       - name: Setup EDM
-        uses: enthought/setup-edm-action@v3
+        uses: enthought/setup-edm-action@v4.2
         with:
           edm-version: ${{ env.INSTALL_EDM_VERSION }}
       - name: Install click to the default EDM environment
