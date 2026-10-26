@@ -11,7 +11,7 @@ name: Test with EDM
 on: [workflow_dispatch]
 
 env:
-  INSTALL_EDM_VERSION: 3.5.0
+  INSTALL_EDM_VERSION: 4.1.7
   QT_MAC_WANTS_LAYER: 1
 
 jobs:
@@ -54,7 +54,7 @@ jobs:
           path: ~/.cache
           key: ${{ runner.os }}-${{ matrix.python-version }}-${{ matrix.toolkit }}-${{ hashFiles('etstool.py') }}
       - name: Setup EDM
-        uses: enthought/setup-edm-action@v3
+        uses: enthought/setup-edm-action@v4.2
         with:
           edm-version: ${{ env.INSTALL_EDM_VERSION }}
       - name: Install click to the default EDM environment
