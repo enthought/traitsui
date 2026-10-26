@@ -12,6 +12,8 @@ on: [workflow_dispatch]
 
 env:
   INSTALL_EDM_VERSION: 4.1.7
+  # No macOS build of EDM 4.1.7 exists (EDM is supported on Linux and Windows); macOS keeps the last version that has one.
+  INSTALL_EDM_VERSION_MACOS: 3.5.0
   QT_MAC_WANTS_LAYER: 1
 
 jobs:
@@ -56,7 +58,7 @@ jobs:
       - name: Setup EDM
         uses: enthought/setup-edm-action@v4.2
         with:
-          edm-version: ${{ env.INSTALL_EDM_VERSION }}
+          edm-version: ${{ runner.os == 'macOS' && env.INSTALL_EDM_VERSION_MACOS || env.INSTALL_EDM_VERSION }}
       - name: Install click to the default EDM environment
         run: edm install -y wheel click coverage
       - name: Install test environment
